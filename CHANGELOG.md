@@ -1,3 +1,14 @@
+## [0.2.4] - 2026-02-28
+
+### Summary
+
+docs(docs): deep code analysis engine with 5 supporting modules
+
+### Docs
+
+- docs: update README
+
+
 ## [0.2.3] - 2026-02-28
 
 ### Summary

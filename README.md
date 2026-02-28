@@ -314,6 +314,233 @@ The analyzer is designed to be extensible. Key areas for enhancement:
 - Real-time analysis mode
 - TOON format enhancements
 
+## 🎯 Quick Reference
+
+| Command | Output | Use Case |
+|---------|--------|----------|
+| `code2flow ./project` | `analysis.toon` | Quick analysis (default) |
+| `code2flow ./project -f all` | All formats | Complete analysis |
+| `code2flow ./project -f toon,yaml` | TOON + YAML | Comparison |
+| `code2flow ./project -m hybrid -v` | TOON + verbose | Detailed analysis |
+| `python validate_toon.py analysis.toon` | Validation | Quality check |
+
+## 🔧 Advanced Usage
+
+### Custom Analysis Configuration
+
+```bash
+# Deep analysis with all insights
+code2flow ./project \
+    -m hybrid \
+    -f toon \
+    --max-depth 15 \
+    --full \
+    -v
+
+# Performance-optimized for large projects
+code2flow ./project \
+    -m static \
+    -f toon \
+    --strategy quick \
+    --max-memory 500
+
+# Refactoring-focused analysis
+code2flow ./project \
+    -m behavioral \
+    -f toon \
+    --refactor \
+    --smell god_function
+```
+
+### Integration Examples
+
+#### CI/CD Pipeline
+```bash
+#!/bin/bash
+# Analyze code quality in CI
+code2flow ./src -f toon -o ./analysis
+python validate_toon.py ./analysis/analysis.toon
+if [ $? -eq 0 ]; then
+    echo "✅ Code analysis passed"
+else
+    echo "❌ Code analysis failed"
+    exit 1
+fi
+```
+
+#### Pre-commit Hook
+```bash
+#!/bin/sh
+# .git/hooks/pre-commit
+code2flow ./ -f toon -o ./temp_analysis
+python validate_toon.py ./temp_analysis/analysis.toon
+rm -rf ./temp_analysis
+```
+
+## 📊 Real-World Examples
+
+### Microservice Analysis
+```bash
+# Analyze microservice complexity
+code2flow ./microservice -f toon -o ./service_analysis
+# Results: 15 critical functions, 3 modules need refactoring
+```
+
+### Legacy Code Migration
+```bash
+# Prepare for legacy system migration
+code2flow ./legacy -f toon,yaml -o ./migration_analysis
+# Use TOON for quick overview, YAML for detailed migration planning
+```
+
+### Code Review Enhancement
+```bash
+# Generate insights for code review
+code2flow ./feature-branch -f toon --refactor -o ./review
+# Focus on critical functions and code smells
+```
+
+## 🚀 Migration Guide
+
+### From YAML to TOON
+
+**Before:**
+```bash
+code2flow ./project -f yaml -o ./analysis
+# Output: analysis.yaml (2.5MB)
+```
+
+**After:**
+```bash
+code2flow ./project -f toon -o ./analysis
+# Output: analysis.toon (204KB)
+```
+
+**Benefits:**
+- 10x smaller files
+- Faster processing
+- Built-in insights
+- Automatic recommendations
+
+### Backward Compatibility
+
+```bash
+# Still generate YAML if needed
+code2flow ./project -f toon,yaml
+# Both formats available for comparison
+```
+
+## 📋 TOON Format Specification
+
+### File Structure
+```
+analysis.toon
+├── meta              # Metadata (project, mode, timestamp)
+├── stats             # Analysis statistics
+├── functions         # Function analysis with complexity
+├── classes           # Class information from function grouping
+├── modules           # Module-level statistics
+├── patterns          # Detected design patterns
+├── call_graph        # Top 50 most important functions
+└── insights           # Recommendations and summaries
+```
+
+### Complexity Scoring
+
+| Factor | Weight | Example |
+|--------|--------|---------|
+| Loops (FOR/WHILE) | 2.0 | `for i in range(10):` |
+| Conditions (IF) | 1.0 | `if condition:` |
+| Method calls | 1.0 | `obj.method()` |
+| Size (>10 nodes) | 1.0 | Large functions |
+| Returns/Assignments | 0.5 | `return value`, `x = 1` |
+
+### Tier Classification
+
+- **Critical (≥5.0)**: Immediate refactoring required
+- **High (3.0-4.9)**: Consider refactoring
+- **Medium (1.5-2.9)**: Monitor complexity
+- **Low (0.1-1.4)**: Acceptable
+- **Basic (0.0)**: Simple functions
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+**Issue:** `analysis.toon not found`
+```bash
+# Solution: Check output directory
+ls -la ./output/
+# Should contain analysis.toon file
+```
+
+**Issue:** Validation fails
+```bash
+# Solution: Run with verbose output
+code2flow ./project -f toon -v
+# Check for any errors during analysis
+```
+
+**Issue:** Large file sizes
+```bash
+# Solution: Use TOON format instead of YAML
+code2flow ./project -f toon  # 200KB vs 2.5MB
+```
+
+### Performance Issues
+
+**Memory Usage:**
+```bash
+# Limit memory for large projects
+code2flow ./large-project --max-memory 500 -f toon
+```
+
+**Slow Analysis:**
+```bash
+# Use fast mode for initial exploration
+code2flow ./project -m static -f toon --strategy quick
+```
+
+## 🤝 Contributing to TOON Format
+
+The TOON format is designed to be extensible. Areas for contribution:
+
+- **New complexity metrics**
+- **Additional pattern detection**
+- **Enhanced recommendations**
+- **Visualization improvements**
+- **Integration with other tools**
+
+### Development Setup
+
+```bash
+# Clone and setup development environment
+git clone https://github.com/tom-sapletta/code2flow.git
+cd code2flow
+pip install -e ".[dev]"
+
+# Run tests
+bash project.sh
+
+# Validate TOON format
+python validate_toon.py output/analysis.toon
+```
+
+## 📚 Additional Resources
+
+- [TOON Format Validation](validate_toon.py) - Built-in validation tool
+- [Project Testing Script](project.sh) - Comprehensive test suite
+- [CLI Reference](code2flow/cli.py) - Complete command-line interface
+- [Exporter Implementation](code2flow/exporters/base.py) - TOON format implementation
+
+---
+
+**Ready to analyze your code?** Start with the optimized TOON format:
+
+```bash
+code2flow ./your-project -f toon
+```
+
 ## License
 
 Apache License 2.0 - see [LICENSE](LICENSE) for details.
