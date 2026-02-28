@@ -1,4 +1,4 @@
-# code2flow | 52f 14309L | python:52
+# code2flow | 52f 14323L | python:52
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
 M[52]:
   benchmarks/benchmark_performance.py,181
@@ -11,7 +11,7 @@ M[52]:
   code2flow/analysis/coupling.py,61
   code2flow/analysis/dfg.py,165
   code2flow/analysis/smells.py,143
-  code2flow/cli.py,346
+  code2flow/cli.py,357
   code2flow/core/__init__.py,34
   code2flow/core/analyzer.py,593
   code2flow/core/config.py,136

@@ -27,7 +27,7 @@ class ToonExporter:
         # Optimize sorting and structure
         toon_data = self._optimize_structure(toon_data)
         
-        # Save with optimized YAML settings
+        # Save with optimized YAML settings but .toon extension
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, 'w', encoding='utf-8') as f:
             yaml.dump(toon_data, f, 

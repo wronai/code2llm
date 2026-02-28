@@ -23,10 +23,20 @@ def create_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
 Examples:
-  code2flow /path/to/project
+  code2flow /path/to/project                    # Default: TOON format only
+  code2flow /path/to/project -f all             # Generate all formats
+  code2flow /path/to/project -f toon,yaml      # TOON + YAML
+  code2flow /path/to/project -f json,png       # JSON + PNG
   code2flow /path/to/project -m static -o ./analysis
-  code2flow /path/to/project --format yaml,json,mermaid
-  code2flow llm-flow  # Generate LLM flow summary
+  code2flow llm-flow                             # Generate LLM flow summary
+
+Format Options:
+  toon    - Optimized compact format (default)
+  yaml    - Standard YAML format
+  json    - Machine-readable JSON
+  mermaid - Flowchart diagrams
+  png     - Visual graphs
+  all     - Generate all formats
         '''
     )
     
@@ -52,8 +62,8 @@ Examples:
     
     parser.add_argument(
         '-f', '--format',
-        default='toon,mermaid,png',
-        help='Output formats: toon,yaml,json,mermaid,png (comma-separated)'
+        default='toon',
+        help='Output formats: toon,yaml,json,mermaid,png,all (default: toon)'
     )
     
     parser.add_argument(
@@ -274,10 +284,14 @@ def main():
     # Export results
     formats = [f.strip() for f in args.format.split(',')]
     
+    # Handle 'all' format
+    if 'all' in formats:
+        formats = ['toon', 'yaml', 'json', 'mermaid', 'png']
+    
     try:
         if 'toon' in formats:
             exporter = ToonExporter()
-            filepath = output_dir / 'analysis.toon.yaml'
+            filepath = output_dir / 'analysis.toon'
             exporter.export(result, str(filepath))
             if args.verbose:
                 print(f"  - TOON: {filepath}")
