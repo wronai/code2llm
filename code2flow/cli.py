@@ -11,7 +11,7 @@ from pathlib import Path
 
 from .core.config import Config, ANALYSIS_MODES
 from .core.analyzer import ProjectAnalyzer
-from .exporters.base import YAMLExporter, JSONExporter, MermaidExporter, LLMPromptExporter
+from .exporters.base import YAMLExporter, JSONExporter, MermaidExporter, LLMPromptExporter, ToonExporter
 from .visualizers.graph import GraphVisualizer
 
 
@@ -52,8 +52,8 @@ Examples:
     
     parser.add_argument(
         '-f', '--format',
-        default='yaml,mermaid,png',
-        help='Output formats: yaml,json,mermaid,png (comma-separated)'
+        default='toon,mermaid,png',
+        help='Output formats: toon,yaml,json,mermaid,png (comma-separated)'
     )
     
     parser.add_argument(
@@ -275,6 +275,13 @@ def main():
     formats = [f.strip() for f in args.format.split(',')]
     
     try:
+        if 'toon' in formats:
+            exporter = ToonExporter()
+            filepath = output_dir / 'analysis.toon.yaml'
+            exporter.export(result, str(filepath))
+            if args.verbose:
+                print(f"  - TOON: {filepath}")
+        
         if 'yaml' in formats:
             exporter = YAMLExporter()
             if args.separate_orphans:
@@ -355,6 +362,7 @@ def main():
                 print(f"  - Data structures: {struct_path}")
                 
         # Always generate LLM prompt
+        exporter = LLMPromptExporter()
         filepath = output_dir / 'llm_prompt.md'
         exporter.export(result, str(filepath))
         if args.verbose:

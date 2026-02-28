@@ -1,6 +1,6 @@
-# code2flow | 50f 13078L | python:50
+# code2flow | 52f 14309L | python:52
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[50]:
+M[52]:
   benchmarks/benchmark_performance.py,181
   benchmarks/test_performance.py,154
   code2flow/__init__.py,37
@@ -11,14 +11,15 @@ M[50]:
   code2flow/analysis/coupling.py,61
   code2flow/analysis/dfg.py,165
   code2flow/analysis/smells.py,143
-  code2flow/cli.py,339
+  code2flow/cli.py,346
   code2flow/core/__init__.py,34
-  code2flow/core/analyzer.py,583
+  code2flow/core/analyzer.py,593
   code2flow/core/config.py,136
   code2flow/core/models.py,320
   code2flow/core/streaming_analyzer.py,510
-  code2flow/exporters/__init__.py,0
-  code2flow/exporters/base.py,944
+  code2flow/exporters/__init__.py,3
+  code2flow/exporters/base.py,1240
+  code2flow/exporters/toon.py,297
   code2flow/extractors/__init__.py,0
   code2flow/extractors/call_graph.py,115
   code2flow/extractors/cfg_extractor.py,219
@@ -42,7 +43,7 @@ M[50]:
   code2flow/refactor/prompt_engine.py,118
   code2flow/visualizers/__init__.py,0
   code2flow/visualizers/graph.py,150
-  examples/functional_refactoring_example.py,501
+  examples/functional_refactoring_example.py,456
   setup.py,60
   tests/test_advanced_analysis.py,63
   tests/test_analyzer.py,173
@@ -51,6 +52,7 @@ M[50]:
   tests/test_refactoring_engine.py,61
   tests/test_sprint4.py,60
   tests/test_sprint5.py,62
+  validate_toon.py,291
 D:
   benchmarks/benchmark_performance.py:
     i: time,tempfile,shutil,statistics,sys,code2flow.{FAST_CONFIG,ProjectAnalyzer},code2flow.core.streaming_analyzer.{STRATEGY_QUICK,StreamingAnalyzer},pathlib.Path
@@ -89,7 +91,7 @@ D:
   code2flow/cli.py:
     i: argparse,sys,core.analyzer.ProjectAnalyzer,core.config.{ANALYSIS_MODES,Config},exporters.base.{JSONExporter,LLMPromptExporter,MermaidExporter,YAMLExporter},pathlib.Path
     e: create_parser,main,generate_llm_context
-    create_parser()->Any
+    create_parser()->argparse.ArgumentParser
     main()
     generate_llm_context(args_list)
   code2flow/core/analyzer.py:
@@ -102,7 +104,7 @@ D:
     _analyze_single_file(args)
   code2flow/core/config.py:
     i: dataclasses.{dataclass,field},enum.Enum,typing.{List,Set}
-    e: AnalysisMode,PerformanceConfig,FilterConfig,DepthConfig,OutputConfig,Config
+    e: AnalysisMode,PerformanceConfig,FilterConfig,DepthConfig,OutputConfig,Config,FAST_CONFIG,ANALYSIS_MODES
     AnalysisMode:   # Available analysis modes.
     PerformanceConfig:   # Performance optimization settings.
     FilterConfig:   # Filtering options to reduce analysis...
@@ -118,7 +120,7 @@ D:
     ModuleInfo: to_dict(1)  # Information about a module/package.
   code2flow/core/streaming_analyzer.py:
     i: ast,hashlib,json,os,time,collections.defaultdict,dataclasses.{dataclass,field},pathlib.Path,typing.Dict
-    e: FilePriority,ScanStrategy,StreamingFileCache,SmartPrioritizer,StreamingAnalyzer,IncrementalAnalyzer
+    e: FilePriority,ScanStrategy,STRATEGY_QUICK,STRATEGY_STANDARD,STRATEGY_DEEP,StreamingFileCache,SmartPrioritizer,StreamingAnalyzer
     FilePriority:   # Priority scoring for file analysis or...
     ScanStrategy:   # Scanning methodology configuration.
     StreamingFileCache: __init__(2),_get_cache_key(2),_evict_if_needed(0),get(2),put(3)  # Memory-efficient cache with LRU evict...
@@ -126,11 +128,16 @@ D:
     StreamingAnalyzer: __init__(2),set_progress_callback(1),cancel(0),analyze_streaming(2),_quick_scan_file(1)  # Memory-efficient streaming analyzer w...
   code2flow/exporters/base.py:
     i: json,yaml,core.models.AnalysisResult,pathlib.Path,typing.{Any,Dict}
-    e: JSONExporter,YAMLExporter,MermaidExporter,LLMPromptExporter
+    e: ToonExporter,JSONExporter,YAMLExporter,MermaidExporter,LLMPromptExporter
+    ToonExporter: __init__(0),export(2),_build_toon_data(1),_analyze_functions(1),_calculate_complexity(1)  # Export to optimized toon format with...
     JSONExporter: export(4)  # Export to JSON format.
     YAMLExporter: export(4),export_grouped(2),export_split(4),export_separated(3),export_data_flow(3)  # Export to YAML format.
     MermaidExporter: export(2),export_call_graph(2),export_compact(2),_safe_id(1)  # Export call graph to Mermaid format.
     LLMPromptExporter: export(2),_trace_flow(5),_analyze_call_patterns(1)  # Export LLM-ready analysis summary wit...
+  code2flow/exporters/toon.py:
+    i: yaml,collections.defaultdict,core.models.AnalysisResult,pathlib.Path,typing.{Any,Dict}
+    e: ToonExporter
+    ToonExporter: __init__(0),export(2),_build_toon_data(1),_analyze_functions(1),_calculate_complexity(1)  # Export to optimized toon format with...
   code2flow/extractors/call_graph.py:
     i: ast,core.config.Config,core.models.{AnalysisResult,FlowEdge},typing.{Optional,Set}
     e: CallGraphExtractor
@@ -145,26 +152,26 @@ D:
     DFGExtractor: __init__(1),extract(3),visit_FunctionDef(1),visit_Assign(1),visit_AugAssign(1)  # Extract Data Flow Graph from AST.
   code2flow/llm_flow_generator.py:
     i: argparse,re,sys,collections.{Counter,defaultdict,deque},dataclasses.dataclass,pathlib.Path,typing.{Any,Dict}
-    e: FuncSummary,generate_llm_flow,render_llm_flow_md,dump_yaml,create_parser,main
+    e: _FUNC_LABEL_PREFIX,_CALL_LABEL_PREFIX,FuncSummary,generate_llm_flow,render_llm_flow_md,dump_yaml,create_parser,main
     FuncSummary: 
     _strip_bom(text:str)->str
-    _safe_read_yaml(path:Path)->Dict[str,Any]
-    _as_dict(d:Any)->Dict[str,Any]
+    _safe_read_yaml(path:Path)->Dict[str, Any]
+    _as_dict(d:Any)->Dict[str, Any]
     _as_list(v:Any)->List[Any]
     _shorten(s:str;max_len:int)->str
     _parse_call_label(label:str)->Optional[str]
     _parse_func_label(label:str)->Optional[str]
-    _collect_nodes(analysis:Dict[str;Any])->Dict[int,Dict[str,Any]]
+    _collect_nodes(analysis:Dict[str;Any])->Dict[int, Dict[str, Any]]
   code2flow/llm_task_generator.py:
     i: argparse,sys,yaml,pathlib.Path,typing.{Any,Dict,List,Optional,Tuple}
-    e: normalize_llm_task,parse_llm_task_text,load_input,dump_yaml,create_parser,main
+    e: normalize_llm_task,_SECTION_KEYS,parse_llm_task_text,load_input,dump_yaml,create_parser,main
     _strip_bom(text:str)->str
     _ensure_list(value:Any)->List[Any]
     _deep_get(d:Dict[str;Any];path:Tuple[str;Ellipsis])->Any
-    normalize_llm_task(data:Dict[str;Any])->Dict[str,Any]
+    normalize_llm_task(data:Dict[str;Any])->Dict[str, Any]
     _parse_bullets(lines:List[str])->List[str]
-    parse_llm_task_text(text:str)->Dict[str,Any]
-    load_input(path:Path)->Dict[str,Any]
+    parse_llm_task_text(text:str)->Dict[str, Any]
+    load_input(path:Path)->Dict[str, Any]
     dump_yaml(data:Dict[str;Any])->str
   code2flow/mermaid_generator.py:
     i: os,sys,subprocess,tempfile,json,pathlib.Path,typing.{List,Optional}
@@ -176,7 +183,7 @@ D:
     generate_with_puppeteer(mmd_file:Path;output_file:Path;timeout:int=60;max_text_size:int=2000000;max_edges:int=20000)->bool
   code2flow/nlp/config.py:
     i: yaml,dataclasses.{dataclass,field},pathlib.Path,typing.{Dict,List,Optional}
-    e: NormalizationConfig,IntentMatchingConfig,EntityResolutionConfig,MultilingualConfig,NLPConfig
+    e: NormalizationConfig,IntentMatchingConfig,EntityResolutionConfig,MultilingualConfig,NLPConfig,FAST_NLP_CONFIG,PRECISE_NLP_CONFIG
     NormalizationConfig:   # Configuration for query normalization.
     IntentMatchingConfig:   # Configuration for intent matching.
     EntityResolutionConfig:   # Configuration for entity resolution.
@@ -233,6 +240,15 @@ D:
     i: networkx,core.config.NODE_COLORS,core.models.AnalysisResult,matplotlib.{patches,pyplot},pathlib.Path,typing.Dict
     e: GraphVisualizer
     GraphVisualizer: __init__(1),_build_graph(0),visualize_cfg(2),visualize_call_graph(1),_hierarchical_layout(0)  # Visualize analysis results as graphs.
+  examples/functional_refactoring_example.py:
+    i: json,re,abc.{ABC,abstractmethod},dataclasses.dataclass,pathlib.Path,typing.{Any,Dict,Optional,Protocol}
+    e: TemplateGenerator,CommandContext,CommandResult,EntityPreparer,ShellEntityPreparer,DockerEntityPreparer,SQLEntityPreparer,KubernetesEntityPreparer
+    TemplateGenerator: __init__(0),generate(3),_prepare_shell_entities(0),_prepare_docker_entities(0),_prepare_sql_entities(0)  # Original - handles EVERYTHING: loadin...
+    CommandContext:   # Context for command generation.
+    CommandResult:   # Result of command generation.
+    EntityPreparer: supports(1),prepare(3)  # Protocol for domain-specific entity p...
+    ShellEntityPreparer: supports(1),prepare(3),_apply_path_defaults(4),_apply_pattern_defaults(2),_apply_find_flags(3)  # Prepares entities for shell commands.
+    generate(query:str;intent:Optional[str];dry_run:bool;cache_dir:str)
   setup.py:
     i: os,setuptools.{find_packages,setup}
     e: read_readme
@@ -282,3 +298,14 @@ D:
     test_tiktoken_truncation()
     test_template_rendering_with_metrics()
     test_tree_sitter_init()
+  validate_toon.py:
+    i: yaml,sys,collections.defaultdict,pathlib.Path
+    e: load_yaml,extract_functions_from_yaml,extract_functions_from_toon,extract_classes_from_yaml,extract_classes_from_toon,analyze_class_differences,extract_modules_from_yaml,extract_modules_from_toon
+    load_yaml(filepath)
+    extract_functions_from_yaml(yaml_data)
+    extract_functions_from_toon(toon_data)
+    extract_classes_from_yaml(yaml_data)
+    extract_classes_from_toon(toon_data)
+    analyze_class_differences(yaml_data;toon_data)
+    extract_modules_from_yaml(yaml_data)
+    extract_modules_from_toon(toon_data)

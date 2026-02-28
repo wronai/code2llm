@@ -183,10 +183,10 @@ class FileAnalyzer:
         
         lines = content.split('\n')
         
-        for node in ast.walk(tree):
+        for node in tree.body:
             if isinstance(node, ast.ClassDef):
                 self._process_class(node, file_path, module_name, result, lines)
-            elif isinstance(node, ast.FunctionDef) or isinstance(node, ast.AsyncFunctionDef):
+            elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 self._process_function(node, file_path, module_name, result, lines, None)
         
         # Calculate complexity with radon
@@ -194,16 +194,22 @@ class FileAnalyzer:
             complexity_results = cc_visit(content)
             for entry in complexity_results:
                 # Radon returns a list of objects (Function, Class, Method)
-                # We need to match them to our function/class records
-                full_name = f"{module_name}.{entry.name}"
-                if entry.classname:
-                    full_name = f"{module_name}.{entry.classname}.{entry.name}"
+                name = getattr(entry, 'name', '')
+                classname = getattr(entry, 'classname', None)
+                
+                if classname:
+                    full_name = f"{module_name}.{classname}.{name}"
+                else:
+                    full_name = f"{module_name}.{name}"
                 
                 if full_name in result['functions']:
                     result['functions'][full_name].complexity = {
-                        'cyclomatic': entry.complexity,
-                        'rank': cc_rank(entry.complexity)
+                        'cyclomatic_complexity': entry.complexity,
+                        'cc_rank': cc_rank(entry.complexity)
                     }
+                elif full_name in result['classes']:
+                    # We can store class complexity too if needed
+                    result['classes'][full_name].is_state_machine = result['classes'][full_name].is_state_machine or (entry.complexity > 20)
         except Exception as e:
             if self.config.verbose:
                 print(f"Error calculating complexity for {file_path}: {e}")
@@ -324,17 +330,19 @@ class FileAnalyzer:
             id=exit_id, type='EXIT', label='exit', function=func_name
         )
         
+        func_info.cfg_nodes.extend([entry_id, exit_id])
+        
         func_info.cfg_entry = entry_id
         func_info.cfg_exit = exit_id
         
         # Build CFG with depth limiting
         self._process_cfg_block(node.body, entry_id, exit_id, func_name, 
-                               result, depth=0, max_depth=max_depth)
+                               func_info, result, depth=0, max_depth=max_depth)
         
         self.stats['nodes_created'] += len(result['nodes'])
     
     def _process_cfg_block(self, body: List[ast.stmt], entry: str, exit: str,
-                            func_name: str, result: Dict, depth: int, max_depth: int) -> str:
+                            func_name: str, func_info: FunctionInfo, result: Dict, depth: int, max_depth: int) -> str:
         """Process a block of statements for CFG with depth limiting."""
         if depth >= max_depth:
             # Connect directly to exit if depth exceeded
@@ -350,15 +358,16 @@ class FileAnalyzer:
                     id=node_id, type='IF', label='if', function=func_name,
                     line=stmt.lineno
                 )
+                func_info.cfg_nodes.append(node_id)
                 result['edges'].append(FlowEdge(source=current, target=node_id))
                 
                 # Process branches
                 then_exit = self._process_cfg_block(
-                    stmt.body, node_id, exit, func_name, result, depth + 1, max_depth
+                    stmt.body, node_id, exit, func_name, func_info, result, depth + 1, max_depth
                 )
                 if stmt.orelse:
                     else_exit = self._process_cfg_block(
-                        stmt.orelse, node_id, exit, func_name, result, depth + 1, max_depth
+                        stmt.orelse, node_id, exit, func_name, func_info, result, depth + 1, max_depth
                     )
                 else:
                     else_exit = node_id
@@ -368,6 +377,7 @@ class FileAnalyzer:
                 result['nodes'][current] = FlowNode(
                     id=current, type='FUNC', label='merge', function=func_name
                 )
+                func_info.cfg_nodes.append(current)
                 result['edges'].append(FlowEdge(source=then_exit, target=current))
                 if else_exit != node_id:
                     result['edges'].append(FlowEdge(source=else_exit, target=current))
@@ -379,11 +389,12 @@ class FileAnalyzer:
                     id=node_id, type=loop_type, label=loop_type.lower(), 
                     function=func_name, line=stmt.lineno
                 )
+                func_info.cfg_nodes.append(node_id)
                 result['edges'].append(FlowEdge(source=current, target=node_id))
                 
                 # Limit loop body depth even more
                 self._process_cfg_block(
-                    stmt.body, node_id, node_id, func_name, result, depth + 2, max_depth
+                    stmt.body, node_id, node_id, func_name, func_info, result, depth + 2, max_depth
                 )
                 current = node_id
             
@@ -393,6 +404,7 @@ class FileAnalyzer:
                     id=node_id, type='RETURN', label='return', 
                     function=func_name, line=stmt.lineno
                 )
+                func_info.cfg_nodes.append(node_id)
                 result['edges'].append(FlowEdge(source=current, target=node_id))
                 result['edges'].append(FlowEdge(source=node_id, target=exit))
                 return exit
