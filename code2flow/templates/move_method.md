@@ -1,24 +1,25 @@
-## Cel refaktoryzacji
-Move method `{{ target_function }}` from module `{{ source_module }}` to `{{ target_module }}`.
+# Refaktoryzacja: Przeniesienie Metody (Move Method)
 
-## Powód (Głęboka Analiza)
-- {{ reason }}
-- Status reachability: {{ reachability }}
-- Feature Envy: Metoda używa więcej danych z `{{ target_module }}` niż z `{{ source_module }}`.
-- Obce Mutacje: {{ foreign_mutations }}
+Dla metody: `{{ target_function }}` z modułu `{{ source_module }}` do `{{ target_module }}`
 
-## Kontekst strukturalny
-- Zależności: {{ dependencies }}
-- Mutacje w module docelowym: {{ foreign_mutations_context }}
+## Analiza Problemu
+{{ reason }}
 
-## Dotknięte pliki
-- {{ source_file }} — źródło
-- {{ target_file }} — cel
+## Kontekst Couplingu
+- {{ foreign_mutations_context }}
+- **Zależności Obce**: {{ foreign_mutations }}
+- **Zależności Mutowane**: {{ dependencies }}
 
-## Kod źródłowy do przeniesienia
+## Zadanie
+{{ instruction }}
+
+## Kod do Przeniesienia
 ```python
 {{ source_code }}
 ```
 
-## Instrukcja
-{{ instruction }}
+## Wytyczne
+1. Przenieś logikę do docelowego modułu/klasy.
+2. W miejscu starej metody możesz zostawić delegację (jeśli konieczne) lub całkowicie ją usunąć, aktualizując wywołania.
+3. Zadbaj o poprawne importy w nowym miejscu.
+4. Upewnij się, że testy jednostkowe nadal pokrywają tę logikę.

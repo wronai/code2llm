@@ -90,8 +90,13 @@ class ToonExporter:
             complexity_score = self._calculate_complexity(nodes)
             complexity_distribution[self._get_complexity_tier(complexity_score)] += 1
             
-            # Extract function characteristics
-            characteristics = self._extract_characteristics(nodes)
+            # Skip detailed entry if complexity is low (CC < 3.0),
+            # but still keep it in distribution/averages
+            if complexity_score < 3.0:
+                continue
+
+            # Extract function characteristics in compact trait format
+            traits = self._extract_traits(nodes)
             
             # Build function entry
             func_entry = {
@@ -100,7 +105,8 @@ class ToonExporter:
                 'complexity': complexity_score,
                 'tier': self._get_complexity_tier(complexity_score),
                 'nodes': len(nodes),
-                **characteristics
+                'traits': traits,
+                'exits': len([n for n in nodes if getattr(n, 'type', '') in ['EXIT', 'RETURN']])
             }
             
             functions.append(func_entry)
@@ -139,20 +145,18 @@ class ToonExporter:
         else:
             return 'basic'
     
-    def _extract_characteristics(self, nodes) -> Dict[str, Any]:
-        """Extract function characteristics from nodes."""
+    def _extract_traits(self, nodes) -> list:
+        """Extract function traits in compact list format."""
         node_types = set(getattr(node, 'type', 'FUNC') for node in nodes)
+        traits = []
         
-        return {
-            'has_loops': any(t in ['FOR', 'WHILE'] for t in node_types),
-            'has_conditions': 'IF' in node_types,
-            'has_returns': 'RETURN' in node_types,
-            'has_assignments': 'assign' in node_types,
-            'has_method_calls': 'method_call' in node_types,
-            'node_types': list(node_types),
-            'entry_points': len([n for n in nodes if getattr(n, 'type', '') == 'ENTRY']),
-            'exit_points': len([n for n in nodes if getattr(n, 'type', '') in ['EXIT', 'RETURN']])
-        }
+        if any(t in ['FOR', 'WHILE'] for t in node_types): traits.append('loops')
+        if 'IF' in node_types: traits.append('conditions')
+        if 'RETURN' in node_types: traits.append('returns')
+        if 'assign' in node_types: traits.append('assigns')
+        if 'method_call' in node_types: traits.append('calls')
+        
+        return traits
     
     def _build_classes(self, functions: list) -> list:
         """Build class information from function data."""

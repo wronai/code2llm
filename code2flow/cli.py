@@ -11,7 +11,7 @@ from pathlib import Path
 
 from .core.config import Config, ANALYSIS_MODES
 from .core.analyzer import ProjectAnalyzer
-from .exporters.base import YAMLExporter, JSONExporter, MermaidExporter, LLMPromptExporter, ToonExporter
+from .exporters import YAMLExporter, JSONExporter, MermaidExporter, LLMPromptExporter, ToonExporter
 from .visualizers.graph import GraphVisualizer
 
 
@@ -432,7 +432,7 @@ def generate_llm_context(args_list):
     
     from pathlib import Path
     from . import ProjectAnalyzer, FAST_CONFIG
-    from .exporters.base import LLMPromptExporter
+    from .exporters import LLMPromptExporter
     
     source_path = Path(args.source)
     if not source_path.exists():

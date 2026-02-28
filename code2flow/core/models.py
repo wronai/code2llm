@@ -1,12 +1,32 @@
-"""Data models for code2flow analysis."""
-
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import List, Dict, Set, Optional, Any
 from pathlib import Path
 
 
+class BaseModel:
+    """Base class for models with automated serialization."""
+    def to_dict(self, compact: bool = True) -> dict:
+        """Convert to dictionary using dataclasses.asdict with filtering."""
+        data = asdict(self)
+        if compact:
+            return self._filter_compact(data)
+        return data
+
+    def _filter_compact(self, data: Any) -> Any:
+        """Recursively filter out None and empty collections if compact."""
+        if isinstance(data, dict):
+            return {
+                k: self._filter_compact(v) 
+                for k, v in data.items() 
+                if v is not None and (not isinstance(v, (list, dict, set)) or len(v) > 0)
+            }
+        elif isinstance(data, (list, tuple, set)):
+            return [self._filter_compact(v) for v in data]
+        return data
+
+
 @dataclass
-class FlowNode:
+class FlowNode(BaseModel):
     """Represents a node in the control flow graph."""
     id: str
     type: str  # FUNC, CALL, IF, FOR, WHILE, ASSIGN, RETURN, ENTRY, EXIT
@@ -18,65 +38,20 @@ class FlowNode:
     conditions: List[str] = field(default_factory=list)
     data_flow: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    def to_dict(self, compact: bool = True) -> dict:
-        """Convert to dictionary, optionally skipping empty fields."""
-        result = {
-            "id": self.id,
-            "type": self.type,
-            "label": self.label,
-        }
-        if self.function:
-            result["function"] = self.function
-        if self.file:
-            result["file"] = self.file
-        if self.line is not None:
-            result["line"] = self.line
-        
-        if not compact:
-            if self.column is not None:
-                result["column"] = self.column
-            if self.conditions:
-                result["conditions"] = self.conditions
-            if self.data_flow:
-                result["data_flow"] = self.data_flow
-            if self.metadata:
-                result["metadata"] = self.metadata
-        else:
-            if self.conditions:
-                result["conditions"] = self.conditions
-            if self.data_flow:
-                result["data_flow"] = self.data_flow
-        
-        return result
 
 
 @dataclass
-class FlowEdge:
+class FlowEdge(BaseModel):
     """Represents an edge in the control flow graph."""
     source: str
     target: str
     edge_type: str = "control"  # control, data, call
     label: Optional[str] = None
     conditions: List[str] = field(default_factory=list)
-    
-    def to_dict(self, compact: bool = True) -> dict:
-        """Convert to dictionary."""
-        result = {
-            "source": self.source,
-            "target": self.target,
-        }
-        if self.edge_type != "control":
-            result["type"] = self.edge_type
-        if self.label:
-            result["label"] = self.label
-        if self.conditions and not compact:
-            result["conditions"] = self.conditions
-        return result
 
 
 @dataclass
-class FunctionInfo:
+class FunctionInfo(BaseModel):
     """Information about a function/method."""
     name: str
     qualified_name: str
@@ -104,61 +79,10 @@ class FunctionInfo:
     complexity: Dict[str, Any] = field(default_factory=dict) # Cyclomatic, Cognitive
     centrality: float = 0.0 # Betweenness Centrality
     reachability: str = "unknown" # reachable, unreachable, unknown
-    
-    def to_dict(self, compact: bool = True) -> dict:
-        """Convert to dictionary."""
-        result = {
-            "name": self.name,
-            "qualified_name": self.qualified_name,
-            "file": self.file,
-            "line": self.line,
-        }
-        if self.module:
-            result["module"] = self.module
-        if self.class_name:
-            result["class"] = self.class_name
-        if self.is_method:
-            result["is_method"] = True
-        
-        if not compact:
-            if self.column:
-                result["column"] = self.column
-            if self.is_private:
-                result["is_private"] = True
-            if self.is_property:
-                result["is_property"] = True
-            if self.docstring:
-                result["docstring"] = self.docstring
-            if self.args:
-                result["args"] = self.args
-            if self.returns:
-                result["returns"] = self.returns
-            if self.decorators:
-                result["decorators"] = self.decorators
-        
-        if self.cfg_entry:
-            result["cfg_entry"] = self.cfg_entry
-        if self.calls:
-            # Remove duplicates while preserving order
-            unique_calls = list(dict.fromkeys(self.calls))
-            result["calls"] = unique_calls
-        if self.called_by:
-            # Remove duplicates while preserving order
-            unique_called_by = list(dict.fromkeys(self.called_by))
-            result["called_by"] = unique_called_by
-        
-        if self.complexity:
-            result["complexity"] = self.complexity
-        if self.centrality:
-            result["centrality"] = round(self.centrality, 4)
-        if self.reachability != "unknown":
-            result["reachability"] = self.reachability
-        
-        return result
 
 
 @dataclass
-class ClassInfo:
+class ClassInfo(BaseModel):
     """Information about a class."""
     name: str
     qualified_name: str
@@ -169,30 +93,10 @@ class ClassInfo:
     methods: List[str] = field(default_factory=list)
     docstring: Optional[str] = None
     is_state_machine: bool = False
-    
-    def to_dict(self, compact: bool = True) -> dict:
-        """Convert to dictionary."""
-        result = {
-            "name": self.name,
-            "qualified_name": self.qualified_name,
-            "file": self.file,
-            "line": self.line,
-        }
-        if self.module:
-            result["module"] = self.module
-        if self.bases:
-            result["bases"] = self.bases
-        if self.methods:
-            result["methods"] = self.methods
-        if self.is_state_machine:
-            result["is_state_machine"] = True
-        if not compact and self.docstring:
-            result["docstring"] = self.docstring
-        return result
 
 
 @dataclass
-class ModuleInfo:
+class ModuleInfo(BaseModel):
     """Information about a module/package."""
     name: str
     file: str
@@ -200,26 +104,10 @@ class ModuleInfo:
     imports: List[str] = field(default_factory=list)
     functions: List[str] = field(default_factory=list)
     classes: List[str] = field(default_factory=list)
-    
-    def to_dict(self, compact: bool = True) -> dict:
-        """Convert to dictionary."""
-        result = {
-            "name": self.name,
-            "file": self.file,
-        }
-        if self.is_package:
-            result["is_package"] = True
-        if self.functions:
-            result["functions"] = self.functions
-        if self.classes:
-            result["classes"] = self.classes
-        if not compact and self.imports:
-            result["imports"] = self.imports
-        return result
 
 
 @dataclass
-class Pattern:
+class Pattern(BaseModel):
     """Detected behavioral pattern."""
     name: str
     type: str  # recursion, state_machine, factory, singleton, strategy, loop
@@ -228,27 +116,10 @@ class Pattern:
     entry_points: List[str] = field(default_factory=list)
     exit_points: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    def to_dict(self, compact: bool = True) -> dict:
-        """Convert to dictionary."""
-        result = {
-            "name": self.name,
-            "type": self.type,
-            "confidence": round(self.confidence, 2),
-        }
-        if self.functions:
-            result["functions"] = self.functions
-        if self.entry_points:
-            result["entry_points"] = self.entry_points
-        if self.exit_points:
-            result["exit_points"] = self.exit_points
-        if not compact and self.metadata:
-            result["metadata"] = self.metadata
-        return result
 
 
 @dataclass
-class CodeSmell:
+class CodeSmell(BaseModel):
     """Represents a detected code smell."""
     name: str
     type: str  # god_function, feature_envy, etc.
@@ -258,21 +129,9 @@ class CodeSmell:
     description: str
     context: Dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> dict:
-        """Convert to dictionary."""
-        return {
-            "name": self.name,
-            "type": self.type,
-            "file": self.file,
-            "line": self.line,
-            "severity": self.severity,
-            "description": self.description,
-            "context": self.context
-        }
-
 
 @dataclass
-class Mutation:
+class Mutation(BaseModel):
     """Represents a mutation of a variable/object."""
     variable: str
     file: str
@@ -281,36 +140,17 @@ class Mutation:
     scope: str
     context: str
 
-    def to_dict(self) -> dict:
-        """Convert to dictionary."""
-        return {
-            "variable": self.variable,
-            "file": self.file,
-            "line": self.line,
-            "type": self.type,
-            "scope": self.scope,
-            "context": self.context
-        }
-
 
 @dataclass
-class DataFlow:
+class DataFlow(BaseModel):
     """Represents data flow for a variable."""
     variable: str
     dependencies: Set[str] = field(default_factory=set)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> dict:
-        """Convert to dictionary."""
-        return {
-            "variable": self.variable,
-            "dependencies": list(self.dependencies),
-            "metadata": self.metadata
-        }
-
 
 @dataclass
-class AnalysisResult:
+class AnalysisResult(BaseModel):
     """Complete analysis result for a project."""
     project_path: str = ""
     analysis_mode: str = "static"
@@ -336,27 +176,6 @@ class AnalysisResult:
     smells: List[CodeSmell] = field(default_factory=list)
     coupling: Dict[str, Any] = field(default_factory=dict)
     mutations: List[Mutation] = field(default_factory=list)
-    
-    def to_dict(self, compact: bool = True) -> dict:
-        """Convert entire result to dictionary."""
-        return {
-            "project_path": self.project_path,
-            "analysis_mode": self.analysis_mode,
-            "stats": self.stats,
-            "nodes": {k: v.to_dict(compact) for k, v in self.nodes.items()} if self.nodes else {},
-            "edges": [e.to_dict(compact) for e in self.edges] if self.edges else [],
-            "modules": {k: v.to_dict(compact) for k, v in self.modules.items()} if self.modules else {},
-            "classes": {k: v.to_dict(compact) for k, v in self.classes.items()} if self.classes else {},
-            "functions": {k: v.to_dict(compact) for k, v in self.functions.items()} if self.functions else {},
-            "patterns": [p.to_dict(compact) for p in self.patterns] if self.patterns else [],
-            "call_graph": self.call_graph,
-            "entry_points": self.entry_points,
-            "data_flows": {k: v.to_dict() for k, v in self.data_flows.items()} if self.data_flows else {},
-            "metrics": self.metrics if self.metrics else {},
-            "smells": [s.to_dict() for s in self.smells] if self.smells else [],
-            "coupling": self.coupling if self.coupling else {},
-            "mutations": [m.to_dict() for m in self.mutations] if self.mutations else [],
-        }
     
     def get_function_count(self) -> int:
         """Get total function count."""

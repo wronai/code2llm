@@ -6,7 +6,7 @@ echo "🚀 Testing different output formats..."
 
 # Test 1: Default TOON format
 echo "📊 Test 1: Default TOON format"
-source venv/bin/activate && python -m code2flow ./ -v -o ./output_toon -m hybrid -f toon
+source venv/bin/activate && python -m code2flow ./ -v -o ./project -m hybrid -f toon
 python3 validate_toon.py output_toon/analysis.toon
 
 # Test 2: All formats

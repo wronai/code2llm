@@ -12,6 +12,7 @@ class SmellDetector:
         """Record and return detected code smells."""
         smells = []
         smells.extend(self._detect_god_functions())
+        smells.extend(self._detect_god_modules())
         smells.extend(self._detect_feature_envy())
         smells.extend(self._detect_data_clumps())
         smells.extend(self._detect_shotgun_surgery())
@@ -29,12 +30,11 @@ class SmellDetector:
             fan_out = metrics.get('fan_out', 0)
             mutation_count = len([m for m in self.result.mutations if m.scope == func_name])
             
-            # Use radon complexity if available
-            complexity = func_info.complexity.get('cyclomatic', 1)
+            # Use cyclomatic complexity (now mapped to 'cc' in FunctionInfo.complexity)
+            complexity = func_info.complexity.get('cyclomatic_complexity', 1)
             
-            if fan_out > 8 or mutation_count > 5 or complexity > 15:
-                # Severity based on multiple factors
-                severity = (fan_out / 15) * 0.4 + (mutation_count / 20) * 0.3 + (complexity / 25) * 0.3
+            if fan_out > 10 or mutation_count > 6 or complexity > 12:
+                severity = (fan_out / 20) * 0.3 + (mutation_count / 15) * 0.3 + (complexity / 30) * 0.4
                 severity = min(1.0, severity)
                 
                 smells.append(CodeSmell(
@@ -43,8 +43,30 @@ class SmellDetector:
                     file=func_info.file,
                     line=func_info.line,
                     severity=severity,
-                    description=f"Function '{func_info.name}' is highly complex: CC={complexity}, fan-out={fan_out}, mutations={mutation_count}.",
-                    context={"fan_out": fan_out, "mutations": mutation_count, "complexity": complexity}
+                    description=f"Function '{func_info.name}' is oversized: CC={complexity}, fan-out={fan_out}, mutations={mutation_count}.",
+                    context={"fan_out": fan_out, "mutations": mutation_count, "complexity": complexity, "function": func_name}
+                ))
+        return smells
+
+    def _detect_god_modules(self) -> List[CodeSmell]:
+        """Detect oversized modules/packages."""
+        smells = []
+        for mod_name, mod in self.result.modules.items():
+            f_count = len(mod.functions)
+            c_count = len(mod.classes)
+            
+            if f_count > 40 or c_count > 10:
+                severity = (f_count / 100) * 0.5 + (c_count / 25) * 0.5
+                severity = min(1.0, severity)
+                
+                smells.append(CodeSmell(
+                    name=f"God Module: {mod_name}",
+                    type="god_function", # Map to extract_method for simplicity or add god_module template
+                    file=mod.file,
+                    line=1,
+                    severity=severity,
+                    description=f"Module '{mod_name}' is too large ({f_count} functions, {c_count} classes). Consider splitting into sub-modules.",
+                    context={"functions": f_count, "classes": c_count}
                 ))
         return smells
         
