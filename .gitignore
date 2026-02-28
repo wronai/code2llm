@@ -1,5 +1,9 @@
 .pkl
+.code2flow_cache
+final_prompts
+final_check
 recordings
+output
 output/*
 output_hybrid/
 !output/analysis.yaml
