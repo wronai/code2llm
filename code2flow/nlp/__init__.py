@@ -4,7 +4,7 @@ Provides query normalization, intent matching, and entity resolution
 with multilingual support and fuzzy matching.
 """
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 from .pipeline import NLPPipeline
 from .normalization import QueryNormalizer

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "code2flow"
-version = "0.2.1"
+version = "0.2.2"
 description = "High-performance Python code flow analysis with NLP query processing - CFG, DFG, call graphs, and intelligent code queries"
 readme = "README.md"
 requires-python = ">=3.8"

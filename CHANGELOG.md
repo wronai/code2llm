@@ -1,3 +1,22 @@
+## [0.2.2] - 2026-02-28
+
+### Summary
+
+feat(goal): deep code analysis engine with 7 supporting modules
+
+### Ci
+
+- config: update publish.yml
+
+### Config
+
+- config: update goal.yaml
+
+### Other
+
+- scripts: update project.sh
+
+
 ## [0.2.1] - 2026-02-28
 
 ### Summary
