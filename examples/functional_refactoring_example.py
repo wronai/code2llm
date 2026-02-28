@@ -12,7 +12,7 @@ into functional domains.
 class TemplateGenerator:
     """Original - handles EVERYTHING: loading, matching, rendering, shell, docker, sql..."""
     
-    def __init__(self, ...):
+    def __init__(self, *args, **kwargs):
         self._load_templates_from_json()
         self._load_defaults_from_json()
     
@@ -31,13 +31,13 @@ class TemplateGenerator:
         return TemplateResult(rendered)
     
     # 100 private methods for different domains...
-    def _prepare_shell_entities(self, ...): ...
-    def _prepare_docker_entities(self, ...): ...
-    def _prepare_sql_entities(self, ...): ...
-    def _prepare_kubernetes_entities(self, ...): ...
-    def _apply_shell_find_flags(self, ...): ...
-    def _build_shell_find_name_flag(self, ...): ...
-    def _build_shell_find_size_flag(self, ...): ...
+    def _prepare_shell_entities(self, *args, **kwargs): pass
+    def _prepare_docker_entities(self, *args, **kwargs): pass
+    def _prepare_sql_entities(self, *args, **kwargs): pass
+    def _prepare_kubernetes_entities(self, *args, **kwargs): pass
+    def _apply_shell_find_flags(self, *args, **kwargs): pass
+    def _build_shell_find_name_flag(self, *args, **kwargs): pass
+    def _build_shell_find_size_flag(self, *args, **kwargs): pass
     # ... 95 more methods
 
 
