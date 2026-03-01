@@ -68,7 +68,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     environment:
       name: pypi
-      url: https://pypi.org/p/code2flow
+      url: https://pypi.org/p/code2llm
     permissions:
       id-token: write
     steps:
