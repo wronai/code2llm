@@ -223,8 +223,16 @@ class MermaidExporter(Exporter):
         return name.replace('.', '_').replace('-', '_').replace('/', '_').replace(' ', '_')
 
     def _module_of(self, func_name: str) -> str:
-        """Extract module from qualified name."""
+        """Extract module from qualified name.
+
+        Returns up to 2 levels (e.g. 'code2llm.core', 'code2llm.exporters')
+        so that subpackage-level cross-edges are visible in compact_flow.
+        """
         parts = func_name.split('.')
+        if len(parts) >= 3:
+            return '.'.join(parts[:2])
+        if len(parts) == 2:
+            return parts[0]
         return parts[0] if parts else 'unknown'
 
     def _resolve(self, callee: str, funcs: dict) -> str:

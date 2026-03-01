@@ -86,61 +86,78 @@ class ToonRenderer:
         if not matrix:
             return ["COUPLING: no cross-package imports detected"]
 
-        all_pkgs = sorted({p for pair in matrix for p in pair})
-        if not all_pkgs:
-            return ["COUPLING: n/a"]
-
-        # Limit to top packages by fan-in + fan-out
-        pkg_activity = [(p, pkg_fan.get(p, {}).get("fan_in", 0) + pkg_fan.get(p, {}).get("fan_out", 0)) for p in all_pkgs]
-        pkg_activity.sort(key=lambda x: x[1], reverse=True)
-        top_pkgs = [p for p, _ in pkg_activity[:MAX_COUPLING_PACKAGES]]
-
+        top_pkgs = self._select_top_packages(matrix, pkg_fan)
         if not top_pkgs:
             return ["COUPLING: n/a"]
 
-        # header
-        col_w = max(len(p) for p in top_pkgs)
-        col_w = max(col_w, 6)
-        hdr_label = "COUPLING:"
+        lines = self._render_coupling_header(top_pkgs)
+        self._render_coupling_rows(top_pkgs, matrix, pkg_fan, lines)
+        self._render_coupling_summary(ctx, pkg_fan, lines)
+        return lines
+
+    def _select_top_packages(self, matrix: Dict, pkg_fan: Dict) -> List[str]:
+        """Select top packages by activity (fan-in + fan-out)."""
+        all_pkgs = sorted({p for pair in matrix for p in pair})
+        if not all_pkgs:
+            return []
+        pkg_activity = [(p, pkg_fan.get(p, {}).get("fan_in", 0) + pkg_fan.get(p, {}).get("fan_out", 0)) for p in all_pkgs]
+        pkg_activity.sort(key=lambda x: x[1], reverse=True)
+        return [p for p, _ in pkg_activity[:MAX_COUPLING_PACKAGES]]
+
+    def _render_coupling_header(self, top_pkgs: List[str]) -> List[str]:
+        """Render coupling matrix header row."""
+        col_w = max(max(len(p) for p in top_pkgs), 6)
         pad = max(len(p) for p in top_pkgs) + 2
         hdr = f"{'':>{pad}}  " + "  ".join(f"{p:>{col_w}}" for p in top_pkgs)
-        lines = [hdr_label, hdr]
+        return ["COUPLING:", hdr]
 
+    def _render_coupling_rows(self, top_pkgs: List[str], matrix: Dict, pkg_fan: Dict, lines: List[str]) -> None:
+        """Render one matrix row per source package."""
+        col_w = max(max(len(p) for p in top_pkgs), 6)
+        pad = max(len(p) for p in top_pkgs) + 2
         for src in top_pkgs:
-            row_parts = []
-            for dst in top_pkgs:
-                if src == dst:
-                    row_parts.append(f"{'──':>{col_w}}")
-                else:
-                    val = matrix.get((src, dst), 0)
-                    cell = str(val) if val else ""
-                    # show ←N for fan-in direction
-                    if not val:
-                        rev = matrix.get((dst, src), 0)
-                        cell = f"←{rev}" if rev else ""
-                    row_parts.append(f"{cell:>{col_w}}")
-            tag = ""
-            fi = pkg_fan.get(src, {}).get("fan_in", 0)
-            fo = pkg_fan.get(src, {}).get("fan_out", 0)
-            if fi >= 5:
-                tag = "  hub"
-            elif fo >= 8:
-                tag = "  !! fan-out"
+            row_parts = self._build_coupling_row(src, top_pkgs, matrix, col_w)
+            tag = self._coupling_row_tag(src, pkg_fan)
             lines.append(f"  {src:>{pad-2}}  " + "  ".join(row_parts) + tag)
 
-        # summary
+    @staticmethod
+    def _build_coupling_row(src: str, top_pkgs: List[str], matrix: Dict, col_w: int) -> List[str]:
+        """Build cell values for a single coupling matrix row."""
+        row_parts = []
+        for dst in top_pkgs:
+            if src == dst:
+                row_parts.append(f"{'──':>{col_w}}")
+            else:
+                val = matrix.get((src, dst), 0)
+                cell = str(val) if val else ""
+                if not val:
+                    rev = matrix.get((dst, src), 0)
+                    cell = f"←{rev}" if rev else ""
+                row_parts.append(f"{cell:>{col_w}}")
+        return row_parts
+
+    @staticmethod
+    def _coupling_row_tag(src: str, pkg_fan: Dict) -> str:
+        """Determine row tag (hub / fan-out warning)."""
+        fi = pkg_fan.get(src, {}).get("fan_in", 0)
+        fo = pkg_fan.get(src, {}).get("fan_out", 0)
+        if fi >= 5:
+            return "  hub"
+        if fo >= 8:
+            return "  !! fan-out"
+        return ""
+
+    @staticmethod
+    def _render_coupling_summary(ctx: Dict[str, Any], pkg_fan: Dict, lines: List[str]) -> None:
+        """Render coupling summary: cycles, hubs, smells."""
         ncycles = len(ctx["cycles"])
         lines.append(f"  CYCLES: {'none' if ncycles == 0 else ncycles}")
-        hubs = [p for p, d in pkg_fan.items() if d.get("fan_in", 0) >= 5]
-        if hubs:
-            for h in hubs:
-                lines.append(f"  HUB: {h}/ (fan-in={pkg_fan[h]['fan_in']})")
-        smelly = [p for p, d in pkg_fan.items() if d.get("fan_out", 0) >= 8]
-        if smelly:
-            for s in smelly:
-                lines.append(f"  SMELL: {s}/ fan-out={pkg_fan[s]['fan_out']} → split needed")
-
-        return lines
+        for h, d in pkg_fan.items():
+            if d.get("fan_in", 0) >= 5:
+                lines.append(f"  HUB: {h}/ (fan-in={d['fan_in']})")
+        for s, d in pkg_fan.items():
+            if d.get("fan_out", 0) >= 8:
+                lines.append(f"  SMELL: {s}/ fan-out={d['fan_out']} → split needed")
 
     def render_layers(self, ctx: Dict[str, Any]) -> List[str]:
         """Render LAYERS section — files grouped by package with metrics."""
@@ -149,7 +166,6 @@ class ToonRenderer:
         pkg_fan = ctx["pkg_fan"]
         dup_files = _dup_file_set(ctx)
 
-        # group files by package, sort packages by avg_cc desc
         pkg_order = sorted(
             packages.keys(),
             key=lambda p: packages[p].get("avg_cc", 0),
@@ -158,68 +174,62 @@ class ToonRenderer:
 
         lines = ["LAYERS:"]
         for pkg in pkg_order:
-            pd = packages[pkg]
-            fi = pkg_fan.get(pkg, {}).get("fan_in", 0)
-            fo = pkg_fan.get(pkg, {}).get("fan_out", 0)
-            markers = ""
-            if fo >= 8:
-                markers = "  !! split"
-            # any dup classes?
-            pkg_dups = any(
-                d["fileA"].startswith(pkg + "/") or d["fileB"].startswith(pkg + "/")
-                for d in ctx["duplicates"]
-            )
-            if pkg_dups:
-                markers += "  ×DUP"
-
-            lines.append(
-                f"  {pkg + '/':30s}  CC̄={pd['avg_cc']:<5}  "
-                f"←in:{fi}  →out:{fo}{markers}"
-            )
-
-            # files in this package sorted by lines desc
-            pkg_files = [
-                (fpath, fm) for fpath, fm in files.items()
-                if fm["rel"].startswith(pkg + "/") or (pkg == "." and "/" not in fm["rel"])
-            ]
-            pkg_files.sort(key=lambda x: x[1]["lines"], reverse=True)
-
-            for fpath, fm in pkg_files:
-                rel = fm["rel"]
-                short = rel.split("/")[-1] if "/" in rel else rel
-                # remove .py suffix for compactness
-                if short.endswith(".py"):
-                    short = short[:-3]
-                lc = fm["lines"]
-                cc_count = fm["class_count"]
-                mc = fm["methods"]
-                mcc = fm["max_cc"]
-                fin = fm["fan_in"]
-
-                severity = ""
-                if lc >= GOD_MODULE_LINES or mcc >= CC_WARNING:
-                    severity = "!! "
-                elif mcc >= CC_CRITICAL:
-                    severity = "!  "
-
-                dup_mark = ""
-                if rel in dup_files:
-                    dup_mark = "  ×DUP"
-
-                lines.append(
-                    f"  │ {severity}{short:24s} {lc:>5}L  {cc_count}C  {mc:>3}m"
-                    f"  CC={mcc:<5}  ←{fin}{dup_mark}"
-                )
+            self._render_layer_package(pkg, packages[pkg], pkg_fan, ctx, lines)
+            self._render_layer_files(pkg, files, dup_files, lines)
             lines.append(f"  │")
 
-        # zero-line files
+        self._render_zero_line_files(files, lines)
+        return lines
+
+    def _render_layer_package(self, pkg: str, pd: Dict, pkg_fan: Dict, ctx: Dict, lines: List[str]) -> None:
+        """Render a single package header line in LAYERS."""
+        fi = pkg_fan.get(pkg, {}).get("fan_in", 0)
+        fo = pkg_fan.get(pkg, {}).get("fan_out", 0)
+        markers = "  !! split" if fo >= 8 else ""
+        pkg_dups = any(
+            d["fileA"].startswith(pkg + "/") or d["fileB"].startswith(pkg + "/")
+            for d in ctx["duplicates"]
+        )
+        if pkg_dups:
+            markers += "  ×DUP"
+        lines.append(
+            f"  {pkg + '/':30s}  CC̄={pd['avg_cc']:<5}  "
+            f"←in:{fi}  →out:{fo}{markers}"
+        )
+
+    def _render_layer_files(self, pkg: str, files: Dict, dup_files: set, lines: List[str]) -> None:
+        """Render file rows for a single package in LAYERS."""
+        pkg_files = [
+            (fpath, fm) for fpath, fm in files.items()
+            if fm["rel"].startswith(pkg + "/") or (pkg == "." and "/" not in fm["rel"])
+        ]
+        pkg_files.sort(key=lambda x: x[1]["lines"], reverse=True)
+        for fpath, fm in pkg_files:
+            lines.append(self._format_layer_file_row(fm, dup_files))
+
+    @staticmethod
+    def _format_layer_file_row(fm: Dict, dup_files: set) -> str:
+        """Format a single file row in LAYERS section."""
+        rel = fm["rel"]
+        short = rel.split("/")[-1] if "/" in rel else rel
+        if short.endswith(".py"):
+            short = short[:-3]
+        lc, mcc, fin = fm["lines"], fm["max_cc"], fm["fan_in"]
+        severity = "!! " if (lc >= GOD_MODULE_LINES or mcc >= CC_WARNING) else ("!  " if mcc >= CC_CRITICAL else "")
+        dup_mark = "  ×DUP" if rel in dup_files else ""
+        return (
+            f"  │ {severity}{short:24s} {lc:>5}L  {fm['class_count']}C  {fm['methods']:>3}m"
+            f"  CC={mcc:<5}  ←{fin}{dup_mark}"
+        )
+
+    @staticmethod
+    def _render_zero_line_files(files: Dict, lines: List[str]) -> None:
+        """Render zero-line files at the end of LAYERS."""
         zero = [(fpath, fm) for fpath, fm in files.items() if fm["lines"] == 0]
         if zero:
             lines.append("  ── zero ──")
             for fpath, fm in sorted(zero, key=lambda x: x[1]["rel"]):
                 lines.append(f"     {fm['rel']:40s}  0L")
-
-        return lines
 
     def render_duplicates(self, ctx: Dict[str, Any]) -> List[str]:
         """Render duplicates section."""
@@ -252,27 +262,31 @@ class ToonRenderer:
             return [f"FUNCTIONS (CC≥{CC_CRITICAL}, 0 of {total}): none"]
 
         lines = [f"FUNCTIONS (CC≥{CC_CRITICAL}, {len(critical)} of {total}):"]
-        shown = critical[:MAX_FUNCTIONS_SHOWN]
-        for fm in shown:
-            display = fm["name"]
-            if fm["class_name"]:
-                display = f"{fm['class_name']}.{fm['name']}"
+        for fm in critical[:MAX_FUNCTIONS_SHOWN]:
+            lines.append(self._format_function_row(fm, dup_classes))
 
-            traits = "+".join(fm["traits"]) if fm["traits"] else ""
-            exits_s = f"{fm['exits']}exit" if fm["exits"] else ""
+        self._render_cc_summary(all_funcs, total, lines)
+        return lines
 
-            markers = ""
-            if fm["class_name"] and fm["class_name"] in dup_classes:
-                markers += "  ×DUP"
-            if fm["cc"] >= CC_WARNING:
-                markers += "  !! split"
+    @staticmethod
+    def _format_function_row(fm: Dict, dup_classes: set) -> str:
+        """Format a single function row."""
+        display = f"{fm['class_name']}.{fm['name']}" if fm["class_name"] else fm["name"]
+        traits = "+".join(fm["traits"]) if fm["traits"] else ""
+        exits_s = f"{fm['exits']}exit" if fm["exits"] else ""
+        markers = ""
+        if fm["class_name"] and fm["class_name"] in dup_classes:
+            markers += "  ×DUP"
+        if fm["cc"] >= CC_WARNING:
+            markers += "  !! split"
+        return (
+            f"  {fm['cc']:>5.1f}  {display:40s}  {fm['nodes']:>3}n"
+            f"  {exits_s:>6s}  {traits}{markers}"
+        )
 
-            lines.append(
-                f"  {fm['cc']:>5.1f}  {display:40s}  {fm['nodes']:>3}n"
-                f"  {exits_s:>6s}  {traits}{markers}"
-            )
-
-        # summary distribution
+    @staticmethod
+    def _render_cc_summary(all_funcs: List[Dict], total: int, lines: List[str]) -> None:
+        """Render CC distribution summary."""
         cc_bins = {"critical": 0, "high": 0, "medium": 0, "low": 0}
         for f in all_funcs:
             if f["cc"] >= CC_CRITICAL:
@@ -296,8 +310,6 @@ class ToonRenderer:
             f" | low(<2): {cc_bins['low']}"
         )
         lines.append(f"    {pct_crit}% CC≥{CC_CRITICAL}  {pct_high}% CC≥{CC_HIGH}")
-
-        return lines
 
     def render_hotspots(self, ctx: Dict[str, Any]) -> List[str]:
         """Render hotspots section."""

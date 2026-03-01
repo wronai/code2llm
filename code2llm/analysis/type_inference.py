@@ -222,40 +222,49 @@ class TypeInferenceEngine:
         if node is None:
             return None
 
-        if isinstance(node, ast.Constant):
-            return str(node.value)
-
-        if isinstance(node, ast.Name):
-            return node.id
-
-        if isinstance(node, ast.Attribute):
-            value = self._annotation_to_str(node.value)
-            if value:
-                return f"{value}.{node.attr}"
-            return node.attr
-
-        if isinstance(node, ast.Subscript):
-            base = self._annotation_to_str(node.value)
-            slice_str = self._annotation_to_str(node.slice)
-            if base and slice_str:
-                return f"{base}[{slice_str}]"
-            return base
-
-        if isinstance(node, ast.Tuple):
-            parts = [self._annotation_to_str(e) for e in node.elts]
-            return ", ".join(p for p in parts if p)
+        handler = self._ANNOTATION_HANDLERS.get(type(node))
+        if handler:
+            return handler(self, node)
 
         if isinstance(node, ast.BinOp) and isinstance(node.op, ast.BitOr):
-            left = self._annotation_to_str(node.left)
-            right = self._annotation_to_str(node.right)
-            if left and right:
-                return f"{left} | {right}"
+            return self._ann_binop(node)
 
-        # Fallback: try ast.unparse (Python 3.8+)
         try:
             return ast.unparse(node)
         except (AttributeError, ValueError):
             return None
+
+    def _ann_constant(self, node: ast.Constant) -> str:
+        return str(node.value)
+
+    def _ann_name(self, node: ast.Name) -> str:
+        return node.id
+
+    def _ann_attribute(self, node: ast.Attribute) -> str:
+        value = self._annotation_to_str(node.value)
+        return f"{value}.{node.attr}" if value else node.attr
+
+    def _ann_subscript(self, node: ast.Subscript) -> Optional[str]:
+        base = self._annotation_to_str(node.value)
+        slice_str = self._annotation_to_str(node.slice)
+        return f"{base}[{slice_str}]" if (base and slice_str) else base
+
+    def _ann_tuple(self, node: ast.Tuple) -> str:
+        parts = [self._annotation_to_str(e) for e in node.elts]
+        return ", ".join(p for p in parts if p)
+
+    def _ann_binop(self, node: ast.BinOp) -> Optional[str]:
+        left = self._annotation_to_str(node.left)
+        right = self._annotation_to_str(node.right)
+        return f"{left} | {right}" if (left and right) else None
+
+    _ANNOTATION_HANDLERS = {
+        ast.Constant: _ann_constant,
+        ast.Name: _ann_name,
+        ast.Attribute: _ann_attribute,
+        ast.Subscript: _ann_subscript,
+        ast.Tuple: _ann_tuple,
+    }
 
     # ------------------------------------------------------------------
     # name-based inference (fallback)

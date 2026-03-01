@@ -27,6 +27,82 @@ def load_toon(filepath):
         print(f"Error loading {filepath}: {e}")
         return None
 
+def _parse_header_line(line, data):
+    """Parse '# code2llm ...' header line."""
+    data['meta']['project'] = 'code2llm'
+    data['meta']['generated'] = line.split('|')[-1].strip() if '|' in line else ''
+
+
+def _parse_stats_line(line, data):
+    """Parse '# CC̄=... | critical:... | dups:... | cycles:...' header line."""
+    parts = line[2:].strip().split('|')
+    for part in parts:
+        if 'critical' in part:
+            data['stats']['critical'] = part.strip()
+        elif 'dups' in part:
+            data['stats']['duplicates'] = part.strip()
+        elif 'cycles' in part:
+            data['stats']['cycles'] = part.strip()
+
+
+def _parse_health_line(line_stripped, data):
+    """Parse a single HEALTH section line."""
+    if line_stripped.startswith('\U0001f534') or line_stripped.startswith('\U0001f7e1'):
+        data['health'].append(line_stripped)
+
+
+def _parse_functions_line(line_stripped, data):
+    """Parse a single FUNCTIONS section line."""
+    if line_stripped.startswith('summary:'):
+        return
+    parts = line_stripped.split()
+    if len(parts) >= 2 and parts[0].replace('.', '').isdigit():
+        data['functions'].append({'name': parts[1], 'cc': float(parts[0])})
+
+
+def _parse_classes_line(line_stripped, data):
+    """Parse a single CLASSES section line."""
+    parts = line_stripped.split()
+    if parts and not parts[0].startswith('\u2588'):
+        data['classes'].append({'name': parts[0]})
+
+
+def _parse_hotspots_line(line_stripped, data):
+    """Parse a single HOTSPOTS section line."""
+    if line_stripped.startswith('#'):
+        parts = line_stripped.split()
+        if len(parts) >= 2:
+            data['hotspots'].append({'name': parts[1]})
+
+
+_SECTION_DISPATCH = {
+    'health': _parse_health_line,
+    'functions': _parse_functions_line,
+    'classes': _parse_classes_line,
+    'hotspots': _parse_hotspots_line,
+}
+
+_SECTION_HEADERS = {
+    'HEALTH': 'health',
+    'REFACTOR': 'refactor',
+    'COUPLING:': 'coupling',
+    'LAYERS:': 'layers',
+    'DUPLICATES': 'duplicates',
+    'FUNCTIONS': 'functions',
+    'HOTSPOTS:': 'hotspots',
+    'CLASSES:': 'classes',
+    'D:': 'details',
+}
+
+
+def _detect_section(line):
+    """Detect section header; return section name or None."""
+    for prefix, section_name in _SECTION_HEADERS.items():
+        if line.startswith(prefix):
+            return section_name
+    return None
+
+
 def parse_toon_content(content):
     """Parse TOON v2 plain-text format."""
     data = {
@@ -48,77 +124,23 @@ def parse_toon_content(content):
     for line in lines:
         line_stripped = line.strip()
         
-        # Parse header
         if line.startswith('# code2llm'):
-            data['meta']['project'] = 'code2llm'
-            data['meta']['generated'] = line.split('|')[-1].strip() if '|' in line else ''
+            _parse_header_line(line, data)
             continue
         
-        # Parse stats from header line 2
         if line.startswith('# CC'):
-            parts = line[2:].strip().split('|')
-            for part in parts:
-                if 'critical' in part:
-                    data['stats']['critical'] = part.strip()
-                elif 'dups' in part:
-                    data['stats']['duplicates'] = part.strip()
-                elif 'cycles' in part:
-                    data['stats']['cycles'] = part.strip()
+            _parse_stats_line(line, data)
             continue
         
-        # Detect sections
-        if line.startswith('HEALTH'):
-            section = 'health'
-            continue
-        elif line.startswith('REFACTOR'):
-            section = 'refactor'
-            continue
-        elif line.startswith('COUPLING:'):
-            section = 'coupling'
-            continue
-        elif line.startswith('LAYERS:'):
-            section = 'layers'
-            continue
-        elif line.startswith('DUPLICATES'):
-            section = 'duplicates'
-            continue
-        elif line.startswith('FUNCTIONS'):
-            section = 'functions'
-            continue
-        elif line.startswith('HOTSPOTS:'):
-            section = 'hotspots'
-            continue
-        elif line.startswith('CLASSES:'):
-            section = 'classes'
-            continue
-        elif line.startswith('D:'):
-            section = 'details'
+        detected = _detect_section(line)
+        if detected is not None:
+            section = detected
             continue
         
-        # Parse section content
-        if section == 'health' and line_stripped:
-            if line_stripped.startswith('🔴') or line_stripped.startswith('🟡'):
-                data['health'].append(line_stripped)
-        elif section == 'functions' and line_stripped:
-            # Parse function lines like: "56.0  main  19n 4exit cond+ret !! split"
-            if line_stripped.startswith('summary:'):
-                continue
-            parts = line_stripped.split()
-            if len(parts) >= 2 and parts[0].replace('.', '').isdigit():
-                func_name = parts[1]
-                data['functions'].append({'name': func_name, 'cc': float(parts[0])})
-        elif section == 'classes' and line_stripped:
-            # Parse class lines like: "ToonExporter  ████████  29m CC̄=9.5 max=31 !!"
-            parts = line_stripped.split()
-            if parts and not parts[0].startswith('█'):
-                class_name = parts[0]
-                data['classes'].append({'name': class_name})
-        elif section == 'hotspots' and line_stripped:
-            # Parse hotspot lines like: "#1  main  fan=45  \"calls 45 functions\""
-            if line_stripped.startswith('#'):
-                parts = line_stripped.split()
-                if len(parts) >= 2:
-                    data['hotspots'].append({'name': parts[1]})
+        if section and line_stripped:
+            parser = _SECTION_DISPATCH.get(section)
+            if parser:
+                parser(line_stripped, data)
     
     return data
 

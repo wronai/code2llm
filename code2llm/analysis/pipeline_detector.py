@@ -164,7 +164,11 @@ class PipelineDetector:
     # graph construction
     # ------------------------------------------------------------------
     def _build_graph(self, funcs: Dict[str, FunctionInfo]) -> nx.DiGraph:
-        """Build a directed graph from function call relationships."""
+        """Build a directed graph from function call relationships.
+
+        Includes method→method edges within the same class by resolving
+        self.X calls to the qualified name of the target method.
+        """
         G = nx.DiGraph()
 
         for qname, fi in funcs.items():
@@ -173,7 +177,7 @@ class PipelineDetector:
 
         for qname, fi in funcs.items():
             for callee in fi.calls:
-                resolved = self._resolve_callee(callee, funcs)
+                resolved = self._resolve_callee(callee, funcs, caller=fi)
                 if resolved and resolved != qname:  # no self-loops
                     G.add_edge(qname, resolved)
 
@@ -434,17 +438,49 @@ class PipelineDetector:
     # callee resolution
     # ------------------------------------------------------------------
     def _resolve_callee(
-        self, callee: str, funcs: Dict[str, FunctionInfo]
+        self, callee: str, funcs: Dict[str, FunctionInfo],
+        caller: Optional[FunctionInfo] = None,
     ) -> Optional[str]:
         """Resolve callee name to qualified name.
+
+        Handles:
+        - Direct qualified matches
+        - self.method → same-class method resolution
+        - Unqualified names with same-class preference
 
         Returns None for ambiguous matches (multiple candidates)
         to avoid creating phantom pipeline edges.
         """
         if callee in funcs:
             return callee
-        candidates = [qn for qn in funcs if qn.endswith(f".{callee}")]
+
+        # Strip self. prefix for method→method calls
+        bare = callee
+        is_self_call = False
+        if callee.startswith("self."):
+            bare = callee[5:]  # strip "self."
+            is_self_call = True
+
+        # Try same-class resolution first (for self.X or unqualified method calls)
+        if caller and caller.class_name:
+            class_prefix = f"{caller.module}.{caller.class_name}."
+            class_candidate = class_prefix + bare
+            if class_candidate in funcs:
+                return class_candidate
+
+        # Suffix match
+        candidates = [qn for qn in funcs if qn.endswith(f".{bare}")]
         if len(candidates) == 1:
             return candidates[0]
+
+        # For self.X calls, prefer candidates in the same class
+        if (is_self_call or caller and caller.class_name) and len(candidates) > 1:
+            same_class = [
+                qn for qn in candidates
+                if caller and caller.class_name and f".{caller.class_name}." in qn
+            ]
+            if len(same_class) == 1:
+                return same_class[0]
+
         # Ambiguous or not found — skip to avoid wrong edges
         return None
