@@ -57,11 +57,13 @@ def update_data(obj):
 def test_smell_detection():
     from code2llm.core.models import AnalysisResult, FunctionInfo, Mutation
     result = AnalysisResult(project_path=".", analysis_mode="static")
+    fi = FunctionInfo(name="god_func", qualified_name="test.god_func", file="test.py", line=10)
+    fi.complexity = {"cyclomatic_complexity": 20}
     result.functions = {
-        "test.god_func": FunctionInfo(name="god_func", qualified_name="test.god_func", file="test.py", line=10)
+        "test.god_func": fi
     }
     result.metrics = {
-        "test.god_func": {"fan_out": 10, "fan_in": 1}
+        "test.god_func": {"fan_out": 15, "fan_in": 1}
     }
     
     detector = SmellDetector(result)

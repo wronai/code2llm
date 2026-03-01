@@ -68,6 +68,9 @@ code2llm /path/to/project \
 - **Data Flow Graph (DFG)**: Track variable definitions and dependencies  
 - **Call Graph Analysis**: Map function calls and dependencies
 - **Pattern Detection**: Identify design patterns and code smells
+- **🚀 Streaming Analysis**: Memory-efficient analysis with progress tracking
+- **Smart Prioritization**: Analyzes important files first for faster feedback
+- **Incremental Analysis**: Detect and analyze only changed files
 - **Multiple Output Formats**: TOON, YAML, JSON, Mermaid diagrams, PNG visualizations
 - **LLM-Ready Output**: Generate prompts for reverse engineering
 - **Smart Validation**: Built-in format validation and testing
@@ -133,6 +136,67 @@ code2llm /path/to/project -m behavioral
 
 # Reverse engineering ready
 code2llm /path/to/project -m reverse
+```
+
+### 🚀 Streaming Analysis
+
+For large projects, use streaming analysis with smart prioritization:
+
+```bash
+# Quick overview (functions/classes only)
+code2llm /path/to/project --strategy quick
+
+# Standard analysis with selective CFG
+code2llm /path/to/project --strategy standard
+
+# Deep analysis with full CFG
+code2llm /path/to/project --strategy deep
+
+# Enable streaming with progress reporting
+code2llm /path/to/project --streaming -v
+
+# Memory-limited analysis
+code2llm /path/to/project --strategy quick --max-memory 512
+```
+
+#### Streaming Strategies
+
+| Strategy | Description | Memory Use | Speed |
+|----------|-------------|-----------|-------|
+| `quick` | Fast overview - functions/classes only, no CFG | Low | 5-10x |
+| `standard` | Balanced analysis with selective CFG | Medium | 2-3x |
+| `deep` | Complete analysis with full CFG for all files | High | 1x |
+
+#### Progress Tracking
+
+Streaming analysis provides real-time progress updates:
+
+```bash
+# With verbose progress reporting
+code2llm /path/to/project --streaming -v
+
+# Output shows:
+# [25%] Scanning module.main (priority: 150.0)
+# [50%] Building call graph...
+# [75%] Deep analysis of important files...
+# [100%] Completed in 12.3s
+```
+
+### 🔄 Incremental Analysis
+
+For CI/CD and frequent analysis, use incremental mode to analyze only changed files:
+
+```python
+from code2llm.core.streaming_analyzer import IncrementalAnalyzer
+
+# Detect changed files since last analysis
+incremental = IncrementalAnalyzer()
+changed, unchanged = incremental.get_changed_files(".")
+
+# Only analyze changed files for faster CI
+if changed:
+    print(f"Analyzing {len(changed)} changed files...")
+    # Run streaming analysis on changed files only
 ```
 
 ### Custom Output

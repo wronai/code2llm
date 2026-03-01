@@ -1,6 +1,7 @@
 import pytest
 import ast
 from code2llm.core.analyzer import ProjectAnalyzer
+from code2llm.core.core import FileAnalyzer, FastFileFilter, RefactoringAnalyzer
 from code2llm.core.config import Config
 from code2llm.core.models import AnalysisResult
 
@@ -20,7 +21,6 @@ def complex_func(x):
             print(i)
         return 0
 """
-    from code2llm.core.analyzer import FileAnalyzer
     config = Config()
     config.verbose = True
     analyzer = FileAnalyzer(config)
@@ -35,9 +35,9 @@ def complex_func(x):
     assert simple is not None
     assert complex_f is not None
     
-    assert simple.complexity['cyclomatic'] == 1
-    assert complex_f.complexity['cyclomatic'] > 1
-    assert complex_f.complexity['cyclomatic'] > simple.complexity['cyclomatic']
+    assert simple.complexity.get('cyclomatic_complexity', simple.complexity.get('cyclomatic', 0)) == 1
+    assert complex_f.complexity.get('cyclomatic_complexity', complex_f.complexity.get('cyclomatic', 0)) > 1
+    assert complex_f.complexity.get('cyclomatic_complexity', complex_f.complexity.get('cyclomatic', 0)) > simple.complexity.get('cyclomatic_complexity', simple.complexity.get('cyclomatic', 0))
 
 def test_graph_metrics():
     # Create a dummy AnalysisResult with a call graph
@@ -60,16 +60,14 @@ def test_graph_metrics():
     result.functions["D"].calls = ["C"]
     
     config = Config()
-    analyzer = ProjectAnalyzer(config)
-    analyzer._perform_refactoring_analysis(result)
+    file_filter = FastFileFilter(config.filters)
+    refactoring = RefactoringAnalyzer(config, file_filter)
+    refactoring.perform_refactoring_analysis(result)
     
     # Check centrality
     # B and D should have some centrality
     assert result.functions["B"].centrality > 0
     assert result.functions["D"].centrality > 0
-    
-    # Check for smells if any (threshold is 0.1, might be lower for this tiny graph)
-    # Let's adjust threshold in test or check if it's set
     
 def test_circular_dependency():
     result = AnalysisResult()
@@ -82,8 +80,9 @@ def test_circular_dependency():
     result.functions["B"].calls = ["A"]
     
     config = Config()
-    analyzer = ProjectAnalyzer(config)
-    analyzer._perform_refactoring_analysis(result)
+    file_filter = FastFileFilter(config.filters)
+    refactoring = RefactoringAnalyzer(config, file_filter)
+    refactoring.perform_refactoring_analysis(result)
     
     project_metrics = result.metrics.get("project", {})
     assert "circular_dependencies" in project_metrics

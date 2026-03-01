@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
+
+pip install -e .
 pip install code2llm --upgrade
-code2llm ./ -f toon --compact --name project -o ./
+code2llm ./ --streaming --strategy deep -o ./project
+code2llm ./ -f toon -o ./
 
 echo "🚀 Testing different output formats..."
 
