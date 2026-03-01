@@ -6,6 +6,7 @@ Available exporters:
   - FlowExporter      → flow.toon      (data-flow: pipelines, contracts, types)
   - EvolutionExporter  → evolution.toon (ranked refactoring queue)
   - ContextExporter   → context.md     (LLM narrative)
+  - READMEExporter    → README.md      (documentation of all files)
   - YAMLExporter      → analysis.yaml
   - JSONExporter      → analysis.json
   - MermaidExporter   → *.mmd
@@ -23,6 +24,7 @@ from .toon import ToonExporter
 from .map_exporter import MapExporter
 from .flow_exporter import FlowExporter
 from .evolution_exporter import EvolutionExporter
+from .readme_exporter import READMEExporter
 
 __all__ = [
     'Exporter',
@@ -35,4 +37,5 @@ __all__ = [
     'MapExporter',
     'FlowExporter',
     'EvolutionExporter',
+    'READMEExporter',
 ]

@@ -15,7 +15,7 @@ from .exporters import (
     YAMLExporter, JSONExporter, MermaidExporter,
     ContextExporter, LLMPromptExporter,
     ToonExporter, MapExporter, FlowExporter,
-    EvolutionExporter,
+    EvolutionExporter, READMEExporter,
 )
 
 
@@ -28,11 +28,12 @@ def create_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
 Examples:
-  code2llm /path/to/project                    # Default: TOON format only
-  code2llm /path/to/project -f all             # Generate all formats
-  code2llm /path/to/project -f toon,map,flow   # Diagnostics + structure + data-flow
-  code2llm /path/to/project -f context         # LLM narrative context
+  code2llm /path/to/project                    # Default: TOON format + README
+  code2llm /path/to/project -f all             # Generate all formats + README
+  code2llm /path/to/project -f toon,map,flow   # Diagnostics + structure + data-flow + README
+  code2llm /path/to/project -f context         # LLM narrative + README
   code2llm /path/to/project -m static -o ./analysis
+  code2llm /path/to/project --no-readme        # Disable README generation
   code2llm llm-flow                             # Generate LLM flow summary
 
 Format Options:
@@ -171,6 +172,19 @@ Format Options:
         choices=['claude', 'gpt', 'markdown'],
         default='markdown',
         help='Format for refactoring prompts (default: markdown)'
+    )
+    
+    parser.add_argument(
+        '--readme',
+        action='store_true',
+        default=True,
+        help='Generate README.md with documentation of all output files (default: enabled)'
+    )
+    
+    parser.add_argument(
+        '--no-readme',
+        action='store_true',
+        help='Disable automatic README.md generation'
     )
     
     return parser
@@ -336,6 +350,14 @@ def _run_exports(args, result, output_dir: Path):
         # AI-driven refactoring prompts
         if args.refactor:
             _export_refactor_prompts(args, result, output_dir)
+
+        # README documentation (default enabled)
+        if args.readme and not args.no_readme:
+            exporter = READMEExporter()
+            filepath = output_dir / 'README.md'
+            exporter.export(result, str(filepath))
+            if args.verbose:
+                print(f"  - README (documentation): {filepath}")
 
     except Exception as e:
         print(f"Error during export: {e}", file=sys.stderr)
