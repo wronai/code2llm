@@ -4,7 +4,7 @@ PYTHON := python3
 
 # Default target
 help:
-	@echo "code2flow - Python Code Flow Analysis Tool with TOON Format"
+	@echo "code2llm - Python Code Flow Analysis Tool with LLM Integration and TOON Format"
 	@echo ""
 	@echo "🚀 Installation:"
 	@echo "  make install       - Install package"
@@ -56,11 +56,11 @@ help:
 
 install:
 	$(PYTHON) -m pip install -e .
-	@echo "✓ code2flow installed with TOON format support"
+	@echo "✓ code2llm installed with TOON format support"
 
 dev-install:
 	$(PYTHON) -m pip install -e ".[dev]"
-	@echo "✓ code2flow installed with dev dependencies"
+	@echo "✓ code2llm installed with dev dependencies"
 
 # =============================================================================
 # Testing
@@ -70,11 +70,11 @@ test:
 	$(PYTHON) -m pytest tests/ -v --tb=short 2>/dev/null || echo "No tests yet - create tests/ directory"
 
 test-cov:
-	$(PYTHON) -m pytest tests/ --cov=code2flow --cov-report=html --cov-report=term 2>/dev/null || echo "No tests yet"
+	$(PYTHON) -m pytest tests/ --cov=code2llm --cov-report=html --cov-report=term 2>/dev/null || echo "No tests yet"
 
 test-toon:
 	@echo "🎯 Testing TOON format..."
-	$(PYTHON) -m code2flow ./ -v -o ./test_toon -m hybrid -f toon
+	$(PYTHON) -m code2llm ./ -v -o ./test_toon -m hybrid -f toon
 	$(PYTHON) validate_toon.py test_toon/analysis.toon
 	@echo "✓ TOON format test complete"
 
@@ -82,7 +82,7 @@ validate-toon: test-toon
 
 test-all-formats:
 	@echo "📊 Testing all output formats..."
-	$(PYTHON) -m code2flow ./ -v -o ./test_all -m hybrid -f all
+	$(PYTHON) -m code2llm ./ -v -o ./test_all -m hybrid -f all
 	$(PYTHON) validate_toon.py test_all/analysis.toon
 	@echo "✓ All formats test complete"
 
@@ -115,17 +115,17 @@ check: lint typecheck test
 # =============================================================================
 
 run:
-	$(PYTHON) -m code2flow ../python/stts_core -v -o ./output
+	$(PYTHON) -m code2llm ../python/stts_core -v -o ./output
 
 analyze:
 	@echo "🎯 Running TOON format analysis on current project..."
-	$(PYTHON) -m code2flow ./ -v -o ./analysis -m hybrid -f toon
+	$(PYTHON) -m code2llm ./ -v -o ./analysis -m hybrid -f toon
 	$(PYTHON) validate_toon.py analysis/analysis.toon
 	@echo "✓ TOON analysis complete - check analysis/analysis.toon"
 
 analyze-all:
 	@echo "📊 Running analysis with all formats..."
-	$(PYTHON) -m code2flow ./ -v -o ./analysis_all -m hybrid -f all
+	$(PYTHON) -m code2llm ./ -v -o ./analysis_all -m hybrid -f all
 	$(PYTHON) validate_toon.py analysis_all/analysis.toon
 	@echo "✓ All formats analysis complete - check analysis_all/"
 
@@ -135,7 +135,7 @@ analyze-all:
 
 toon-demo:
 	@echo "🎯 Quick TOON format demo..."
-	$(PYTHON) -m code2flow ./ -v -o ./demo -m hybrid -f toon
+	$(PYTHON) -m code2llm ./ -v -o ./demo -m hybrid -f toon
 	@echo "📁 Generated: demo/analysis.toon"
 	@echo "📊 Size: $$(du -h demo/analysis.toon | cut -f1)"
 	@echo "🔍 Preview:"
@@ -143,7 +143,7 @@ toon-demo:
 
 toon-compare:
 	@echo "📊 Comparing TOON vs YAML formats..."
-	$(PYTHON) -m code2flow ./ -v -o ./compare -m hybrid -f toon,yaml
+	$(PYTHON) -m code2llm ./ -v -o ./compare -m hybrid -f toon,yaml
 	@echo "📁 Files generated:"
 	@echo "  - TOON:  compare/analysis.toon  ($$(du -h compare/analysis.toon | cut -f1))"
 	@echo "  - YAML:  compare/analysis.yaml  ($$(du -h compare/analysis.yaml | cut -f1))"
@@ -195,8 +195,8 @@ publish: build
 	$(MAKE) build
 	@echo "📦 Publishing to PyPI..."
 	$(PYTHON) -m venv publish-env
-	pip install twine
-	$(PYTHON) -m twine upload dist/*
+	publish-env/bin/pip install twine
+	publish-env/bin/python -m twine upload dist/*
 	rm -rf publish-env
 	@echo "✓ Published to PyPI"
 
@@ -241,7 +241,7 @@ clean-png:
 # =============================================================================
 
 quickstart:
-	@echo "🚀 Quick Start with code2flow TOON format:"
+	@echo "🚀 Quick Start with code2llm TOON format:"
 	@echo ""
 	@echo "1. Install:        make install"
 	@echo "2. Test TOON:      make test-toon"

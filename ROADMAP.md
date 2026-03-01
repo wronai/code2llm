@@ -1,8 +1,8 @@
-# code2flow Development Roadmap
+# code2llm Development Roadmap
 
-This document outlines planned features, improvements, and milestones for the code2flow project.
+This document outlines planned features, improvements, and milestones for the code2llm project with LLM integration focus.
 
-## Current Status (v0.3.1)
+## Current Status (v0.3.8)
 
 ✅ **Completed:**
 - Core analysis engine with caching and parallel processing
@@ -23,6 +23,10 @@ This document outlines planned features, improvements, and milestones for the co
   - `SideEffectDetector` — AST scan for IO, cache, mutation, pure classification
   - Enhanced CONTRACTS: IN/OUT types, SIDE-EFFECT, INVARIANT, SMELL markers
   - Enhanced DATA_TYPES: source counts, hub-type split recommendations
+- **networkx-based pipeline detection (v0.3.2)**:
+  - `PipelineDetector` — DiGraph call graph, longest-path detection, cycle-safe
+  - Domain classification: NLP, Analysis, Export, Refactor, Core, IO
+  - Entry/exit labeling, purity aggregation, bottleneck identification
 
 ---
 
@@ -311,6 +315,7 @@ pattern:
 | v0.2.5 | Mar 2026 | TOON v2 format implementation | ✅ Done |
 | v0.3.0 | Mar 2026 | Format taxonomy (map, toon, flow, context) | ✅ Done |
 | v0.3.1 | Mar 2026 | CONTRACTS + DATA_TYPES enhancement (AST type inference, side-effect detection) | ✅ Done |
+| v0.3.2 | Mar 2026 | networkx pipeline detection, domain grouping, entry/exit labeling | ✅ Done |
 | v0.4.0 | Q3 2026 | IDE integration, real-time analysis | 📋 Planned |
 | v0.5.0 | Q4 2026 | JS/TS support | 📋 Planned |
 | v0.6.0 | Q1 2027 | Enterprise features | 📋 Planned |

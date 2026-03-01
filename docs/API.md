@@ -1,13 +1,13 @@
-# code2flow Documentation
+# code2llm Documentation
 
 ## Overview
 
-code2flow is a high-performance Python code analysis tool with integrated NLP processing for intelligent code queries.
+code2llm is a high-performance Python code analysis tool with integrated NLP processing and LLM integration for intelligent code queries.
 
 ## Installation
 
 ```bash
-pip install code2flow-toon
+pip install code2llm
 ```
 
 ## Quick Start

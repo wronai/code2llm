@@ -1,30 +1,30 @@
 #!/usr/bin/env bash
-pip install code2logic --upgrade
-code2logic ./ -f toon --compact --name project -o ./
+pip install code2llm --upgrade
+code2llm ./ -f toon --compact --name project -o ./
 
 echo "🚀 Testing different output formats..."
 
 # Test 1: Default TOON format
 echo "📊 Test 1: Default TOON format"
-source venv/bin/activate && python -m code2flow ./ -v -o ./project -m hybrid -f toon
+source venv/bin/activate && python -m code2llm ./ -v -o ./project -m hybrid -f toon
 python3 validate_toon.py output_toon/analysis.toon
 
 # Test 2: All formats
 echo "📊 Test 2: All formats (toon,yaml,json,mermaid,png)"
-source venv/bin/activate && python -m code2flow ./ -v -o ./output_all -m hybrid -f all
+source venv/bin/activate && python -m code2llm ./ -v -o ./output_all -m hybrid -f all
 ls -la output_all/
 
 # Test 3: TOON + YAML (for comparison)
 echo "📊 Test 3: TOON + YAML (for validation)"
-source venv/bin/activate && python -m code2flow ./ -v -o ./output_comparison -m hybrid -f toon,yaml
+source venv/bin/activate && python -m code2llm ./ -v -o ./output_comparison -m hybrid -f toon,yaml
 python3 validate_toon.py output_comparison/analysis.toon
 python3 validate_toon.py output_comparison/analysis.yaml output_comparison/analysis.toon
 
 # Test 4: Different analysis modes with TOON
 echo "📊 Test 4: Different analysis modes with TOON"
-source venv/bin/activate && python -m code2flow ./ -v -o ./output_modes -m hybrid -f toon
-source venv/bin/activate && python -m code2flow ./ -v -o ./output_modes -m dynamic -f toon
-source venv/bin/activate && python -m code2flow ./ -v -o ./output_modes -m behavioral -f toon
+source venv/bin/activate && python -m code2llm ./ -v -o ./output_modes -m hybrid -f toon
+source venv/bin/activate && python -m code2llm ./ -v -o ./output_modes -m dynamic -f toon
+source venv/bin/activate && python -m code2llm ./ -v -o ./output_modes -m behavioral -f toon
 python3 validate_toon.py output_modes/analysis.toon
 
 echo "✅ All tests completed!"

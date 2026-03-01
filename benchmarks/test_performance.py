@@ -5,11 +5,36 @@ import shutil
 import time
 from pathlib import Path
 from typing import Dict, List
+import json
+from datetime import datetime
 
 import pytest
 
 from code2flow import ProjectAnalyzer, Config
 from code2flow.core.config import FAST_CONFIG
+
+
+def save_test_report(results: dict, test_name: str) -> str:
+    """Save test benchmark report to reports folder."""
+    reports_dir = Path(__file__).parent.parent / "reports"
+    reports_dir.mkdir(exist_ok=True)
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"test_{test_name}_{timestamp}.json"
+    report_path = reports_dir / filename
+    
+    # Add metadata
+    results['metadata'] = {
+        'timestamp': datetime.now().isoformat(),
+        'test_name': test_name,
+        'type': 'pytest_benchmark',
+    }
+    
+    with open(report_path, 'w') as f:
+        json.dump(results, f, indent=2, default=str)
+    
+    print(f"\n[Test report saved to: {report_path}]")
+    return str(report_path)
 
 
 class TestPerformanceBenchmarks:
@@ -87,6 +112,17 @@ def helper_{i}(x):
         assert result.get_function_count() > 0
         
         print(f"\nFast mode: {elapsed:.2f}s, {result.get_function_count()} functions")
+        
+        # Save report
+        test_results = {
+            'test': 'fast_mode_performance',
+            'elapsed_seconds': elapsed,
+            'functions_found': result.get_function_count(),
+            'classes_found': result.get_class_count(),
+            'modules_found': len(result.modules),
+            'passed': elapsed < 30.0,
+        }
+        save_test_report(test_results, 'fast_mode_performance')
     
     def test_caching_performance(self, large_project):
         """Benchmark caching improvement."""

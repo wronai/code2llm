@@ -1,4 +1,4 @@
-"""Setup configuration for code2flow."""
+"""Setup configuration for code2llm."""
 
 from setuptools import setup, find_packages
 import os
@@ -15,7 +15,7 @@ def read_readme():
     return "Python code flow analysis tool"
 
 setup(
-    name='code2flow',
+    name='code2llm',
     version=version,
     description='Python code flow analysis tool - CFG, DFG, and call graph extraction',
     long_description=read_readme(),
@@ -26,7 +26,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'code2flow=code2flow.cli:main',
+            'code2llm=code2flow.cli:main',
         ],
     },
     install_requires=[

@@ -1,4 +1,14 @@
-# TODO
+# TODO - code2llm Project
+
+## ✅ Completed — Rebranding (v0.3.8)
+
+- [x] **Project Rebranding to code2llm**
+  - [x] Package name: `code2flow-toon` → `code2llm`
+  - [x] Documentation updates (README.md, API.md)
+  - [x] CLI commands: `code2flow` → `code2llm`
+  - [x] Makefile targets updated
+  - [x] setup.py and pyproject.toml updated
+  - [x] CHANGELOG.md and ROADMAP.md updated
 
 ## ✅ Completed — Sprint 1 (v0.3.0)
 
@@ -37,24 +47,28 @@
 
 - [x] **26 new tests** (`tests/test_sprint2_flow.py`)
 
-## 🎯 Sprint 3 — PIPELINES auto-detection + SIDE_EFFECTS (v0.3.2)
+## ✅ Completed — Sprint 3 (v0.3.2)
 
-### High Priority
+- [x] **Pipeline detection with networkx** (`analysis/pipeline_detector.py`)
+  - [x] `networkx.DiGraph` call graph, `dag_longest_path` + DFS fallback
+  - [x] Domain classification: NLP, Analysis, Export, Refactor, Core, IO
+  - [x] Entry/exit point labeling (▶/■ markers)
+  - [x] `Pipeline` and `PipelineStage` dataclasses
 
-- [ ] **Pipeline detection with networkx**
-  - Find longest paths in call graph
-  - Group by module (NLP, Analysis, Export, Refactor)
-  - Label entry/exit points
+- [x] **SIDE_EFFECTS analysis** (done in Sprint 2, integrated in Sprint 3)
+  - [x] AST scan: `open()`, `write()`, `self.cache`, `global`
+  - [x] Classification: IO / Cache / Mutation / Pure
+  - [x] Pipeline purity aggregation per pipeline
 
-- [ ] **SIDE_EFFECTS analysis**
-  - AST scan: `open()`, `write()`, `self.cache`, `global`
-  - Classification: IO / Cache / Mutation / Pure
-  - Pipeline purity aggregation
+- [x] **Integration: flow.toon ← analysis.toon**
+  - [x] CC metrics inline in pipeline stages
+  - [x] Bottleneck identification per pipeline
+  - [x] `!!` markers for CC ≥ 15
+  - [x] Domain summary in PIPELINES header
+  - [x] Entry→exit type flow per pipeline
 
-- [ ] **Integration: flow.toon ← analysis.toon**
-  - CC metrics inline in pipeline stages
-  - Bottleneck identification per pipeline
-  - `!!` markers for CC ≥ 15
+- [x] **22 new tests** (`tests/test_sprint3_pipelines.py`)
+  - [x] ≥3 pipelines with ≥3 stages each (success metric ✅)
 
 ## 🎯 Sprint 4 — Self-test + benchmark v2 (v0.3.3)
 

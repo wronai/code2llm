@@ -6,8 +6,8 @@ DATA_TYPES, and SIDE_EFFECTS sections.
 Purpose: "how data flows through the system"
 Format: pipeline stages, transform fan-out, contracts, hub-type detection
 
-Sprint 2 (v0.3.1): Enhanced with AST-based type inference and side-effect
-detection for richer CONTRACTS and DATA_TYPES sections.
+Sprint 2 (v0.3.1): AST-based type inference and side-effect detection.
+Sprint 3 (v0.3.2): networkx-based pipeline detection with domain grouping.
 """
 
 import ast
@@ -22,6 +22,7 @@ from ..core.models import (
 )
 from ..analysis.type_inference import TypeInferenceEngine
 from ..analysis.side_effects import SideEffectDetector, SideEffectInfo
+from ..analysis.pipeline_detector import PipelineDetector, Pipeline
 
 # Thresholds
 CC_HIGH = 15
@@ -53,13 +54,17 @@ class FlowExporter(Exporter):
 
     Sections: PIPELINES, TRANSFORMS, CONTRACTS, DATA_TYPES, SIDE_EFFECTS
 
-    Sprint 2: Uses TypeInferenceEngine for AST-based type extraction and
-    SideEffectDetector for AST-based purity scoring.
+    Sprint 2: TypeInferenceEngine + SideEffectDetector for AST-based analysis.
+    Sprint 3: PipelineDetector with networkx for graph-based pipeline detection.
     """
 
     def __init__(self):
         self._type_engine = TypeInferenceEngine()
         self._side_effect_detector = SideEffectDetector()
+        self._pipeline_detector = PipelineDetector(
+            type_engine=self._type_engine,
+            side_effect_detector=self._side_effect_detector,
+        )
 
     def export(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
         """Export analysis result to flow.toon format."""
@@ -103,8 +108,10 @@ class FlowExporter(Exporter):
         # AST-based side-effect detection (Sprint 2)
         ctx["se_info"] = self._side_effect_detector.analyze_all(funcs)
 
-        # Detect pipelines from call chains
-        ctx["pipelines"] = self._detect_pipelines(funcs, result, ctx["se_info"])
+        # Detect pipelines using networkx-based PipelineDetector (Sprint 3)
+        raw_pipelines = self._pipeline_detector.detect(funcs, se_info=ctx["se_info"])
+        ctx["raw_pipelines"] = raw_pipelines
+        ctx["pipelines"] = [self._pipeline_to_dict(p) for p in raw_pipelines]
 
         # Compute transforms (high fan-out functions)
         ctx["transforms"] = self._compute_transforms(funcs)
@@ -123,126 +130,35 @@ class FlowExporter(Exporter):
         return ctx
 
     # ------------------------------------------------------------------
-    # pipeline detection
+    # pipeline conversion (Sprint 3)
     # ------------------------------------------------------------------
-    def _detect_pipelines(
-        self, funcs: Dict[str, FunctionInfo], result: AnalysisResult,
-        se_info: Dict[str, SideEffectInfo]
-    ) -> List[Dict[str, Any]]:
-        """Detect pipelines by finding linear call chains grouped by package."""
-        # Build adjacency: caller -> [callees within project]
-        adj: Dict[str, List[str]] = defaultdict(list)
-        all_callees: Set[str] = set()
-        for qname, fi in funcs.items():
-            for callee in fi.calls:
-                resolved = self._resolve_callee(callee, funcs)
-                if resolved:
-                    adj[qname].append(resolved)
-                    all_callees.add(resolved)
-
-        # Find entry points: functions that are not called by others in the set
-        entry_candidates = set(funcs.keys()) - all_callees
-
-        # Trace longest chains from entry points
-        chains: List[List[str]] = []
-        for entry in entry_candidates:
-            chain = self._trace_chain(entry, adj, set(), max_depth=8)
-            if len(chain) >= 3:
-                chains.append(chain)
-
-        # Sort by length desc, deduplicate overlapping chains
-        chains.sort(key=len, reverse=True)
-        used: Set[str] = set()
-        pipelines: List[Dict[str, Any]] = []
-
-        for chain in chains:
-            overlap = sum(1 for f in chain if f in used)
-            if overlap > len(chain) * 0.5:
-                continue
-
-            pkg = self._pipeline_name(chain, funcs)
-            stages = self._build_stages(chain, funcs, se_info)
-
-            if stages:
-                pure_count = sum(1 for s in stages if s["purity"] == "pure")
-                bottleneck = max(stages, key=lambda s: s["cc"]) if stages else None
-                pipelines.append({
-                    "name": pkg,
-                    "stages": stages,
-                    "entry_type": self._infer_input_type(stages[0], funcs),
-                    "pure_count": pure_count,
-                    "total_stages": len(stages),
-                    "bottleneck": bottleneck,
-                })
-                used.update(chain)
-
-            if len(pipelines) >= 8:
-                break
-
-        return pipelines
-
-    def _build_stages(
-        self, chain: List[str], funcs: Dict[str, FunctionInfo],
-        se_info: Dict[str, SideEffectInfo]
-    ) -> List[Dict[str, Any]]:
-        """Build pipeline stage info using AST-based engines."""
+    def _pipeline_to_dict(self, pipeline: Pipeline) -> Dict[str, Any]:
+        """Convert Pipeline dataclass to dict for rendering."""
         stages = []
-        for qname in chain:
-            fi = funcs.get(qname)
-            if not fi:
-                continue
-            cc = fi.complexity.get("cyclomatic_complexity", 0)
-            se = se_info.get(qname)
-            purity = se.classification if se else "pure"
-            sig = self._type_engine.get_typed_signature(fi)
+        for s in pipeline.stages:
             stages.append({
-                "name": fi.name,
-                "qualified": qname,
-                "signature": sig,
-                "cc": cc,
-                "purity": purity,
+                "name": s.name,
+                "qualified": s.qualified_name,
+                "signature": s.signature,
+                "cc": s.cc,
+                "purity": s.purity,
+                "is_entry": s.is_entry,
+                "is_exit": s.is_exit,
             })
-        return stages
 
-    def _trace_chain(
-        self, start: str, adj: Dict[str, List[str]],
-        visited: Set[str], max_depth: int
-    ) -> List[str]:
-        """Trace longest linear chain from start."""
-        if max_depth <= 0 or start in visited:
-            return [start]
-
-        visited = visited | {start}
-        best_chain = [start]
-
-        for callee in adj.get(start, []):
-            if callee not in visited:
-                sub = self._trace_chain(callee, adj, visited, max_depth - 1)
-                candidate = [start] + sub
-                if len(candidate) > len(best_chain):
-                    best_chain = candidate
-
-        return best_chain
-
-    def _pipeline_name(
-        self, chain: List[str], funcs: Dict[str, FunctionInfo]
-    ) -> str:
-        """Derive pipeline name from dominant package in chain."""
-        pkg_counts: Dict[str, int] = defaultdict(int)
-        for qname in chain:
-            fi = funcs.get(qname)
-            if fi:
-                pkg = fi.module.split(".")[0] if "." in fi.module else fi.module
-                # Try second level for more specificity
-                parts = fi.module.split(".")
-                if len(parts) >= 2:
-                    pkg = parts[1]  # e.g. "nlp", "core", "exporters"
-                pkg_counts[pkg] += 1
-
-        if pkg_counts:
-            dominant = max(pkg_counts, key=pkg_counts.get)
-            return dominant.capitalize()
-        return "Unknown"
+        bn = pipeline.bottleneck
+        return {
+            "name": pipeline.name,
+            "domain": pipeline.domain,
+            "stages": stages,
+            "entry_point": pipeline.entry_point,
+            "exit_point": pipeline.exit_point,
+            "entry_type": pipeline.entry_type,
+            "exit_type": pipeline.exit_type,
+            "pure_count": pipeline.pure_count,
+            "total_stages": pipeline.total_stages,
+            "bottleneck": {"name": bn.name, "cc": bn.cc} if bn else None,
+        }
 
     # ------------------------------------------------------------------
     # transforms — high fan-out functions
@@ -259,7 +175,7 @@ class FlowExporter(Exporter):
                     "name": fi.name,
                     "qualified": qname,
                     "fan_out": fan_out,
-                    "signature": self._compact_signature(fi),
+                    "signature": self._type_engine.get_typed_signature(fi),
                     "label": self._transform_label(fi, fan_out),
                 })
         transforms.sort(key=lambda x: x["fan_out"], reverse=True)
@@ -496,16 +412,30 @@ class FlowExporter(Exporter):
         if not pipelines:
             return ["PIPELINES[0]: none detected"]
 
-        lines = [f"PIPELINES[{len(pipelines)}]:"]
+        # Count domains
+        domains = defaultdict(int)
         for pl in pipelines:
-            lines.append(f"  {pl['name']}:{' ' * max(1, 10 - len(pl['name']))}"
-                         f"{pl.get('entry_type', '?')}")
+            domains[pl.get("domain", "Unknown")] += 1
+        domain_summary = ", ".join(f"{d}:{n}" for d, n in sorted(domains.items()))
+
+        lines = [f"PIPELINES[{len(pipelines)}] ({domain_summary}):"]
+        for pl in pipelines:
+            domain_tag = f"[{pl.get('domain', '?')}]"
+            entry_type = pl.get("entry_type", "?")
+            exit_type = pl.get("exit_type", "?")
+            lines.append(
+                f"  {pl['name']} {domain_tag}:"
+                f" {entry_type} \u2192 {exit_type}"
+            )
             for stage in pl["stages"]:
                 cc_marker = "  !!" if stage["cc"] >= CC_HIGH else ""
+                entry_lbl = " \u25b6" if stage.get("is_entry") else ""
+                exit_lbl = " \u25a0" if stage.get("is_exit") else ""
                 lines.append(
                     f"              \u2192 {stage['signature']}"
                     f"{'':>{max(1, 40 - len(stage['signature']))}}"
-                    f"CC={stage['cc']:<4.0f} {stage['purity']}{cc_marker}"
+                    f"CC={stage['cc']:<4.0f} {stage['purity']}"
+                    f"{cc_marker}{entry_lbl}{exit_lbl}"
                 )
             bn = pl.get("bottleneck")
             bn_str = f"BOTTLENECK: {bn['name']}(CC={bn['cc']:.0f})" if bn else "OK"
@@ -628,35 +558,6 @@ class FlowExporter(Exporter):
     # ------------------------------------------------------------------
     # utility helpers
     # ------------------------------------------------------------------
-    def _infer_input_type(
-        self, first_stage: Dict[str, Any],
-        funcs: Dict[str, FunctionInfo]
-    ) -> str:
-        """Infer input type of pipeline entry point using type engine."""
-        fi = funcs.get(first_stage["qualified"])
-        if not fi:
-            return "?"
-        args = self._type_engine.get_arg_types(fi)
-        for arg in args:
-            if arg["name"] == "self":
-                continue
-            if arg.get("type"):
-                return arg["type"]
-            return arg["name"]
-        return "?"
-
-    def _resolve_callee(
-        self, callee: str, funcs: Dict[str, FunctionInfo]
-    ) -> Optional[str]:
-        """Resolve callee name to qualified name."""
-        if callee in funcs:
-            return callee
-        # Try suffix match
-        for qname in funcs:
-            if qname.endswith(f".{callee}"):
-                return qname
-        return None
-
     def _is_excluded(self, path: str) -> bool:
         if not path:
             return False

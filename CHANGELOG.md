@@ -1,3 +1,52 @@
+## [0.3.8] - 2026-03-01
+
+### Summary
+
+feat(rebrand): rename project from code2flow-toon to code2llm with LLM integration focus
+
+### Changed
+
+- **Package name**: `code2flow-toon` → `code2llm`
+- **Documentation**: Updated all references to use new project name
+- **Commands**: All CLI commands now use `code2llm`
+- **Setup**: Updated setup.py and pyproject.toml with new name
+- **Makefile**: All targets updated to use `code2llm` commands
+
+## [0.3.2] - 2026-03-01
+
+### Summary
+
+feat(pipelines): networkx-based pipeline detection with domain grouping and entry/exit labeling
+
+### Added
+
+- **PipelineDetector** (`analysis/pipeline_detector.py`)
+  - Builds directed call graph with `networkx.DiGraph`
+  - Finds longest paths via `dag_longest_path` + DFS fallback for cycles
+  - Classifies pipelines by domain: NLP, Analysis, Export, Refactor, Core, IO
+  - Labels entry/exit points per pipeline
+  - Aggregates purity per pipeline using `SideEffectDetector`
+  - `Pipeline` and `PipelineStage` dataclasses with `to_dict()` support
+
+- **22 new tests** (`tests/test_sprint3_pipelines.py`)
+  - PipelineDetector: chain detection, entry/exit, purity, bottleneck, edge cases
+  - Domain classification: NLP, Analysis, Export, Unknown
+  - Multiple pipelines: ≥3 pipelines with ≥3 stages each (success metric ✅)
+  - FlowExporter integration: domain tags, entry/exit markers, purity summary
+  - Edge cases: cycles, self-recursion, diamond dependencies, long chains
+
+### Changed
+
+- **FlowExporter** now uses `PipelineDetector` instead of custom DFS
+  - Replaced `_detect_pipelines`, `_trace_chain`, `_pipeline_name` with networkx
+  - PIPELINES header shows domain summary: `PIPELINES[3] (Analysis:1, Export:1, NLP:1)`
+  - Pipeline stages show ▶ (entry) and ■ (exit) markers
+  - Pipeline header shows entry→exit type flow: `NLP [NLP]: str → IntentMatch`
+
+- **Version bump** to 0.3.2
+
+---
+
 ## [0.3.1] - 2026-03-01
 
 ### Summary

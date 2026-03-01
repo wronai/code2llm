@@ -1,17 +1,21 @@
-# code2flow | 56f 14429L | python:56
+# code2flow | 61f 16410L | python:61
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[56]:
-  benchmarks/benchmark_performance.py,181
-  benchmarks/test_performance.py,154
+M[61]:
+  code2flow/analysis/pipeline_detector.py,337
+  tests/test_sprint3_pipelines.py,314
+  benchmarks/benchmark_performance.py,216
+  benchmarks/test_performance.py,181
   code2flow/__init__.py,37
   code2flow/__main__.py,4
-  code2flow/analysis/__init__.py,15
+  code2flow/analysis/__init__.py,21
   code2flow/analysis/call_graph.py,155
   code2flow/analysis/cfg.py,219
   code2flow/analysis/coupling.py,61
   code2flow/analysis/data_analysis.py,228
   code2flow/analysis/dfg.py,165
+  code2flow/analysis/side_effects.py,252
   code2flow/analysis/smells.py,163
+  code2flow/analysis/type_inference.py,245
   code2flow/cli.py,382
   code2flow/core/__init__.py,34
   code2flow/core/analyzer.py,593
@@ -20,7 +24,7 @@ M[56]:
   code2flow/core/streaming_analyzer.py,510
   code2flow/exporters/__init__.py,28
   code2flow/exporters/base.py,9
-  code2flow/exporters/flow_exporter.py,486
+  code2flow/exporters/flow_exporter.py,450
   code2flow/exporters/json_exporter.py,13
   code2flow/exporters/llm_exporter.py,174
   code2flow/exporters/map_exporter.py,166
@@ -53,14 +57,32 @@ M[56]:
   tests/test_edge_cases.py,282
   tests/test_nlp_pipeline.py,239
   tests/test_refactoring_engine.py,61
+  tests/test_sprint2_flow.py,344
   tests/test_sprint4.py,60
   tests/test_sprint5.py,62
   tests/test_toon_v2.py,228
   validate_toon.py,376
 D:
+  code2flow/analysis/pipeline_detector.py:
+    i: logging,collections.defaultdict,dataclasses.{dataclass,field},typing
+    e: MIN_PIPELINE_LENGTH,MAX_PIPELINES,CC_HIGH,EXCLUDE_PATTERNS,DOMAIN_KEYWORDS,PipelineStage,Pipeline,PipelineDetector
+    PipelineStage:   # A single stage in a detected pipeline.
+    Pipeline: purity_ratio(0),to_dict(0)  # A detected pipeline with stages, puri...
+    PipelineDetector: __init__(2),detect(2),_build_graph(1),_find_pipeline_paths(1),_longest_path_from(3)  # Detect pipelines in a codebase using...
+  tests/test_sprint3_pipelines.py:
+    i: textwrap,pytest,code2flow.analysis.pipeline_detector.{Pipeline,PipelineDetector,PipelineStage},code2flow.analysis.side_effects.SideEffectDetector,code2flow.core.models.{AnalysisResult,FunctionInfo,ModuleInfo},pathlib.Path
+    e: TestPipelineDetector,TestDomainClassification,TestMultiplePipelines,TestFlowExporterSprint3,TestPipelineEdgeCases
+    TestPipelineDetector: test_detects_simple_chain(0),test_entry_exit_labeling(0),test_purity_aggregation(1),test_bottleneck_detection(0),test_pipeline_to_dict(0)
+    TestDomainClassification: test_nlp_domain(0),test_analysis_domain(0),test_export_domain(0),test_unknown_domain(0)
+    TestMultiplePipelines: test_three_independent_pipelines(0),test_four_pipelines_with_domains(0)
+    TestFlowExporterSprint3: multi_pipeline_result(0),test_output_has_domain_tags(2),test_output_has_entry_exit_markers(2),test_output_has_pipeline_purity(2),test_output_has_all_sections(2)
+    TestPipelineEdgeCases: test_cyclic_calls(0),test_self_recursive(0),test_diamond_dependency(0),test_very_long_chain(0)
+    _fi(name;module='mod';args=None;calls=None;cc=3;class_name=None;...+1)
+    _build_chain_funcs(chain_spec;module='mod';file='/test/src.py')
   benchmarks/benchmark_performance.py:
-    i: time,tempfile,shutil,statistics,sys,code2flow.{FAST_CONFIG,ProjectAnalyzer},code2flow.core.streaming_analyzer.{STRATEGY_QUICK,StreamingAnalyzer},pathlib.Path
-    e: create_test_project,benchmark_original_analyzer,benchmark_streaming_analyzer,benchmark_with_strategies,print_comparison,main
+    i: time,tempfile,shutil,statistics,json,datetime,sys,code2flow.{FAST_CONFIG,ProjectAnalyzer},pathlib.Path
+    e: save_report,create_test_project,benchmark_original_analyzer,benchmark_streaming_analyzer,benchmark_with_strategies,print_comparison,main
+    save_report(results:dict;filename:str=None)->str
     create_test_project(size:str='medium')->str
     benchmark_original_analyzer(project_path:str;runs:int=3)->dict
     benchmark_streaming_analyzer(project_path:str;runs:int=3)->dict
@@ -68,10 +90,11 @@ D:
     print_comparison(original:dict;streaming:dict)
     main()
   benchmarks/test_performance.py:
-    i: tempfile,shutil,time,pytest,code2flow.{Config,ProjectAnalyzer},code2flow.core.config.FAST_CONFIG,pathlib.Path,typing.{Dict,List}
-    e: TestPerformanceBenchmarks,TestMemoryBenchmarks
+    i: tempfile,shutil,time,json,datetime,pytest,code2flow.ProjectAnalyzer,pathlib.Path,typing.{Dict,List}
+    e: save_test_report,TestPerformanceBenchmarks,TestMemoryBenchmarks
     TestPerformanceBenchmarks: large_project(0),test_fast_mode_performance(1),test_caching_performance(1),test_parallel_vs_sequential(1),test_scaling_with_project_size(1)  # Performance benchmark tests.
     TestMemoryBenchmarks: test_memory_usage_stays_bounded(1)  # Memory usage benchmarks.
+    save_test_report(results:dict;test_name:str)->str
   code2flow/analysis/call_graph.py:
     i: ast,astroid,core.config.Config,core.models.{AnalysisResult,FlowEdge},typing.{Dict,List,Optional,Set}
     e: CallGraphExtractor
@@ -92,10 +115,19 @@ D:
     i: ast,collections.defaultdict,core.config.Config,core.models.{AnalysisResult,DataFlow,FlowEdge,Mutation},typing.{Dict,List,Set}
     e: DFGExtractor
     DFGExtractor: __init__(1),extract(3),visit_FunctionDef(1),visit_Assign(1),visit_AugAssign(1)  # Extract Data Flow Graph from AST.
+  code2flow/analysis/side_effects.py:
+    i: ast,logging,core.models.FunctionInfo,pathlib.Path,typing.{Any,Dict,List,Optional,Set}
+    e: IO_CALLS,IO_ATTRIBUTES,CACHE_INDICATORS,CACHE_CALLS,MUTATION_CALLS,SideEffectInfo,SideEffectDetector
+    SideEffectInfo: __init__(2),is_pure(0),side_effect_summary(0),to_dict(0)  # Side-effect analysis result for a sin...
+    SideEffectDetector: __init__(0),analyze_function(1),analyze_all(1),get_purity_score(1),_scan_node(2)  # Detect side effects in Python functio...
   code2flow/analysis/smells.py:
     i: core.models.{AnalysisResult,CodeSmell},typing.{Any,Dict,List}
     e: SmellDetector
     SmellDetector: __init__(1),detect(0),_detect_god_functions(0),_detect_god_modules(0),_detect_feature_envy(0)  # Detect code smells from analysis resu...
+  code2flow/analysis/type_inference.py:
+    i: ast,logging,core.models.FunctionInfo,pathlib.Path,typing.{Any,Dict,List,Optional,Tuple}
+    e: NAME_PATTERNS,TypeInferenceEngine
+    TypeInferenceEngine: __init__(0),enrich_function(1),get_arg_types(1),get_return_type(1),get_typed_signature(1)  # Extract and infer type information fr...
   code2flow/cli.py:
     i: argparse,sys,core.analyzer.ProjectAnalyzer,core.config.{ANALYSIS_MODES,Config},exporters.{JSONExporter,LLMPromptExporter,MermaidExporter,YAMLExporter},pathlib.Path
     e: create_parser,main,generate_llm_context
@@ -140,8 +172,8 @@ D:
     Exporter: export(2)  # Abstract base class for all exporters.
   code2flow/exporters/flow_exporter.py:
     i: ast,datetime,collections.defaultdict,pathlib.Path,typing
-    e: CC_HIGH,FAN_OUT_THRESHOLD,HUB_TYPE_THRESHOLD,EXCLUDE_PATTERNS,FlowExporter
-    FlowExporter: export(2),_build_context(1),_detect_pipelines(2),_trace_chain(4),_pipeline_name(2)  # Export to flow.toon — data-flow focus...
+    e: CC_HIGH,FAN_OUT_THRESHOLD,HUB_TYPE_THRESHOLD,EXCLUDE_PATTERNS,HUB_SPLIT_RECOMMENDATIONS,FlowExporter
+    FlowExporter: __init__(0),export(2),_build_context(1),_pipeline_to_dict(1),_compute_transforms(1)  # Export to flow.toon — data-flow focus...
   code2flow/exporters/json_exporter.py:
     i: json,base.Exporter,core.models.AnalysisResult,pathlib.Path
     e: JSONExporter
@@ -153,7 +185,7 @@ D:
   code2flow/exporters/map_exporter.py:
     i: datetime,base.Exporter,collections.defaultdict,pathlib.Path,typing
     e: EXCLUDE_PATTERNS,MapExporter
-    MapExporter: export(2),_render_header(1),_render_module_list(1),_render_details(1),_function_signature(1)  # Export to project.map — structural ma...
+    MapExporter: export(2),_render_header(1),_render_module_list(1),_render_details(1),_function_signature(1)  # Export to map.toon — structural map w...
   code2flow/exporters/mermaid_exporter.py:
     i: base.Exporter,core.models.AnalysisResult,pathlib.Path,typing.Dict
     e: MermaidExporter
@@ -303,6 +335,16 @@ D:
     test_metrics_calculation()
     test_mutation_tracking()
     test_smell_detection()
+  tests/test_sprint2_flow.py:
+    i: os,textwrap,tempfile,pytest,code2flow.analysis.side_effects.SideEffectDetector,code2flow.analysis.type_inference.TypeInferenceEngine,code2flow.core.models.{AnalysisResult,FunctionInfo,ModuleInfo},pathlib.Path
+    e: typed_source,untyped_source,TestTypeInferenceEngine,TestSideEffectDetector,TestFlowExporterSprint2,TestEdgeCases
+    TestTypeInferenceEngine: test_extracts_return_annotation(1),test_extracts_arg_types(1),test_detects_default_args(1),test_typed_signature_format(1),test_name_based_fallback(1)
+    TestSideEffectDetector: test_detects_io(1),test_detects_pure(1),test_detects_mutation(1),test_detects_write_io(1),test_side_effect_summary(1)
+    TestFlowExporterSprint2: sample_result(1),test_export_creates_file(2),test_contracts_have_in_out(2),test_data_types_has_source_counts(2),test_side_effects_section(2)
+    TestEdgeCases: test_empty_result(1),test_missing_source_file(1),test_type_inference_bad_syntax(1),test_side_effect_detector_bad_syntax(1)
+    typed_source(tmp_path)
+    untyped_source(tmp_path)
+    _make_fi(name;file;line=1;args=None;returns=None;calls=None;...+1)
   tests/test_sprint4.py:
     i: pytest,os,code2flow.core.analyzer.{FileAnalyzer,ProjectAnalyzer},code2flow.core.config.Config,code2flow.core.models.AnalysisResult,pathlib.Path
     e: test_astroid_resolution_mock,test_vulture_dead_code

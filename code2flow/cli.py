@@ -12,7 +12,8 @@ from pathlib import Path
 from .core.config import Config, ANALYSIS_MODES
 from .core.analyzer import ProjectAnalyzer
 from .exporters import (
-    YAMLExporter, JSONExporter, MermaidExporter, LLMPromptExporter,
+    YAMLExporter, JSONExporter, MermaidExporter,
+    ContextExporter, LLMPromptExporter,
     ToonExporter, MapExporter, FlowExporter,
 )
 from .visualizers.graph import GraphVisualizer
@@ -317,7 +318,7 @@ def main():
                 print(f"  - FLOW (data-flow): {filepath}")
 
         if 'context' in formats:
-            exporter = LLMPromptExporter()
+            exporter = ContextExporter()
             filepath = output_dir / 'context.md'
             exporter.export(result, str(filepath))
             if args.verbose:
@@ -402,9 +403,9 @@ def main():
             if args.verbose:
                 print(f"  - Data structures: {struct_path}")
                 
-        # Generate LLM context (backward compat: also as llm_prompt.md)
+        # Generate LLM context (backward compat: always generate context.md)
         if 'context' not in formats:
-            exporter = LLMPromptExporter()
+            exporter = ContextExporter()
             filepath = output_dir / 'context.md'
             exporter.export(result, str(filepath))
             if args.verbose:
@@ -460,7 +461,7 @@ def generate_llm_context(args_list):
     
     from pathlib import Path
     from . import ProjectAnalyzer, FAST_CONFIG
-    from .exporters import LLMPromptExporter
+    from .exporters import ContextExporter
     
     source_path = Path(args.source)
     if not source_path.exists():
@@ -476,7 +477,7 @@ def generate_llm_context(args_list):
     analyzer = ProjectAnalyzer(FAST_CONFIG)
     result = analyzer.analyze_project(str(source_path))
     
-    exporter = LLMPromptExporter()
+    exporter = ContextExporter()
     exporter.export(result, args.output)
     
     # Print summary

@@ -1,6 +1,6 @@
-# code2flow
+# code2llm
 
-**Python Code Flow Analysis Tool** - Static analysis for control flow graphs (CFG), data flow graphs (DFG), and call graph extraction with optimized TOON format.
+**Python Code Flow Analysis Tool with LLM Integration** - Static analysis for control flow graphs (CFG), data flow graphs (DFG), and call graph extraction with optimized TOON format.
 
 ![img.png](img.png)
 
@@ -18,13 +18,13 @@
 
 ```bash
 # Default: TOON format only
-code2flow /path/to/project
+code2llm /path/to/project
 
 # Generate all formats
-code2flow /path/to/project -f all
+code2llm /path/to/project -f all
 
 # TOON + YAML (for comparison)
-code2flow /path/to/project -f toon,yaml
+code2llm /path/to/project -f toon,yaml
 ```
 
 ## Performance Optimization
@@ -33,10 +33,10 @@ For large projects (>1000 functions), use **Fast Mode**:
 
 ```bash
 # Ultra-fast analysis (5-10x faster)
-code2flow /path/to/project --fast
+code2llm /path/to/project --fast
 
 # Custom performance settings
-code2flow /path/to/project \
+code2llm /path/to/project \
     --parallel-workers 8 \
     --max-depth 3 \
     --skip-data-flow \
@@ -160,7 +160,7 @@ code2flow /path/to/project -o my_analysis
 The TOON v2 format is designed for rapid scanning and actionable insights:
 
 ```
-# code2flow | 43f 10693L | py:43 | 2026-02-28
+# code2llm | 43f 10693L | py:43 | 2026-02-28
 # CC̄=4.6 | critical:39/406 | dups:0 | cycles:0
 
 HEALTH[20]:

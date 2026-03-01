@@ -10,6 +10,8 @@ import tempfile
 import shutil
 from pathlib import Path
 import statistics
+import json
+from datetime import datetime
 
 # Add parent to path
 import sys
@@ -19,6 +21,31 @@ from code2flow import ProjectAnalyzer, FAST_CONFIG
 from code2flow.core.streaming_analyzer import (
     StreamingAnalyzer, STRATEGY_QUICK, STRATEGY_STANDARD, STRATEGY_DEEP
 )
+
+
+def save_report(results: dict, filename: str = None) -> str:
+    """Save benchmark report to reports folder."""
+    reports_dir = Path(__file__).parent.parent / "reports"
+    reports_dir.mkdir(exist_ok=True)
+    
+    if not filename:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"benchmark_{timestamp}.json"
+    
+    report_path = reports_dir / filename
+    
+    # Add metadata
+    results['metadata'] = {
+        'timestamp': datetime.now().isoformat(),
+        'python_version': sys.version,
+        'platform': sys.platform,
+    }
+    
+    with open(report_path, 'w') as f:
+        json.dump(results, f, indent=2, default=str)
+    
+    print(f"\n[Report saved to: {report_path}]")
+    return str(report_path)
 
 
 def create_test_project(size: str = "medium") -> str:
@@ -202,6 +229,14 @@ def main():
     project_path = create_test_project("medium")
     print(f"  Project created at: {project_path}")
     
+    # Collect all results
+    all_results = {
+        'benchmark_type': 'performance_comparison',
+        'project_size': 'medium',
+        'modules': 50,
+        'functions_per_module': 10,
+    }
+    
     try:
         # Run benchmarks
         print("\n" + "="*60)
@@ -211,6 +246,9 @@ def main():
         original_results = benchmark_original_analyzer(project_path, runs=3)
         streaming_results = benchmark_streaming_analyzer(project_path, runs=3)
         
+        all_results['original_analyzer'] = original_results
+        all_results['streaming_analyzer'] = streaming_results
+        
         print_comparison(original_results, streaming_results)
         
         # Strategy comparison
@@ -219,6 +257,7 @@ def main():
         print("="*60)
         
         strategy_results = benchmark_with_strategies(project_path)
+        all_results['strategy_comparison'] = strategy_results
         
         print("\n[Summary]")
         print(f"  Quick strategy: {strategy_results['Quick']['time']:.2f}s")
@@ -234,6 +273,13 @@ def main():
         print("  Standard: ~100-300MB (selective CFG)")
         print("  Deep: ~300-800MB (full CFG, bounded)")
         
+        all_results['memory_estimates'] = {
+            'original_mb': '500-2000',
+            'quick_mb': '50-100',
+            'standard_mb': '100-300',
+            'deep_mb': '300-800',
+        }
+        
         print("\n" + "="*60)
         print("RECOMMENDATIONS")
         print("="*60)
@@ -242,6 +288,9 @@ def main():
         print("  • Use 'deep' strategy for documentation/auditing")
         print("  • Enable streaming for large projects (>100 files)")
         print("  • Use incremental mode for CI/CD")
+        
+        # Save report
+        save_report(all_results)
         
     finally:
         # Cleanup
