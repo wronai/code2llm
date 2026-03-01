@@ -4,15 +4,17 @@
 
 ![img.png](img.png)
 
-## 🚀 New: TOON Format
+## 🚀 New: TOON Format v2
 
-**TOON** is the new default output format - optimized for performance and readability:
+**TOON v2** is the default output format - scannable, severity-sorted, prompt-ready:
 
-- **🎯 10x smaller** than standard YAML (204KB vs 2.5MB)
-- **⚡ Faster processing** with intelligent sorting
-- **📊 Enhanced insights** with complexity analysis
-- **🔍 Smart recommendations** for refactoring
-- **📋 Complete validation** with built-in testing
+- **🎯 Health-first design** - issues sorted by severity (🔴/🟡)
+- **📊 Coupling matrix** - fan-in/fan-out analysis
+- **🔍 Duplicate detection** - find identical classes
+- **📈 Layered architecture** - package-level metrics
+- **⚡ Inline markers** - `!!` (CC≥15), `!` (CC≥10), `×DUP`
+- **🚫 Smart filtering** - excludes venv, site-packages
+- **📋 Actionable REFACTOR** - concrete steps, not just problems
 
 ```bash
 # Default: TOON format only
@@ -153,43 +155,46 @@ code2flow /path/to/project -o my_analysis
 | `call_graph.png` | Call graph visualization | ~3.7MB |
 | `llm_prompt.md` | LLM-ready analysis summary | ~35KB |
 
-## 🎯 TOON Format Structure
+## 🎯 TOON v2 Format Structure
 
-The TOON format provides optimized, human-readable output:
+The TOON v2 format is designed for rapid scanning and actionable insights:
 
-```yaml
-meta:
-  project: /path/to/project
-  mode: hybrid
-  generated: '2026-02-28T22:13:30'
-  version: '2.0'
+```
+# code2flow | 43f 10693L | py:43 | 2026-02-28
+# CC̄=4.6 | critical:39/406 | dups:0 | cycles:0
 
-stats:
-  files_processed: 42
-  functions_found: 443
-  classes_found: 77
-  nodes_created: 2734
-  edges_created: 3223
+HEALTH[20]:
+  🔴 GOD   code2flow/core/analyzer.py = 765L, 4 classes, 30m, max CC=20
+  🟡 CC    validate_mermaid_file CC=42 (limit:15)
 
-functions:
-  - name: export
-    module: code2flow.exporters.base.LLMPromptExporter
-    complexity: 45.0
-    tier: critical
-    nodes: 52
-    has_loops: true
-    has_conditions: true
-    has_returns: false
+REFACTOR[4]:
+  1. split code2flow/core/analyzer.py  (god module)
+  2. split 17 high-CC methods  (CC>15)
 
-insights:
-  complexity_summary:
-    critical_functions: 115
-    high_complexity: 64
-    avg_complexity: 3.17
-  recommendations:
-    - type: complexity
-      priority: high
-      message: "Refactor 115 critical functions"
+COUPLING:
+  ┌─────────────┬──────────────────────────────────────┐
+  │ Package     │ fan-in  fan-out  status             │
+  ├─────────────┼──────────────────────────────────────┤
+  │ core        │ 12      45        !! split needed    │
+  │ exporters   │ 5       28        hub               │
+  └─────────────┴──────────────────────────────────────┘
+
+LAYERS:
+  code2flow/                      CC̄=5.0    ←in:0  →out:0
+  │ !! toon                       982L  1C   29m  CC=31
+  │ !! analyzer                   765L  4C   30m  CC=20
+
+FUNCTIONS (CC≥10, 39 of 406):
+   56.0  main                    19n   4exit  cond+ret  !! split
+   42.0  validate_mermaid_file   6n   3exit  cond+ret  !! split
+
+HOTSPOTS:
+  #1  main                     fan=45   "calls 45 functions"
+  #2  analyze_project           fan=18   "analysis pipeline, 18 stages"
+
+CLASSES:
+  ToonExporter                   ████████████████████████  29m  CC̄=9.5   max=31    !!
+  DataAnalyzer                   ██████████                13m  CC̄=9.9   max=17    !!
 ```
 
 ### Complexity Tiers
@@ -430,19 +435,19 @@ code2flow ./project -f toon,yaml
 # Both formats available for comparison
 ```
 
-## 📋 TOON Format Specification
+## 📋 TOON v2 Format Specification
 
 ### File Structure
 ```
 analysis.toon
-├── meta              # Metadata (project, mode, timestamp)
-├── stats             # Analysis statistics
-├── functions         # Function analysis with complexity
-├── classes           # Class information from function grouping
-├── modules           # Module-level statistics
-├── patterns          # Detected design patterns
-├── call_graph        # Top 50 most important functions
-└── insights           # Recommendations and summaries
+├── Header lines      # Project summary + key metrics
+├── HEALTH            # Highest-severity issues (🔴/🟡)
+├── REFACTOR          # Actionable refactoring steps
+├── COUPLING          # Package-level fan-in/fan-out summary
+├── LAYERS            # Package hierarchy + inline markers
+├── FUNCTIONS         # CC-filtered function list (focus on CC≥10)
+├── HOTSPOTS          # Top fan-out functions
+└── CLASSES           # Class-level complexity summary
 ```
 
 ### Complexity Scoring

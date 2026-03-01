@@ -7,7 +7,7 @@ code2flow is a high-performance Python code analysis tool with integrated NLP pr
 ## Installation
 
 ```bash
-pip install code2flow
+pip install code2flow-toon
 ```
 
 ## Quick Start
@@ -351,6 +351,62 @@ flowchart TD
 }
 ```
 
+### TOON (v2 - Scannable Plain Text)
+
+The `.toon` format is designed for quick visual scanning of code health. Structure communicates meaning through sorting, indentation, and inline markers.
+
+```bash
+code2flow -f toon /path/to/project
+```
+
+**Format Philosophy:**
+- Sorting = Priority (not alphabetical)
+- Indentation = Architecture (not filesystem)
+- Visual bar = Size/complexity
+- Inline markers = Issues at a glance
+
+**Sections:**
+
+| Section | Purpose |
+|---------|---------|
+| `HEALTH` | Critical issues sorted by severity (🔴 red, 🟡 yellow) |
+| `REFACTOR` | Numbered refactoring steps with estimated impact |
+| `COUPLING` | Package dependency matrix with fan-in/fan-out |
+| `LAYERS` | Files grouped by package with metrics |
+| `DUPLICATES` | Duplicate classes with diff and recommendation |
+| `FUNCTIONS` | Only functions with CC≥10 (configurable threshold) |
+| `HOTSPOTS` | Top functions by fan-out |
+| `CLASSES` | Classes with visual bar chart (method count) |
+| `D:` | Per-module details with flow-signature (call chains) |
+
+**Example Output:**
+```
+# code2flow | 39f 9191L | py:39 | 2026-03-01
+# CC̄=5.0 | critical:36/332 | dups:0 | cycles:0
+
+HEALTH[20]:
+  🔴 GOD   core/analyzer.py = 765L, 4 classes, 30m, max CC=20
+  🟡 CC    main CC=56 (limit:15)
+
+CLASSES:
+  ToonExporter                   ████████████████████████  29m  CC̄=9.2   max=31    !!
+  DataStructureOptimizer         ██████████████████        22m  CC̄=3.0   max=7   
+
+D:
+  exporters/toon.py:
+    ToonExporter
+      export(2)  CC=1.0
+        → _build_context(1)  CC=1.0
+        → _compute_file_metrics(1)  CC=21.0  !
+```
+
+**Inline Markers:**
+- `!!` - Critical issue (CC≥15 or god module)
+- `!` - Warning (CC≥10)
+- `×DUP` - Duplicate class
+- `←N` - Fan-in count
+- `→N` - Fan-out count
+
 ## Testing
 
 ```bash
@@ -374,4 +430,4 @@ pytest tests/ --cov=code2flow --cov-report=html
 
 ## License
 
-MIT License - See LICENSE file for details.
+Apache License 2.0 - See LICENSE file for details.

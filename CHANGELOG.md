@@ -1,3 +1,44 @@
+## [0.2.5] - 2026-03-01
+
+### Summary
+
+feat(toon): implement TOON v2 format with health-first design
+
+### Added
+
+- **TOON v2 Format** - complete reimplementation of the exporter
+  - HEALTH section: issues sorted by severity (🔴/🟡), limited to 20 items
+  - REFACTOR section: actionable steps with concrete recommendations
+  - COUPLING matrix: package-level fan-in/fan-out analysis, limited to 15 packages
+  - LAYERS section: package hierarchy with inline markers
+  - DUPLICATES detection: find classes with identical method sets (≥60% overlap)
+  - FUNCTIONS section: filtered by CC≥10, limited to 50 items
+  - HOTSPOTS ranking: top 10 functions by fan-out with descriptions
+  - CLASSES section: visual bar charts (████), max CC markers
+  - D: details section: per-module call flow signatures
+
+- **Smart Filtering**
+  - EXCLUDE_PATTERNS: venv, site-packages, node_modules, .git, etc.
+  - Automatic exclusion of virtual environments
+  - Configurable limits: MAX_HEALTH_ISSUES, MAX_COUPLING_PACKAGES, MAX_FUNCTIONS_SHOWN
+
+- **Inline Markers**
+  - `!!` for CC≥15 (critical)
+  - `!` for CC≥10 (high)
+  - `×DUP` for duplicate classes
+  - `hub` for high fan-in packages
+  - `SMELL` for high fan-out packages
+
+### Test
+
+- add tests/test_toon_v2.py with 17 comprehensive tests
+- all tests passing (17/17)
+
+### Docs
+
+- update README.md with TOON v2 format documentation
+
+
 ## [0.2.4] - 2026-02-28
 
 ### Summary

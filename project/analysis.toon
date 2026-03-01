@@ -1,0 +1,541 @@
+# code2flow | 43f 10693L | py:43 | 2026-03-01
+# CC̄=4.6 | critical:39/406 | dups:0 | cycles:0
+
+HEALTH[20]:
+  🔴 GOD   examples/functional_refactoring_example.py = 644L, 15 classes, 50m, max CC=6
+  🔴 GOD   code2flow/core/streaming_analyzer.py = 666L, 6 classes, 25m, max CC=14
+  🔴 GOD   code2flow/core/analyzer.py = 765L, 4 classes, 30m, max CC=20
+  🟡 CC    validate_toon_completeness CC=17 (limit:15)
+  🟡 CC    main CC=17 (limit:15)
+  🟡 CC    validate_mermaid_file CC=42 (limit:15)
+  🟡 CC    fix_mermaid_file CC=25 (limit:15)
+  🟡 CC    parse_llm_task_text CC=19 (limit:15)
+  🟡 CC    _collect_entrypoints CC=15 (limit:15)
+  🟡 CC    _find_data_pipelines CC=17 (limit:15)
+  🟡 CC    _analyze_data_types CC=15 (limit:15)
+  🟡 CC    main CC=56 (limit:15)
+  🟡 CC    _trace_flow CC=15 (limit:15)
+  🟡 CC    _compute_file_metrics CC=21 (limit:15)
+  🟡 CC    _compute_coupling_matrix CC=19 (limit:15)
+  🟡 CC    _detect_duplicates CC=15 (limit:15)
+  🟡 CC    _compute_health CC=19 (limit:15)
+  🟡 CC    _render_coupling CC=28 (limit:15)
+  🟡 CC    _render_layers CC=21 (limit:15)
+  🟡 CC    _render_functions CC=18 (limit:15)
+
+REFACTOR[4]:
+  1. split examples/functional_refactoring_example.py  (god module)
+  2. split code2flow/core/streaming_analyzer.py  (god module)
+  3. split code2flow/core/analyzer.py  (god module)
+  4. split 17 high-CC methods  (CC>15)
+
+COUPLING: no cross-package imports detected
+
+LAYERS:
+  ./                              CC̄=5.1    ←in:0  →out:0
+  │ !! validate_toon              409L  0C   14m  CC=17     ←0
+  │ setup                       66L  0C    1m  CC=2      ←0
+  │
+  code2flow/                      CC̄=5.0    ←in:0  →out:0
+  │ !! toon                       982L  1C   29m  CC=31     ←0
+  │ !! implementation             849L  1C    5m  CC=2      ←0
+  │ !! analyzer                   765L  4C   30m  CC=20     ←0
+  │ !! streaming_analyzer         666L  6C   25m  CC=14     ←0
+  │ !! mermaid_generator          481L  0C    5m  CC=42     ←1
+  │ !! cli                        464L  0C    3m  CC=56     ←0
+  │ !! llm_flow_generator         451L  1C   20m  CC=15     ←0
+  │ advanced_optimizer         409L  1C   22m  CC=7      ←0
+  │ !  pipeline                   388L  3C   20m  CC=10     ←0
+  │ !  entity_resolution          326L  3C   16m  CC=13     ←0
+  │ intent_matching            297L  3C   15m  CC=7      ←0
+  │ cfg                        293L  1C   17m  CC=5      ←0
+  │ !! llm_task_generator         263L  0C   10m  CC=19     ←2
+  │ !! data_analysis              249L  1C   13m  CC=17     ←0
+  │ dfg                        224L  1C   12m  CC=7      ←0
+  │ call_graph                 210L  1C   13m  CC=9      ←0
+  │ !! llm_exporter               199L  1C   12m  CC=15     ←0
+  │ graph                      196L  1C    5m  CC=8      ←0
+  │ models                     194L  11C    6m  CC=8      ←0
+  │ smells                     192L  1C    9m  CC=7      ←0
+  │ config                     177L  6C    0m  CC=0.0    ←0
+  │ config                     174L  5C    2m  CC=1      ←0
+  │ detector                   168L  1C    8m  CC=9      ←0
+  │ !  prompt_engine              150L  1C    7m  CC=12     ←0
+  │ normalization              122L  2C   13m  CC=6      ←0
+  │ yaml_exporter              108L  1C    7m  CC=8      ←0
+  │ coupling                    77L  1C    5m  CC=7      ←0
+  │ !  mermaid_exporter            67L  1C    4m  CC=11     ←0
+  │ __init__                    47L  0C    0m  CC=0.0    ←0
+  │ __init__                    36L  0C    0m  CC=0.0    ←0
+  │ __init__                    23L  0C    0m  CC=0.0    ←0
+  │ json_exporter               17L  1C    1m  CC=3      ←0
+  │ __init__                    17L  0C    0m  CC=0.0    ←0
+  │ __init__                    17L  0C    0m  CC=0.0    ←0
+  │ base                        13L  1C    1m  CC=1      ←0
+  │ __main__                     6L  0C    0m  CC=0.0    ←0
+  │ __init__                     0L  0C    0m  CC=0.0    ←0
+  │ __init__                     0L  0C    0m  CC=0.0    ←0
+  │ __init__                     0L  0C    0m  CC=0.0    ←0
+  │
+  benchmarks/                     CC̄=3.7    ←in:0  →out:0
+  │ benchmark_performance      257L  0C    6m  CC=6      ←0
+  │
+  examples/                       CC̄=2.1    ←in:0  →out:0
+  │ !! functional_refactoring_example   644L  15C   50m  CC=6      ←0
+  │
+  ── zero ──
+     code2flow/patterns/__init__.py            0L
+     code2flow/refactor/__init__.py            0L
+     code2flow/visualizers/__init__.py         0L
+
+DUPLICATES[0]: none
+
+FUNCTIONS (CC≥10, 39 of 406):
+   56.0  main                                       19n   4exit  cond+ret  !! split
+   42.0  validate_mermaid_file                       6n   3exit  cond+ret  !! split
+   31.0  ToonExporter._render_details               32n   2exit  loops+cond+ret  !! split
+   28.0  ToonExporter._render_coupling              26n   5exit  loops+cond+ret  !! split
+   25.0  fix_mermaid_file                            3n   2exit  ret  !! split
+   21.0  ToonExporter._compute_file_metrics         31n   2exit  loops+cond+ret  !! split
+   21.0  ToonExporter._render_layers                18n   2exit  loops+cond+ret  !! split
+   20.0  ProjectAnalyzer._detect_dead_code           4n   1exit  cond  !! split
+   19.0  parse_llm_task_text                        35n   2exit  loops+cond+ret  !! split
+   19.0  ToonExporter._compute_coupling_matrix      16n   2exit  loops+cond+ret  !! split
+   19.0  ToonExporter._compute_health               20n   2exit  loops+cond+ret  !! split
+   18.0  ToonExporter._render_functions             20n   3exit  loops+cond+ret  !! split
+   17.0  validate_toon_completeness                 19n   2exit  loops+cond+ret  !! split
+   17.0  main                                       21n   3exit  loops+cond+ret  !! split
+   17.0  DataAnalyzer._find_data_pipelines          14n   2exit  loops+cond+ret  !! split
+   17.0  ProjectAnalyzer._perform_refactoring_analysis   10n   1exit  loops+cond  !! split
+   15.0  _collect_entrypoints                       13n   2exit  loops+cond+ret  !! split
+   15.0  DataAnalyzer._analyze_data_types            9n   2exit  loops+cond+ret  !! split
+   15.0  LLMPromptExporter._trace_flow              17n   3exit  loops+cond+ret  !! split
+   15.0  ToonExporter._detect_duplicates            13n   2exit  loops+cond+ret  !! split
+   15.0  FileAnalyzer._analyze_ast                   8n   2exit  loops+cond+ret  !! split
+   14.0  normalize_llm_task                          3n   2exit  ret
+   14.0  _summarize_functions                       15n   2exit  loops+cond+ret
+   14.0  DataAnalyzer._find_event_flows              9n   2exit  loops+cond+ret
+   14.0  DataAnalyzer._get_function_data_types      19n   2exit  cond+ret
+   14.0  DataAnalyzer._analyze_optimization_opportunities   15n   2exit  loops+cond+ret
+   14.0  StreamingAnalyzer._quick_scan_file         15n   2exit  loops+cond+ret
+   13.0  generate_single_png                         2n   1exit  
+   13.0  EntityResolver.resolve                     18n   2exit  loops+cond+ret
+   12.0  DataAnalyzer._find_state_patterns           9n   2exit  loops+cond+ret
+   12.0  StreamingAnalyzer.analyze_streaming        16n   1exit  loops+cond
+   12.0  PromptEngine._build_context_for_smell       5n   2exit  cond+ret
+   12.0  FileAnalyzer._process_function             14n   2exit  loops+cond+ret
+   11.0  MermaidExporter.export_call_graph          13n   1exit  loops+cond
+   11.0  ToonExporter._render_refactor              14n   3exit  loops+cond+ret
+   10.0  render_llm_flow_md                         16n   2exit  loops+cond+ret
+   10.0  NLPPipeline._format_action                 29n  10exit  cond+ret
+   10.0  ToonExporter._render_classes               11n   3exit  loops+cond+ret
+   10.0  FileAnalyzer._process_cfg_block            19n   3exit  loops+cond+ret
+
+  summary:
+    critical(≥10): 39 | high(5-10): 101 | medium(2-5): 155 | low(<2): 111
+    10% CC≥10  34% CC≥5
+
+HOTSPOTS:
+  #1  main                                 fan=45   "calls 45 functions"
+  #2  fix_mermaid_file                     fan=29   "calls 29 functions"
+  #3  ToonExporter._compute_file_metrics   fan=22   "ToonExporter method, fan-out=22"
+  #4  ProjectAnalyzer._perform_refactoring_analysis  fan=22   "ProjectAnalyzer method, fan-out=22"
+  #5  _summarize_functions                 fan=21   "calls 21 functions"
+  #6  GraphVisualizer.visualize_call_graph  fan=21   "GraphVisualizer method, fan-out=21"
+  #7  validate_mermaid_file                fan=20   "calls 20 functions"
+  #8  GraphVisualizer.visualize_cfg        fan=20   "GraphVisualizer method, fan-out=20"
+  #9  ToonExporter.export                  fan=18   "export with 18 outputs"
+  #10 ProjectAnalyzer.analyze_project      fan=18   "analysis pipeline, 18 stages"
+
+CLASSES:
+  ToonExporter                   ████████████████████████  29m  CC̄=9.5   max=31    !!
+  DataStructureOptimizer         ██████████████████        22m  CC̄=3.0   max=7   
+  CFGExtractor                   ██████████████            17m  CC̄=2.9   max=5   
+  NLPPipeline                    █████████████             16m  CC̄=2.6   max=10  
+  EntityResolver                 ███████████               14m  CC̄=3.7   max=13  
+  DataAnalyzer                   ██████████                13m  CC̄=9.9   max=17    !!
+  CallGraphExtractor             ██████████                13m  CC̄=4.2   max=9   
+  IntentMatcher                  ██████████                13m  CC̄=3.5   max=7   
+  QueryNormalizer                ██████████                13m  CC̄=1.8   max=6   
+  DFGExtractor                   █████████                 12m  CC̄=3.6   max=7   
+  LLMPromptExporter              █████████                 12m  CC̄=5.3   max=15    !!
+  StreamingAnalyzer              █████████                 11m  CC̄=6.2   max=14  
+  EvolutionaryCache              ████████                  10m  CC̄=2.4   max=5   
+  FileAnalyzer                   ████████                  10m  CC̄=6.2   max=15    !!
+  ProjectAnalyzer                ████████                  10m  CC̄=8.8   max=20    !!
+  TemplateGenerator              ███████                    9m  CC̄=1.3   max=4   
+  SmellDetector                  ███████                    9m  CC̄=4.4   max=7   
+  PatternDetector                ██████                     8m  CC̄=4.6   max=9   
+  TemplateLoader                 █████                      7m  CC̄=1.6   max=3   
+  YAMLExporter                   █████                      7m  CC̄=3.1   max=8   
+  PromptEngine                   █████                      7m  CC̄=5.0   max=12  
+  FileCache                      ████                       6m  CC̄=1.8   max=4   
+  ShellEntityPreparer            ████                       5m  CC̄=2.6   max=5   
+  CouplingAnalyzer               ████                       5m  CC̄=3.8   max=7   
+  StreamingFileCache             ████                       5m  CC̄=2.0   max=4   
+  IncrementalAnalyzer            ████                       5m  CC̄=2.8   max=5   
+  GraphVisualizer                ████                       5m  CC̄=4.8   max=8   
+  OptimizationImplementer        ████                       5m  CC̄=1.2   max=2   
+  SQLEntityPreparer              ███                        4m  CC̄=3.0   max=4   
+  SmartPrioritizer               ███                        4m  CC̄=5.2   max=9   
+  AnalysisResult                 ███                        4m  CC̄=1.0   max=1   
+  MermaidExporter                ███                        4m  CC̄=3.8   max=11  
+  NLPPipelineResult              ███                        4m  CC̄=2.0   max=3   
+  DockerEntityPreparer           ██                         3m  CC̄=1.7   max=3   
+  TemplateRenderer               ██                         3m  CC̄=2.0   max=3   
+  FastFileFilter                 ██                         3m  CC̄=6.0   max=8   
+  EntityPreparer                 █                          2m  CC̄=1.0   max=1   
+  KubernetesEntityPreparer       █                          2m  CC̄=2.0   max=3   
+  EntityPreparationPipeline      █                          2m  CC̄=2.0   max=3   
+  CommandGenerator               █                          2m  CC̄=3.5   max=4   
+  NLPConfig                      █                          2m  CC̄=1.0   max=1   
+  IntentMatchingResult           █                          2m  CC̄=2.0   max=2   
+  EntityResolutionResult         █                          2m  CC̄=2.5   max=3   
+  BaseModel                      █                          2m  CC̄=5.0   max=8   
+  Exporter                                                  1m  CC̄=1.0   max=1   
+  JSONExporter                                              1m  CC̄=3.0   max=3   
+  FuncSummary                                               0m  CC̄=0.0   max=0.0 
+  CommandContext                                            0m  CC̄=0.0   max=0.0 
+  CommandResult                                             0m  CC̄=0.0   max=0.0 
+  Template                                                  0m  CC̄=0.0   max=0.0 
+  CacheEntry                                                0m  CC̄=0.0   max=0.0 
+  AnalysisMode                                              0m  CC̄=0.0   max=0.0 
+  PerformanceConfig                                         0m  CC̄=0.0   max=0.0 
+  FilterConfig                                              0m  CC̄=0.0   max=0.0 
+  DepthConfig                                               0m  CC̄=0.0   max=0.0 
+  OutputConfig                                              0m  CC̄=0.0   max=0.0 
+  Config                                                    0m  CC̄=0.0   max=0.0 
+  NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
+  IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
+  EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
+  MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
+  FilePriority                                              0m  CC̄=0.0   max=0.0 
+  ScanStrategy                                              0m  CC̄=0.0   max=0.0 
+  IntentMatch                                               0m  CC̄=0.0   max=0.0 
+  Entity                                                    0m  CC̄=0.0   max=0.0 
+  FlowNode                                                  0m  CC̄=0.0   max=0.0 
+  FlowEdge                                                  0m  CC̄=0.0   max=0.0 
+  FunctionInfo                                              0m  CC̄=0.0   max=0.0 
+  ClassInfo                                                 0m  CC̄=0.0   max=0.0 
+  ModuleInfo                                                0m  CC̄=0.0   max=0.0 
+  Pattern                                                   0m  CC̄=0.0   max=0.0 
+  CodeSmell                                                 0m  CC̄=0.0   max=0.0 
+  Mutation                                                  0m  CC̄=0.0   max=0.0 
+  DataFlow                                                  0m  CC̄=0.0   max=0.0 
+  NormalizationResult                                       0m  CC̄=0.0   max=0.0 
+  PipelineStage                                             0m  CC̄=0.0   max=0.0 
+
+D:
+  code2flow/cli.py:
+    e: create_parser,main,generate_llm_context
+    create_parser()
+    main()
+    generate_llm_context(args_list)
+  code2flow/mermaid_generator.py:
+    e: validate_mermaid_file,fix_mermaid_file,generate_pngs,generate_single_png,generate_with_puppeteer
+    validate_mermaid_file(mmd_path)
+    fix_mermaid_file(mmd_path)
+    generate_pngs(input_dir,output_dir,timeout)
+    generate_single_png(mmd_file,output_file,timeout)
+    generate_with_puppeteer(mmd_file,output_file,timeout,max_text_size,max_edges)
+  code2flow/exporters/toon.py:
+    e: ToonExporter
+    ToonExporter  # Export to toon v2 plain-text format — scannable, sorted by s...
+      export(2)  CC=1.0
+        → _build_context(1)  CC=1.0
+        → _compute_file_metrics(1)  CC=21.0  !
+        → _is_excluded(1)  CC=5.0
+        → _rel_path(2)  CC=6.0
+        → _compute_package_metrics(2)  CC=5.0
+        → _package_of(1)  CC=2.0
+        → _compute_function_metrics(1)  CC=8.0
+        → _traits_from_cfg(2)  CC=7.0
+        → _compute_class_metrics(1)  CC=7.0
+        → _compute_coupling_matrix(1)  CC=19.0  !
+        → _package_of_module(1)  CC=3.0
+        → _detect_duplicates(1)  CC=15.0  !
+        → _compute_health(1)  CC=19.0  !
+        → _compute_hotspots(1)  CC=5.0
+        → _hotspot_description(2)  CC=8.0
+        → _get_cycles(1)  CC=1.0
+        → _render_header(1)  CC=6.0
+        → _render_health(1)  CC=4.0
+        → _render_refactor(1)  CC=11.0
+        → _render_coupling(1)  CC=28.0  !
+        → _render_layers(1)  CC=21.0  !
+        → _dup_file_set(1)  CC=2.0
+        → _render_duplicates(1)  CC=6.0
+        → _render_functions(1)  CC=18.0  !
+        → _render_hotspots(1)  CC=3.0
+        → _render_classes(1)  CC=10.0
+        → _render_details(1)  CC=31.0  !
+        → _render_call_chain(5)  CC=2.0
+  code2flow/core/analyzer.py:
+    e: FileCache,FastFileFilter,FileAnalyzer,ProjectAnalyzer,_analyze_single_file
+    FileCache  # Cache for parsed AST files....
+      __init__(2)  CC=1.0
+    FastFileFilter  # Fast file filtering with pattern matching....
+      __init__(1)  CC=3.0
+    FileAnalyzer  # Analyzes a single file....
+      __init__(2)  CC=1.0
+    ProjectAnalyzer  # Main analyzer with parallel processing....
+      __init__(1)  CC=3.0
+    _analyze_single_file(args)
+  code2flow/llm_task_generator.py:
+    e: _strip_bom,_ensure_list,_deep_get,normalize_llm_task,_parse_bullets,parse_llm_task_text,load_input,dump_yaml,create_parser,main
+    _strip_bom(text)
+    _ensure_list(value)
+    _deep_get(d,path)
+    normalize_llm_task(data)
+    _parse_bullets(lines)
+    parse_llm_task_text(text)
+    load_input(path)
+    dump_yaml(data)
+    create_parser()
+    main(argv)
+  validate_toon.py:
+    e: load_yaml,extract_functions_from_yaml,extract_functions_from_toon,extract_classes_from_yaml,extract_classes_from_toon,analyze_class_differences,extract_modules_from_yaml,extract_modules_from_toon,compare_basic_stats,compare_functions,compare_classes,compare_modules,validate_toon_completeness,main
+    load_yaml(filepath)
+    extract_functions_from_yaml(yaml_data)
+    extract_functions_from_toon(toon_data)
+    extract_classes_from_yaml(yaml_data)
+    extract_classes_from_toon(toon_data)
+    analyze_class_differences(yaml_data,toon_data)
+    extract_modules_from_yaml(yaml_data)
+    extract_modules_from_toon(toon_data)
+    compare_basic_stats(yaml_data,toon_data)
+    compare_functions(yaml_data,toon_data)
+    compare_classes(yaml_data,toon_data)
+    compare_modules(yaml_data,toon_data)
+    validate_toon_completeness(toon_data)
+    main()
+  code2flow/analysis/data_analysis.py:
+    e: DataAnalyzer
+    DataAnalyzer  # Analyze data flows, structures, and optimization opportuniti...
+      analyze_data_flow(1)  CC=1.0
+        → _find_data_pipelines(1)  CC=17.0  !
+        → _find_state_patterns(1)  CC=12.0
+        → _find_data_dependencies(1)  CC=9.0
+        → _find_event_flows(1)  CC=14.0
+  code2flow/llm_flow_generator.py:
+    e: FuncSummary,_strip_bom,_safe_read_yaml,_as_dict,_as_list,_shorten,_parse_call_label,_parse_func_label,_collect_nodes,_collect_entrypoints,_collect_functions,_node_counts_by_function,_pick_relevant_functions,_summarize_functions,_build_call_graph,_reachable,generate_llm_flow,render_llm_flow_md,dump_yaml,create_parser,main
+    FuncSummary
+    _strip_bom(text)
+    _safe_read_yaml(path)
+    _as_dict(d)
+    _as_list(v)
+    _shorten(s,max_len)
+    _parse_call_label(label)
+    _parse_func_label(label)
+    _collect_nodes(analysis)
+    _collect_entrypoints(nodes)
+    _collect_functions(nodes)
+    _node_counts_by_function(nodes)
+    _pick_relevant_functions()
+    _summarize_functions(nodes,limit_decisions,limit_calls)
+    _build_call_graph(func_summaries,known_functions)
+    _reachable(g,roots,max_nodes)
+    generate_llm_flow(analysis,max_functions,limit_decisions,limit_calls)
+    render_llm_flow_md(flow)
+    dump_yaml(data)
+    create_parser()
+    main(argv)
+  code2flow/exporters/llm_exporter.py:
+    e: LLMPromptExporter
+    LLMPromptExporter  # Export LLM-ready analysis summary with architecture and flow...
+      export(2)  CC=1.0
+        → _get_important_entries(1)  CC=3.0
+        → _get_overview(1)  CC=1.0
+        → _get_architecture_by_module(1)  CC=7.0
+        → _get_key_entry_points(1)  CC=4.0
+        → _get_process_flows(2)  CC=6.0
+        → _trace_flow(5)  CC=15.0  !
+        → _get_key_classes(1)  CC=6.0
+        → _get_data_transformations(1)  CC=7.0
+        → _get_behavioral_patterns(1)  CC=4.0
+        → _get_api_surface(1)  CC=5.0
+        → _get_system_interactions(1)  CC=5.0
+  code2flow/core/streaming_analyzer.py:
+    e: FilePriority,ScanStrategy,StreamingFileCache,SmartPrioritizer,StreamingAnalyzer,IncrementalAnalyzer
+    FilePriority  # Priority scoring for file analysis order....
+    ScanStrategy  # Scanning methodology configuration....
+    StreamingFileCache  # Memory-efficient cache with LRU eviction....
+      __init__(2)  CC=1.0
+    SmartPrioritizer  # Smart file prioritization for optimal analysis order....
+      __init__(1)  CC=1.0
+    StreamingAnalyzer  # Memory-efficient streaming analyzer with progress tracking....
+      __init__(2)  CC=4.0
+    IncrementalAnalyzer  # Incremental analysis with change detection....
+      __init__(1)  CC=2.0
+        → _load_state(0)  CC=3.0
+  code2flow/nlp/entity_resolution.py:
+    e: Entity,EntityResolutionResult,EntityResolver
+    Entity  # Resolved entity....
+    EntityResolutionResult  # Result of entity resolution....
+      get_by_type(1)  CC=3.0
+    EntityResolver  # Resolve entities (functions, classes, etc.) from queries....
+      __init__(2)  CC=3.0
+  code2flow/refactor/prompt_engine.py:
+    e: PromptEngine
+    PromptEngine  # Generate refactoring prompts from analysis results and detec...
+      __init__(2)  CC=4.0
+  code2flow/exporters/mermaid_exporter.py:
+    e: MermaidExporter
+    MermaidExporter  # Export call graph to Mermaid format....
+      export(2)  CC=1.0
+        → export_call_graph(2)  CC=11.0
+        → _safe_id(1)  CC=2.0
+  code2flow/nlp/pipeline.py:
+    e: PipelineStage,NLPPipelineResult,NLPPipeline
+    PipelineStage  # Single pipeline stage result....
+    NLPPipelineResult  # Complete NLP pipeline result (4b-4e aggregation)....
+      is_successful(0)  CC=3.0
+    NLPPipeline  # Main NLP processing pipeline (4a-4e)....
+      __init__(1)  CC=2.0
+  code2flow/analysis/call_graph.py:
+    e: CallGraphExtractor
+    CallGraphExtractor  # Extract call graph from AST....
+      __init__(1)  CC=1.0
+  code2flow/patterns/detector.py:
+    e: PatternDetector
+    PatternDetector  # Detect behavioral patterns in code....
+      __init__(1)  CC=1.0
+  code2flow/core/models.py:
+    e: BaseModel,FlowNode,FlowEdge,FunctionInfo,ClassInfo,ModuleInfo,Pattern,CodeSmell,Mutation,DataFlow,AnalysisResult
+    BaseModel  # Base class for models with automated serialization....
+      to_dict(1)  CC=2.0
+        → _filter_compact(1)  CC=8.0
+    FlowNode  # Represents a node in the control flow graph....
+    FlowEdge  # Represents an edge in the control flow graph....
+    FunctionInfo  # Information about a function/method....
+    ClassInfo  # Information about a class....
+    ModuleInfo  # Information about a module/package....
+    Pattern  # Detected behavioral pattern....
+    CodeSmell  # Represents a detected code smell....
+    Mutation  # Represents a mutation of a variable/object....
+    DataFlow  # Represents data flow for a variable....
+    AnalysisResult  # Complete analysis result for a project....
+      get_function_count(0)  CC=1.0
+  code2flow/exporters/yaml_exporter.py:
+    e: YAMLExporter
+    YAMLExporter  # Export to YAML format....
+      __init__(0)  CC=1.0
+  code2flow/visualizers/graph.py:
+    e: GraphVisualizer
+    GraphVisualizer  # Visualize analysis results as graphs....
+      __init__(1)  CC=1.0
+        → _build_graph(0)  CC=3.0
+  code2flow/analysis/coupling.py:
+    e: CouplingAnalyzer
+    CouplingAnalyzer  # Analyze coupling between modules....
+      __init__(1)  CC=1.0
+  code2flow/analysis/smells.py:
+    e: SmellDetector
+    SmellDetector  # Detect code smells from analysis results....
+      __init__(1)  CC=1.0
+  code2flow/analysis/dfg.py:
+    e: DFGExtractor
+    DFGExtractor  # Extract Data Flow Graph from AST....
+      __init__(1)  CC=1.0
+  code2flow/nlp/intent_matching.py:
+    e: IntentMatch,IntentMatchingResult,IntentMatcher
+    IntentMatch  # Single intent match result....
+    IntentMatchingResult  # Result of intent matching....
+      get_best_intent(0)  CC=2.0
+    IntentMatcher  # Match queries to intents using fuzzy and keyword matching....
+      __init__(2)  CC=3.0
+  code2flow/optimization/advanced_optimizer.py:
+    e: DataStructureOptimizer
+    DataStructureOptimizer  # Advanced optimizer for data structures and flows....
+      __init__(1)  CC=1.0
+        → _build_networkx_graph(0)  CC=3.0
+  examples/functional_refactoring_example.py:
+    e: TemplateGenerator,CommandContext,CommandResult,EntityPreparer,ShellEntityPreparer,DockerEntityPreparer,SQLEntityPreparer,KubernetesEntityPreparer,EntityPreparationPipeline,Template,TemplateLoader,TemplateRenderer,CommandGenerator,CacheEntry,EvolutionaryCache,generate
+    TemplateGenerator  # Original - handles EVERYTHING: loading, matching, rendering,...
+      __init__(0)  CC=1.0
+    CommandContext  # Context for command generation....
+    CommandResult  # Result of command generation....
+    EntityPreparer  # Protocol for domain-specific entity preparation....
+      supports(1)  CC=1.0
+    ShellEntityPreparer  # Prepares entities for shell commands....
+      supports(1)  CC=2.0
+    DockerEntityPreparer  # Prepares entities for docker commands....
+      supports(1)  CC=1.0
+    SQLEntityPreparer  # Prepares entities for SQL commands....
+      supports(1)  CC=1.0
+    KubernetesEntityPreparer  # Prepares entities for kubernetes commands....
+      supports(1)  CC=1.0
+    EntityPreparationPipeline  # Coordinates entity preparation across domains....
+      __init__(0)  CC=1.0
+    Template  # Command template....
+    TemplateLoader  # Loads templates from various sources....
+      __init__(1)  CC=2.0
+    TemplateRenderer  # Renders templates with entity substitution....
+      render(2)  CC=2.0
+        → _manual_render(2)  CC=3.0
+    CommandGenerator  # Generates commands from natural language intents....
+      __init__(3)  CC=4.0
+    CacheEntry  # Single cache entry with evolution metadata....
+    EvolutionaryCache  # Cache that evolves based on usage patterns.
+
+Unlike simple L...
+      __init__(2)  CC=1.0
+        → _load(0)  CC=5.0
+    generate(query,intent,dry_run,cache_dir)
+  benchmarks/benchmark_performance.py:
+    e: create_test_project,benchmark_original_analyzer,benchmark_streaming_analyzer,benchmark_with_strategies,print_comparison,main
+    create_test_project(size)
+    benchmark_original_analyzer(project_path,runs)
+    benchmark_streaming_analyzer(project_path,runs)
+    benchmark_with_strategies(project_path)
+    print_comparison(original,streaming)
+    main()
+  code2flow/nlp/normalization.py:
+    e: NormalizationResult,QueryNormalizer
+    NormalizationResult  # Result of query normalization....
+    QueryNormalizer  # Normalize queries for consistent processing....
+      __init__(1)  CC=2.0
+  code2flow/analysis/cfg.py:
+    e: CFGExtractor
+    CFGExtractor  # Extract Control Flow Graph from AST....
+      __init__(1)  CC=1.0
+  code2flow/exporters/json_exporter.py:
+    e: JSONExporter
+    JSONExporter  # Export to JSON format....
+      export(4)  CC=3.0
+  setup.py:
+    e: read_readme
+    read_readme()
+  code2flow/optimization/implementation.py:
+    e: OptimizationImplementer
+    OptimizationImplementer  # Implements concrete optimizations based on analysis results....
+      __init__(1)  CC=1.0
+  code2flow/nlp/config.py:
+    e: NormalizationConfig,IntentMatchingConfig,EntityResolutionConfig,MultilingualConfig,NLPConfig
+    NormalizationConfig  # Configuration for query normalization....
+    IntentMatchingConfig  # Configuration for intent matching....
+    EntityResolutionConfig  # Configuration for entity resolution....
+    MultilingualConfig  # Configuration for multilingual processing....
+    NLPConfig  # Main NLP pipeline configuration....
+      from_yaml(1)  CC=1.0
+  code2flow/exporters/base.py:
+    e: Exporter
+    Exporter  # Abstract base class for all exporters....
+      export(2)  CC=1.0
+  code2flow/__main__.py:
+  code2flow/__init__.py:
+  code2flow/analysis/__init__.py:
+  code2flow/core/config.py:
+    e: AnalysisMode,PerformanceConfig,FilterConfig,DepthConfig,OutputConfig,Config
+    AnalysisMode  # Available analysis modes....
+    PerformanceConfig  # Performance optimization settings....
+    FilterConfig  # Filtering options to reduce analysis scope....
+    DepthConfig  # Depth limiting for control flow analysis....
+    OutputConfig  # Output formatting options....
+    Config  # Analysis configuration with performance optimizations....
+  code2flow/core/__init__.py:
+  code2flow/nlp/__init__.py:
+  code2flow/exporters/__init__.py:
+  code2flow/visualizers/__init__.py:
+  code2flow/refactor/__init__.py:
+  code2flow/patterns/__init__.py:

@@ -21,6 +21,18 @@ CC_WARNING = 15
 GOD_MODULE_LINES = 500
 GOD_MODULE_CLASSES = 4
 
+# Limits for output size
+MAX_HEALTH_ISSUES = 20
+MAX_COUPLING_PACKAGES = 15
+MAX_FUNCTIONS_SHOWN = 50
+
+# Patterns to exclude (venv, site-packages, etc.)
+EXCLUDE_PATTERNS = {
+    'venv', '.venv', 'env', '.env', 'publish-env', 'test-env',
+    'site-packages', 'node_modules', '__pycache__', '.git',
+    'dist', 'build', 'egg-info', '.tox', '.mypy_cache',
+}
+
 
 class ToonExporter:
     """Export to toon v2 plain-text format — scannable, sorted by severity."""
@@ -60,6 +72,16 @@ class ToonExporter:
     # ------------------------------------------------------------------
     # context builder — pre-compute all metrics once
     # ------------------------------------------------------------------
+    def _is_excluded(self, path: str) -> bool:
+        """Check if path should be excluded (venv, site-packages, etc.)."""
+        path_lower = path.lower().replace('\\', '/')
+        for pattern in EXCLUDE_PATTERNS:
+            if f'/{pattern}/' in path_lower or path_lower.startswith(f'{pattern}/'):
+                return True
+            if pattern in path_lower.split('/'):
+                return True
+        return False
+
     def _build_context(self, result: AnalysisResult) -> Dict[str, Any]:
         ctx: Dict[str, Any] = {}
         ctx["result"] = result
@@ -108,9 +130,11 @@ class ToonExporter:
                     except Exception:
                         pass
 
-        # aggregate from functions
+        # aggregate from functions (skip excluded paths)
         for qname, fi in result.functions.items():
             fpath = fi.file
+            if self._is_excluded(fpath):
+                continue
             if fpath not in files:
                 rel = self._rel_path(fpath, project_path)
                 lc = line_counts.get(fpath, line_counts.get(rel, 0))
@@ -127,9 +151,11 @@ class ToonExporter:
             if fi.class_name:
                 files[fpath]["classes"].add(fi.class_name)
 
-        # aggregate from classes without functions
+        # aggregate from classes without functions (skip excluded)
         for qname, ci in result.classes.items():
             fpath = ci.file
+            if self._is_excluded(fpath):
+                continue
             if fpath not in files:
                 rel = self._rel_path(fpath, project_path)
                 lc = line_counts.get(fpath, line_counts.get(rel, 0))
@@ -141,9 +167,11 @@ class ToonExporter:
                 }
             files[fpath]["classes"].add(ci.name)
 
-        # modules with no functions/classes (e.g. __init__.py)
+        # modules with no functions/classes (e.g. __init__.py) (skip excluded)
         for mname, mi in result.modules.items():
             fpath = mi.file
+            if self._is_excluded(fpath):
+                continue
             if fpath not in files:
                 rel = self._rel_path(fpath, project_path)
                 lc = line_counts.get(fpath, line_counts.get(rel, 0))
@@ -196,6 +224,8 @@ class ToonExporter:
     def _compute_function_metrics(self, result: AnalysisResult) -> List[Dict[str, Any]]:
         funcs = []
         for qname, fi in result.functions.items():
+            if self._is_excluded(fi.file):
+                continue
             cc = fi.complexity.get("cyclomatic_complexity", 0)
             # count CFG nodes for this function
             node_count = len(fi.cfg_nodes) if fi.cfg_nodes else 0
@@ -231,6 +261,8 @@ class ToonExporter:
     def _compute_class_metrics(self, result: AnalysisResult) -> List[Dict[str, Any]]:
         classes = []
         for qname, ci in result.classes.items():
+            if self._is_excluded(ci.file):
+                continue
             method_ccs = []
             method_names = []
             for mq in ci.methods:
@@ -263,13 +295,16 @@ class ToonExporter:
         matrix: Dict[Tuple[str, str], int] = defaultdict(int)
         pkg_fan: Dict[str, Dict[str, int]] = {}
 
-        # Build module lookup: qualified_func_name -> module_name
+        # Build module lookup: qualified_func_name -> module_name (skip excluded)
         func_to_module: Dict[str, str] = {}
         for qname, fi in result.functions.items():
-            func_to_module[qname] = fi.module
+            if not self._is_excluded(fi.file):
+                func_to_module[qname] = fi.module
 
-        # Derive coupling from actual cross-module calls
+        # Derive coupling from actual cross-module calls (skip excluded)
         for qname, fi in result.functions.items():
+            if self._is_excluded(fi.file):
+                continue
             src_mod = fi.module
             src_pkg = self._package_of_module(src_mod)
             for callee in fi.calls:
@@ -301,7 +336,8 @@ class ToonExporter:
     def _detect_duplicates(self, result: AnalysisResult) -> List[Dict[str, Any]]:
         """Detect duplicate classes by comparing method-name sets."""
         dupes: List[Dict[str, Any]] = []
-        class_list = list(result.classes.items())
+        # Filter out excluded classes first
+        class_list = [(q, c) for q, c in result.classes.items() if not self._is_excluded(c.file)]
 
         for i, (qa, ca) in enumerate(class_list):
             methods_a = set(m.split(".")[-1] for m in ca.methods)
@@ -410,15 +446,17 @@ class ToonExporter:
                     "impact": "split method",
                 })
 
-        # sort: red first, then yellow
+        # sort: red first, then yellow, limit to MAX_HEALTH_ISSUES
         sev_order = {"red": 0, "yellow": 1, "green": 2}
         issues.sort(key=lambda x: sev_order.get(x["severity"], 9))
-        return issues
+        return issues[:MAX_HEALTH_ISSUES]
 
     def _compute_hotspots(self, result: AnalysisResult) -> List[Dict[str, Any]]:
         """Top functions by fan-out."""
         spots = []
         for qname, fi in result.functions.items():
+            if self._is_excluded(fi.file):
+                continue
             fan_out = len(set(fi.calls))
             if fan_out >= 5:
                 display = fi.name
@@ -507,17 +545,25 @@ class ToonExporter:
         if not all_pkgs:
             return ["COUPLING: n/a"]
 
+        # Limit to top packages by fan-in + fan-out
+        pkg_activity = [(p, pkg_fan.get(p, {}).get("fan_in", 0) + pkg_fan.get(p, {}).get("fan_out", 0)) for p in all_pkgs]
+        pkg_activity.sort(key=lambda x: x[1], reverse=True)
+        top_pkgs = [p for p, _ in pkg_activity[:MAX_COUPLING_PACKAGES]]
+
+        if not top_pkgs:
+            return ["COUPLING: n/a"]
+
         # header
-        col_w = max(len(p) for p in all_pkgs)
+        col_w = max(len(p) for p in top_pkgs)
         col_w = max(col_w, 6)
         hdr_label = "COUPLING:"
-        pad = max(len(p) for p in all_pkgs) + 2
-        hdr = f"{'':>{pad}}  " + "  ".join(f"{p:>{col_w}}" for p in all_pkgs)
+        pad = max(len(p) for p in top_pkgs) + 2
+        hdr = f"{'':>{pad}}  " + "  ".join(f"{p:>{col_w}}" for p in top_pkgs)
         lines = [hdr_label, hdr]
 
-        for src in all_pkgs:
+        for src in top_pkgs:
             row_parts = []
-            for dst in all_pkgs:
+            for dst in top_pkgs:
                 if src == dst:
                     row_parts.append(f"{'──':>{col_w}}")
                 else:
@@ -660,7 +706,8 @@ class ToonExporter:
             return [f"FUNCTIONS (CC\u2265{CC_CRITICAL}, 0 of {total}): none"]
 
         lines = [f"FUNCTIONS (CC\u2265{CC_CRITICAL}, {len(critical)} of {total}):"]
-        for fm in critical:
+        shown = critical[:MAX_FUNCTIONS_SHOWN]
+        for fm in shown:
             display = fm["name"]
             if fm["class_name"]:
                 display = f"{fm['class_name']}.{fm['name']}"
@@ -726,7 +773,6 @@ class ToonExporter:
 
         max_methods = max(c["method_count"] for c in classes) if classes else 1
         bar_max = 24
-        dup_classes = {d["class_name"] for d in ctx["duplicates"]}
 
         lines = ["CLASSES:"]
         for cm in classes:
@@ -743,7 +789,7 @@ class ToonExporter:
                 markers += "  !!"
             dup_count = sum(1 for d in ctx["duplicates"] if d["class_name"] == name)
             if dup_count > 0:
-                markers += f"  ×{dup_count}"
+                markers += f"  \u00d7{dup_count}"
 
             lines.append(
                 f"  {name:30s} {bar:<{bar_max}}  {mc:>2}m  CC\u0304={avg_cc:<4}  max={max_cc:<4}{markers}"
@@ -797,6 +843,7 @@ class ToonExporter:
                 ci = result.classes.get(cq)
                 if not ci:
                     continue
+
                 dup_mark = "  ×DUP" if ci.name in dup_classes else ""
                 doc = ""
                 if ci.docstring:
@@ -854,16 +901,18 @@ class ToonExporter:
                 return fpath
 
     def _package_of(self, rel_path: str) -> str:
-        """Extract top-level package from relative path."""
+        """Extract top-level package/directory from relative path."""
         parts = Path(rel_path).parts
         if len(parts) >= 2:
-            return str(Path(parts[0]) / parts[1]) if parts[0] == "code2flow" else parts[0]
-        return parts[0] if parts else "."
+            return parts[0]
+        # root-level .py files → group under "."
+        return "."
 
     def _package_of_module(self, module_name: str) -> str:
         parts = module_name.split(".")
         if len(parts) >= 2:
-            return f"{parts[0]}/{parts[1]}" if parts[0] == "code2flow" else parts[0]
+            return parts[0]
+        # single-part module names are root-level scripts
         return parts[0] if parts else ""
 
     def _traits_from_cfg(self, fi: FunctionInfo, result: AnalysisResult) -> List[str]:
@@ -927,6 +976,7 @@ class ToonExporter:
                 if call_name in method_map and call_name not in called:
                     called.add(call_name)
                     child, _, _ = method_map[call_name]
-                    render_method(child, depth + 1, "  \u2192 ")
+                    render_method(child, depth + 1, "  → ")
 
         render_method(root, 0, "")
+

@@ -1,29 +1,30 @@
-# code2flow | 52f 14323L | python:52
+# code2flow | 54f 13451L | python:54
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[52]:
+M[54]:
   benchmarks/benchmark_performance.py,181
   benchmarks/test_performance.py,154
   code2flow/__init__.py,37
   code2flow/__main__.py,4
-  code2flow/analysis/__init__.py,0
+  code2flow/analysis/__init__.py,15
   code2flow/analysis/call_graph.py,155
   code2flow/analysis/cfg.py,219
   code2flow/analysis/coupling.py,61
+  code2flow/analysis/data_analysis.py,228
   code2flow/analysis/dfg.py,165
-  code2flow/analysis/smells.py,143
+  code2flow/analysis/smells.py,163
   code2flow/cli.py,357
   code2flow/core/__init__.py,34
   code2flow/core/analyzer.py,593
   code2flow/core/config.py,136
-  code2flow/core/models.py,320
+  code2flow/core/models.py,155
   code2flow/core/streaming_analyzer.py,510
-  code2flow/exporters/__init__.py,3
-  code2flow/exporters/base.py,1240
-  code2flow/exporters/toon.py,297
-  code2flow/extractors/__init__.py,0
-  code2flow/extractors/call_graph.py,115
-  code2flow/extractors/cfg_extractor.py,219
-  code2flow/extractors/dfg_extractor.py,136
+  code2flow/exporters/__init__.py,15
+  code2flow/exporters/base.py,9
+  code2flow/exporters/json_exporter.py,13
+  code2flow/exporters/llm_exporter.py,174
+  code2flow/exporters/mermaid_exporter.py,53
+  code2flow/exporters/toon.py,796
+  code2flow/exporters/yaml_exporter.py,86
   code2flow/llm_flow_generator.py,359
   code2flow/llm_task_generator.py,215
   code2flow/mermaid_generator.py,346
@@ -52,6 +53,7 @@ M[52]:
   tests/test_refactoring_engine.py,61
   tests/test_sprint4.py,60
   tests/test_sprint5.py,62
+  tests/test_toon_v2.py,228
   validate_toon.py,291
 D:
   benchmarks/benchmark_performance.py:
@@ -80,6 +82,10 @@ D:
     i: core.models.AnalysisResult,typing.{Any,Dict,List,Set}
     e: CouplingAnalyzer
     CouplingAnalyzer: __init__(1),analyze(0),_analyze_module_interactions(0),_detect_data_leakage(0),_detect_shared_state(0)  # Analyze coupling between modules.
+  code2flow/analysis/data_analysis.py:
+    i: core.models.AnalysisResult,typing.{Any,Dict,List}
+    e: DataAnalyzer
+    DataAnalyzer: analyze_data_flow(1),analyze_data_structures(1),_find_data_pipelines(1),_find_state_patterns(1),_find_data_dependencies(1)  # Analyze data flows, structures, and o...
   code2flow/analysis/dfg.py:
     i: ast,collections.defaultdict,core.config.Config,core.models.{AnalysisResult,DataFlow,FlowEdge,Mutation},typing.{Dict,List,Set}
     e: DFGExtractor
@@ -87,9 +93,9 @@ D:
   code2flow/analysis/smells.py:
     i: core.models.{AnalysisResult,CodeSmell},typing.{Any,Dict,List}
     e: SmellDetector
-    SmellDetector: __init__(1),detect(0),_detect_god_functions(0),_detect_feature_envy(0),_detect_data_clumps(0)  # Detect code smells from analysis resu...
+    SmellDetector: __init__(1),detect(0),_detect_god_functions(0),_detect_god_modules(0),_detect_feature_envy(0)  # Detect code smells from analysis resu...
   code2flow/cli.py:
-    i: argparse,sys,core.analyzer.ProjectAnalyzer,core.config.{ANALYSIS_MODES,Config},exporters.base.{JSONExporter,LLMPromptExporter,MermaidExporter,YAMLExporter},pathlib.Path
+    i: argparse,sys,core.analyzer.ProjectAnalyzer,core.config.{ANALYSIS_MODES,Config},exporters.{JSONExporter,LLMPromptExporter,MermaidExporter,YAMLExporter},pathlib.Path
     e: create_parser,main,generate_llm_context
     create_parser()->argparse.ArgumentParser
     main()
@@ -111,13 +117,13 @@ D:
     DepthConfig:   # Depth limiting for control flow analy...
     OutputConfig:   # Output formatting options.
   code2flow/core/models.py:
-    i: dataclasses.{dataclass,field},pathlib.Path,typing.{Any,Dict,List,Optional,Set}
-    e: FlowNode,FlowEdge,FunctionInfo,ClassInfo,ModuleInfo,Pattern,CodeSmell,Mutation
-    FlowNode: to_dict(1)  # Represents a node in the control flow...
-    FlowEdge: to_dict(1)  # Represents an edge in the control flo...
-    FunctionInfo: to_dict(1)  # Information about a function/method.
-    ClassInfo: to_dict(1)  # Information about a class.
-    ModuleInfo: to_dict(1)  # Information about a module/package.
+    i: dataclasses.{asdict,dataclass,field},pathlib.Path,typing.{Any,Dict,List,Optional,Set}
+    e: BaseModel,FlowNode,FlowEdge,FunctionInfo,ClassInfo,ModuleInfo,Pattern,CodeSmell
+    BaseModel: to_dict(1),_filter_compact(1)  # Base class for models with automated...
+    FlowNode:   # Represents a node in the control flow...
+    FlowEdge:   # Represents an edge in the control flo...
+    FunctionInfo:   # Information about a function/method.
+    ClassInfo:   # Information about a class.
   code2flow/core/streaming_analyzer.py:
     i: ast,hashlib,json,os,time,collections.defaultdict,dataclasses.{dataclass,field},pathlib.Path,typing.Dict
     e: FilePriority,ScanStrategy,STRATEGY_QUICK,STRATEGY_STANDARD,STRATEGY_DEEP,StreamingFileCache,SmartPrioritizer,StreamingAnalyzer
@@ -127,29 +133,29 @@ D:
     SmartPrioritizer: __init__(1),prioritize_files(2),_build_import_graph(2),_check_has_main(1)  # Smart file prioritization for optimal...
     StreamingAnalyzer: __init__(2),set_progress_callback(1),cancel(0),analyze_streaming(2),_quick_scan_file(1)  # Memory-efficient streaming analyzer w...
   code2flow/exporters/base.py:
-    i: json,yaml,core.models.AnalysisResult,pathlib.Path,typing.{Any,Dict}
-    e: ToonExporter,JSONExporter,YAMLExporter,MermaidExporter,LLMPromptExporter
-    ToonExporter: __init__(0),export(2),_build_toon_data(1),_analyze_functions(1),_calculate_complexity(1)  # Export to optimized toon format with...
+    i: abc.{ABC,abstractmethod},core.models.AnalysisResult
+    e: Exporter
+    Exporter: export(2)  # Abstract base class for all exporters.
+  code2flow/exporters/json_exporter.py:
+    i: json,base.Exporter,core.models.AnalysisResult,pathlib.Path
+    e: JSONExporter
     JSONExporter: export(4)  # Export to JSON format.
-    YAMLExporter: export(4),export_grouped(2),export_split(4),export_separated(3),export_data_flow(3)  # Export to YAML format.
+  code2flow/exporters/llm_exporter.py:
+    i: base.Exporter,core.models.{AnalysisResult,FunctionInfo},pathlib.Path,typing.{Any,Dict,List,Tuple}
+    e: LLMPromptExporter
+    LLMPromptExporter: export(2),_get_overview(1),_get_architecture_by_module(1),_get_important_entries(1),_get_key_entry_points(1)  # Export LLM-ready analysis summary wit...
+  code2flow/exporters/mermaid_exporter.py:
+    i: base.Exporter,core.models.AnalysisResult,pathlib.Path,typing.Dict
+    e: MermaidExporter
     MermaidExporter: export(2),export_call_graph(2),export_compact(2),_safe_id(1)  # Export call graph to Mermaid format.
-    LLMPromptExporter: export(2),_trace_flow(5),_analyze_call_patterns(1)  # Export LLM-ready analysis summary wit...
   code2flow/exporters/toon.py:
-    i: yaml,collections.defaultdict,core.models.AnalysisResult,pathlib.Path,typing.{Any,Dict}
-    e: ToonExporter
-    ToonExporter: __init__(0),export(2),_build_toon_data(1),_analyze_functions(1),_calculate_complexity(1)  # Export to optimized toon format with...
-  code2flow/extractors/call_graph.py:
-    i: ast,core.config.Config,core.models.{AnalysisResult,FlowEdge},typing.{Optional,Set}
-    e: CallGraphExtractor
-    CallGraphExtractor: __init__(1),extract(3),visit_Import(1),visit_ImportFrom(1),visit_ClassDef(1)  # Extract call graph from AST.
-  code2flow/extractors/cfg_extractor.py:
-    i: ast,collections.defaultdict,core.config.Config,core.models.{AnalysisResult,FlowEdge,FlowNode,FunctionInfo},typing.Optional
-    e: CFGExtractor
-    CFGExtractor: __init__(1),extract(3),new_node(2),connect(4),visit_FunctionDef(1)  # Extract Control Flow Graph from AST.
-  code2flow/extractors/dfg_extractor.py:
-    i: ast,collections.defaultdict,core.config.Config,core.models.{AnalysisResult,DataFlow,FlowEdge},typing.{Dict,List,Set}
-    e: DFGExtractor
-    DFGExtractor: __init__(1),extract(3),visit_FunctionDef(1),visit_Assign(1),visit_AugAssign(1)  # Extract Data Flow Graph from AST.
+    i: datetime,collections.defaultdict,core.models.AnalysisResult,pathlib.Path,typing
+    e: CC_CRITICAL,CC_HIGH,CC_WARNING,GOD_MODULE_LINES,GOD_MODULE_CLASSES,MAX_HEALTH_ISSUES,MAX_COUPLING_PACKAGES,MAX_FUNCTIONS_SHOWN
+    ToonExporter: export(2),_is_excluded(1),_build_context(1),_compute_file_metrics(1),_compute_package_metrics(2)  # Export to toon v2 plain-text format —...
+  code2flow/exporters/yaml_exporter.py:
+    i: yaml,analysis.data_analysis.DataAnalyzer,base.Exporter,collections.defaultdict,core.models.AnalysisResult,pathlib.Path
+    e: YAMLExporter
+    YAMLExporter: __init__(0),export(4),export_grouped(2),export_data_flow(3),export_data_structures(3)  # Export to YAML format.
   code2flow/llm_flow_generator.py:
     i: argparse,re,sys,collections.{Counter,defaultdict,deque},dataclasses.dataclass,pathlib.Path,typing.{Any,Dict}
     e: _FUNC_LABEL_PREFIX,_CALL_LABEL_PREFIX,FuncSummary,generate_llm_flow,render_llm_flow_md,dump_yaml,create_parser,main
@@ -298,6 +304,12 @@ D:
     test_tiktoken_truncation()
     test_template_rendering_with_metrics()
     test_tree_sitter_init()
+  tests/test_toon_v2.py:
+    i: pytest,code2flow.core.models.{AnalysisResult,ClassInfo,FunctionInfo,ModuleInfo},code2flow.exporters.toon.{EXCLUDE_PATTERNS,ToonExporter},pathlib.Path
+    e: sample_result,TestToonExporterV2,TestToonExporterEdgeCases
+    TestToonExporterV2: test_export_creates_file(2),test_header_format(2),test_health_section(2),test_refactor_section(2),test_layers_section(2)  # Test ToonExporter v2 format.
+    TestToonExporterEdgeCases: test_empty_result(1),test_single_function(1)  # Test edge cases for ToonExporter.
+    sample_result()
   validate_toon.py:
     i: yaml,sys,collections.defaultdict,pathlib.Path
     e: load_yaml,extract_functions_from_yaml,extract_functions_from_toon,extract_classes_from_yaml,extract_classes_from_toon,analyze_class_differences,extract_modules_from_yaml,extract_modules_from_toon
