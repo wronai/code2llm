@@ -45,6 +45,11 @@ code2llm ./ -f all
 # LLM-ready context only
 code2llm ./ -f context
 ```
+Przykład z projektu toonic:
+![img_1.png](img_1.png)
+```bash
+code2llm ./ -f toon,evolution -o ./project
+```
 
 ### Performance Options
 ```bash
