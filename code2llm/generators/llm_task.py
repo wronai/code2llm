@@ -100,10 +100,8 @@ def _parse_bullets(lines: List[str]) -> List[str]:
     return items
 
 
-def parse_llm_task_text(text: str) -> Dict[str, Any]:
-    text = _strip_bom(text)
-    lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
-
+def _parse_sections(lines: List[str]) -> Dict[str, List[str]]:
+    """Parse text lines into sections based on headers."""
     sections: Dict[str, List[str]] = {}
     current: Optional[str] = None
 
@@ -111,6 +109,12 @@ def parse_llm_task_text(text: str) -> Dict[str, Any]:
         nonlocal current
         current = name
         sections.setdefault(name, [])
+
+    _SECTION_HEADERS = {
+        "TITLE", "GOAL", "CURRENT", "DESIRED", "INPUTS", "OUTPUTS",
+        "RULES (MUST)", "RULES (MUST NOT)", "EDGE CASES",
+        "ACCEPTANCE TESTS", "DELIVERABLES",
+    }
 
     for line in lines:
         stripped = line.strip()
@@ -122,19 +126,7 @@ def parse_llm_task_text(text: str) -> Dict[str, Any]:
         upper = stripped.upper()
         if upper.endswith(":"):
             key = upper[:-1].strip()
-            if key in {
-                "TITLE",
-                "GOAL",
-                "CURRENT",
-                "DESIRED",
-                "INPUTS",
-                "OUTPUTS",
-                "RULES (MUST)",
-                "RULES (MUST NOT)",
-                "EDGE CASES",
-                "ACCEPTANCE TESTS",
-                "DELIVERABLES",
-            }:
+            if key in _SECTION_HEADERS:
                 start_section(key)
                 continue
 
@@ -142,7 +134,12 @@ def parse_llm_task_text(text: str) -> Dict[str, Any]:
             continue
         sections[current].append(line)
 
-    data: Dict[str, Any] = {
+    return sections
+
+
+def _create_empty_task_data() -> Dict[str, Any]:
+    """Create empty task data structure."""
+    return {
         "task": {"title": "", "one_line_goal": ""},
         "context": {"product_area": "", "current_behavior": "", "desired_behavior": ""},
         "deliverables": {"language": "any", "must_generate": [], "files_to_create_or_edit": []},
@@ -153,6 +150,9 @@ def parse_llm_task_text(text: str) -> Dict[str, Any]:
         "notes_for_llm": {"constraints": [], "style": [], "language_specific_hints": []},
     }
 
+
+def _apply_simple_sections(sections: Dict[str, List[str]], data: Dict[str, Any]) -> None:
+    """Apply simple section key mappings to data."""
     for section_name, path in _SECTION_KEYS.items():
         content_lines = sections.get(section_name)
         if not content_lines:
@@ -164,6 +164,9 @@ def parse_llm_task_text(text: str) -> Dict[str, Any]:
                 parent = parent[key]
             parent[path[-1]] = value
 
+
+def _apply_bullet_sections(sections: Dict[str, List[str]], data: Dict[str, Any]) -> None:
+    """Apply bullet list sections to data."""
     if sections.get("INPUTS"):
         data["interfaces"]["inputs"] = _parse_bullets(sections["INPUTS"])
     if sections.get("OUTPUTS"):
@@ -175,12 +178,30 @@ def parse_llm_task_text(text: str) -> Dict[str, Any]:
     if sections.get("EDGE CASES"):
         data["rules"]["edge_cases"] = _parse_bullets(sections["EDGE CASES"])
 
-    if sections.get("ACCEPTANCE TESTS"):
-        tests: List[Dict[str, str]] = []
-        raw_items = _parse_bullets(sections["ACCEPTANCE TESTS"])
-        for idx, item in enumerate(raw_items, 1):
-            tests.append({"name": f"test_{idx}", "given": "", "when": "", "then": item})
-        data["acceptance"]["tests"] = tests
+
+def _parse_acceptance_tests(sections: Dict[str, List[str]]) -> List[Dict[str, str]]:
+    """Parse acceptance tests section into structured format."""
+    if not sections.get("ACCEPTANCE TESTS"):
+        return []
+    tests: List[Dict[str, str]] = []
+    raw_items = _parse_bullets(sections["ACCEPTANCE TESTS"])
+    for idx, item in enumerate(raw_items, 1):
+        tests.append({"name": f"test_{idx}", "given": "", "when": "", "then": item})
+    return tests
+
+
+def parse_llm_task_text(text: str) -> Dict[str, Any]:
+    """Parse LLM task text into structured data."""
+    text = _strip_bom(text)
+    lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+
+    sections = _parse_sections(lines)
+    data = _create_empty_task_data()
+
+    _apply_simple_sections(sections, data)
+    _apply_bullet_sections(sections, data)
+
+    data["acceptance"]["tests"] = _parse_acceptance_tests(sections)
 
     if sections.get("DELIVERABLES"):
         data["deliverables"]["must_generate"] = _parse_bullets(sections["DELIVERABLES"])

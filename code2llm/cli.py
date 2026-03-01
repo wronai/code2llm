@@ -8,6 +8,7 @@ Analyze control flow, data flow, and call graphs of Python codebases.
 import argparse
 import sys
 from pathlib import Path
+from typing import List, Optional
 
 from .core.config import Config, ANALYSIS_MODES
 from .core.analyzer import ProjectAnalyzer
@@ -203,20 +204,18 @@ Strategy Options (--strategy):
     return parser
 
 
-def main():
-    """Main CLI entry point."""
-    # Handle special sub-commands first
+def _handle_special_commands() -> Optional[int]:
+    """Handle special sub-commands (llm-flow, llm-context)."""
     if len(sys.argv) > 1 and sys.argv[1] == 'llm-flow':
         from .generators.llm_flow import main as llm_flow_main
         return llm_flow_main(sys.argv[2:])
-
     if len(sys.argv) > 1 and sys.argv[1] == 'llm-context':
         return generate_llm_context(sys.argv[2:])
+    return None
 
-    # Parse arguments
-    parser = create_parser()
-    args = parser.parse_args()
 
+def _validate_and_setup(args) -> tuple[Path, Path]:
+    """Validate source path and setup output directory."""
     if not args.source:
         print("Error: missing required argument: source", file=sys.stderr)
         print("Usage: code2llm <source> [options]", file=sys.stderr)
@@ -230,11 +229,30 @@ def main():
 
     output_dir = Path(args.output)
     output_dir.mkdir(parents=True, exist_ok=True)
+    return source_path, output_dir
 
+
+def _print_start_info(args, source_path: Path, output_dir: Path) -> None:
+    """Print analysis start information if verbose."""
     if args.verbose:
         print(f"Analyzing: {source_path}")
         print(f"Mode: {args.mode}")
         print(f"Output: {output_dir}")
+
+
+def main():
+    """Main CLI entry point."""
+    # Handle special sub-commands first
+    special_result = _handle_special_commands()
+    if special_result is not None:
+        return special_result
+
+    # Parse arguments
+    parser = create_parser()
+    args = parser.parse_args()
+
+    source_path, output_dir = _validate_and_setup(args)
+    _print_start_info(args, source_path, output_dir)
 
     # Analyze → Export
     result = _run_analysis(args, source_path, output_dir)

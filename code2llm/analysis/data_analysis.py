@@ -130,9 +130,8 @@ class DataAnalyzer:
                 if len(flows) >= 20: break
         return flows
 
-    def _analyze_data_types(self, result: AnalysisResult) -> list:
-        """Analyze data types and usage."""
-        data_types = {}
+    def _detect_types_from_name(self, func_name: str, doc: str) -> list:
+        """Detect data types from function name and docstring."""
         type_indicators = {
             'list': ['list', 'array', 'items', 'elements', 'collection', 'sequence'],
             'dict': ['dict', 'map', 'mapping', 'key_value', 'record', 'object'],
@@ -143,23 +142,45 @@ class DataAnalyzer:
             'tuple': ['tuple', 'pair'],
             'set': ['set', 'unique'],
         }
+        name_lower = func_name.lower()
+        return [t for t, inds in type_indicators.items() if any(ind in name_lower or ind in doc for ind in inds)]
+
+    def _create_type_entry(self, type_key: str, detected: list, params: list, returns: list) -> dict:
+        """Create a new data type entry."""
+        return {
+            'type_name': type_key,
+            'detected_types': list(set(detected)),
+            'parameter_types': list(set(params)),
+            'return_types': list(set(returns)),
+            'functions': [],
+            'usage_count': 0,
+            'cross_module_usage': 0
+        }
+
+    def _update_type_stats(self, entry: dict, func_name: str, func_module: str, calls: list) -> None:
+        """Update type entry with function info and check cross-module usage."""
+        entry['functions'].append(func_name)
+        entry['usage_count'] += 1
+        for called in list(calls)[:10]:
+            called_module = called.rsplit('.', 1)[0] if '.' in called else 'root'
+            if called_module != func_module:
+                entry['cross_module_usage'] += 1
+                break
+
+    def _analyze_data_types(self, result: AnalysisResult) -> list:
+        """Analyze data types and usage."""
+        data_types = {}
         for func_name, func in result.functions.items():
-            name_lower = func.name.lower()
             doc = func.docstring.lower() if func.docstring else ''
-            detected = [t for t, inds in type_indicators.items() if any(ind in name_lower or ind in doc for ind in inds)]
+            detected = self._detect_types_from_name(func.name, doc)
             params = self._infer_parameter_types(func)
             returns = self._infer_return_types(func)
             if detected or params or returns:
                 type_key = ",".join(sorted(set(detected + params + returns)))
                 if type_key not in data_types:
-                    data_types[type_key] = {'type_name': type_key, 'detected_types': list(set(detected)), 'parameter_types': list(set(params)), 'return_types': list(set(returns)), 'functions': [], 'usage_count': 0, 'cross_module_usage': 0}
-                data_types[type_key]['functions'].append(func_name)
-                data_types[type_key]['usage_count'] += 1
-                mod = func_name.rsplit('.', 1)[0] if '.' in func_name else 'root'
-                for called in list(func.calls)[:10]:
-                    if (called.rsplit('.', 1)[0] if '.' in called else 'root') != mod:
-                        data_types[type_key]['cross_module_usage'] += 1
-                        break
+                    data_types[type_key] = self._create_type_entry(type_key, detected, params, returns)
+                func_module = func_name.rsplit('.', 1)[0] if '.' in func_name else 'root'
+                self._update_type_stats(data_types[type_key], func_name, func_module, func.calls)
         return sorted(data_types.values(), key=lambda x: x['usage_count'], reverse=True)
 
     def _infer_parameter_types(self, func) -> list:

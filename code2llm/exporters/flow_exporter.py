@@ -17,6 +17,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from .base import Exporter
+from .flow_constants import CC_HIGH, FAN_OUT_THRESHOLD, EXCLUDE_PATTERNS, HUB_SPLIT_RECOMMENDATIONS, HUB_TYPE_THRESHOLD
+from .flow_renderer import FlowRenderer
 from ..core.models import (
     AnalysisResult, FunctionInfo, ClassInfo, ModuleInfo, FlowNode
 )
@@ -24,29 +26,7 @@ from ..analysis.type_inference import TypeInferenceEngine
 from ..analysis.side_effects import SideEffectDetector, SideEffectInfo
 from ..analysis.pipeline_detector import PipelineDetector, Pipeline
 
-# Thresholds
-CC_HIGH = 15
-FAN_OUT_THRESHOLD = 10
-HUB_TYPE_THRESHOLD = 10
-
-# Patterns to exclude
-EXCLUDE_PATTERNS = {
-    'venv', '.venv', 'env', '.env', 'publish-env', 'test-env',
-    'site-packages', 'node_modules', '__pycache__', '.git',
-    'dist', 'build', 'egg-info', '.tox', '.mypy_cache',
-}
-
-
-# Hub-type split recommendations: type -> suggested sub-interfaces
-HUB_SPLIT_RECOMMENDATIONS: Dict[str, List[str]] = {
-    "AnalysisResult": ["StructureResult (modules, classes, functions)",
-                       "MetricsResult (complexity, coupling)",
-                       "FlowResult (call_graph, cfg, dfg)"],
-    "dict": ["replace with typed alternatives (dataclass/TypedDict)"],
-    "str": [],  # primitive, expected to be ubiquitous
-    "list": [],
-    "Any": [],
-}
+# Thresholds - already imported from flow_constants
 
 
 class FlowExporter(Exporter):
@@ -65,23 +45,24 @@ class FlowExporter(Exporter):
             type_engine=self._type_engine,
             side_effect_detector=self._side_effect_detector,
         )
+        self._renderer = FlowRenderer()
 
     def export(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
         """Export analysis result to flow.toon format."""
         ctx = self._build_context(result)
 
         sections: List[str] = []
-        sections.extend(self._render_header(ctx))
+        sections.extend(self._renderer.render_header(ctx))
         sections.append("")
-        sections.extend(self._render_pipelines(ctx))
+        sections.extend(self._renderer.render_pipelines(ctx))
         sections.append("")
-        sections.extend(self._render_transforms(ctx))
+        sections.extend(self._renderer.render_transforms(ctx))
         sections.append("")
-        sections.extend(self._render_contracts(ctx))
+        sections.extend(self._renderer.render_contracts(ctx))
         sections.append("")
-        sections.extend(self._render_data_types(ctx))
+        sections.extend(self._renderer.render_data_types(ctx))
         sections.append("")
-        sections.extend(self._render_side_effects(ctx))
+        sections.extend(self._renderer.render_side_effects(ctx))
 
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, "w", encoding="utf-8") as f:
@@ -393,168 +374,8 @@ class FlowExporter(Exporter):
         return ""
 
     # ------------------------------------------------------------------
-    # render sections
+    # utility helpers
     # ------------------------------------------------------------------
-    def _render_header(self, ctx: Dict[str, Any]) -> List[str]:
-        result: AnalysisResult = ctx["result"]
-        nfuncs = len(ctx["funcs"])
-        npipelines = len(ctx["pipelines"])
-        nhubs = sum(1 for t in ctx["type_usage"]
-                    if t["consumed"] >= HUB_TYPE_THRESHOLD)
-        return [
-            f"# {Path(result.project_path).name if result.project_path else 'project'}/flow"
-            f" | {nfuncs} func | {npipelines} pipelines"
-            f" | {nhubs} hub-types | {ctx['timestamp']}",
-        ]
-
-    def _render_pipelines(self, ctx: Dict[str, Any]) -> List[str]:
-        pipelines = ctx["pipelines"]
-        if not pipelines:
-            return ["PIPELINES[0]: none detected"]
-
-        # Count domains
-        domains = defaultdict(int)
-        for pl in pipelines:
-            domains[pl.get("domain", "Unknown")] += 1
-        domain_summary = ", ".join(f"{d}:{n}" for d, n in sorted(domains.items()))
-
-        lines = [f"PIPELINES[{len(pipelines)}] ({domain_summary}):"]
-        for pl in pipelines:
-            domain_tag = f"[{pl.get('domain', '?')}]"
-            entry_type = pl.get("entry_type", "?")
-            exit_type = pl.get("exit_type", "?")
-            lines.append(
-                f"  {pl['name']} {domain_tag}:"
-                f" {entry_type} \u2192 {exit_type}"
-            )
-            for stage in pl["stages"]:
-                cc_marker = "  !!" if stage["cc"] >= CC_HIGH else ""
-                entry_lbl = " \u25b6" if stage.get("is_entry") else ""
-                exit_lbl = " \u25a0" if stage.get("is_exit") else ""
-                lines.append(
-                    f"              \u2192 {stage['signature']}"
-                    f"{'':>{max(1, 40 - len(stage['signature']))}}"
-                    f"CC={stage['cc']:<4.0f} {stage['purity']}"
-                    f"{cc_marker}{entry_lbl}{exit_lbl}"
-                )
-            bn = pl.get("bottleneck")
-            bn_str = f"BOTTLENECK: {bn['name']}(CC={bn['cc']:.0f})" if bn else "OK"
-            lines.append(
-                f"              PURITY: {pl['pure_count']}/{pl['total_stages']} pure"
-                f"  {bn_str}"
-            )
-            lines.append("")
-
-        return lines
-
-    def _render_transforms(self, ctx: Dict[str, Any]) -> List[str]:
-        transforms = ctx["transforms"]
-        if not transforms:
-            return ["TRANSFORMS: none (fan-out < 10)"]
-
-        lines = [f"TRANSFORMS (fan-out \u2265{FAN_OUT_THRESHOLD}):"]
-        for t in transforms:
-            lines.append(
-                f"  {t['signature']:<55s} fan={t['fan_out']:<3}"
-                f"  {t['label']}"
-            )
-        return lines
-
-    def _render_contracts(self, ctx: Dict[str, Any]) -> List[str]:
-        contracts = ctx["contracts"]
-        if not contracts:
-            return ["CONTRACTS: none (no pipelines detected)"]
-
-        lines = ["CONTRACTS:"]
-        for contract in contracts:
-            lines.append(f"  Pipeline: {contract['pipeline']}")
-            for stage in contract["stages"]:
-                lines.append(f"    {stage['signature']}")
-                lines.append(f"      IN:  {stage['in']}")
-                lines.append(f"      OUT: {stage['out']}")
-                if stage.get("side_effect"):
-                    lines.append(f"      SIDE-EFFECT: {stage['side_effect']}")
-                if stage.get("invariant"):
-                    lines.append(f"      INVARIANT: {stage['invariant']}")
-                if stage.get("smell"):
-                    lines.append(f"      SMELL: {stage['smell']}")
-                lines.append("")
-        return lines
-
-    def _render_data_types(self, ctx: Dict[str, Any]) -> List[str]:
-        types = ctx["type_usage"]
-        if not types:
-            return ["DATA_TYPES: no type information available"]
-
-        # Count type sources
-        type_info = ctx.get("type_info", {})
-        n_annotated = sum(
-            1 for ti in type_info.values()
-            if ti.get("source") == "annotation"
-        )
-        n_inferred = sum(
-            1 for ti in type_info.values()
-            if ti.get("source") == "inferred"
-        )
-        n_total = len(type_info)
-
-        lines = [
-            f"DATA_TYPES (by cross-function usage)"
-            f" [{n_annotated} annotated, {n_inferred} inferred"
-            f" / {n_total} functions]:"
-        ]
-        for t in types:
-            label = f"  {t['label']}" if t["label"] else ""
-            lines.append(
-                f"  {t['type']:<20s} consumed:{t['consumed']:<3}"
-                f" produced:{t['produced']:<3}{label}"
-            )
-
-        # Hub types summary with split recommendations
-        hubs = [t for t in types if t["consumed"] >= HUB_TYPE_THRESHOLD]
-        if hubs:
-            lines.append("")
-            lines.append("  HUB TYPES (consumed \u226510):")
-            for h in hubs:
-                lines.append(
-                    f"    {h['type']} \u2192 {h['consumed']} consumers"
-                    f" \u2192 split into:"
-                )
-                recs = HUB_SPLIT_RECOMMENDATIONS.get(h["type"], [])
-                if recs:
-                    for rec in recs:
-                        lines.append(f"      - {rec}")
-                else:
-                    lines.append("      - (analyze consumers to suggest sub-interfaces)")
-
-        return lines
-
-    def _render_side_effects(self, ctx: Dict[str, Any]) -> List[str]:
-        se = ctx["side_effects"]
-        lines = ["SIDE_EFFECTS:"]
-
-        for category, funcs in se.items():
-            if funcs:
-                lines.append(
-                    f"  {category + ':':<10s} {', '.join(funcs[:10])}"
-                )
-
-        # Pipeline purity summary
-        pipelines = ctx["pipelines"]
-        if pipelines:
-            lines.append("")
-            lines.append("  PIPELINE PURITY:")
-            for pl in pipelines:
-                ratio = pl["pure_count"] / pl["total_stages"] if pl["total_stages"] else 0
-                bar_len = int(ratio * 4)
-                bar = "\u2588" * bar_len + "\u2591" * (4 - bar_len)
-                pct = int(ratio * 100)
-                lines.append(
-                    f"    {pl['name']:<15s} {bar} {pct}% pure"
-                )
-
-        return lines
-
     # ------------------------------------------------------------------
     # utility helpers
     # ------------------------------------------------------------------

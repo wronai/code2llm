@@ -103,24 +103,38 @@ class EvolutionExporter(Exporter):
             })
         return sorted(func_data, key=lambda x: x["impact"], reverse=True)
 
-    def _compute_god_modules(self, result: AnalysisResult) -> List[Dict]:
-        """Identify god modules (≥500 lines) from project files."""
-        file_stats = defaultdict(lambda: {"lines": 0, "funcs": 0, "classes": set(), "max_cc": 0})
-        pp = Path(result.project_path) if result.project_path else None
+    def _scan_file_sizes(self, project_path: Optional[Path]) -> Dict[str, int]:
+        """Scan Python files and return line counts."""
+        file_lines: Dict[str, int] = {}
+        if not project_path or not project_path.is_dir():
+            return file_lines
+        
+        for py in project_path.rglob("*.py"):
+            fpath = str(py)
+            if self._is_excluded(fpath):
+                continue
+            try:
+                lc = len(py.read_text(encoding="utf-8", errors="ignore").splitlines())
+                file_lines[fpath] = lc
+            except Exception:
+                pass
+        return file_lines
 
-        # Scan file sizes
-        if pp and pp.is_dir():
-            for py in pp.rglob("*.py"):
-                fpath = str(py)
-                if self._is_excluded(fpath):
-                    continue
-                try:
-                    lc = len(py.read_text(encoding="utf-8", errors="ignore").splitlines())
-                    file_stats[fpath]["lines"] = lc
-                except Exception:
-                    pass
-
-        # Aggregate function/class data
+    def _aggregate_file_stats(
+        self, 
+        result: AnalysisResult, 
+        file_lines: Dict[str, int]
+    ) -> Dict[str, Dict]:
+        """Aggregate function and class data per file."""
+        file_stats: Dict[str, Dict] = defaultdict(
+            lambda: {"lines": 0, "funcs": 0, "classes": set(), "max_cc": 0}
+        )
+        
+        # Initialize with line counts
+        for fpath, lc in file_lines.items():
+            file_stats[fpath]["lines"] = lc
+        
+        # Aggregate function data
         for qname, fi in result.functions.items():
             if self._is_excluded(fi.file):
                 continue
@@ -129,27 +143,46 @@ class EvolutionExporter(Exporter):
             fs["max_cc"] = max(fs["max_cc"], fi.complexity.get("cyclomatic_complexity", 0))
             if fi.class_name:
                 fs["classes"].add(fi.class_name)
+        
+        # Aggregate class data
         for qname, ci in result.classes.items():
             if not self._is_excluded(ci.file):
                 file_stats[ci.file]["classes"].add(ci.name)
+        
+        return file_stats
 
-        # Filter to god modules
+    def _make_relative_path(self, fpath: str, project_path: Optional[Path]) -> str:
+        """Convert absolute path to relative path."""
+        if not project_path:
+            return fpath
+        try:
+            return str(Path(fpath).relative_to(project_path))
+        except ValueError:
+            return fpath
+
+    def _filter_god_modules(self, file_stats: Dict[str, Dict], project_path: Optional[Path]) -> List[Dict]:
+        """Filter files to god modules (≥500 lines)."""
         god_modules = []
         for fpath, stats in file_stats.items():
             if stats["lines"] >= GOD_MODULE_LINES:
-                rel = fpath
-                if pp:
-                    try:
-                        rel = str(Path(fpath).relative_to(pp))
-                    except ValueError:
-                        pass
+                rel = self._make_relative_path(fpath, project_path)
                 god_modules.append({
-                    "file": rel, "lines": stats["lines"],
-                    "funcs": stats["funcs"], "classes": len(stats["classes"]),
+                    "file": rel, 
+                    "lines": stats["lines"],
+                    "funcs": stats["funcs"], 
+                    "classes": len(stats["classes"]),
                     "max_cc": stats["max_cc"],
                 })
         god_modules.sort(key=lambda x: x["lines"], reverse=True)
         return god_modules
+
+    def _compute_god_modules(self, result: AnalysisResult) -> List[Dict]:
+        """Identify god modules (≥500 lines) from project files."""
+        pp = Path(result.project_path) if result.project_path else None
+        
+        file_lines = self._scan_file_sizes(pp)
+        file_stats = self._aggregate_file_stats(result, file_lines)
+        return self._filter_god_modules(file_stats, pp)
 
     def _compute_hub_types(self, result: AnalysisResult) -> List[Dict]:
         """Identify hub types consumed by many functions."""

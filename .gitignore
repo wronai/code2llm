@@ -174,7 +174,7 @@ Thumbs.db
 # Project specific
 *.bak
 *.backup
-reports/
+!reports/
 *.json.bak
 env-report.json
 
@@ -190,7 +190,7 @@ test_no_readme/
 optimized_analysis/
 toon_v5/
 publish-test-env/
-project/
+!project/
 TODO/
 
 # Secrets
