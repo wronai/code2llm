@@ -1,0 +1,206 @@
+flowchart TD
+    subgraph TODO
+        TODO_cli_patch_code2_4356["create_parser_patch"]
+        TODO_cli_patch_code2llm_export_dispatch["export_dispatch"]
+    end
+    subgraph benchmarks
+        benchmarks_benchmark_7471["save_report"]
+        benchmarks_benchmark_3933["create_test_project"]
+        benchmarks_benchmark_9139["benchmark_original_analyzer"]
+        benchmarks_benchmark_1762["benchmark_streaming_analyzer"]
+        benchmarks_benchmark_7795["benchmark_with_strategies"]
+        benchmarks_benchmark_5913["print_comparison"]
+        benchmarks_benchmark_performance_main["main"]
+        benchmarks_benchmark_6787["create_ground_truth_project"]
+        benchmarks_benchmark_298["evaluate_format"]
+        benchmarks_benchmark_4248["run_benchmark"]
+        benchmarks_benchmark_8093["print_results"]
+        benchmarks_benchmark_6934["build_report"]
+        benchmarks_benchmark_8476["save_report"]
+    end
+    subgraph code2llm
+        code2llm_analysis_da_1188["analyze_data_flow"]
+        code2llm_analysis_da_4874["analyze_data_structures"]
+        code2llm_analysis_da_821["_find_data_pipelines"]
+        code2llm_analysis_da_971["_find_state_patterns"]
+        code2llm_analysis_da_316["_find_data_dependencies"]
+        code2llm_analysis_da_1446["_find_event_flows"]
+        code2llm_analysis_da_4348["_analyze_data_types"]
+        code2llm_analysis_da_6374["_infer_parameter_types"]
+        code2llm_analysis_da_3884["_infer_return_types"]
+        code2llm_analysis_da_3655["_build_data_flow_graph"]
+        code2llm_analysis_da_2573["_get_function_data_types"]
+        code2llm_analysis_da_9899["_identify_process_patterns"]
+        code2llm_analysis_da_6536["_analyze_optimization_opportun"]
+        code2llm_analysis_pi_6104["to_dict"]
+        code2llm_analysis_pi_3682["__init__"]
+        code2llm_analysis_pi_502["detect"]
+        code2llm_analysis_pi_8938["_build_graph"]
+        code2llm_analysis_pi_2478["_find_pipeline_paths"]
+        code2llm_analysis_pi_6014["_longest_path_from"]
+        code2llm_analysis_pi_518["_longest_path_in_dag"]
+        code2llm_analysis_pi_4384["_build_pipelines"]
+        code2llm_analysis_pi_9163["_build_stages"]
+        code2llm_analysis_pi_4473["_classify_domain"]
+        code2llm_analysis_pi_9200["_derive_pipeline_name"]
+        code2llm_analysis_pi_5691["_get_entry_type"]
+        code2llm_analysis_pi_4061["_get_exit_type"]
+        code2llm_analysis_pi_3801["_resolve_callee"]
+        code2llm_analysis_ty_5769["__init__"]
+        code2llm_analysis_ty_4479["enrich_function"]
+        code2llm_analysis_ty_2433["get_arg_types"]
+        code2llm_analysis_ty_5153["get_return_type"]
+        code2llm_analysis_ty_3727["get_typed_signature"]
+        code2llm_analysis_ty_5149["extract_all_types"]
+        code2llm_analysis_ty_2859["_get_ast"]
+        code2llm_analysis_ty_5507["_find_function_node"]
+        code2llm_analysis_ty_4338["_extract_from_node"]
+        code2llm_analysis_ty_3939["_extract_args"]
+        code2llm_analysis_ty_1329["_annotation_to_str"]
+        code2llm_analysis_ty_5329["_infer_from_name"]
+        code2llm_analysis_co_3457["__init__"]
+        code2llm_analysis_co_6054["analyze"]
+        code2llm_analysis_co_8290["_analyze_module_interactions"]
+        code2llm_analysis_co_818["_detect_data_leakage"]
+        code2llm_analysis_co_8418["_detect_shared_state"]
+        code2llm_cli_create_parser["create_parser"]
+        code2llm_cli_main["main"]
+        code2llm_cli_generate_llm_context["generate_llm_context"]
+        code2llm_analysis_si_6144["__init__"]
+        code2llm_analysis_si_9057["to_dict"]
+        code2llm_analysis_si_8070["__init__"]
+    end
+    subgraph examples
+        examples_functional__4083["__init__"]
+        examples_functional__291["generate"]
+        examples_functional__2413["_prepare_shell_entities"]
+        examples_functional__100["_prepare_docker_entities"]
+        examples_functional__6148["_prepare_sql_entities"]
+        examples_functional__1068["_prepare_kubernetes_entities"]
+        examples_functional__8568["_apply_shell_find_flags"]
+        examples_functional__3891["_build_shell_find_name_flag"]
+        examples_functional__8353["_build_shell_find_size_flag"]
+        examples_functional__1254["supports"]
+        examples_functional__3365["prepare"]
+        examples_functional__8119["supports"]
+        examples_functional__2109["prepare"]
+        examples_functional__9563["_apply_path_defaults"]
+        examples_functional__8763["_apply_pattern_defaults"]
+        examples_functional__6656["_apply_find_flags"]
+        examples_functional__7708["supports"]
+        examples_functional__5503["prepare"]
+        examples_functional__8774["_resolve_container_name"]
+        examples_functional__8042["supports"]
+        examples_functional__7357["prepare"]
+        examples_functional__9368["_sanitize_identifier"]
+        examples_functional__5773["_sanitize_columns"]
+        examples_functional__8532["supports"]
+        examples_functional__7819["prepare"]
+        examples_functional__1473["__init__"]
+        examples_functional__4508["prepare"]
+        examples_functional__4744["__init__"]
+        examples_functional__3720["load"]
+        examples_functional__6504["_load_templates"]
+        examples_functional__8469["_load_defaults"]
+        examples_functional__9494["get_template"]
+        examples_functional__9073["get_default"]
+        examples_functional__6239["find_alternative_template"]
+        examples_functional__5189["render"]
+        examples_functional__6140["_manual_render"]
+        examples_functional__2215["render_with_conditionals"]
+        examples_functional__1177["__init__"]
+        examples_functional__4374["generate"]
+        examples_functional__5084["__init__"]
+        examples_functional__7933["_load"]
+        examples_functional__5455["_save"]
+        examples_functional__2533["get"]
+        examples_functional__2915["put"]
+        examples_functional__4685["report_success"]
+        examples_functional__2960["report_failure"]
+        examples_functional__3856["_make_key"]
+        examples_functional__4744["_calculate_score"]
+        examples_functional__7898["_evict_worst"]
+        examples_functional__3391["generate"]
+    end
+    subgraph scripts
+        scripts_bump_version_get_current_version["get_current_version"]
+        scripts_bump_version_parse_version["parse_version"]
+        scripts_bump_version_format_version["format_version"]
+        scripts_bump_version_bump_version["bump_version"]
+        scripts_bump_version_9025["update_pyproject_toml"]
+        scripts_bump_version_update_version_file["update_version_file"]
+        scripts_bump_version_main["main"]
+    end
+    subgraph setup
+        setup_read_readme["read_readme"]
+    end
+    subgraph validate_toon
+        validate_toon_load_yaml["load_yaml"]
+        validate_toon_load_toon["load_toon"]
+        validate_toon_parse_toon_content["parse_toon_content"]
+        validate_toon_is_toon_file["is_toon_file"]
+        validate_toon_load_file["load_file"]
+        validate_toon_extrac_8639["extract_functions_from_yaml"]
+        validate_toon_extrac_8612["extract_functions_from_toon"]
+        validate_toon_extract_classes_from_yaml["extract_classes_from_yaml"]
+        validate_toon_extract_classes_from_toon["extract_classes_from_toon"]
+        validate_toon_analyze_class_differences["analyze_class_differences"]
+        validate_toon_extract_modules_from_yaml["extract_modules_from_yaml"]
+        validate_toon_extract_modules_from_toon["extract_modules_from_toon"]
+        validate_toon_compare_basic_stats["compare_basic_stats"]
+        validate_toon_compare_functions["compare_functions"]
+        validate_toon_compare_classes["compare_classes"]
+        validate_toon_compare_modules["compare_modules"]
+        validate_toon_validate_toon_completeness["validate_toon_completeness"]
+        validate_toon_main["main"]
+    end
+    validate_toon_load_toon --> validate_toon_parse_toon_content
+    validate_toon_load_file --> validate_toon_is_toon_file
+    validate_toon_load_file --> validate_toon_load_yaml
+    validate_toon_load_file --> validate_toon_load_toon
+    validate_toon_compare_functions --> validate_toon_extrac_8639
+    validate_toon_compare_functions --> validate_toon_extrac_8612
+    validate_toon_compare_classes --> validate_toon_extract_classes_from_yaml
+    validate_toon_compare_classes --> validate_toon_extract_classes_from_toon
+    validate_toon_compare_classes --> validate_toon_analyze_class_differences
+    validate_toon_compare_modules --> validate_toon_extract_modules_from_yaml
+    validate_toon_compare_modules --> validate_toon_extract_modules_from_toon
+    validate_toon_main --> validate_toon_load_file
+    validate_toon_main --> validate_toon_validate_toon_completeness
+    scripts_bump_version_bump_version --> scripts_bump_version_get_current_version
+    scripts_bump_version_bump_version --> scripts_bump_version_parse_version
+    scripts_bump_version_bump_version --> scripts_bump_version_format_version
+    scripts_bump_version_main --> scripts_bump_version_get_current_version
+    scripts_bump_version_main --> scripts_bump_version_bump_version
+    scripts_bump_version_main --> scripts_bump_version_9025
+    scripts_bump_version_main --> scripts_bump_version_update_version_file
+    benchmarks_benchmark_performance_main --> benchmarks_benchmark_3933
+    benchmarks_benchmark_4248 --> benchmarks_benchmark_6787
+    code2llm_cli_main --> code2llm_cli_create_parser
+    code2llm_cli_main --> code2llm_cli_generate_llm_context
+    code2llm_generators__9921 --> code2llm_generators_llm_flow__strip_bom
+    code2llm_generators__6677 --> code2llm_generators__4417
+    code2llm_generators__8910 --> code2llm_generators__9613
+    code2llm_generators__8695 --> code2llm_generators__9595
+    code2llm_generators__8695 --> code2llm_generators__295
+    code2llm_generators__8695 --> code2llm_generators__6677
+    code2llm_generators__8695 --> code2llm_generators__1231
+    code2llm_generators__8695 --> code2llm_generators__8910
+    code2llm_generators__1846 --> code2llm_generators_llm_flow__as_dict
+    code2llm_generators__1846 --> code2llm_generators_llm_flow__as_list
+    code2llm_generators__1846 --> code2llm_generators_llm_flow__as_list
+    code2llm_generators__1846 --> code2llm_generators_llm_flow__as_list
+    code2llm_generators_llm_flow_main --> code2llm_generators__9921
+    code2llm_generators_llm_flow_main --> code2llm_generators__8695
+    code2llm_generators_llm_flow_main --> code2llm_generators_llm_flow_dump_yaml
+    code2llm_generators__5056 --> code2llm_generators__1439
+    code2llm_generators__5056 --> code2llm_generators__1439
+    code2llm_generators__3335 --> code2llm_generators_llm_flow__strip_bom
+    code2llm_generators_llm_task_load_input --> code2llm_generators_llm_flow__strip_bom
+    code2llm_generators_llm_task_load_input --> code2llm_generators__3335
+    code2llm_generators_llm_task_main --> code2llm_generators_llm_task_load_input
+    code2llm_generators_llm_task_main --> code2llm_generators__5056
+    code2llm_generators__560 --> code2llm_generators__22
+    code2llm_generators__560 --> code2llm_generators__376
+    code2llm_generators__560 --> code2llm_generators__3330
+    code2llm_generators__560 --> code2llm_generators__22

@@ -1,0 +1,216 @@
+# code2llm/flow | 467 func | 5 pipelines | 10 hub-types | 2026-03-01
+
+PIPELINES[5] (Export:2, IO:3):
+  Validate_toon [Export]: ? → dict
+              → main()                                  CC=17   IO  !! ▶
+              → load_file(filepath) → AnalysisResult    CC=2    pure
+              → load_toon(filepath)                     CC=2    IO
+              → parse_toon_content(content) → dict      CC=35   pure  !! ■
+              PURITY: 2/4 pure  BOTTLENECK: parse_toon_content(CC=35)
+
+  Generators [Export]: ? → bool
+              → main()                                  CC=61   IO  !! ▶
+              → generate_pngs(input_dir:Path, output_dir:Path, timeout:int) → int CC=6    IO
+              → generate_single_png(mmd_file:Path, output_file:Path, timeout:int) → bool CC=13   IO
+              → generate_with_puppeteer(mmd_file:Path, output_file:Path, timeout:int, max_text_size:int, max_edges:int) → bool CC=2    IO ■
+              PURITY: 0/4 pure  BOTTLENECK: main(CC=61)
+
+  Generators [IO]: Optional[List[str]] → Counter[str]
+              → main(argv:Optional[List[str]]) → int    CC=3    IO ▶
+              → generate_llm_flow(analysis:Dict[str, Any], max_functions:int, limit_decisions:int, limit_calls:int) → Dict[str, Any] CC=5    IO
+              → _pick_relevant_functions() → List[str]  CC=8    IO
+              → _node_counts_by_function(nodes:Dict[int, Dict[str, Any]]) → Counter[str] CC=4    IO ■
+              PURITY: 0/4 pure  BOTTLENECK: _pick_relevant_functions(CC=8)
+
+  Generators [IO]: Optional[List[str]] → List[str]
+              → main(argv:Optional[List[str]]) → int    CC=4    IO ▶
+              → load_input(path:Path) → Dict[str, Any]  CC=6    IO
+              → parse_llm_task_text(text:str) → Dict[str, Any] CC=19   IO  !!
+              → _parse_bullets(lines:List[str]) → List[str] CC=4    mutation ■
+              PURITY: 0/4 pure  BOTTLENECK: parse_llm_task_text(CC=19)
+
+  Scripts [IO]: ? → str
+              → main()                                  CC=3    IO ▶
+              → bump_version(version_type)              CC=4    IO
+              → format_version(major, minor, patch) → str CC=1    pure ■
+              PURITY: 1/3 pure  BOTTLENECK: bump_version(CC=4)
+
+
+TRANSFORMS (fan-out ≥10):
+  main()                                                  fan=44   !! script-in-disguise
+  fix_mermaid_file(mmd_path:Path) → bool                  fan=29   !! side-effects
+  run_benchmark() → Dict                                  fan=25   !! side-effects
+  _compute_file_metrics(result:AnalysisResult) → Dict[str, Dict[str, Any]] fan=22   !! side-effects
+  _perform_refactoring_analysis(result:AnalysisResult) → None fan=22   !! side-effects
+  _summarize_functions(nodes:Dict[int, Dict[str, Any]], limit_decisions:int, limit_calls:int) → Dict[str, FuncSummary] fan=21   !! side-effects
+  validate_mermaid_file(mmd_path:Path) → List[str]        fan=20   !! side-effects
+  export_dispatch(result, output_dir, format_string)      fan=18   fan=18
+  export(result:AnalysisResult, output_path:str, **kwargs) → None fan=18   PIPELINE:ToonExporter.entry
+  analyze_project(project_path:str) → AnalysisResult      fan=18   PIPELINE:ProjectAnalyzer.entry
+  _render_details(result:AnalysisResult) → List[str]      fan=17   PIPELINE:MapExporter.entry
+  process(query:str, language:str) → NLPPipelineResult    fan=17   PIPELINE:NLPPipeline.entry
+  parse_llm_task_text(text:str) → Dict[str, Any]          fan=17   fan=17
+  _analyze_ast(tree:ast.AST, file_path:str, module_name:str, content:str) → Dict fan=17   PIPELINE:FileAnalyzer.entry
+  analyze_streaming(project_path:str, output_callback:Optional[callable]) → Iterator[Dict] fan=16   PIPELINE:StreamingAnalyzer.entry
+
+CONTRACTS:
+  Pipeline: Validate_toon
+    main()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+      SMELL: CC=17 → split
+
+    load_file(filepath) → AnalysisResult
+      IN:  filepath
+      OUT: AnalysisResult
+
+    load_toon(filepath)
+      IN:  filepath
+      OUT: None
+      SIDE-EFFECT: IO(open, read, print)
+
+    parse_toon_content(content) → dict
+      IN:  content
+      OUT: dict
+      SMELL: CC=35 → split
+
+  Pipeline: Generators
+    main()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(mkdir, print, print)
+      SMELL: CC=61 → split
+
+    generate_pngs(input_dir:Path, output_dir:Path, timeout:int) → int
+      IN:  input_dir:Path, output_dir:Path, timeout:int
+      OUT: int
+      SIDE-EFFECT: IO(print, print)
+
+    generate_single_png(mmd_file:Path, output_file:Path, timeout:int) → bool
+      IN:  mmd_file:Path, output_file:Path, timeout:int
+      OUT: bool
+      SIDE-EFFECT: IO(mkdir, write, dumps)
+
+    generate_with_puppeteer(mmd_file:Path, output_file:Path, timeout:int, max_text_size:int, max_edges:int) → bool
+      IN:  mmd_file:Path, output_file:Path, timeout:int, max_text_size:int, max_edges:int
+      OUT: bool
+      SIDE-EFFECT: IO(read_text, write, unlink)
+
+  Pipeline: Generators
+    main(argv:Optional[List[str]]) → int
+      IN:  argv:Optional[List[str]]
+      OUT: int
+      SIDE-EFFECT: IO(mkdir, write_text, print)
+
+    generate_llm_flow(analysis:Dict[str, Any], max_functions:int, limit_decisions:int, limit_calls:int) → Dict[str, Any]
+      IN:  analysis:Dict[str, Any], max_functions:int, limit_decisions:int, limit_calls:int
+      OUT: Dict[str, Any]
+      SIDE-EFFECT: IO(get)
+
+    _pick_relevant_functions() → List[str]
+      IN:  ()
+      OUT: List[str]
+      SIDE-EFFECT: IO(get, get)
+
+    _node_counts_by_function(nodes:Dict[int, Dict[str, Any]]) → Counter[str]
+      IN:  nodes:Dict[int, Dict[str, Any]]
+      OUT: Counter[str]
+      SIDE-EFFECT: IO(get)
+
+  Pipeline: Generators
+    main(argv:Optional[List[str]]) → int
+      IN:  argv:Optional[List[str]]
+      OUT: int
+      SIDE-EFFECT: IO(mkdir, write_text, print)
+
+    load_input(path:Path) → Dict[str, Any]
+      IN:  path:Path
+      OUT: Dict[str, Any]
+      SIDE-EFFECT: IO(read_text, loads)
+
+    parse_llm_task_text(text:str) → Dict[str, Any]
+      IN:  text:str
+      OUT: Dict[str, Any]
+      SIDE-EFFECT: IO(get, get, get); global(current)
+      SMELL: CC=19 → split
+
+    _parse_bullets(lines:List[str]) → List[str]
+      IN:  lines:List[str]
+      OUT: List[str]
+      SIDE-EFFECT: pure
+
+  Pipeline: Scripts
+    main()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    bump_version(version_type)
+      IN:  version_type
+      OUT: None
+      SIDE-EFFECT: IO(print)
+
+    format_version(major, minor, patch) → str
+      IN:  major, minor, patch
+      OUT: str
+
+
+DATA_TYPES (by cross-function usage) [423 annotated, 0 inferred / 467 functions]:
+  str                  consumed:205 produced:120  !! HUB-TYPE → split interface
+  str, Any             consumed:50  produced:37   !! HUB-TYPE → split interface
+  AnalysisResult       consumed:65  produced:11   !! HUB-TYPE → split interface
+  int                  consumed:35  produced:10   !! HUB-TYPE → split interface
+  Dict                 consumed:15  produced:14   !! HUB-TYPE → split interface
+  bool                 consumed:13  produced:15   !! HUB-TYPE → split interface
+  Path                 consumed:21  produced:2    !! HUB-TYPE → split interface
+  Entity               consumed:7   produced:13 
+  FunctionInfo         consumed:20  produced:0    !! HUB-TYPE → split interface
+  ast.AST              consumed:17  produced:0    !! HUB-TYPE → split interface
+  dict                 consumed:8   produced:9  
+  str, FunctionInfo    consumed:13  produced:0    !! HUB-TYPE → split interface
+  float                consumed:1   produced:12   output-heavy
+  NLPPipelineResult    consumed:7   produced:4  
+  CodeSmell            consumed:3   produced:8  
+  SideEffectInfo       consumed:9   produced:1    input-heavy (read-only flow)
+  ast.FunctionDef      consumed:8   produced:2  
+  list                 consumed:1   produced:9    output-heavy
+  str, str             consumed:5   produced:5  
+  IntentMatch          consumed:4   produced:5  
+
+  HUB TYPES (consumed ≥10):
+    str → 205 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    str, Any → 50 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    AnalysisResult → 65 consumers → split into:
+      - StructureResult (modules, classes, functions)
+      - MetricsResult (complexity, coupling)
+      - FlowResult (call_graph, cfg, dfg)
+    int → 35 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    Dict → 15 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    bool → 13 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    Path → 21 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    FunctionInfo → 20 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    ast.AST → 17 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    str, FunctionInfo → 13 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+
+SIDE_EFFECTS:
+  IO:        read_readme, load_yaml, load_toon, is_toon_file, extract_functions_from_yaml, extract_functions_from_toon, extract_classes_from_yaml, extract_classes_from_toon, analyze_class_differences, extract_modules_from_yaml
+  Cache:     EvolutionaryCache.put, SideEffectDetector._check_calls, SideEffectDetector._heuristic_classify, StreamingFileCache.put, StreamingAnalyzer.__init__, ProjectAnalyzer.__init__
+  Mutation:  ShellEntityPreparer._apply_find_flags, EntityPreparationPipeline.__init__, TemplateLoader.__init__, EvolutionaryCache.__init__, DataAnalyzer._find_data_pipelines, DataAnalyzer._infer_parameter_types, DataAnalyzer._infer_return_types, DataAnalyzer._build_data_flow_graph, DataAnalyzer._get_function_data_types, DataAnalyzer._identify_process_patterns
+  Pure:      parse_toon_content, load_file, create_parser_patch, parse_version, format_version, TemplateGenerator.__init__, TemplateGenerator.generate, TemplateGenerator._prepare_shell_entities, TemplateGenerator._prepare_docker_entities, TemplateGenerator._prepare_sql_entities
+
+  PIPELINE PURITY:
+    Validate_toon   ██░░ 50% pure
+    Generators      ░░░░ 0% pure
+    Generators      ░░░░ 0% pure
+    Generators      ░░░░ 0% pure
+    Scripts         █░░░ 33% pure
