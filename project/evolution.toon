@@ -1,0 +1,50 @@
+# code2llm/evolution | 678 func | 65f | 2026-03-01
+
+NEXT[8] (ranked by impact):
+  [1] !! SPLIT           validate_toon.py
+      WHY: 530L, 0 classes, max CC=17
+      EFFORT: ~4h  IMPACT: 9010
+
+  [2] !! SPLIT           code2llm/cli.py
+      WHY: 548L, 0 classes, max CC=15
+      EFFORT: ~4h  IMPACT: 8220
+
+  [3] !! SPLIT           examples/functional_refactoring_example.py
+      WHY: 644L, 15 classes, max CC=6
+      EFFORT: ~4h  IMPACT: 3864
+
+  [4] !  SPLIT-FUNC      main  CC=17  fan=14
+      WHY: CC=17 exceeds 15
+      EFFORT: ~1h  IMPACT: 238
+
+  [5] !  SPLIT-FUNC      ContextExporter._trace_flow  CC=15  fan=15
+      WHY: CC=15 exceeds 15
+      EFFORT: ~1h  IMPACT: 225
+
+  [6] !  SPLIT-FUNC      _run_exports  CC=15  fan=14
+      WHY: CC=15 exceeds 15
+      EFFORT: ~1h  IMPACT: 210
+
+  [7] !  SPLIT-FUNC      _collect_entrypoints  CC=15  fan=12
+      WHY: CC=15 exceeds 15
+      EFFORT: ~1h  IMPACT: 180
+
+  [8] !  SPLIT-FUNC      DataAnalyzer._find_data_pipelines  CC=17  fan=8
+      WHY: CC=17 exceeds 15
+      EFFORT: ~1h  IMPACT: 136
+
+
+RISKS[3]:
+  ⚠ Splitting examples/functional_refactoring_example.py may break 50 import paths
+  ⚠ Splitting code2llm/cli.py may break 13 import paths
+  ⚠ Splitting validate_toon.py may break 25 import paths
+
+METRICS-TARGET:
+  CC̄:          4.1 → ≤2.9
+  max-CC:      18 → ≤9
+  god-modules: 4 → 0
+  high-CC(≥15): 7 → ≤3
+  hub-types:   0 → ≤0
+
+HISTORY:
+  (first run — no previous data)

@@ -3,10 +3,10 @@
 
 HEALTH[7]:
   🟡 CC    main CC=17 (limit:15)
-  🟡 CC    _find_data_pipelines CC=17 (limit:15)
-  🟡 CC    _resolve_callee CC=18 (limit:15)
-  🟡 CC    _infer_from_name CC=17 (limit:15)
   🟡 CC    _run_exports CC=15 (limit:15)
+  🟡 CC    _find_data_pipelines CC=17 (limit:15)
+  🟡 CC    _infer_from_name CC=17 (limit:15)
+  🟡 CC    _resolve_callee CC=18 (limit:15)
   🟡 CC    _trace_flow CC=15 (limit:15)
   🟡 CC    _collect_entrypoints CC=15 (limit:15)
 
@@ -139,8 +139,8 @@ FUNCTIONS (CC≥10, 41 of 574):
    13.0  MermaidExporter.export_call_graph          16n   1exit  loops+cond
    13.0  MermaidExporter.export_compact             14n   1exit  loops+cond
    13.0  generate_single_png                         2n   1exit  
-   12.0  DataAnalyzer._find_state_patterns           9n   2exit  loops+cond+ret
    12.0  _export_mermaid                             8n   1exit  cond
+   12.0  DataAnalyzer._find_state_patterns           9n   2exit  loops+cond+ret
    12.0  StreamingAnalyzer.analyze_streaming        16n   1exit  loops+cond
    12.0  PromptEngine._build_context_for_smell       5n   2exit  cond+ret
    12.0  _check_node_ids                            15n   1exit  loops+cond
@@ -165,8 +165,8 @@ HOTSPOTS:
   #2  run_benchmark                        fan=18   "calls 18 functions"
   #3  ProjectAnalyzer.analyze_project      fan=18   "analysis pipeline, 18 stages"
   #4  ToonExporter.export                  fan=18   "export with 18 outputs"
-  #5  MermaidExporter.export_call_graph    fan=17   "export with 17 outputs"
-  #6  NLPPipeline.process                  fan=17   "analysis pipeline, 17 stages"
+  #5  NLPPipeline.process                  fan=17   "analysis pipeline, 17 stages"
+  #6  MermaidExporter.export_call_graph    fan=17   "export with 17 outputs"
   #7  run_benchmark                        fan=16   "calls 16 functions"
   #8  evaluate_format                      fan=16   "16-way dispatch"
   #9  StreamingAnalyzer.analyze_streaming  fan=16   "analysis pipeline, 16 stages"
@@ -185,9 +185,9 @@ CLASSES:
   EntityResolver                 ████████████              14m  CC̄=3.7   max=13  
   FlowExporter                   ████████████              14m  CC̄=5.6   max=10  
   PipelineDetector               ███████████               13m  CC̄=6.9   max=18    !!
-  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   IntentMatcher                  ███████████               13m  CC̄=3.5   max=7   
   QueryNormalizer                ███████████               13m  CC̄=1.8   max=6   
+  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   MapExporter                    ███████████               13m  CC̄=4.8   max=13  
   DFGExtractor                   ██████████                12m  CC̄=3.6   max=7   
   MermaidExporter                ██████████                12m  CC̄=5.3   max=13  
@@ -562,6 +562,10 @@ Sections: P...
     e: SmellDetector
     SmellDetector  # Detect code smells from analysis results....
       __init__(1)  CC=1.0
+  code2llm/analysis/dfg.py:
+    e: DFGExtractor
+    DFGExtractor  # Extract Data Flow Graph from AST....
+      __init__(1)  CC=1.0
   code2llm/nlp/intent_matching.py:
     e: IntentMatch,IntentMatchingResult,IntentMatcher
     IntentMatch  # Single intent match result....
@@ -569,10 +573,6 @@ Sections: P...
       get_best_intent(0)  CC=2.0
     IntentMatcher  # Match queries to intents using fuzzy and keyword matching....
       __init__(2)  CC=3.0
-  code2llm/analysis/dfg.py:
-    e: DFGExtractor
-    DFGExtractor  # Extract Data Flow Graph from AST....
-      __init__(1)  CC=1.0
   code2llm/exporters/toon/module_detail.py:
     e: ModuleDetailRenderer
     ModuleDetailRenderer  # Renders detailed module information....
@@ -780,8 +780,8 @@ Unlike simple L...
   code2llm/refactor/__init__.py:
   code2llm/patterns/__init__.py:
   code2llm/core/core/__init__.py:
+  code2llm/core/streaming/__init__.py:
   code2llm/core/streaming/strategies.py:
     e: ScanStrategy
     ScanStrategy  # Scanning methodology configuration....
-  code2llm/core/streaming/__init__.py:
   examples/streaming-analyzer/sample_project/__init__.py:
