@@ -9,12 +9,12 @@ wprowadzenie **taksonomii 4 formatów** (v0.3.0), a następnie:
 - **Reorganizacja**: generatory przeniesione do `generators/` subpakietu
 - **Testy**: nazwy sprint-based → feature-based
 
-## Aktualna Struktura (v0.4.0)
+## Aktualna Struktura (v0.6.0)
 
 ```
 code2llm/
 ├── code2llm/                  # Główna paczka
-│   ├── __init__.py            # Eksportuje publiczne API (v0.4.0)
+│   ├── __init__.py            # Eksportuje publiczne API
 │   ├── __main__.py            # Entry point: python -m code2llm
 │   ├── cli.py                 # CLI: code2llm (map,toon,flow,context,all)
 │   ├── core/                  # Klasy bazowe i konfiguracja
@@ -22,62 +22,70 @@ code2llm/
 │   │   ├── config.py          # Config, ANALYSIS_MODES, NODE_COLORS
 │   │   ├── models.py          # FlowNode, FlowEdge, DataFlow, AnalysisResult
 │   │   ├── analyzer.py        # ProjectAnalyzer - główny orchestrator
-│   │   └── streaming_analyzer.py  # StreamingAnalyzer z priorytetyzacją
+│   │   ├── streaming_analyzer.py  # StreamingAnalyzer z priorytetyzacją
+│   │   ├── core/              # Subpackage: file analysis internals (v0.6.0)
+│   │   │   ├── __init__.py    # Re-exports: FileCache, FastFileFilter, FileAnalyzer, RefactoringAnalyzer
+│   │   │   ├── cache.py       # FileCache
+│   │   │   ├── file_filter.py # FastFileFilter
+│   │   │   ├── file_analyzer.py # FileAnalyzer (AST parsing)
+│   │   │   └── refactoring.py # RefactoringAnalyzer
+│   │   └── streaming/         # Subpackage: streaming internals (v0.6.0)
+│   │       ├── __init__.py    # Re-exports: StreamingScanner, SmartPrioritizer, etc.
+│   │       ├── scanner.py     # StreamingScanner
+│   │       ├── prioritizer.py # SmartPrioritizer
+│   │       └── incremental.py # IncrementalAnalyzer
 │   ├── analysis/              # Moduły analizy
 │   │   ├── call_graph.py      # CallGraphExtractor
 │   │   ├── cfg.py             # CFGExtractor - Control Flow Graph
 │   │   ├── coupling.py        # CouplingAnalyzer
 │   │   ├── data_analysis.py   # DataAnalyzer
 │   │   ├── dfg.py             # DFGExtractor - Data Flow Graph
-│   │   ├── pipeline_detector.py # PipelineDetector (networkx)
+│   │   ├── pipeline_detector.py # PipelineDetector (networkx, method→method edges)
 │   │   ├── side_effects.py    # SideEffectDetector
-│   │   ├── type_inference.py  # TypeInference (AST-based)
+│   │   ├── type_inference.py  # TypeInference (AST-based, dispatch dict)
 │   │   └── smells.py          # SmellDetector
-│   ├── exporters/             # Eksport do formatów (7 eksporterów)
+│   ├── exporters/             # Eksport do formatów (9 eksporterów)
 │   │   ├── __init__.py
 │   │   ├── base.py            # Exporter ABC
-│   │   ├── toon.py            # ToonExporter → analysis.toon (diagnostyka)
+│   │   ├── toon/              # Package: ToonExporter (v0.6.0, was toon.py)
+│   │   │   ├── __init__.py    # ToonExporter facade
+│   │   │   ├── renderer.py    # ToonRenderer (CC-split sub-methods)
+│   │   │   ├── metrics.py     # MetricsComputer
+│   │   │   ├── helpers.py     # Helper functions
+│   │   │   └── module_detail.py # ModuleDetailRenderer
+│   │   ├── toon.py            # backward-compat shim → toon/ package
 │   │   ├── map_exporter.py    # MapExporter → map.toon (struktura)
 │   │   ├── flow_exporter.py   # FlowExporter → flow.toon (data-flow)
 │   │   ├── context_exporter.py # ContextExporter → context.md (LLM)
 │   │   ├── llm_exporter.py    # backward-compat shim → ContextExporter
 │   │   ├── yaml_exporter.py   # YAMLExporter → analysis.yaml
 │   │   ├── json_exporter.py   # JSONExporter → analysis.json
-│   │   └── mermaid_exporter.py # MermaidExporter → *.mmd
-│   ├── generators/            # Generatory (przeniesione z root-level)
+│   │   ├── mermaid_exporter.py # MermaidExporter → *.mmd (subpackage grouping)
+│   │   ├── evolution_exporter.py # EvolutionExporter → evolution.toon
+│   │   └── readme_exporter.py # READMEExporter → README.md
+│   ├── generators/            # Generatory
 │   │   ├── __init__.py
 │   │   ├── llm_flow.py        # LLM flow summary generator
 │   │   ├── llm_task.py        # LLM task breakdown generator
 │   │   └── mermaid.py         # Mermaid PNG generator
 │   ├── nlp/                   # NLP pipeline
-│   ├── patterns/              # Detekcja wzorców (do podłączenia w v0.5)
-│   └── refactor/              # Silnik refaktoryzacji
-├── tests/
-│   ├── test_analyzer.py
-│   ├── test_edge_cases.py
-│   ├── test_nlp_pipeline.py
-│   ├── test_flow_exporter.py      # (was test_sprint2_flow.py)
-│   ├── test_pipeline_detector.py  # (was test_sprint3_pipelines.py)
-│   ├── test_deep_analysis.py      # (was test_sprint4.py)
-│   ├── test_prompt_engine.py      # (was test_sprint5.py)
-│   ├── test_toon_v2.py
-│   ├── test_refactoring_engine.py
-│   ├── test_format_quality.py
-│   └── test_advanced_analysis.py
+│   ├── patterns/              # Detekcja wzorców
+│   ├── refactor/              # Silnik refaktoryzacji
+│   └── templates/             # Jinja2 templates for refactoring prompts
+├── tests/                     # 159 tests, all passing
 ├── benchmarks/
-│   ├── benchmark_performance.py
-│   ├── benchmark_format_quality.py
-│   └── test_performance.py
-├── setup.py
+├── examples/
 ├── pyproject.toml
 ├── Makefile
-├── requirements.txt
 └── README.md
 ```
 
-### Usunięte w v0.4.0
-- `optimization/` — 1590L martwego kodu (zero importów z zewnątrz)
-- `visualizers/` — 150L martwego kodu (PNG via mermaid)
+### Usunięte
+- `optimization/` — 1590L martwego kodu (v0.4.0)
+- `visualizers/` — 150L martwego kodu (v0.4.0)
+- `core/analyzer_old.py` — 765L (v0.6.0)
+- `core/streaming_analyzer_old.py` — 666L (v0.6.0)
+- `TODO/` — stare pliki migracji (v0.6.0)
 
 ## Kluczowe Decyzje Architektoniczne
 
@@ -206,17 +214,18 @@ result.to_dict(include_defaults=True)  # Include all fields
 - **Black** do formatowania
 - **isort** do importów (opcjonalnie)
 
-## Status: ✅ Ukończone (v0.4.0)
+## Status: ✅ Ukończone (v0.6.0)
 
 - [x] Rename code2flow → code2llm
 - [x] Struktura katalogów (reorganizacja generators/)
-- [x] Moduły core/
-- [x] Moduły analysis/ (+ pipeline_detector, side_effects, type_inference)
-- [x] Moduły exporters/ (7 eksporterów, wszystkie podłączone do CLI)
+- [x] Moduły core/ + core/core/ + core/streaming/ subpackages
+- [x] Moduły analysis/ (+ pipeline_detector method→method, type_inference dispatch)
+- [x] Moduły exporters/ (9 eksporterów + toon/ package, wszystkie podłączone do CLI)
 - [x] Moduły generators/ (przeniesione z root-level)
-- [x] Usunięcie martwego kodu (optimization/, visualizers/)
-- [x] CLI
+- [x] Usunięcie martwego kodu (optimization/, visualizers/, *_old.py, TODO/)
+- [x] CLI (streaming, strategy, refactor, examples)
 - [x] setup.py / pyproject.toml
 - [x] Makefile
-- [x] Testy (feature-named)
+- [x] Testy (159/159 passing)
+- [x] Metryki: CC̄=4.7, max-CC=19, 12 pipelines, 0 god modules
 - [ ] Dokumentacja API (do zrobienia)
