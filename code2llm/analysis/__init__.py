@@ -1,4 +1,4 @@
-"""Analysis package for code2flow."""
+"""Analysis package for code2llm."""
 
 from .cfg import CFGExtractor
 from .dfg import DFGExtractor

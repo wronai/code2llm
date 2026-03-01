@@ -2,7 +2,7 @@
 """
 Pytest-based format quality tests.
 
-These verify that each code2flow output format correctly detects
+These verify that each code2llm output format correctly detects
 known problems in a controlled test project.
 
 Run with: pytest tests/test_format_quality.py -v
@@ -143,8 +143,8 @@ def ground_truth_project(tmp_path_factory) -> Path:
 
 @pytest.fixture(scope="module")
 def analysis_result(ground_truth_project):
-    """Run code2flow analysis on ground truth project."""
-    from code2flow import ProjectAnalyzer, Config
+    """Run code2llm analysis on ground truth project."""
+    from code2llm import ProjectAnalyzer, Config
     cfg = Config()
     cfg.filters.exclude_patterns = [
         '*__pycache__*', '*.pyc', '*venv*', '*.venv*',
@@ -165,7 +165,7 @@ class TestAnalysisToon:
 
     @pytest.fixture
     def toon_content(self, analysis_result, tmp_path):
-        from code2flow.exporters.toon import ToonExporter
+        from code2llm.exporters.toon import ToonExporter
         out = tmp_path / "analysis.toon"
         ToonExporter().export(analysis_result, str(out))
         return out.read_text()
@@ -206,7 +206,7 @@ class TestFlowToon:
 
     @pytest.fixture
     def flow_content(self, analysis_result, tmp_path):
-        from code2flow.exporters.flow_exporter import FlowExporter
+        from code2llm.exporters.flow_exporter import FlowExporter
         out = tmp_path / "flow.toon"
         FlowExporter().export(analysis_result, str(out))
         return out.read_text()
@@ -246,7 +246,7 @@ class TestProjectMap:
 
     @pytest.fixture
     def map_content(self, analysis_result, tmp_path):
-        from code2flow.exporters.map_exporter import MapExporter
+        from code2llm.exporters.map_exporter import MapExporter
         out = tmp_path / "project.map"
         MapExporter().export(analysis_result, str(out))
         return out.read_text()
@@ -279,7 +279,7 @@ class TestContextMd:
 
     @pytest.fixture
     def context_content(self, analysis_result, tmp_path):
-        from code2flow.exporters.llm_exporter import LLMPromptExporter
+        from code2llm.exporters.llm_exporter import LLMPromptExporter
         out = tmp_path / "context.md"
         LLMPromptExporter().export(analysis_result, str(out))
         return out.read_text()
@@ -305,10 +305,10 @@ class TestCrossFormat:
     def all_formats(self, analysis_result, tmp_path):
         formats = {}
         exporters = {
-            "analysis.toon": ("code2flow.exporters.toon", "ToonExporter"),
-            "flow.toon":     ("code2flow.exporters.flow_exporter", "FlowExporter"),
-            "project.map":   ("code2flow.exporters.map_exporter", "MapExporter"),
-            "context.md":    ("code2flow.exporters.llm_exporter", "LLMPromptExporter"),
+            "analysis.toon": ("code2llm.exporters.toon", "ToonExporter"),
+            "flow.toon":     ("code2llm.exporters.flow_exporter", "FlowExporter"),
+            "project.map":   ("code2llm.exporters.map_exporter", "MapExporter"),
+            "context.md":    ("code2llm.exporters.llm_exporter", "LLMPromptExporter"),
         }
         for name, (mod_path, cls_name) in exporters.items():
             try:

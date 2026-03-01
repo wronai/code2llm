@@ -62,7 +62,7 @@ dev = [
 ]
 
 [project.scripts]
-code2flow = "code2flow.cli:main"
+code2llm = "code2llm.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/wronai/stts"

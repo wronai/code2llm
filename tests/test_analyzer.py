@@ -1,11 +1,11 @@
-"""Test suite for code2flow."""
+"""Test suite for code2llm."""
 
 import pytest
 import tempfile
 import shutil
 from pathlib import Path
-from code2flow import ProjectAnalyzer, Config
-from code2flow.core.config import FAST_CONFIG, FilterConfig
+from code2llm import ProjectAnalyzer, Config
+from code2llm.core.config import FAST_CONFIG, FilterConfig
 
 
 class TestProjectAnalyzer:
@@ -175,7 +175,7 @@ class TestExporters:
     @pytest.fixture
     def sample_result(self):
         """Create sample analysis result."""
-        from code2flow.core.models import AnalysisResult, FunctionInfo
+        from code2llm.core.models import AnalysisResult, FunctionInfo
         
         result = AnalysisResult(
             project_path="/test",
@@ -199,7 +199,7 @@ class TestExporters:
     
     def test_json_export(self, sample_result, tmp_path):
         """Test JSON export."""
-        from code2flow.exporters.base import JSONExporter
+        from code2llm.exporters.base import JSONExporter
         
         output = tmp_path / "output.json"
         exporter = JSONExporter()
@@ -212,7 +212,7 @@ class TestExporters:
     
     def test_mermaid_export(self, sample_result, tmp_path):
         """Test Mermaid export."""
-        from code2flow.exporters.base import MermaidExporter
+        from code2llm.exporters.base import MermaidExporter
         
         output = tmp_path / "output.mmd"
         exporter = MermaidExporter()

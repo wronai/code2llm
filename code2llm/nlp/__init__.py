@@ -1,4 +1,4 @@
-"""NLP Processing Pipeline for code2flow.
+"""NLP Processing Pipeline for code2llm.
 
 Provides query normalization, intent matching, and entity resolution
 with multilingual support and fuzzy matching.

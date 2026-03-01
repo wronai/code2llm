@@ -1,4 +1,4 @@
-"""Toon Exporter v2 — scannable plain-text format for code2flow.
+"""Toon Exporter v2 — scannable plain-text format for code2llm.
 
 Structure communicates health: sorting by severity, inline markers,
 coupling matrix, duplicate detection, filtered functions.
@@ -490,7 +490,7 @@ class ToonExporter:
         ncycles = len(ctx["cycles"])
 
         lines = [
-            f"# code2flow | {nfiles}f {total_lines}L | py:{nfiles} | {ctx['timestamp']}",
+            f"# code2llm | {nfiles}f {total_lines}L | py:{nfiles} | {ctx['timestamp']}",
             f"# CC\u0304={avg_cc} | critical:{critical}/{nfuncs} | dups:{ndups} | cycles:{ncycles}",
         ]
         return lines

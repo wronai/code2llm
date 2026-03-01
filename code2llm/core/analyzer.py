@@ -29,7 +29,7 @@ from ..analysis.smells import SmellDetector
 class FileCache:
     """Cache for parsed AST files."""
     
-    def __init__(self, cache_dir: str = ".code2flow_cache", ttl_hours: int = 24):
+    def __init__(self, cache_dir: str = ".code2llm_cache", ttl_hours: int = 24):
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.ttl_seconds = ttl_hours * 3600

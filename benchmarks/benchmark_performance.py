@@ -17,8 +17,8 @@ from datetime import datetime
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from code2flow import ProjectAnalyzer, FAST_CONFIG
-from code2flow.core.streaming_analyzer import (
+from code2llm import ProjectAnalyzer, FAST_CONFIG
+from code2llm.core.streaming_analyzer import (
     StreamingAnalyzer, STRATEGY_QUICK, STRATEGY_STANDARD, STRATEGY_DEEP
 )
 

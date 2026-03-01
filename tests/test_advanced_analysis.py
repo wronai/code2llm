@@ -1,8 +1,8 @@
 import pytest
 import ast
-from code2flow.core.analyzer import ProjectAnalyzer
-from code2flow.core.config import Config
-from code2flow.core.models import AnalysisResult
+from code2llm.core.analyzer import ProjectAnalyzer
+from code2llm.core.config import Config
+from code2llm.core.models import AnalysisResult
 
 def test_radon_complexity():
     content = """
@@ -20,7 +20,7 @@ def complex_func(x):
             print(i)
         return 0
 """
-    from code2flow.core.analyzer import FileAnalyzer
+    from code2llm.core.analyzer import FileAnalyzer
     config = Config()
     config.verbose = True
     analyzer = FileAnalyzer(config)
@@ -49,7 +49,7 @@ def test_graph_metrics():
     # Actually Betweenness Centrality on:
     # A -> B, B -> C, A -> D, D -> C
     
-    from code2flow.core.models import FunctionInfo
+    from code2llm.core.models import FunctionInfo
     
     func_names = ["A", "B", "C", "D"]
     for name in func_names:
@@ -73,7 +73,7 @@ def test_graph_metrics():
     
 def test_circular_dependency():
     result = AnalysisResult()
-    from code2flow.core.models import FunctionInfo
+    from code2llm.core.models import FunctionInfo
     
     # A -> B -> A
     result.functions["A"] = FunctionInfo(name="A", qualified_name="A", file="test.py", line=1)

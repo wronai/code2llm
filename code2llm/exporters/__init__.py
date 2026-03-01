@@ -1,4 +1,4 @@
-"""Exporters package for code2flow.
+"""Exporters package for code2llm.
 
 Available exporters:
   - ToonExporter      → analysis.toon  (health diagnostics)

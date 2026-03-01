@@ -395,7 +395,7 @@ class PipelineDetector:
                 parts = fi.module.split(".")
                 # Use most specific module component
                 for part in parts:
-                    if part and part not in ("code2flow", "__init__"):
+                    if part and part not in ("code2llm", "__init__"):
                         module_counts[part] += 1
 
         if module_counts:

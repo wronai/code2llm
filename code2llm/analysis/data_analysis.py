@@ -1,4 +1,4 @@
-"""Data Analysis logic for code2flow - extracted from YAMLExporter."""
+"""Data Analysis logic for code2llm - extracted from YAMLExporter."""
 
 from typing import Any, Dict, List
 from ..core.models import AnalysisResult

@@ -1,4 +1,4 @@
-"""Entry point for running code2flow as a module."""
+"""Entry point for running code2llm as a module."""
 
 from .cli import main
 

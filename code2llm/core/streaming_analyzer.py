@@ -110,7 +110,7 @@ STRATEGY_DEEP = ScanStrategy(
 class StreamingFileCache:
     """Memory-efficient cache with LRU eviction."""
     
-    def __init__(self, max_size: int = 100, cache_dir: str = ".code2flow_cache"):
+    def __init__(self, max_size: int = 100, cache_dir: str = ".code2llm_cache"):
         self.max_size = max_size
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -605,7 +605,7 @@ class IncrementalAnalyzer:
     
     def __init__(self, config: Optional[Config] = None):
         self.config = config or FAST_CONFIG
-        self.state_file = Path(".code2flow_state.json")
+        self.state_file = Path(".code2llm_state.json")
         self.previous_state: Dict[str, str] = {}
         self._load_state()
     

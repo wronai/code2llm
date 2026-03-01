@@ -49,8 +49,8 @@ def parse_toon_content(content):
         line_stripped = line.strip()
         
         # Parse header
-        if line.startswith('# code2flow'):
-            data['meta']['project'] = 'code2flow'
+        if line.startswith('# code2llm'):
+            data['meta']['project'] = 'code2llm'
             data['meta']['generated'] = line.split('|')[-1].strip() if '|' in line else ''
             continue
         
@@ -131,7 +131,7 @@ def is_toon_file(filepath):
     try:
         with open(filepath, 'r') as f:
             first_line = f.readline()
-            return first_line.startswith('# code2flow') or first_line.startswith('# CC')
+            return first_line.startswith('# code2llm') or first_line.startswith('# CC')
     except:
         return False
 

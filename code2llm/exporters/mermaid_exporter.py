@@ -1,4 +1,4 @@
-"""Mermaid Exporter for code2flow."""
+"""Mermaid Exporter for code2llm."""
 
 from pathlib import Path
 from typing import Dict

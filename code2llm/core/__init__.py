@@ -1,4 +1,4 @@
-"""Core analysis components for code2flow."""
+"""Core analysis components for code2llm."""
 
 from .analyzer import ProjectAnalyzer, FileCache, FastFileFilter
 from .streaming_analyzer import (

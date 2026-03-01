@@ -1,4 +1,4 @@
-"""Context Exporter for code2flow — generates context.md (LLM narrative).
+"""Context Exporter for code2llm — generates context.md (LLM narrative).
 
 Rename from llm_exporter.py → context_exporter.py (Sprint 4, v0.3.3).
 Produces LLM-ready architecture summary with flows, patterns, and API surface.

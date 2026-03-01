@@ -1,12 +1,12 @@
-"""Additional tests for code2flow - edge cases and integration tests."""
+"""Additional tests for code2llm - edge cases and integration tests."""
 
 import pytest
 import tempfile
 import shutil
 from pathlib import Path
-from code2flow import ProjectAnalyzer, FAST_CONFIG, NLPPipeline, FAST_NLP_CONFIG, Config
-from code2flow.core.analyzer import FileCache, FastFileFilter
-from code2flow.core.config import FilterConfig, PerformanceConfig
+from code2llm import ProjectAnalyzer, FAST_CONFIG, NLPPipeline, FAST_NLP_CONFIG, Config
+from code2llm.core.analyzer import FileCache, FastFileFilter
+from code2llm.core.config import FilterConfig, PerformanceConfig
 
 
 class TestEdgeCases:
@@ -305,7 +305,7 @@ def standalone_func(): pass
             analysis = analyzer.analyze_project(str(tmp_dir))
             
             # Load entities
-            from code2flow.nlp import EntityResolver
+            from code2llm.nlp import EntityResolver
             resolver = EntityResolver()
             resolver.load_from_analysis(analysis)
             

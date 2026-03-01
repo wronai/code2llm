@@ -1,4 +1,4 @@
-"""Configuration and constants for code2flow."""
+"""Configuration and constants for code2llm."""
 
 from dataclasses import dataclass, field
 from typing import List, Set
@@ -18,7 +18,7 @@ class AnalysisMode(str, Enum):
 class PerformanceConfig:
     """Performance optimization settings."""
     enable_cache: bool = True
-    cache_dir: str = ".code2flow_cache"
+    cache_dir: str = ".code2llm_cache"
     cache_ttl_hours: int = 24
     parallel_workers: int = 4
     parallel_enabled: bool = True

@@ -1,10 +1,10 @@
 import pytest
 import ast
-from code2flow.core.config import Config
-from code2flow.analysis.call_graph import CallGraphExtractor
-from code2flow.analysis.dfg import DFGExtractor
-from code2flow.analysis.smells import SmellDetector
-from code2flow.refactor.prompt_engine import PromptEngine
+from code2llm.core.config import Config
+from code2llm.analysis.call_graph import CallGraphExtractor
+from code2llm.analysis.dfg import DFGExtractor
+from code2llm.analysis.smells import SmellDetector
+from code2llm.refactor.prompt_engine import PromptEngine
 
 def test_metrics_calculation():
     code = """
@@ -23,7 +23,7 @@ def c():
     
     # Manual population of functions (since cg_extractor assumes they are in result.functions)
     # ProjectAnalyzer normally does this merge. For unit test, we simulate:
-    from code2flow.core.models import FunctionInfo
+    from code2llm.core.models import FunctionInfo
     result.functions = {
         "test.a": FunctionInfo(name="a", qualified_name="test.a", file="test.py", line=2, calls=["test.b", "test.c"]),
         "test.b": FunctionInfo(name="b", qualified_name="test.b", file="test.py", line=5, calls=[]),
@@ -55,7 +55,7 @@ def update_data(obj):
     assert "method_call" in types # .append()
 
 def test_smell_detection():
-    from code2flow.core.models import AnalysisResult, FunctionInfo, Mutation
+    from code2llm.core.models import AnalysisResult, FunctionInfo, Mutation
     result = AnalysisResult(project_path=".", analysis_mode="static")
     result.functions = {
         "test.god_func": FunctionInfo(name="god_func", qualified_name="test.god_func", file="test.py", line=10)

@@ -1,4 +1,4 @@
-"""YAML Exporter for code2flow."""
+"""YAML Exporter for code2llm."""
 
 import yaml
 from collections import defaultdict

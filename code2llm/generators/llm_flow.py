@@ -394,7 +394,7 @@ def dump_yaml(data: Dict[str, Any]) -> str:
 def create_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="llm-flow-generator",
-        description="Generate compact LLM-friendly app flow summary from code2flow analysis.yaml",
+        description="Generate compact LLM-friendly app flow summary from code2llm analysis.yaml",
     )
     p.add_argument(
         "-i",

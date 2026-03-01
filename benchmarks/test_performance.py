@@ -1,4 +1,4 @@
-"""Performance benchmarks for code2flow."""
+"""Performance benchmarks for code2llm."""
 
 import tempfile
 import shutil
@@ -10,8 +10,8 @@ from datetime import datetime
 
 import pytest
 
-from code2flow import ProjectAnalyzer, Config
-from code2flow.core.config import FAST_CONFIG
+from code2llm import ProjectAnalyzer, Config
+from code2llm.core.config import FAST_CONFIG
 
 
 def save_test_report(results: dict, test_name: str) -> str:

@@ -389,18 +389,18 @@ def run_benchmark() -> Dict:
     print(f"  Known pipelines: {len(KNOWN_PIPELINES)}")
     print(f"  Known hub types: {len(KNOWN_HUB_TYPES)}")
     
-    # 2. Run code2flow and generate all formats
+    # 2. Run code2llm and generate all formats
     output_dir = tmp / "output"
     output_dir.mkdir()
     
     scores: Dict[str, FormatScore] = {}
     
     try:
-        from code2flow import ProjectAnalyzer, Config
-        from code2flow.core.models import AnalysisResult
+        from code2llm import ProjectAnalyzer, Config
+        from code2llm.core.models import AnalysisResult
         
         # Analyze project — use relaxed Config (FAST_CONFIG excludes *test*)
-        print(f"\n→ Running code2flow analysis...")
+        print(f"\n→ Running code2llm analysis...")
         start = time.time()
         cfg = Config()
         cfg.filters.exclude_patterns = [
@@ -416,10 +416,10 @@ def run_benchmark() -> Dict:
         
         # Generate each format
         format_configs = {
-            "analysis.toon": ("code2flow.exporters.toon", "ToonExporter"),
-            "flow.toon":     ("code2flow.exporters.flow_exporter", "FlowExporter"),
-            "project.map":   ("code2flow.exporters.map_exporter", "MapExporter"),
-            "context.md":    ("code2flow.exporters.llm_exporter", "LLMPromptExporter"),
+            "analysis.toon": ("code2llm.exporters.toon", "ToonExporter"),
+            "flow.toon":     ("code2llm.exporters.flow_exporter", "FlowExporter"),
+            "project.map":   ("code2llm.exporters.map_exporter", "MapExporter"),
+            "context.md":    ("code2llm.exporters.llm_exporter", "LLMPromptExporter"),
         }
         
         for filename, (module_path, class_name) in format_configs.items():
@@ -447,9 +447,9 @@ def run_benchmark() -> Dict:
                 scores[filename] = FormatScore(name=filename)
         
     except ImportError as e:
-        print(f"\n⚠ code2flow not installed: {e}")
+        print(f"\n⚠ code2llm not installed: {e}")
         print("  Running in OFFLINE mode with sample data...")
-        # Create minimal fallback scores for when code2flow isn't installed
+        # Create minimal fallback scores for when code2llm isn't installed
         for name in ["analysis.toon", "flow.toon", "project.map", "context.md"]:
             scores[name] = FormatScore(name=name)
     

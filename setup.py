@@ -26,7 +26,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'code2llm=code2flow.cli:main',
+            'code2llm=code2llm.cli:main',
         ],
     },
     install_requires=[

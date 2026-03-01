@@ -1,4 +1,4 @@
-"""Base Exporter class for code2flow."""
+"""Base Exporter class for code2llm."""
 
 from abc import ABC, abstractmethod
 from ..core.models import AnalysisResult

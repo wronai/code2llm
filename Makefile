@@ -96,16 +96,16 @@ test-comprehensive:
 # =============================================================================
 
 lint:
-	$(PYTHON) -m flake8 code2flow/ --max-line-length=100 --ignore=E203,W503 2>/dev/null || echo "flake8 not installed"
-	$(PYTHON) -m black --check code2flow/ 2>/dev/null || echo "black not installed"
+	$(PYTHON) -m flake8 code2llm/ --max-line-length=100 --ignore=E203,W503 2>/dev/null || echo "flake8 not installed"
+	$(PYTHON) -m black --check code2llm/ 2>/dev/null || echo "black not installed"
 	@echo "✓ Linting complete"
 
 format:
-	$(PYTHON) -m black code2flow/ --line-length=100 2>/dev/null || echo "black not installed, run: pip install black"
+	$(PYTHON) -m black code2llm/ --line-length=100 2>/dev/null || echo "black not installed, run: pip install black"
 	@echo "✓ Code formatted"
 
 typecheck:
-	$(PYTHON) -m mypy code2flow/ --ignore-missing-imports 2>/dev/null || echo "mypy not installed"
+	$(PYTHON) -m mypy code2llm/ --ignore-missing-imports 2>/dev/null || echo "mypy not installed"
 
 check: lint typecheck test
 	@echo "✓ All checks passed"
@@ -226,7 +226,7 @@ check-mermaid:
 clean:
 	rm -rf build/ dist/ *.egg-info
 	rm -rf .pytest_cache .coverage htmlcov/
-	rm -rf code2flow/__pycache__ code2flow/*/__pycache__
+	rm -rf code2llm/__pycache__ code2llm/*/__pycache__
 	rm -rf test_* demo compare analysis analysis_all output_* 2>/dev/null || true
 	find . -name "*.pyc" -delete 2>/dev/null || true
 	find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true

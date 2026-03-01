@@ -1,8 +1,8 @@
 """Tests for ToonExporter v2 format."""
 import pytest
 from pathlib import Path
-from code2flow.core.models import AnalysisResult, FunctionInfo, ClassInfo, ModuleInfo
-from code2flow.exporters.toon import ToonExporter, EXCLUDE_PATTERNS
+from code2llm.core.models import AnalysisResult, FunctionInfo, ClassInfo, ModuleInfo
+from code2llm.exporters.toon import ToonExporter, EXCLUDE_PATTERNS
 
 
 @pytest.fixture
@@ -91,7 +91,7 @@ class TestToonExporterV2:
         lines = content.split("\n")
         
         # Check header
-        assert lines[0].startswith("# code2flow |")
+        assert lines[0].startswith("# code2llm |")
         assert "CC" in lines[1]
         assert "critical:" in lines[1]
     
@@ -182,12 +182,12 @@ class TestToonExporterV2:
         """Test that normal project paths are included."""
         exporter = ToonExporter()
         
-        assert exporter._is_excluded("/project/code2flow/analyzer.py") is False
+        assert exporter._is_excluded("/project/code2llm/analyzer.py") is False
         assert exporter._is_excluded("/project/tests/test_analyzer.py") is False
     
     def test_max_health_issues_limit(self, sample_result, tmp_path):
         """Test that HEALTH section respects MAX_HEALTH_ISSUES limit."""
-        from code2flow.exporters.toon import MAX_HEALTH_ISSUES
+        from code2llm.exporters.toon import MAX_HEALTH_ISSUES
         
         # Add many high CC functions
         for i in range(100):
@@ -213,7 +213,7 @@ class TestToonExporterV2:
     
     def test_coupling_matrix_limited(self, sample_result, tmp_path):
         """Test that COUPLING matrix is limited to top packages."""
-        from code2flow.exporters.toon import MAX_COUPLING_PACKAGES
+        from code2llm.exporters.toon import MAX_COUPLING_PACKAGES
         
         exporter = ToonExporter()
         output_file = tmp_path / "test.toon"

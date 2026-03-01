@@ -1,4 +1,4 @@
-"""JSON Exporter for code2flow."""
+"""JSON Exporter for code2llm."""
 
 import json
 from pathlib import Path

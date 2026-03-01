@@ -1,5 +1,5 @@
 """
-code2flow - Optimized Python Code Flow Analysis Tool
+code2llm - Optimized Python Code Flow Analysis Tool
 
 A high-performance tool for analyzing Python code control flow, data flow,
 and call graphs with caching and parallel processing.

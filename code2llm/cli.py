@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-code2flow - CLI for Python code flow analysis
+code2llm - CLI for Python code flow analysis
 
 Analyze control flow, data flow, and call graphs of Python codebases.
 """
@@ -16,23 +16,23 @@ from .exporters import (
     ContextExporter, LLMPromptExporter,
     ToonExporter, MapExporter, FlowExporter,
 )
-from .visualizers.graph import GraphVisualizer
+
 
 
 def create_parser() -> argparse.ArgumentParser:
     """Create CLI argument parser."""
     parser = argparse.ArgumentParser(
-        prog='code2flow',
+        prog='code2llm',
         description='Analyze Python code control flow, data flow, and call graphs',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
 Examples:
-  code2flow /path/to/project                    # Default: TOON format only
-  code2flow /path/to/project -f all             # Generate all formats
-  code2flow /path/to/project -f toon,map,flow   # Diagnostics + structure + data-flow
-  code2flow /path/to/project -f context         # LLM narrative context
-  code2flow /path/to/project -m static -o ./analysis
-  code2flow llm-flow                             # Generate LLM flow summary
+  code2llm /path/to/project                    # Default: TOON format only
+  code2llm /path/to/project -f all             # Generate all formats
+  code2llm /path/to/project -f toon,map,flow   # Diagnostics + structure + data-flow
+  code2llm /path/to/project -f context         # LLM narrative context
+  code2llm /path/to/project -m static -o ./analysis
+  code2llm llm-flow                             # Generate LLM flow summary
 
 Format Options:
   toon    - Health diagnostics (analysis.toon) — default
@@ -42,7 +42,6 @@ Format Options:
   yaml    - Standard YAML format
   json    - Machine-readable JSON
   mermaid - Flowchart diagrams
-  png     - Visual graphs
   all     - Generate all formats
         '''
     )
@@ -63,8 +62,8 @@ Format Options:
     
     parser.add_argument(
         '-o', '--output',
-        default='./code2flow_output',
-        help='Output directory (default: ./code2flow_output)'
+        default='./code2llm_output',
+        help='Output directory (default: ./code2llm_output)'
     )
     
     parser.add_argument(
@@ -179,7 +178,7 @@ def main():
     """Main CLI entry point."""
     # Handle special cases first
     if len(sys.argv) > 1 and sys.argv[1] == 'llm-flow':
-        from .llm_flow_generator import main as llm_flow_main
+        from .generators.llm_flow import main as llm_flow_main
         return llm_flow_main(sys.argv[2:])
     
     if len(sys.argv) > 1 and sys.argv[1] == 'llm-context':
@@ -193,8 +192,8 @@ def main():
     # Handle analysis (default behavior)
     if not args.source:
         print("Error: missing required argument: source", file=sys.stderr)
-        print("Usage: code2flow <source> [options]", file=sys.stderr)
-        print("   or: code2flow llm-flow [options]", file=sys.stderr)
+        print("Usage: code2llm <source> [options]", file=sys.stderr)
+        print("   or: code2llm llm-flow [options]", file=sys.stderr)
         sys.exit(2)
 
     # Validate source path
@@ -293,7 +292,7 @@ def main():
     
     # Handle 'all' format
     if 'all' in formats:
-        formats = ['toon', 'map', 'flow', 'context', 'yaml', 'json', 'mermaid', 'png']
+        formats = ['toon', 'map', 'flow', 'context', 'yaml', 'json', 'mermaid']
     
     try:
         if 'toon' in formats:
@@ -365,7 +364,7 @@ def main():
             # Auto-generate PNG from Mermaid files (unless disabled)
             if not args.no_png:
                 try:
-                    from .mermaid_generator import generate_pngs
+                    from .generators.mermaid import generate_pngs
                     png_count = generate_pngs(output_dir, output_dir)
                     if args.verbose and png_count > 0:
                         print(f"  - PNG: {png_count} files generated")
@@ -387,15 +386,7 @@ def main():
             elif args.verbose:
                 print(f"  - PNG: Skipped (--no-png)")
                 
-        if 'png' in formats:
-            visualizer = GraphVisualizer(result)
-            filepath = output_dir / 'cfg.png'
-            visualizer.visualize_cfg(str(filepath))
-            filepath = output_dir / 'call_graph.png'
-            visualizer.visualize_call_graph(str(filepath))
-            if args.verbose:
-                print(f"  - PNG: {output_dir / '*.png'}")
-                
+        
         if args.data_structures:
             exporter = YAMLExporter()
             struct_path = output_dir / 'data_structures.yaml'
@@ -450,7 +441,7 @@ def generate_llm_context(args_list):
     import argparse
     
     parser = argparse.ArgumentParser(
-        prog='code2flow llm-context',
+        prog='code2llm llm-context',
         description='Generate LLM-friendly context for a project'
     )
     parser.add_argument('source', help='Path to Python project')

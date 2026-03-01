@@ -1,14 +1,14 @@
 """Tests for NLP Processing Pipeline."""
 
 import pytest
-from code2flow.nlp import (
+from code2llm.nlp import (
     NLPPipeline, QueryNormalizer, IntentMatcher, EntityResolver,
     NLPConfig, FAST_NLP_CONFIG, PRECISE_NLP_CONFIG
 )
-from code2flow.nlp.normalization import NormalizationResult
-from code2flow.nlp.intent_matching import IntentMatchingResult, IntentMatch
-from code2flow.nlp.entity_resolution import EntityResolutionResult, Entity
-from code2flow.nlp.config import EntityResolutionConfig
+from code2llm.nlp.normalization import NormalizationResult
+from code2llm.nlp.intent_matching import IntentMatchingResult, IntentMatch
+from code2llm.nlp.entity_resolution import EntityResolutionResult, Entity
+from code2llm.nlp.config import EntityResolutionConfig
 
 
 class TestQueryNormalization:
@@ -48,7 +48,7 @@ class TestQueryNormalization:
     
     def test_step_1e_remove_stopwords(self):
         """1e. Stopword removal."""
-        from code2flow.nlp.config import NormalizationConfig
+        from code2llm.nlp.config import NormalizationConfig
         
         config = NormalizationConfig(remove_stopwords=True)
         normalizer = QueryNormalizer(config)
@@ -103,7 +103,7 @@ class TestIntentMatching:
     
     def test_step_2e_multi_intent_resolution(self):
         """2e. Multi-intent resolution strategy."""
-        from code2flow.nlp.config import IntentMatchingConfig
+        from code2llm.nlp.config import IntentMatchingConfig
         
         config = IntentMatchingConfig(multi_intent_strategy="best_match")
         matcher = IntentMatcher(config)
@@ -134,7 +134,7 @@ class TestEntityResolution:
                 Entity("analyze", "analyzer.analyze", "function", 1.0),
             ],
             "class": [
-                Entity("Pipeline", "code2flow.Pipeline", "class", 1.0),
+                Entity("Pipeline", "code2llm.Pipeline", "class", 1.0),
             ],
         }
     
@@ -148,7 +148,7 @@ class TestEntityResolution:
     
     def test_step_3b_name_match_threshold(self, mock_entities):
         """3b. Name matching threshold."""
-        from code2flow.nlp.config import EntityResolutionConfig
+        from code2llm.nlp.config import EntityResolutionConfig
         
         config = EntityResolutionConfig(name_match_threshold=0.9)
         resolver = EntityResolver(config, mock_entities)
@@ -176,7 +176,7 @@ class TestEntityResolution:
         
         # Add hierarchical entity
         mock_entities["function"].append(
-            Entity("Pipeline.run", "code2flow.Pipeline.run", "function", 1.0)
+            Entity("Pipeline.run", "code2llm.Pipeline.run", "function", 1.0)
         )
         
         result = resolver.resolve("run method")

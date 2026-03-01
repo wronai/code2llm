@@ -1,5 +1,5 @@
 """
-Mermaid PNG Generator for code2flow
+Mermaid PNG Generator for code2llm
 Integrates with CLI to auto-generate PNG from Mermaid files.
 """
 
