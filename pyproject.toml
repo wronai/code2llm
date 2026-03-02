@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "code2llm"
-version = "0.5.13"
+version = "0.5.14"
 description = "High-performance Python code flow analysis with optimized TOON format - CFG, DFG, call graphs, and intelligent code queries"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -75,7 +75,7 @@ line-length = 100
 target-version = ['py38']
 
 [tool.mypy]
-python_version = "0.5.8"
+python_version = "0.5.14"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
