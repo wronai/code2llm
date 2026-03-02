@@ -3,9 +3,9 @@
 import pytest
 import tempfile
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
-from code2llm.cli import _export_prompt_txt
+from code2llm.cli import _export_prompt_txt, _export_code2logic
 
 
 class TestPromptTxtGeneration:
@@ -138,17 +138,68 @@ class TestPromptTxtGeneration:
             "Prompt should start with AI assistant instruction"
         assert any("we are in project path:" in line for line in lines), \
             "Project path should be present"
+
         assert any("Files for analysis:" in line for line in lines), \
             "Files section should be present"
-        
+
         # All files should be listed without missing section
         assert "Missing files" not in content, "No missing section when all files exist"
         for f in all_files:
             assert f in content, f"All files should be listed: {f}"
-        
+
         # Check for file paths with descriptions
         assert "- " in content, "Files should be listed with bullet points"
         assert "Health diagnostics" in content, "Descriptions should be present"
+
+
+class TestCode2logicExport:
+    """Test the _export_code2logic wrapper."""
+
+    @pytest.fixture
+    def temp_output_dir(self):
+        """Create temporary output directory."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            yield Path(tmpdir)
+
+    def test_export_code2logic_adds_quiet_flag_when_not_verbose(self, temp_output_dir):
+        args = MagicMock()
+        args.verbose = False
+
+        source_path = Path('/home/user/myproject')
+        formats = ['code2logic']
+
+        completed = MagicMock()
+        completed.returncode = 0
+        completed.stdout = ""
+        completed.stderr = ""
+
+        with patch('code2llm.cli.shutil.which', return_value='/usr/bin/code2logic'), \
+             patch('code2llm.cli.subprocess.run', return_value=completed) as run_mock, \
+             patch('pathlib.Path.exists', return_value=True):
+            _export_code2logic(args, source_path, temp_output_dir, formats)
+
+        called_cmd = run_mock.call_args[0][0]
+        assert '-q' in called_cmd
+
+    def test_export_code2logic_does_not_add_quiet_flag_when_verbose(self, temp_output_dir):
+        args = MagicMock()
+        args.verbose = True
+
+        source_path = Path('/home/user/myproject')
+        formats = ['code2logic']
+
+        completed = MagicMock()
+        completed.returncode = 0
+        completed.stdout = ""
+        completed.stderr = ""
+
+        with patch('code2llm.cli.shutil.which', return_value='/usr/bin/code2logic'), \
+             patch('code2llm.cli.subprocess.run', return_value=completed) as run_mock, \
+             patch('pathlib.Path.exists', return_value=True):
+            _export_code2logic(args, source_path, temp_output_dir, formats)
+
+        called_cmd = run_mock.call_args[0][0]
+        assert '-q' not in called_cmd
     
     def test_prompt_txt_no_verbose_output(self, temp_output_dir):
         """Test that no print occurs when verbose is False."""

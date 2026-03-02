@@ -147,13 +147,13 @@ Main execution flows into the system:
 > Export module-level graph: one node per module, weighted edges.
 - **Calls**: defaultdict, defaultdict, result.functions.items, defaultdict, result.functions.items, set, sorted, sorted
 
-### code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph
-> Export simplified call graph — only connected nodes.
-- **Calls**: set, result.functions.items, sorted, set, self._write, self._module_of, result.functions.get, modules.items
-
 ### code2llm.exporters.context_exporter.ContextExporter.export
 > Generate comprehensive LLM prompt with architecture description.
 - **Calls**: lines.extend, lines.extend, self._get_important_entries, lines.extend, lines.extend, lines.extend, lines.extend, lines.extend
+
+### code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph
+> Export simplified call graph — only connected nodes.
+- **Calls**: set, result.functions.items, sorted, set, self._write, self._module_of, result.functions.get, modules.items
 
 ### code2llm.exporters.toon.metrics.MetricsComputer._compute_file_metrics
 > Per-file metrics derived from AnalysisResult.
@@ -211,12 +211,12 @@ Strategy:
 > Renderuj sekcję PIPELINES.
 - **Calls**: defaultdict, None.join, pl.get, pl.get, lines.append, pl.get, lines.append, lines.append
 
+### code2llm.generators.llm_flow.main
+- **Calls**: None.parse_args, Path, code2llm.generators.llm_flow._safe_read_yaml, code2llm.generators.llm_flow.generate_llm_flow, Path, output_path.parent.mkdir, output_path.write_text, input_path.exists
+
 ### code2llm.exporters.flow_exporter.FlowExporter._compute_type_usage
 > Count how many functions consume/produce each type using AST data.
 - **Calls**: defaultdict, defaultdict, funcs.items, type_list.sort, type_info.get, ti.get, ti.get, set
-
-### code2llm.generators.llm_flow.main
-- **Calls**: None.parse_args, Path, code2llm.generators.llm_flow._safe_read_yaml, code2llm.generators.llm_flow.generate_llm_flow, Path, output_path.parent.mkdir, output_path.write_text, input_path.exists
 
 ### examples.litellm.run.main
 - **Calls**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.parse_args, examples.litellm.run.run_analysis, print, examples.litellm.run.get_refactoring_advice, print
@@ -458,6 +458,13 @@ Key functions that process and transform data:
 > Oceń pojedynczy format względem ground truth.
 - **Output to**: FormatScore, benchmarks.format_evaluator._detect_problems, sum, benchmarks.format_evaluator._detect_pipelines, sum
 
+### scripts.bump_version.parse_version
+> Parse version string into tuple of (major, minor, patch)
+- **Output to**: version_str.split, tuple, int
+
+### scripts.bump_version.format_version
+> Format version tuple as string
+
 ### scripts.benchmark_badges.parse_evolution_metrics
 > Extract metrics from evolution.toon content.
 - **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, m.group
@@ -474,15 +481,12 @@ Key functions that process and transform data:
 > Generate badges from format quality scores.
 - **Output to**: enumerate, badges.append, sorted, badges.append, format_scores.items
 
-### scripts.bump_version.parse_version
-> Parse version string into tuple of (major, minor, patch)
-- **Output to**: version_str.split, tuple, int
-
-### scripts.bump_version.format_version
-> Format version tuple as string
-
 ### demo_langs.valid.sample.UserService.process_users
 - **Output to**: print
+
+### benchmarks.benchmark_format_quality._generate_format_outputs
+> Generate all format outputs and evaluate them.
+- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
 ### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
 - **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
@@ -498,10 +502,6 @@ Key functions that process and transform data:
 ### code2llm.cli._export_simple_formats
 > Export toon, map, flow, context, yaml, json formats.
 - **Output to**: format_map.items, code2llm.cli._export_yaml, JSONExporter, exporter.export, exporter_cls
-
-### benchmarks.benchmark_format_quality._generate_format_outputs
-> Generate all format outputs and evaluate them.
-- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
 ### code2llm.nlp.pipeline.NLPPipeline.process
 > Process query through full pipeline (4a-4e).
@@ -546,8 +546,8 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.exporters.mermaid_exporter.MermaidExporter.export_compact` - 26 calls
 - `benchmarks.benchmark_evolution.parse_evolution_metrics` - 25 calls
 - `code2llm.cli.create_parser` - 25 calls
-- `code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph` - 25 calls
 - `code2llm.exporters.context_exporter.ContextExporter.export` - 25 calls
+- `code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph` - 25 calls
 - `validate_toon.compare_functions` - 24 calls
 - `code2llm.generators.mermaid.generate_single_png` - 24 calls
 - `scripts.benchmark_badges.main` - 23 calls
@@ -607,7 +607,7 @@ graph TD
     analyze_streaming --> len
     export_compact --> defaultdict
     export_compact --> items
-    export_call_graph --> set
+    export --> _get_important_entri
 ```
 
 ## Reverse Engineering Guidelines

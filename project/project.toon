@@ -1,4 +1,4 @@
-# code2llm | 121f 19658L | python:105/go:4/java:4/php:4/rust:4/typescript:4
+# code2llm | 121f 19727L | python:105/go:4/java:4/php:4/rust:4/typescript:4
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
 M[121]:
   badges/server.py,91
@@ -7,7 +7,7 @@ M[121]:
   benchmarks/benchmark_format_quality.py,106
   benchmarks/benchmark_performance.py,216
   benchmarks/format_evaluator.py,99
-  benchmarks/project_generator.py,186
+  benchmarks/project_generator.py,190
   benchmarks/reporting.py,144
   benchmarks/test_performance.py,181
   code2llm/__init__.py,37
@@ -22,7 +22,7 @@ M[121]:
   code2llm/analysis/side_effects.py,260
   code2llm/analysis/smells.py,163
   code2llm/analysis/type_inference.py,252
-  code2llm/cli.py,541
+  code2llm/cli.py,554
   code2llm/core/__init__.py,34
   code2llm/core/analyzer.py,165
   code2llm/core/config.py,136
@@ -118,7 +118,7 @@ M[121]:
   tests/test_nlp_pipeline.py,239
   tests/test_pipeline_detector.py,314
   tests/test_prompt_engine.py,61
-  tests/test_prompt_txt.py,109
+  tests/test_prompt_txt.py,146
   tests/test_refactoring_engine.py,63
   tests/test_toon_v2.py,228
   validate_toon.py,388
@@ -458,7 +458,7 @@ D:
     new(id: u32 name: &str)->Self
     main()
   demo_langs/invalid/sample_bad.ts:
-    e: User,UserService
+    e: UserService,User
     UserService: addUser(1),getUser(1)
   demo_langs/valid/sample.go:
     i: fmt
@@ -497,7 +497,7 @@ D:
     process_users(&self)
     main()
   demo_langs/valid/sample.ts:
-    e: User,UserService
+    e: UserService,User
     UserService: addUser(1),getUser(1),processUsers(0)
   examples/functional_refactoring_example.py:
     i: json,re,abc.{ABC,abstractmethod},dataclasses.dataclass,pathlib.Path,typing.{Any,Dict,Optional,Protocol}
@@ -599,7 +599,7 @@ D:
     new(id: u32 name: &str)->Self
     main()
   test_langs/invalid/sample_bad.ts:
-    e: User,UserService
+    e: UserService,User
     UserService: addUser(1),getUser(1)
   test_langs/valid/sample.go:
     i: fmt
@@ -638,7 +638,7 @@ D:
     process_users(&self)
     main()
   test_langs/valid/sample.ts:
-    e: User,UserService
+    e: UserService,User
     UserService: addUser(1),getUser(1),processUsers(0)
   test_python_only/valid/sample.py:
     i: dataclasses.dataclass,typing.{List,Optional}
@@ -716,9 +716,10 @@ D:
     test_template_rendering_with_metrics()
     test_tree_sitter_init()
   tests/test_prompt_txt.py:
-    i: pytest,tempfile,code2llm.cli._export_prompt_txt,pathlib.Path,unittest.mock.MagicMock
-    e: TestPromptTxtGeneration
+    i: pytest,tempfile,code2llm.cli.{_export_code2logic,_export_prompt_txt},pathlib.Path,unittest.mock.{MagicMock,patch}
+    e: TestPromptTxtGeneration,TestCode2logicExport
     TestPromptTxtGeneration: temp_output_dir(0),mock_args(0),test_prompt_txt_not_generated_without_code2logic_format(2),test_prompt_txt_generated_with_code2logic_format(2),test_prompt_txt_generated_with_all_format(2)  # Test the _export_prompt_txt function...
+    TestCode2logicExport: temp_output_dir(0),test_export_code2logic_adds_quiet_flag_when_not_verbose(1),test_export_code2logic_does_not_add_quiet_flag_when_verbose(1),test_prompt_txt_no_verbose_output(1)  # Test the _export_code2logic wrapper.
   tests/test_refactoring_engine.py:
     i: pytest,ast,code2llm.analysis.call_graph.CallGraphExtractor,code2llm.analysis.dfg.DFGExtractor,code2llm.analysis.smells.SmellDetector,code2llm.core.config.Config,code2llm.refactor.prompt_engine.PromptEngine
     e: test_metrics_calculation,test_mutation_tracking,test_smell_detection

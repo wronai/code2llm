@@ -406,6 +406,9 @@ def _export_code2logic(args, source_path: Path, output_dir: Path, formats: list[
         '-o', str(output_dir),
     ]
 
+    if not args.verbose:
+        cmd.append('-q')
+
     try:
         res = subprocess.run(cmd, capture_output=True, text=True)
     except Exception as e:
