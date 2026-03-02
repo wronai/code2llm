@@ -1,3 +1,21 @@
+## [0.5.13] - 2026-03-02
+
+### Summary
+
+feat(goal): code analysis engine
+
+### Docs
+
+- docs: update context.md
+
+### Other
+
+- update code2llm/cli.py
+- update project/analysis.toon
+- update project/evolution.toon
+- update project/project.toon
+
+
 ## [0.5.12] - 2026-03-02
 
 ### Summary
