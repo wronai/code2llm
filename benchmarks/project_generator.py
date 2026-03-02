@@ -40,7 +40,7 @@ def create_core_py(project: Path) -> None:
             return _cache.get(key)
 
         def process_everything(data: list, config: Config) -> Result:
-            """God function — does too many things."""
+            """God function - does too many things."""
             # validate
             if not data:
                 return Result(errors=["empty data"])
@@ -80,7 +80,7 @@ def create_core_py(project: Path) -> None:
             return Result(data=results, metadata=metadata)
 
         def unused_helper(x: int) -> int:
-            """Dead code — never called."""
+            """Dead code - never called."""
             return x * 2 + 1
 
         def main(config: Config) -> None:
@@ -142,7 +142,7 @@ def create_validation_py(project: Path) -> None:
             return {"items": raw_data}
 
         def validate_schema(data: Dict) -> Dict:
-            """Validate data schema — pure function."""
+            """Validate data schema - pure function."""
             errors = []
             if "items" not in data:
                 errors.append("missing 'items' key")
@@ -151,7 +151,7 @@ def create_validation_py(project: Path) -> None:
             return data
 
         def validate_rules(data: Dict) -> Dict:
-            """Validate business rules — pure function."""
+            """Validate business rules - pure function."""
             errors = data.get("schema_errors", [])
             items = data.get("items", [])
             for i, item in enumerate(items):
@@ -176,7 +176,7 @@ def create_utils_py(project: Path) -> None:
         from core import Result, Config
 
         class Validator:
-            """Duplicate of core Validator — should be merged."""
+            """Duplicate of core Validator - should be merged."""
             def __init__(self, config: Config):
                 self.config = config
 
@@ -193,7 +193,7 @@ def create_utils_py(project: Path) -> None:
                 print(f"ERRORS: {result.errors}")
 
         def process_data(data, config):
-            """No type annotations — bad practice."""
+            """No type annotations - bad practice."""
             v = Validator(config)
             return v.validate(data)
     """))
@@ -204,7 +204,7 @@ def add_validator_to_core(project: Path) -> None:
     with open(project / "core.py", "a") as f:
         f.write(textwrap.dedent("""
         class Validator:
-            """Validator — also exists in utils.py."""
+            """Validator - also exists in utils.py."""
             def __init__(self, config: Config):
                 self.config = config
 

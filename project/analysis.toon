@@ -5,8 +5,8 @@ HEALTH[5]:
   🟡 CC    main CC=17 (limit:15)
   🟡 CC    _find_data_pipelines CC=17 (limit:15)
   🟡 CC    _export_code2logic CC=15 (limit:15)
-  🟡 CC    _resolve_callee CC=18 (limit:15)
   🟡 CC    _infer_from_name CC=17 (limit:15)
+  🟡 CC    _resolve_callee CC=18 (limit:15)
 
 REFACTOR[1]:
   1. split 5 high-CC methods  (CC>15)
@@ -127,7 +127,6 @@ FUNCTIONS (CC≥10, 41 of 590):
    14.0  StreamingScanner.quick_scan_file           15n   2exit  loops+cond+ret
    13.0  parse_evolution_metrics                    16n   2exit  loops+cond+ret
    13.0  parse_evolution_metrics                    16n   2exit  loops+cond+ret
-   13.0  _export_prompt_txt                         11n   2exit  loops+cond+ret
    13.0  PipelineDetector._find_pipeline_paths      17n   2exit  loops+cond+ret
    13.0  SideEffectDetector._check_calls            22n   3exit  cond+ret
    13.0  EntityResolver.resolve                     18n   2exit  loops+cond+ret
@@ -137,18 +136,19 @@ FUNCTIONS (CC≥10, 41 of 590):
    13.0  MermaidExporter.export_compact             14n   1exit  loops+cond
    13.0  generate_single_png                         2n   1exit  
    12.0  DataAnalyzer._find_state_patterns           9n   2exit  loops+cond+ret
+   12.0  _export_prompt_txt                         11n   2exit  loops+cond+ret
    12.0  _export_mermaid                             8n   1exit  cond
    12.0  StreamingAnalyzer.analyze_streaming        16n   1exit  loops+cond
-   12.0  PromptEngine._build_context_for_smell       5n   2exit  cond+ret
    12.0  _check_node_ids                            15n   1exit  loops+cond
+   12.0  PromptEngine._build_context_for_smell       5n   2exit  cond+ret
    12.0  MetricsComputer._compute_file_metrics      21n   2exit  loops+cond+ret
    12.0  FileAnalyzer._process_function             14n   2exit  loops+cond+ret
    11.0  ToonRenderer.render_refactor               14n   3exit  loops+cond+ret
    10.0  NLPPipeline._format_action                 29n  10exit  cond+ret
+   10.0  ContextExporter._trace_flow                14n   3exit  loops+cond+ret
    10.0  FlowRenderer.render_pipelines               9n   3exit  loops+cond+ret
    10.0  EvolutionExporter._build_context            3n   2exit  ret
    10.0  EvolutionExporter._render_next             16n   3exit  loops+cond+ret
-   10.0  ContextExporter._trace_flow                14n   3exit  loops+cond+ret
    10.0  FlowExporter._infer_invariant              21n   8exit  cond+ret
    10.0  _scan_brackets                             11n   1exit  loops+cond
    10.0  render_llm_flow_md                         16n   2exit  loops+cond+ret
@@ -184,9 +184,9 @@ CLASSES:
   ContextExporter                ████████████              14m  CC̄=4.8   max=10  
   FlowExporter                   ████████████              14m  CC̄=5.6   max=10  
   PipelineDetector               ███████████               13m  CC̄=6.9   max=18    !!
+  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   IntentMatcher                  ███████████               13m  CC̄=3.5   max=7   
   QueryNormalizer                ███████████               13m  CC̄=1.8   max=6   
-  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   MapExporter                    ███████████               13m  CC̄=4.8   max=13  
   DFGExtractor                   ██████████                12m  CC̄=3.6   max=7   
   MermaidExporter                ██████████                12m  CC̄=5.3   max=13  
@@ -212,9 +212,9 @@ CLASSES:
   ToonExporter                   ██                         3m  CC̄=1.0   max=1   
   FastFileFilter                 ██                         3m  CC̄=6.0   max=8   
   SideEffectInfo                 █                          2m  CC̄=1.0   max=1   
-  BaseModel                      █                          2m  CC̄=5.0   max=8   
   NLPConfig                      █                          2m  CC̄=1.0   max=1   
   IntentMatchingResult           █                          2m  CC̄=2.0   max=2   
+  BaseModel                      █                          2m  CC̄=5.0   max=8   
   EntityResolutionResult         █                          2m  CC̄=2.5   max=3   
   Pipeline                                                  1m  CC̄=3.0   max=3   
   Exporter                                                  1m  CC̄=1.0   max=1   
@@ -228,6 +228,11 @@ CLASSES:
   DepthConfig                                               0m  CC̄=0.0   max=0.0 
   OutputConfig                                              0m  CC̄=0.0   max=0.0 
   Config                                                    0m  CC̄=0.0   max=0.0 
+  NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
+  IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
+  EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
+  MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
+  IntentMatch                                               0m  CC̄=0.0   max=0.0 
   FlowNode                                                  0m  CC̄=0.0   max=0.0 
   FlowEdge                                                  0m  CC̄=0.0   max=0.0 
   FunctionInfo                                              0m  CC̄=0.0   max=0.0 
@@ -237,11 +242,6 @@ CLASSES:
   CodeSmell                                                 0m  CC̄=0.0   max=0.0 
   Mutation                                                  0m  CC̄=0.0   max=0.0 
   DataFlow                                                  0m  CC̄=0.0   max=0.0 
-  NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
-  IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
-  EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
-  MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
-  IntentMatch                                               0m  CC̄=0.0   max=0.0 
   Entity                                                    0m  CC̄=0.0   max=0.0 
   NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   PipelineStage                                             0m  CC̄=0.0   max=0.0 
@@ -486,10 +486,6 @@ S...
       is_successful(0)  CC=3.0
     NLPPipeline  # Main NLP processing pipeline (4a-4e)....
       __init__(1)  CC=2.0
-  code2llm/exporters/evolution_exporter.py:
-    e: EvolutionExporter
-    EvolutionExporter  # Export evolution.toon — prioritized refactoring queue....
-      _is_excluded(1)  CC=5.0
   code2llm/exporters/context_exporter.py:
     e: ContextExporter
     ContextExporter  # Export LLM-ready analysis summary with architecture and flow...
@@ -507,6 +503,10 @@ S...
         → _get_behavioral_patterns(1)  CC=4.0
         → _get_api_surface(1)  CC=5.0
         → _get_system_interactions(1)  CC=5.0
+  code2llm/exporters/evolution_exporter.py:
+    e: EvolutionExporter
+    EvolutionExporter  # Export evolution.toon — prioritized refactoring queue....
+      _is_excluded(1)  CC=5.0
   code2llm/exporters/flow_exporter.py:
     e: FlowExporter
     FlowExporter  # Export to flow.toon — data-flow focused format.
@@ -691,11 +691,6 @@ Unlike simple L...
     e: APIHandler
     APIHandler  # Handles API requests and responses....
       __init__(0)  CC=1.0
-  examples/streaming-analyzer/sample_project/database.py:
-    e: DatabaseConnection
-    DatabaseConnection  # Simple database connection simulator....
-      __init__(1)  CC=2.0
-        → _load_data(0)  CC=3.0
   examples/streaming-analyzer/demo.py:
     e: demo_quick_strategy,demo_standard_strategy,demo_deep_strategy,demo_incremental_analysis,demo_memory_limited,demo_custom_progress,main
     demo_quick_strategy()
@@ -705,6 +700,16 @@ Unlike simple L...
     demo_memory_limited()
     demo_custom_progress()
     main()
+  examples/streaming-analyzer/sample_project/database.py:
+    e: DatabaseConnection
+    DatabaseConnection  # Simple database connection simulator....
+      __init__(1)  CC=2.0
+        → _load_data(0)  CC=3.0
+  badges/server.py:
+    e: index,generate_badges,get_badges
+    index()
+    generate_badges()
+    get_badges()
   scripts/bump_version.py:
     e: get_current_version,parse_version,format_version,bump_version,update_pyproject_toml,update_version_file,main
     get_current_version()
@@ -714,11 +719,6 @@ Unlike simple L...
     update_pyproject_toml(new_version)
     update_version_file(new_version)
     main()
-  badges/server.py:
-    e: index,generate_badges,get_badges
-    index()
-    generate_badges()
-    get_badges()
   benchmarks/benchmark_format_quality.py:
     e: _print_benchmark_header,_print_ground_truth_info,_generate_format_outputs,_create_offline_scores,run_benchmark
     _print_benchmark_header()

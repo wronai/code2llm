@@ -1,6 +1,6 @@
 """Python - invalid code."""
 from dataclasses import dataclass
-from typing import List Optional  # brak przecinka
+from typing import List, Optional  # brak przecinka
 
 
 @dataclass
