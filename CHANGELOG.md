@@ -1,3 +1,14 @@
+## [0.5.11] - 2026-03-02
+
+### Summary
+
+refactor(benchmarks): configuration management system
+
+### Other
+
+- update benchmarks/project_generator.py
+
+
 ## [0.5.10] - 2026-03-02
 
 ### Summary

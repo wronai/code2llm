@@ -10,7 +10,7 @@ from pathlib import Path
 
 def create_core_py(project: Path) -> None:
     """Utwórz core.py z god function, hub type, high fan-out i side-effect."""
-    (project / "core.py").write_text(textwrap.dedent("""\
+    (project / "core.py").write_text(textwrap.dedent("""
         from typing import List, Dict, Optional
         from dataclasses import dataclass
 
