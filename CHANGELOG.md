@@ -1,3 +1,28 @@
+## [0.5.9] - 2026-03-02
+
+### Summary
+
+feat(config): CLI interface improvements
+
+### Docs
+
+- docs: update README
+
+### Test
+
+- update tests/test_prompt_txt.py
+
+### Build
+
+- update pyproject.toml
+- update setup.py
+
+### Other
+
+- update code2llm/cli.py
+- update requirements.txt
+
+
 ## [0.5.7] - 2026-03-01
 
 ### Summary

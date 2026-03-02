@@ -6,6 +6,8 @@ Analyze control flow, data flow, and call graphs of Python codebases.
 """
 
 import argparse
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 from typing import List, Optional
@@ -50,6 +52,7 @@ Format Options (-f):
   map       — Structural map (map.toon) — modules, imports, signatures
   flow      — Data-flow analysis (flow.toon) — pipelines, contracts, types
   context   — LLM narrative (context.md) — architecture summary
+  code2logic — Generate project logic (project.toon) via external code2logic
   yaml      — Standard YAML format
   json      — Machine-readable JSON
   mermaid   — Flowchart diagrams (flow.mmd, calls.mmd, compact_flow.mmd)
@@ -86,7 +89,7 @@ Strategy Options (--strategy):
     parser.add_argument(
         '-f', '--format',
         default='toon',
-        help='Output formats: toon,map,flow,context,yaml,json,mermaid,evolution,png,all (default: toon)'
+        help='Output formats: toon,map,flow,context,code2logic,yaml,json,mermaid,evolution,png,all (default: toon)'
     )
     
     parser.add_argument(
@@ -256,7 +259,7 @@ def main():
 
     # Analyze → Export
     result = _run_analysis(args, source_path, output_dir)
-    _run_exports(args, result, output_dir)
+    _run_exports(args, result, output_dir, source_path=source_path)
 
     if args.verbose:
         print(f"\nAll outputs saved to: {output_dir}")
@@ -383,11 +386,115 @@ def _export_readme(args, result, output_dir: Path):
         print(f"  - README (documentation): {filepath}")
 
 
-def _run_exports(args, result, output_dir: Path):
+def _export_code2logic(args, source_path: Path, output_dir: Path, formats: list[str]) -> None:
+    """Generate project.toon using external code2logic tool."""
+    if 'code2logic' not in formats and 'all' not in formats:
+        return
+
+    if shutil.which('code2logic') is None:
+        print("Error: requested format 'code2logic' but 'code2logic' executable was not found in PATH.", file=sys.stderr)
+        print("Install it with: pip install code2logic --upgrade", file=sys.stderr)
+        sys.exit(1)
+
+    # Align with the user's bash script:
+    # code2logic ./ -f toon --compact --name project -o ./project
+    cmd = [
+        'code2logic', str(source_path),
+        '-f', 'toon',
+        '--compact',
+        '--name', 'project',
+        '-o', str(output_dir),
+    ]
+
+    try:
+        res = subprocess.run(cmd, capture_output=True, text=True)
+    except Exception as e:
+        print(f"Error running code2logic: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if res.returncode != 0:
+        if res.stdout:
+            print(res.stdout, file=sys.stderr)
+        if res.stderr:
+            print(res.stderr, file=sys.stderr)
+        print(f"Error: code2logic failed (exit code {res.returncode}).", file=sys.stderr)
+        sys.exit(res.returncode)
+
+    # Normalize output location to: <output_dir>/project.toon
+    candidate_paths = [
+        output_dir / 'project.toon',
+        output_dir / 'project' / 'project.toon',
+        output_dir / 'project.toon.txt',
+    ]
+    found = next((p for p in candidate_paths if p.exists()), None)
+    if found is None:
+        # If code2logic changes its naming, show its stdout/stderr to help debugging.
+        if res.stdout:
+            print(res.stdout, file=sys.stderr)
+        if res.stderr:
+            print(res.stderr, file=sys.stderr)
+        print("Error: code2logic completed but project.toon was not found in the output directory.", file=sys.stderr)
+        sys.exit(1)
+
+    target = output_dir / 'project.toon'
+    if found != target:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(found, target)
+
+    if args.verbose:
+        print(f"  - CODE2LOGIC (project logic): {target}")
+
+
+def _export_prompt_txt(args, output_dir: Path, formats: list[str]) -> None:
+    """Generate prompt.txt useful to send to an LLM."""
+    # Keep it conservative: generate when code2logic is requested.
+    if 'code2logic' not in formats and 'all' not in formats:
+        return
+
+    prompt_path = output_dir / 'prompt.txt'
+
+    files = [
+        'analysis.toon',
+        'context.md',
+        'evolution.toon',
+        'project.toon',
+        'README.md',
+    ]
+    existing = [f for f in files if (output_dir / f).exists()]
+    missing = [f for f in files if (output_dir / f).exists() is False]
+
+    lines: list[str] = []
+    lines.append("You are an AI assistant helping me understand and improve a codebase.")
+    lines.append("Use the attached/generated files as the authoritative context.")
+    lines.append("")
+    lines.append("Files:")
+    for f in existing:
+        lines.append(f"- {f}")
+    if missing:
+        lines.append("")
+        lines.append("Missing (not generated in this run):")
+        for f in missing:
+            lines.append(f"- {f}")
+    lines.append("")
+    lines.append("Task:")
+    lines.append("- Summarize the architecture and main flows.")
+    lines.append("- Identify the highest-risk areas and propose a refactoring plan.")
+    lines.append("- If you suggest changes, keep behavior backward compatible and provide concrete steps.")
+    lines.append("")
+    lines.append("Constraints:")
+    lines.append("- Prefer minimal, incremental changes.")
+    lines.append("- If uncertain, ask clarifying questions.")
+
+    prompt_path.write_text("\n".join(lines) + "\n", encoding='utf-8')
+    if args.verbose:
+        print(f"  - PROMPT: {prompt_path}")
+
+
+def _run_exports(args, result, output_dir: Path, source_path: Optional[Path] = None):
     """Export analysis results in requested formats."""
     formats = [f.strip() for f in args.format.split(',')]
     if 'all' in formats:
-        formats = ['toon', 'map', 'flow', 'context', 'yaml', 'json', 'mermaid', 'evolution']
+        formats = ['toon', 'map', 'flow', 'context', 'code2logic', 'yaml', 'json', 'mermaid', 'evolution']
 
     try:
         _export_simple_formats(args, result, output_dir, formats)
@@ -398,6 +505,10 @@ def _run_exports(args, result, output_dir: Path):
         _export_evolution(args, result, output_dir)
         _export_data_structures(args, result, output_dir)
         _export_context_fallback(args, result, output_dir, formats)
+
+        if source_path is not None:
+            _export_code2logic(args, source_path, output_dir, formats)
+            _export_prompt_txt(args, output_dir, formats)
         
         if args.refactor:
             _export_refactor_prompts(args, result, output_dir)

@@ -34,6 +34,7 @@ setup(
         'matplotlib>=3.4',
         'pyyaml>=5.4',
         'numpy>=1.20',
+        'code2logic',
     ],
     extras_require={
         'dev': [

@@ -5,3 +5,4 @@ pyyaml>=6.0
 scipy>=1.7.0
 radon>=5.1
 psutil>=5.8.0
+code2logic
