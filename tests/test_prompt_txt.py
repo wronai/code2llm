@@ -70,14 +70,14 @@ class TestPromptTxtGeneration:
         content = prompt_file.read_text()
         
         # Check that existing files are listed with descriptions
-        assert "PLIKI DO ANALIZY:" in content
+        assert "FILES FOR ANALYSIS:" in content
         for f in expected_files:
             assert f in content, f"Existing file {f} should be listed in prompt.txt"
             # Check for description line
-            assert f"CEL:" in content, "Description should be present for each file"
+            assert f"PURPOSE:" in content, "Description should be present for each file"
         
         # Check that missing files are marked
-        assert "BRAKUJĄCE PLIKI" in content or "project.toon" in content, "Missing files should be indicated"
+        assert "MISSING FILES" in content or "project.toon" in content, "Missing files should be indicated"
     
     def test_prompt_txt_shows_missing_files(self, temp_output_dir, mock_args):
         """Test that prompt.txt shows missing files section when files don't exist."""
@@ -89,7 +89,7 @@ class TestPromptTxtGeneration:
         prompt_file = temp_output_dir / 'prompt.txt'
         content = prompt_file.read_text()
         
-        assert "BRAKUJĄCE PLIKI" in content, "Missing section should be present when files don't exist"
+        assert "MISSING FILES" in content, "Missing section should be present when files don't exist"
         assert "analysis.toon" in content, "Missing files should be listed"
     
     def test_prompt_txt_contains_task_instructions(self, temp_output_dir, mock_args):
@@ -101,10 +101,10 @@ class TestPromptTxtGeneration:
         prompt_file = temp_output_dir / 'prompt.txt'
         content = prompt_file.read_text()
         
-        # Check for key sections in Polish
-        assert "ZADANIE DLA LLM:" in content, "Task section should be present"
-        assert "WYMAGANIA:" in content, "Requirements section should be present"
-        assert "Przeanalizuj załączone pliki" in content, "Main instruction should be present"
+        # Check for key sections in English
+        assert "TASK FOR LLM:" in content, "Task section should be present"
+        assert "REQUIREMENTS:" in content, "Requirements section should be present"
+        assert "Analyze the attached files" in content, "Main instruction should be present"
     
     def test_prompt_txt_content_structure(self, temp_output_dir, mock_args):
         """Test the overall structure of generated prompt.txt."""
@@ -121,19 +121,19 @@ class TestPromptTxtGeneration:
         content = prompt_file.read_text()
         lines = content.split('\n')
         
-        # Check structure in Polish
-        assert any("Przeanalizuj załączone pliki" in line for line in lines), \
-            "Prompt should start with Polish instruction"
-        assert any("PLIKI DO ANALIZY:" in line for line in lines), \
-            "Files section should be present in Polish"
+        # Check structure in English
+        assert any("Analyze the attached files" in line for line in lines), \
+            "Prompt should start with English instruction"
+        assert any("FILES FOR ANALYSIS:" in line for line in lines), \
+            "Files section should be present in English"
         
         # All files should be listed without missing section
-        assert "BRAKUJĄCE PLIKI" not in content, "No missing section when all files exist"
+        assert "MISSING FILES" not in content, "No missing section when all files exist"
         for f in all_files:
             assert f in content, f"All files should be listed: {f}"
         
         # Check for descriptions
-        assert "CEL:" in content, "Descriptions should be present"
+        assert "PURPOSE:" in content, "Descriptions should be present"
     
     def test_prompt_txt_no_verbose_output(self, temp_output_dir):
         """Test that no print occurs when verbose is False."""

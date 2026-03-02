@@ -465,34 +465,34 @@ def _export_prompt_txt(args, output_dir: Path, formats: list[str]) -> None:
     missing = [name for name, desc in files if (output_dir / name).exists() is False]
 
     lines: list[str] = []
-    lines.append("Przeanalizuj załączone pliki poniżej i przeprowadź refaktoryzację projektu ./")
+    lines.append("Analyze the attached files below and perform refactoring of the project ./")
     lines.append("")
-    lines.append("PLIKI DO ANALIZY:")
+    lines.append("FILES FOR ANALYSIS:")
     lines.append("")
     
     for name, desc in existing:
         lines.append(f"{name}")
-        lines.append(f"CEL: {desc}")
+        lines.append(f"PURPOSE: {desc}")
         lines.append("")
     
     if missing:
-        lines.append("BRAKUJĄCE PLIKI (nie wygenerowane w tym uruchomieniu):")
+        lines.append("MISSING FILES (not generated in this run):")
         for name in missing:
             lines.append(f"- {name}")
         lines.append("")
     
-    lines.append("ZADANIE DLA LLM:")
-    lines.append("1. Przeanalizuj health diagnostics (analysis.toon) - zidentyfikuj krytyczne problemy")
-    lines.append("2. Sprawdź refactoring queue (evolution.toon) - priorytetyzowane akcje")
-    lines.append("3. Zrozum architekturę (context.md) - struktura modułów i przepływy")
-    lines.append("4. Przejrzyj logikę projektu (project.toon) - zależności i struktura")
-    lines.append("5. Przygotuj plan refaktoryzacji - konkretne kroki z priorytetami")
+    lines.append("TASK FOR LLM:")
+    lines.append("1. Analyze health diagnostics (analysis.toon) - identify critical issues")
+    lines.append("2. Check refactoring queue (evolution.toon) - prioritized actions")
+    lines.append("3. Understand architecture (context.md) - module structure and flows")
+    lines.append("4. Review project logic (project.toon) - dependencies and structure")
+    lines.append("5. Prepare refactoring plan - concrete steps with priorities")
     lines.append("")
-    lines.append("WYMAGANIA:")
-    lines.append("- Utrzymaj zgodność API (nie zmieniaj publicznych interfejsów)")
-    lines.append("- Stosuj zmiany inkrementalne (małe, bezpieczne kroki)")
-    lines.append("- Podaj konkretne ścieżki plików i nazwy funkcji do zmiany")
-    lines.append("- Wyjaśnij ryzyka każdej proponowanej zmiany")
+    lines.append("REQUIREMENTS:")
+    lines.append("- Maintain API compatibility (do not change public interfaces)")
+    lines.append("- Use incremental changes (small, safe steps)")
+    lines.append("- Provide concrete file paths and function names to change")
+    lines.append("- Explain risks of each proposed change")
 
     prompt_path.write_text("\n".join(lines) + "\n", encoding='utf-8')
     if args.verbose:
