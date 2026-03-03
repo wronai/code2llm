@@ -317,6 +317,8 @@ def _run_analysis(args, source_path: Path, output_dir: Path):
     if use_chunking:
         if args.verbose:
             print(f"Large repository detected - using chunked analysis")
+        # Set chunk flag so export knows to use chunked mode
+        args.chunk = True
         return _run_chunked_analysis(args, source_path, output_dir)
     
     # Standard single-analysis flow

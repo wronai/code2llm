@@ -1,3 +1,15 @@
+## [0.5.22] - 2026-03-03
+
+### Summary
+
+feat(goal): CLI interface improvements
+
+### Other
+
+- update code2llm/cli.py
+- update code2llm/core/large_repo.py
+
+
 ## [0.5.21] - 2026-03-03
 
 ### Summary

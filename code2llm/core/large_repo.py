@@ -222,6 +222,10 @@ class HierarchicalRepoSplitter:
                 'lib', 'lib64', 'site-packages', 'include', 'bin', 'share',  # venv internals
             }
             
+            # Skip wheel packages (e.g., networkx-3.6.1-py3-none-any)
+            if '-py3-none-any' in dir_name or dir_name.endswith('.dist-info'):
+                continue
+            
             if dir_name.startswith('.') or dir_name in skip_dirs:
                 continue
             
