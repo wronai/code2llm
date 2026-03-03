@@ -1,3 +1,21 @@
+## [0.5.19] - 2026-03-03
+
+### Summary
+
+feat(goal): CLI interface improvements
+
+### Docs
+
+- docs: update README
+
+### Other
+
+- update code2llm/cli.py
+- update code2llm/cli_exports.py
+- update code2llm/core/large_repo.py
+- update code2llm/core/toon_size_manager.py
+
+
 ## [0.5.18] - 2026-03-03
 
 ### Summary

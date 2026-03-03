@@ -1,10 +1,11 @@
 """Export functions for CLI - extracted from cli.py to reduce module complexity."""
 
+import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from .exporters import (
     YAMLExporter, JSONExporter, MermaidExporter,
@@ -71,10 +72,16 @@ def _export_code2logic(args, source_path: Path, output_dir: Path, formats: list[
 
     found = _find_code2logic_output(output_dir, res)
     target = output_dir / 'project.toon'
-    _normalize_code2logic_output(found, target)
+    final_files = _normalize_code2logic_output(found, target, args)
 
     if args.verbose:
-        print(f"  - CODE2LOGIC (project logic): {target}")
+        if len(final_files) == 1:
+            print(f"  - CODE2LOGIC (project logic): {final_files[0]}")
+        else:
+            print(f"  - CODE2LOGIC (project logic): {len(final_files)} parts")
+            for f in final_files:
+                size_kb = os.path.getsize(f) / 1024
+                print(f"    → {f.name}: {size_kb:.1f}KB")
 
 
 def _should_run_code2logic(formats: list[str]) -> bool:
@@ -155,11 +162,22 @@ def _find_code2logic_output(output_dir: Path, res) -> Path:
     return found
 
 
-def _normalize_code2logic_output(found: Path, target: Path) -> None:
-    """Normalize output location to target path."""
+def _normalize_code2logic_output(found: Path, target: Path, args) -> List[Path]:
+    """Normalize output location to target path and check size limits."""
     if found != target:
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(found, target)
+        found = target
+    
+    # Check and split if exceeds 256KB limit
+    from .core.toon_size_manager import manage_toon_size
+    return manage_toon_size(
+        found,
+        target.parent,
+        max_kb=256,
+        prefix="project",
+        verbose=getattr(args, 'verbose', False)
+    )
 
 
 def _export_prompt_txt(args, output_dir: Path, formats: list[str], source_path: Optional[Path] = None) -> None:
@@ -383,29 +401,32 @@ def _export_single_project(args, result, output_dir: Path, formats: list, source
 
 def _export_chunked_results(args, result, output_dir: Path, source_path: Path, formats: list):
     """Export chunked analysis results to subproject directories."""
-    from .core.large_repo import LargeRepoSplitter
+    from .core.large_repo import HierarchicalRepoSplitter
     
-    splitter = LargeRepoSplitter()
-    subprojects = splitter.detect_subprojects(source_path)
+    splitter = HierarchicalRepoSplitter(size_limit_kb=args.chunk_size)
+    subprojects = splitter.get_analysis_plan(source_path)
     
     # Filter subprojects same as in analysis
     if hasattr(args, 'only_subproject') and args.only_subproject:
-        subprojects = [sp for sp in subprojects if sp.name == args.only_subproject]
+        subprojects = [sp for sp in subprojects if sp.name == args.only_subproject or sp.name.startswith(args.only_subproject + '.')]
     
     if hasattr(args, 'skip_subprojects') and args.skip_subprojects:
-        subprojects = [sp for sp in subprojects if sp.name not in args.skip_subprojects]
+        subprojects = [sp for sp in subprojects if not any(sp.name.startswith(skip) for skip in args.skip_subprojects)]
     
     # Export each subproject to its own directory
     for sp in subprojects:
-        sp_output_dir = output_dir / sp.name
+        sp_output_dir = output_dir / sp.name.replace('.', '_')
         if not sp_output_dir.exists():
-            continue  # Skip if subproject wasn't analyzed
+            continue
         
-        # Check for subproject result file
-        sp_result_file = sp_output_dir / 'analysis.yaml'
-        if sp_result_file.exists():
-            if args.verbose:
-                print(f"  - Exported {sp.name} to {sp_output_dir}")
+        # Check for subproject result files
+        for ext in ['.toon', '.yaml', '.json']:
+            result_file = sp_output_dir / f'analysis{ext}'
+            if result_file.exists():
+                if args.verbose:
+                    level_name = {0: 'root', 1: 'L1', 2: 'L2'}.get(sp.level, f'L{sp.level}')
+                    print(f"  - Exported [{level_name}] {sp.name}")
+                break
     
     # Also create merged summary in root output dir
     _export_simple_formats(args, result, output_dir, ['toon', 'context'])

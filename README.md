@@ -46,45 +46,62 @@ code2llm ./ -f all --max-memory 500
 code2llm ./ -f all --no-png
 ```
 
-### Large Repository Analysis (Chunking)
-For repositories >100 files, automatic chunking splits analysis into smaller subprojects:
+### Large Repository Analysis (Hierarchical Chunking)
+For large repositories, automatic hierarchical chunking ensures each output file stays under 256KB:
 
 ```bash
-# Auto-chunking when >100 files detected
+# Auto-chunking when estimated output >256KB
 code2llm ./ -f toon,evolution,code2logic --verbose
 
 # Force chunking with custom size limit
 code2llm ./ -f toon --chunk --chunk-size 256
 
-# Analyze only specific subproject
+# Analyze only specific subproject (matches level-1 or level-2 names)
 code2llm ./ -f toon --only-subproject src
+code2llm ./ -f toon --only-subproject src.core
 
-# Skip tests and examples
-code2llm ./ -f toon --skip-subprojects tests examples
+# Skip specific directories
+code2llm ./ -f toon --skip-subprojects tests examples docs
 
-# Customize file limit per chunk
-code2llm ./ -f toon --chunk --max-files-per-chunk 50
+# Customize chunking parameters
+code2llm ./ -f toon --chunk --max-files-per-chunk 50 --chunk-size 512
 ```
 
-**Chunking Benefits:**
-- Each subproject analyzed separately (examples/, tests/, src/, etc.)
-- Output limited to ~256KB per file (configurable)
-- Parallel processing of chunks possible
-- Reduced memory usage for large repos
+**Hierarchical Splitting Strategy:**
+1. **Level 0**: Entire project (if small enough, <256KB)
+2. **Level 1**: Top-level directories (src/, tests/, examples/)
+3. **Level 2**: Subdirectories if parent >256KB (src.core/, src.utils/)
+4. **Level 3**: File chunks if still too large
 
-**Output Structure:**
+**Example Output Structure:**
 ```
 ./project/
-  ├── src/                    # Core code analysis
-  │   ├── analysis.toon
+  ├── src/                    # Level 1: src/ fits in 256KB
+  │   ├── analysis.toon       # (~200KB)
   │   └── evolution.toon
-  ├── tests/                 # Test code analysis
+  ├── src_core/               # Level 2: src/core/ was too big
+  │   ├── analysis.toon       # (~180KB)
+  │   └── evolution.toon
+  ├── src_utils_part1/        # Level 3: split by file count
+  │   └── analysis.toon         # (~150KB)
+  ├── tests/                  # Level 1: tests/
   │   └── analysis.toon
-  ├── examples/              # Examples analysis
+  ├── examples/               # Level 1: examples/
   │   └── analysis.toon
-  ├── analysis.toon          # Merged summary
-  └── evolution.toon         # Full refactoring queue
+  ├── analysis.toon           # Merged summary (all levels)
+  └── evolution.toon          # Full refactoring queue
 ```
+
+**Size Estimation:**
+- ~3KB per Python file in TOON format
+- Auto-detect chunking when: `file_count × 3KB > 256KB`
+- Example: 100 files ≈ 300KB → triggers chunking
+
+**Benefits:**
+- Each output file <256KB (easy for LLMs to process)
+- Natural code boundaries (module/submodule level)
+- Incremental analysis possible
+- Parallel processing ready
 
 ### Refactoring Focus
 ```bash

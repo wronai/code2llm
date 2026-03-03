@@ -303,7 +303,9 @@ def _run_analysis(args, source_path: Path, output_dir: Path):
     Returns AnalysisResult or exits on error.
     For large repos, may analyze in chunks and merge results.
     """
-    from .core.large_repo import LargeRepoSplitter, should_use_chunking
+    from .core.large_repo import (
+        HierarchicalRepoSplitter, should_use_chunking, get_analysis_plan
+    )
     
     # Check if we should use chunked analysis
     use_chunking = (
@@ -347,39 +349,57 @@ def _run_analysis(args, source_path: Path, output_dir: Path):
 
 
 def _run_chunked_analysis(args, source_path: Path, output_dir: Path):
-    """Analyze large repository in chunks by subproject."""
-    from .core.large_repo import LargeRepoSplitter, SubProject
+    """Analyze large repository using hierarchical chunking.
     
-    splitter = LargeRepoSplitter(
+    Strategy:
+    1. Level 1 folders first
+    2. If >256KB, split to level 2 subfolders
+    3. If still too big, use file chunking
+    """
+    from .core.large_repo import HierarchicalRepoSplitter
+    
+    splitter = HierarchicalRepoSplitter(
         size_limit_kb=args.chunk_size,
         max_files_per_chunk=args.max_files_per_chunk
     )
     
-    # Get analysis plan
+    # Get hierarchical analysis plan
     subprojects = splitter.get_analysis_plan(source_path)
     
     if args.verbose:
-        print(f"Repository split into {len(subprojects)} subprojects:")
+        print(f"Hierarchical analysis plan ({len(subprojects)} chunks):")
+        level_counts = {}
         for sp in subprojects:
-            print(f"  - {sp.name}: {sp.file_count} files (~{sp.estimated_size_kb}KB)")
+            level_counts[sp.level] = level_counts.get(sp.level, 0) + 1
+        
+        for level in sorted(level_counts.keys()):
+            level_name = {0: 'root', 1: 'level-1', 2: 'level-2', 3: 'file-chunks'}.get(level, f'level-{level}')
+            print(f"  {level_name}: {level_counts[level]} chunks")
+        
+        print("\nChunks:")
+        for sp in subprojects:
+            level_indicator = "  " * sp.level
+            size_info = f"~{sp.estimated_size_kb}KB"
+            print(f"{level_indicator}{sp.name}: {sp.file_count} files ({size_info})")
     
     # Filter subprojects if requested
     if args.only_subproject:
-        subprojects = [sp for sp in subprojects if sp.name == args.only_subproject]
+        subprojects = [sp for sp in subprojects if sp.name == args.only_subproject or sp.name.startswith(args.only_subproject + '.')]
         if not subprojects:
             print(f"Error: Subproject '{args.only_subproject}' not found", file=sys.stderr)
             sys.exit(1)
     
     if args.skip_subprojects:
-        subprojects = [sp for sp in subprojects if sp.name not in args.skip_subprojects]
+        subprojects = [sp for sp in subprojects if not any(sp.name.startswith(skip) for skip in args.skip_subprojects)]
     
     # Analyze each subproject
     all_results = []
     for i, subproject in enumerate(subprojects, 1):
         if args.verbose:
-            print(f"\n[{i}/{len(subprojects)}] Analyzing: {subproject.name}")
+            level_name = {0: 'root', 1: 'L1', 2: 'L2', 3: 'chunk'}.get(subproject.level, f'L{subproject.level}')
+            print(f"\n[{i}/{len(subprojects)}] Analyzing [{level_name}]: {subproject.name}")
         
-        sp_output_dir = output_dir / subproject.name
+        sp_output_dir = output_dir / subproject.name.replace('.', '_')
         sp_output_dir.mkdir(parents=True, exist_ok=True)
         
         result = _analyze_subproject(args, subproject, sp_output_dir)
@@ -391,7 +411,7 @@ def _run_chunked_analysis(args, source_path: Path, output_dir: Path):
     
     if args.verbose:
         print(f"\nChunked analysis complete:")
-        print(f"  - Subprojects analyzed: {len(all_results)}")
+        print(f"  - Chunks analyzed: {len(all_results)}")
         print(f"  - Total functions: {len(merged_result.functions)}")
         print(f"  - Total classes: {len(merged_result.classes)}")
     
