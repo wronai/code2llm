@@ -46,6 +46,46 @@ code2llm ./ -f all --max-memory 500
 code2llm ./ -f all --no-png
 ```
 
+### Large Repository Analysis (Chunking)
+For repositories >100 files, automatic chunking splits analysis into smaller subprojects:
+
+```bash
+# Auto-chunking when >100 files detected
+code2llm ./ -f toon,evolution,code2logic --verbose
+
+# Force chunking with custom size limit
+code2llm ./ -f toon --chunk --chunk-size 256
+
+# Analyze only specific subproject
+code2llm ./ -f toon --only-subproject src
+
+# Skip tests and examples
+code2llm ./ -f toon --skip-subprojects tests examples
+
+# Customize file limit per chunk
+code2llm ./ -f toon --chunk --max-files-per-chunk 50
+```
+
+**Chunking Benefits:**
+- Each subproject analyzed separately (examples/, tests/, src/, etc.)
+- Output limited to ~256KB per file (configurable)
+- Parallel processing of chunks possible
+- Reduced memory usage for large repos
+
+**Output Structure:**
+```
+./project/
+  ├── src/                    # Core code analysis
+  │   ├── analysis.toon
+  │   └── evolution.toon
+  ├── tests/                 # Test code analysis
+  │   └── analysis.toon
+  ├── examples/              # Examples analysis
+  │   └── analysis.toon
+  ├── analysis.toon          # Merged summary
+  └── evolution.toon         # Full refactoring queue
+```
+
 ### Refactoring Focus
 ```bash
 # Get refactoring recommendations

@@ -1,3 +1,14 @@
+## [0.5.18] - 2026-03-03
+
+### Summary
+
+docs(docs): configuration management system
+
+### Docs
+
+- docs: update README
+
+
 ## [0.5.17] - 2026-03-03
 
 ### Summary
