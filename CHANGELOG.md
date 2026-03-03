@@ -1,3 +1,27 @@
+## [0.5.21] - 2026-03-03
+
+### Summary
+
+feat(docs): code analysis engine
+
+### Docs
+
+- docs: update README
+- docs: update context.md
+- docs: update README
+- docs: update context.md
+
+### Other
+
+- update code2llm/core/large_repo.py
+- update project_multi/analysis.toon
+- update project_multi/examples_04_domain_specific/analysis.toon
+- update project_multi/project.toon
+- update project_multi/prompt.txt
+- update project_single/project.toon
+- update project_single/prompt.txt
+
+
 ## [0.5.20] - 2026-03-03
 
 ### Summary

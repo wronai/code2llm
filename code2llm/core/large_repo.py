@@ -46,7 +46,9 @@ class HierarchicalRepoSplitter:
     
     # Size limits
     DEFAULT_SIZE_LIMIT_KB = 256
-    MAX_FILES_PER_CHUNK = 50
+    MAX_FILES_PER_CHUNK = 120  # ~360KB at 3KB per file
+    TARGET_CHUNKS = 7  # Target number of chunks for large repos
+    MERGE_MARGIN_KB = 192  # Allow up to 448KB per chunk (256+192)
     
     def __init__(
         self,
@@ -81,33 +83,46 @@ class HierarchicalRepoSplitter:
         return self._split_hierarchically(project_path)
     
     def _split_hierarchically(self, project_path: Path) -> List[SubProject]:
-        """Split project hierarchically by level 1, then level 2 if needed."""
+        """Split project hierarchically with aggressive consolidation to ~7 chunks."""
         subprojects = []
         
-        # First pass: level 1 directories
+        # Get level 1 directories
         level1_dirs = self._get_level1_dirs(project_path)
         
+        # Calculate total size
+        total_kb = 0
+        dir_sizes = {}
         for dir_path in level1_dirs:
             files = self._collect_files_in_dir(dir_path, project_path)
+            estimated_kb = len(files) * 3
+            dir_sizes[dir_path] = (files, estimated_kb)
+            total_kb += estimated_kb
+        
+        # Strategy: If total fits in ~7 chunks, try to consolidate
+        target_per_chunk = max(self.size_limit_kb, total_kb // self.TARGET_CHUNKS)
+        
+        # First pass: collect small L1 dirs for potential merging
+        small_l1_dirs = []  # dirs that fit within margin
+        large_l1_dirs = []  # dirs that need splitting
+        
+        for dir_path in level1_dirs:
+            files, estimated_kb = dir_sizes[dir_path]
             if not files:
                 continue
-                
-            estimated_kb = len(files) * 3
             
-            if estimated_kb <= self.size_limit_kb:
-                # Level 1 dir fits in limit
-                subprojects.append(SubProject(
-                    name=dir_path.name,
-                    path=dir_path,
-                    relative_path=str(dir_path.relative_to(project_path)),
-                    files=files,
-                    level=1,
-                    priority=self._calculate_priority(dir_path.name, 1)
-                ))
+            if estimated_kb <= self.size_limit_kb + self.MERGE_MARGIN_KB:
+                small_l1_dirs.append((dir_path, files, estimated_kb))
             else:
-                # Level 1 too big - split into level 2
-                level2_chunks = self._split_level2(dir_path, project_path)
-                subprojects.extend(level2_chunks)
+                large_l1_dirs.append((dir_path, files, estimated_kb))
+        
+        # Merge small L1 directories into consolidated chunks
+        if small_l1_dirs:
+            subprojects.extend(self._merge_small_l1_dirs(small_l1_dirs, project_path))
+        
+        # Process large L1 directories
+        for dir_path, files, estimated_kb in large_l1_dirs:
+            level2_chunks = self._split_level2_consolidated(dir_path, project_path, target_per_chunk)
+            subprojects.extend(level2_chunks)
         
         # Add root-level files
         root_files = self._collect_root_files(project_path)
@@ -125,6 +140,67 @@ class HierarchicalRepoSplitter:
         subprojects.sort(key=lambda x: x.priority, reverse=True)
         
         return subprojects
+    
+    def _merge_small_l1_dirs(
+        self, 
+        small_l1_dirs: List[Tuple[Path, List, int]], 
+        project_path: Path
+    ) -> List[SubProject]:
+        """Merge small L1 directories into consolidated chunks up to size limit."""
+        chunks = []
+        
+        # Sort by priority (highest first)
+        sorted_dirs = sorted(
+            small_l1_dirs, 
+            key=lambda x: self._calculate_priority(x[0].name, 1), 
+            reverse=True
+        )
+        
+        current_chunk_files = []
+        current_chunk_names = []
+        current_size = 0
+        
+        effective_limit = self.size_limit_kb + 128  # Use 384KB as effective limit
+        
+        for dir_path, files, estimated_kb in sorted_dirs:
+            # Check if adding this dir would exceed limit
+            if current_chunk_files and (current_size + estimated_kb > effective_limit):
+                # Flush current chunk
+                chunk_name = '_'.join(current_chunk_names) if len(current_chunk_names) <= 3 else f"batch_{len(chunks)+1}"
+                
+                chunks.append(SubProject(
+                    name=chunk_name,
+                    path=project_path,
+                    relative_path=str(project_path.relative_to(project_path)),
+                    files=current_chunk_files.copy(),
+                    level=1,
+                    priority=50  # Medium priority for merged batch
+                ))
+                
+                # Start new chunk
+                current_chunk_files = []
+                current_chunk_names = []
+                current_size = 0
+            
+            # Add to current chunk
+            current_chunk_files.extend(files)
+            current_chunk_names.append(dir_path.name)
+            current_size += estimated_kb
+        
+        # Flush remaining chunk
+        if current_chunk_files:
+            chunk_name = '_'.join(current_chunk_names) if len(current_chunk_names) <= 3 else f"batch_{len(chunks)+1}"
+            
+            chunks.append(SubProject(
+                name=chunk_name,
+                path=project_path,
+                relative_path=str(project_path.relative_to(project_path)),
+                files=current_chunk_files,
+                level=1,
+                priority=50
+            ))
+        
+        return chunks
     
     def _get_level1_dirs(self, project_path: Path) -> List[Path]:
         """Get all level 1 directories (excluding hidden/cache)."""
@@ -155,22 +231,72 @@ class HierarchicalRepoSplitter:
         
         return sorted(dirs, key=lambda d: d.name.lower())
     
-    def _split_level2(self, level1_path: Path, project_path: Path) -> List[SubProject]:
-        """Split level 1 directory into level 2 subdirectories with merging."""
+    def _split_level2_consolidated(self, level1_path: Path, project_path: Path, target_chunk_kb: int) -> List[SubProject]:
+        """Split level 1 directory with aggressive consolidation.
+        
+        Strategy: Create chunks of ~target_chunk_kb size (up to 384KB with margin).
+        """
+        all_files = self._collect_files_in_dir(level1_path, project_path)
+        if not all_files:
+            return []
+        
+        total_kb = len(all_files) * 3
+        
+        # If all files fit with large margin, return single chunk
+        if total_kb <= self.size_limit_kb + self.MERGE_MARGIN_KB:
+            return [SubProject(
+                name=level1_path.name,
+                path=level1_path,
+                relative_path=str(level1_path.relative_to(project_path)),
+                files=all_files,
+                level=1,
+                priority=self._calculate_priority(level1_path.name, 1)
+            )]
+        
+        # Need to split - aim for chunks of target size (up to 320KB)
         chunks = []
+        chunk_num = 1
+        current_files = []
+        current_size = 0
         
-        # Get and categorize subdirectories
-        small_dirs, large_dirs = self._categorize_subdirs(level1_path, project_path)
+        # Sort files by path for consistent ordering
+        all_files.sort(key=lambda x: x[0])
         
-        # Process large directories (need file-level chunking)
-        chunks.extend(self._process_large_dirs(large_dirs, level1_path, project_path))
+        # Effective limit: 320KB (256 + 64 safety margin within the 128 total margin)
+        effective_limit = self.size_limit_kb + 64
         
-        # Merge and process small directories
-        if small_dirs:
-            chunks.extend(self._merge_small_dirs(small_dirs, level1_path, project_path))
+        for file_path, module_name in all_files:
+            file_kb = 3  # Estimate 3KB per file
+            
+            # If adding this file would exceed effective limit and we have files, flush chunk
+            if current_files and (current_size + file_kb > effective_limit):
+                chunk_name = f"{level1_path.name}_part{chunk_num}" if chunk_num > 1 else level1_path.name
+                chunks.append(SubProject(
+                    name=chunk_name,
+                    path=level1_path,
+                    relative_path=str(level1_path.relative_to(project_path)),
+                    files=current_files.copy(),
+                    level=2,
+                    priority=self._calculate_priority(level1_path.name, 1) - chunk_num
+                ))
+                chunk_num += 1
+                current_files = []
+                current_size = 0
+            
+            current_files.append((file_path, module_name))
+            current_size += file_kb
         
-        # Process files directly in level1
-        chunks.extend(self._process_level1_files(level1_path, project_path))
+        # Flush remaining files
+        if current_files:
+            chunk_name = f"{level1_path.name}_part{chunk_num}" if chunk_num > 1 else level1_path.name
+            chunks.append(SubProject(
+                name=chunk_name,
+                path=level1_path,
+                relative_path=str(level1_path.relative_to(project_path)),
+                files=current_files,
+                level=2,
+                priority=self._calculate_priority(level1_path.name, 1) - chunk_num
+            ))
         
         return chunks
     
