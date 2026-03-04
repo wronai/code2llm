@@ -181,20 +181,20 @@ Scans function bodies for IO operations,
 - **Methods**: 14
 - **Key Methods**: code2llm.nlp.entity_resolution.EntityResolver.__init__, code2llm.nlp.entity_resolution.EntityResolver.resolve, code2llm.nlp.entity_resolution.EntityResolver._extract_candidates, code2llm.nlp.entity_resolution.EntityResolver._extract_from_patterns, code2llm.nlp.entity_resolution.EntityResolver._disambiguate, code2llm.nlp.entity_resolution.EntityResolver._resolve_hierarchical, code2llm.nlp.entity_resolution.EntityResolver._resolve_aliases, code2llm.nlp.entity_resolution.EntityResolver._name_similarity, code2llm.nlp.entity_resolution.EntityResolver.load_from_analysis, code2llm.nlp.entity_resolution.EntityResolver.step_3a_extract_entities
 
-### code2llm.exporters.context_exporter.ContextExporter
-> Export LLM-ready analysis summary with architecture and flows.
-
-Output: context.md — architecture na
-- **Methods**: 14
-- **Key Methods**: code2llm.exporters.context_exporter.ContextExporter.export, code2llm.exporters.context_exporter.ContextExporter._get_overview, code2llm.exporters.context_exporter.ContextExporter._get_architecture_by_module, code2llm.exporters.context_exporter.ContextExporter._get_important_entries, code2llm.exporters.context_exporter.ContextExporter._get_key_entry_points, code2llm.exporters.context_exporter.ContextExporter._get_process_flows, code2llm.exporters.context_exporter.ContextExporter._get_key_classes, code2llm.exporters.context_exporter.ContextExporter._get_data_transformations, code2llm.exporters.context_exporter.ContextExporter._get_behavioral_patterns, code2llm.exporters.context_exporter.ContextExporter._get_api_surface
-- **Inherits**: Exporter
-
 ### code2llm.exporters.flow_exporter.FlowExporter
 > Export to flow.toon — data-flow focused format.
 
 Sections: PIPELINES, TRANSFORMS, CONTRACTS, DATA_TY
 - **Methods**: 14
 - **Key Methods**: code2llm.exporters.flow_exporter.FlowExporter.__init__, code2llm.exporters.flow_exporter.FlowExporter.export, code2llm.exporters.flow_exporter.FlowExporter._build_context, code2llm.exporters.flow_exporter.FlowExporter._pipeline_to_dict, code2llm.exporters.flow_exporter.FlowExporter._compute_transforms, code2llm.exporters.flow_exporter.FlowExporter._transform_label, code2llm.exporters.flow_exporter.FlowExporter._compute_type_usage, code2llm.exporters.flow_exporter.FlowExporter._normalize_type, code2llm.exporters.flow_exporter.FlowExporter._type_label, code2llm.exporters.flow_exporter.FlowExporter._classify_side_effects
+- **Inherits**: Exporter
+
+### code2llm.exporters.context_exporter.ContextExporter
+> Export LLM-ready analysis summary with architecture and flows.
+
+Output: context.md — architecture na
+- **Methods**: 14
+- **Key Methods**: code2llm.exporters.context_exporter.ContextExporter.export, code2llm.exporters.context_exporter.ContextExporter._get_overview, code2llm.exporters.context_exporter.ContextExporter._get_architecture_by_module, code2llm.exporters.context_exporter.ContextExporter._get_important_entries, code2llm.exporters.context_exporter.ContextExporter._get_key_entry_points, code2llm.exporters.context_exporter.ContextExporter._get_process_flows, code2llm.exporters.context_exporter.ContextExporter._get_key_classes, code2llm.exporters.context_exporter.ContextExporter._get_data_transformations, code2llm.exporters.context_exporter.ContextExporter._get_behavioral_patterns, code2llm.exporters.context_exporter.ContextExporter._get_api_surface
 - **Inherits**: Exporter
 
 ### code2llm.analysis.pipeline_detector.PipelineDetector
@@ -243,13 +243,13 @@ Keys: M=modules, D=details,
 
 Key functions that process and transform data:
 
-### validate_toon.validate_toon_completeness
-> Validate toon format structure.
-- **Output to**: print, print, bool, bool, bool
-
 ### benchmarks.benchmark_evolution.parse_evolution_metrics
 > Extract metrics from evolution.toon content.
 - **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, int
+
+### validate_toon.validate_toon_completeness
+> Validate toon format structure.
+- **Output to**: print, print, bool, bool, bool
 
 ### benchmarks.format_evaluator.evaluate_format
 > Oceń pojedynczy format względem ground truth.
@@ -278,6 +278,10 @@ Key functions that process and transform data:
 ### scripts.bump_version.format_version
 > Format version tuple as string
 
+### code2llm.cli_exports._export_simple_formats
+> Export toon, map, flow, context, yaml, json formats.
+- **Output to**: format_map.items, code2llm.cli_exports._export_yaml, JSONExporter, exporter.export, exporter_cls
+
 ### code2llm.cli.create_parser
 > Create CLI argument parser.
 - **Output to**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
@@ -296,16 +300,20 @@ Checks:
 ### demo_langs.valid.sample.UserService.process_users
 - **Output to**: print
 
-### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
-- **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
-
 ### benchmarks.benchmark_format_quality._generate_format_outputs
 > Generate all format outputs and evaluate them.
 - **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
-### code2llm.cli_exports._export_simple_formats
-> Export toon, map, flow, context, yaml, json formats.
-- **Output to**: format_map.items, code2llm.cli_exports._export_yaml, JSONExporter, exporter.export, exporter_cls
+### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
+- **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
+
+### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
+> Process large directories with file-level chunking.
+- **Output to**: self._chunk_by_files, chunks.extend
+
+### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
+> Process Python files directly in level1 directory.
+- **Output to**: len, chunks.append, self._chunk_by_files, chunks.extend, str
 
 ### code2llm.analysis.cfg.CFGExtractor._format_except
 > Format except handler.
@@ -316,14 +324,6 @@ Checks:
 
 Returns list of (module_name, start_line, end_line).
 - **Output to**: content.split, enumerate, modules.append, line.startswith, line.endswith
-
-### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
-> Process large directories with file-level chunking.
-- **Output to**: self._chunk_by_files, chunks.extend
-
-### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
-> Process Python files directly in level1 directory.
-- **Output to**: len, chunks.append, self._chunk_by_files, chunks.extend, str
 
 ### code2llm.nlp.pipeline.NLPPipeline.process
 > Process query through full pipeline (4a-4e).
