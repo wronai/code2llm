@@ -2,14 +2,14 @@
 # CC̄=4.5 | critical:46/750 | dups:0 | cycles:0
 
 HEALTH[8]:
-  🟡 CC    _run_chunked_analysis CC=18 (limit:15)
-  🟡 CC    _resolve_callee CC=18 (limit:15)
   🟡 CC    main CC=17 (limit:15)
-  🟡 CC    _export_chunked_results CC=17 (limit:15)
-  🟡 CC    _find_data_pipelines CC=17 (limit:15)
-  🟡 CC    _infer_from_name CC=17 (limit:15)
   🟡 CC    _export_prompt_txt CC=15 (limit:15)
+  🟡 CC    _export_chunked_results CC=17 (limit:15)
   🟡 CC    _validate_chunked_output CC=15 (limit:15)
+  🟡 CC    _run_chunked_analysis CC=18 (limit:15)
+  🟡 CC    _find_data_pipelines CC=17 (limit:15)
+  🟡 CC    _resolve_callee CC=18 (limit:15)
+  🟡 CC    _infer_from_name CC=17 (limit:15)
 
 REFACTOR[1]:
   1. split 8 high-CC methods  (CC>15)
@@ -346,23 +346,6 @@ D:
     e: TypeInferenceEngine
     TypeInferenceEngine  # Extract and infer type information from Python source files....
       __init__(0)  CC=1.0
-  validate_toon.py:
-    e: load_yaml,load_file,extract_functions_from_yaml,extract_functions_from_toon,extract_classes_from_yaml,extract_classes_from_toon,analyze_class_differences,extract_modules_from_yaml,extract_modules_from_toon,compare_basic_stats,compare_functions,compare_classes,compare_modules,validate_toon_completeness,main
-    load_yaml(filepath)
-    load_file(filepath)
-    extract_functions_from_yaml(yaml_data)
-    extract_functions_from_toon(toon_data)
-    extract_classes_from_yaml(yaml_data)
-    extract_classes_from_toon(toon_data)
-    analyze_class_differences(yaml_data,toon_data)
-    extract_modules_from_yaml(yaml_data)
-    extract_modules_from_toon(toon_data)
-    compare_basic_stats(yaml_data,toon_data)
-    compare_functions(yaml_data,toon_data)
-    compare_classes(yaml_data,toon_data)
-    compare_modules(yaml_data,toon_data)
-    validate_toon_completeness(toon_data)
-    main()
   code2llm/analysis/side_effects.py:
     e: SideEffectInfo,SideEffectDetector
     SideEffectInfo  # Side-effect analysis result for a single function....
@@ -834,9 +817,6 @@ Unlike simple L...
   setup.py:
     e: read_readme
     read_readme()
-  setup.py:
-    e: read_readme
-    read_readme()
   benchmarks/project_generator.py:
     e: create_core_py,create_etl_py,create_validation_py,create_utils_py,add_validator_to_core,create_ground_truth_project
     create_core_py(project)
@@ -887,4 +867,3 @@ Unlike simple L...
     e: ScanStrategy
     ScanStrategy  # Scanning methodology configuration....
   examples/streaming-analyzer/sample_project/__init__.py:
-  code2llm/__init__.py:
