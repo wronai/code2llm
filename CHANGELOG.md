@@ -1,3 +1,14 @@
+## [0.5.28] - 2026-03-04
+
+### Summary
+
+feat(None): deep code analysis engine with 2 supporting modules
+
+### Other
+
+- update requirements.txt
+
+
 ## [0.5.27] - 2026-03-04
 
 ### Summary
