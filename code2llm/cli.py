@@ -5,8 +5,16 @@ code2llm - CLI for Python code flow analysis
 Analyze control flow, data flow, and call graphs of Python codebases.
 """
 
-import argparse
+# Suppress stderr at OS level immediately to avoid syntax error messages from C parser
+# This must happen BEFORE any imports that might trigger file parsing
+import os
 import sys
+if os.name != 'nt':  # Unix-like systems
+    _code2llm_null_fd = os.open(os.devnull, os.O_WRONLY)
+    _code2llm_old_stderr_fd = os.dup(2)
+    os.dup2(_code2llm_null_fd, 2)
+
+import argparse
 from pathlib import Path
 from typing import List, Optional
 
@@ -353,6 +361,26 @@ def _validate_chunked_output(output_dir: Path, args) -> bool:
 
 def main():
     """Main CLI entry point."""
+    # Suppress stderr at OS level immediately to avoid syntax error messages from C parser
+    # This must happen BEFORE any imports that might trigger file parsing
+    import os
+    import sys
+    _null_fd = os.open(os.devnull, os.O_WRONLY)
+    _old_stderr_fd = os.dup(2)
+    os.dup2(_null_fd, 2)
+    
+    try:
+        result = _main_internal()
+    finally:
+        # Restore stderr
+        os.dup2(_old_stderr_fd, 2)
+        os.close(_null_fd)
+        os.close(_old_stderr_fd)
+    return result
+
+
+def _main_internal():
+    """Internal main function with actual logic."""
     # Handle special sub-commands first
     special_result = _handle_special_commands()
     if special_result is not None:

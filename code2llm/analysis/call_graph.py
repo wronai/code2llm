@@ -32,11 +32,21 @@ class CallGraphExtractor(ast.NodeVisitor):
         self.class_stack = []
         self.imports = {}
         
-        # Try to get astroid tree for better resolution
+        # Suppress stderr at OS level to avoid syntax error messages from astroid/C parser
+        import os
+        null_fd = os.open(os.devnull, os.O_WRONLY)
+        old_stderr_fd = os.dup(2)
+        os.dup2(null_fd, 2)
+        
         try:
+            # Try to get astroid tree for better resolution
             self.astroid_tree = astroid.MANAGER.ast_from_file(file_path)
         except Exception:
             self.astroid_tree = None
+        finally:
+            os.dup2(old_stderr_fd, 2)
+            os.close(null_fd)
+            os.close(old_stderr_fd)
             
         self.visit(tree)
         self._calculate_metrics()

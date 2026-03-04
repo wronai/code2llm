@@ -1,3 +1,16 @@
+## [0.5.25] - 2026-03-04
+
+### Summary
+
+refactor(goal): code analysis engine
+
+### Other
+
+- update code2llm/analysis/call_graph.py
+- update code2llm/cli.py
+- update code2llm/core/core/file_analyzer.py
+
+
 ## [0.5.24] - 2026-03-03
 
 ### Summary

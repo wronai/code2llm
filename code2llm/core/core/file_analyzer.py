@@ -94,6 +94,13 @@ class FileAnalyzer:
 
     def _calculate_complexity(self, content: str, file_path: str, result: Dict) -> None:
         """Calculate cyclomatic complexity using radon."""
+        # Suppress stderr at OS level to avoid syntax error messages from radon/C parser
+        import os
+        import sys
+        null_fd = os.open(os.devnull, os.O_WRONLY)
+        old_stderr_fd = os.dup(2)
+        os.dup2(null_fd, 2)
+        
         try:
             complexity_results = cc_visit(content)
             for entry in complexity_results:
@@ -117,6 +124,10 @@ class FileAnalyzer:
         except Exception as e:
             if self.config.verbose:
                 print(f"Error calculating complexity for {file_path}: {e}")
+        finally:
+            os.dup2(old_stderr_fd, 2)
+            os.close(null_fd)
+            os.close(old_stderr_fd)
 
     def _perform_deep_analysis(self, tree: ast.AST, module_name: str, file_path: str, result: Dict) -> None:
         """Perform deep analysis including DFG and call graph extraction."""
@@ -359,7 +370,22 @@ class FileAnalyzer:
 def _analyze_single_file(args):
     """Analyze single file - module level function for pickle compatibility."""
     file_path, module_name, config_dict = args
-    from ..config import Config
-    config = Config(**config_dict)
-    analyzer = FileAnalyzer(config, None)
-    return analyzer.analyze_file(file_path, module_name)
+    
+    # Suppress stderr at OS level to avoid syntax error messages from C parser
+    import os
+    import sys
+    null_fd = os.open(os.devnull, os.O_WRONLY)
+    old_stderr_fd = os.dup(2)
+    os.dup2(null_fd, 2)
+    
+    try:
+        from ..config import Config
+        config = Config(**config_dict)
+        analyzer = FileAnalyzer(config, None)
+        result = analyzer.analyze_file(file_path, module_name)
+    finally:
+        os.dup2(old_stderr_fd, 2)
+        os.close(null_fd)
+        os.close(old_stderr_fd)
+    
+    return result
