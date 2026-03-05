@@ -3,13 +3,13 @@
 
 HEALTH[8]:
   🟡 CC    main CC=17 (limit:15)
-  🟡 CC    _validate_chunked_output CC=15 (limit:15)
-  🟡 CC    _run_chunked_analysis CC=18 (limit:15)
   🟡 CC    _export_prompt_txt CC=15 (limit:15)
   🟡 CC    _export_chunked_results CC=17 (limit:15)
   🟡 CC    _find_data_pipelines CC=17 (limit:15)
-  🟡 CC    _resolve_callee CC=18 (limit:15)
   🟡 CC    _infer_from_name CC=17 (limit:15)
+  🟡 CC    _resolve_callee CC=18 (limit:15)
+  🟡 CC    _validate_chunked_output CC=15 (limit:15)
+  🟡 CC    _run_chunked_analysis CC=18 (limit:15)
 
 REFACTOR[1]:
   1. split 8 high-CC methods  (CC>15)
@@ -121,14 +121,14 @@ LAYERS:
 DUPLICATES[0]: none
 
 FUNCTIONS (CC≥10, 46 of 649):
-   18.0  _run_chunked_analysis                      21n   2exit  loops+cond+ret  !! split
    18.0  PipelineDetector._resolve_callee           21n   6exit  cond+ret  !! split
+   18.0  _run_chunked_analysis                      21n   2exit  loops+cond+ret  !! split
    17.0  main                                       21n   3exit  loops+cond+ret  !! split
    17.0  _export_chunked_results                    14n   1exit  loops+cond  !! split
    17.0  DataAnalyzer._find_data_pipelines          14n   2exit  loops+cond+ret  !! split
    17.0  TypeInferenceEngine._infer_from_name       13n   2exit  loops+cond+ret  !! split
-   15.0  _validate_chunked_output                   21n   5exit  loops+cond+ret  !! split
    15.0  _export_prompt_txt                         13n   2exit  loops+cond+ret  !! split
+   15.0  _validate_chunked_output                   21n   5exit  loops+cond+ret  !! split
    14.0  DataAnalyzer._find_event_flows              9n   2exit  loops+cond+ret
    14.0  DataAnalyzer._get_function_data_types      19n   2exit  cond+ret
    14.0  DataAnalyzer._analyze_optimization_opportunities   15n   2exit  loops+cond+ret
@@ -153,8 +153,8 @@ FUNCTIONS (CC≥10, 46 of 649):
    12.0  StreamingAnalyzer.analyze_streaming        16n   1exit  loops+cond
    12.0  PromptEngine._build_context_for_smell       5n   2exit  cond+ret
    12.0  _check_node_ids                            15n   1exit  loops+cond
-   12.0  FileAnalyzer._process_function             14n   2exit  loops+cond+ret
    12.0  MetricsComputer._compute_file_metrics      21n   2exit  loops+cond+ret
+   12.0  FileAnalyzer._process_function             14n   2exit  loops+cond+ret
    11.0  ToonRenderer.render_refactor               14n   3exit  loops+cond+ret
    10.0  ProjectAnalyzer.analyze_project            17n   2exit  cond+ret
    10.0  _split_by_modules                          15n   2exit  loops+cond+ret
@@ -164,8 +164,8 @@ FUNCTIONS (CC≥10, 46 of 649):
    10.0  EvolutionExporter._render_next             16n   3exit  loops+cond+ret
    10.0  ContextExporter._trace_flow                14n   3exit  loops+cond+ret
    10.0  FlowExporter._infer_invariant              21n   8exit  cond+ret
-   10.0  render_llm_flow_md                         16n   2exit  loops+cond+ret
    10.0  _scan_brackets                             11n   1exit  loops+cond
+   10.0  render_llm_flow_md                         16n   2exit  loops+cond+ret
    10.0  ToonRenderer.render_classes                11n   3exit  loops+cond+ret
 
   summary:
@@ -178,8 +178,8 @@ HOTSPOTS:
   #3  ProjectAnalyzer.analyze_project      fan=18   "analysis pipeline, 18 stages"
   #4  ToonExporter.export                  fan=18   "export with 18 outputs"
   #5  _run_chunked_analysis                fan=17   "calls 17 functions"
-  #6  NLPPipeline.process                  fan=17   "analysis pipeline, 17 stages"
-  #7  MermaidExporter.export_call_graph    fan=17   "export with 17 outputs"
+  #6  MermaidExporter.export_call_graph    fan=17   "export with 17 outputs"
+  #7  NLPPipeline.process                  fan=17   "analysis pipeline, 17 stages"
   #8  run_benchmark                        fan=16   "calls 16 functions"
   #9  evaluate_format                      fan=16   "16-way dispatch"
   #10 StreamingAnalyzer.analyze_streaming  fan=16   "analysis pipeline, 16 stages"
@@ -221,16 +221,16 @@ CLASSES:
   IncrementalAnalyzer            ████                       5m  CC̄=2.8   max=5   
   StreamingFileCache             ████                       5m  CC̄=2.0   max=4   
   UserService                    ███                        4m  CC̄=1.8   max=3   
-  NLPPipelineResult              ███                        4m  CC̄=2.0   max=3   
   AnalysisResult                 ███                        4m  CC̄=1.0   max=1   
+  NLPPipelineResult              ███                        4m  CC̄=2.0   max=3   
   SmartPrioritizer               ███                        4m  CC̄=5.2   max=9   
   ToonExporter                   ██                         3m  CC̄=1.0   max=1   
   FastFileFilter                 ██                         3m  CC̄=6.0   max=8   
   SideEffectInfo                 █                          2m  CC̄=1.0   max=1   
   NLPConfig                      █                          2m  CC̄=1.0   max=1   
   IntentMatchingResult           █                          2m  CC̄=2.0   max=2   
-  EntityResolutionResult         █                          2m  CC̄=2.5   max=3   
   BaseModel                      █                          2m  CC̄=5.0   max=8   
+  EntityResolutionResult         █                          2m  CC̄=2.5   max=3   
   Pipeline                                                  1m  CC̄=3.0   max=3   
   Exporter                                                  1m  CC̄=1.0   max=1   
   JSONExporter                                              1m  CC̄=3.0   max=3   
@@ -243,15 +243,12 @@ CLASSES:
   DepthConfig                                               0m  CC̄=0.0   max=0.0 
   OutputConfig                                              0m  CC̄=0.0   max=0.0 
   Config                                                    0m  CC̄=0.0   max=0.0 
-  SubProject                                                0m  CC̄=0.0   max=0.0 
   NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
   IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
   EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
   MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
+  SubProject                                                0m  CC̄=0.0   max=0.0 
   IntentMatch                                               0m  CC̄=0.0   max=0.0 
-  Entity                                                    0m  CC̄=0.0   max=0.0 
-  PipelineStage                                             0m  CC̄=0.0   max=0.0 
-  NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   FlowNode                                                  0m  CC̄=0.0   max=0.0 
   FlowEdge                                                  0m  CC̄=0.0   max=0.0 
   FunctionInfo                                              0m  CC̄=0.0   max=0.0 
@@ -261,11 +258,21 @@ CLASSES:
   CodeSmell                                                 0m  CC̄=0.0   max=0.0 
   Mutation                                                  0m  CC̄=0.0   max=0.0 
   DataFlow                                                  0m  CC̄=0.0   max=0.0 
+  Entity                                                    0m  CC̄=0.0   max=0.0 
+  NormalizationResult                                       0m  CC̄=0.0   max=0.0 
+  PipelineStage                                             0m  CC̄=0.0   max=0.0 
   FuncSummary                                               0m  CC̄=0.0   max=0.0 
   ScanStrategy                                              0m  CC̄=0.0   max=0.0 
   FilePriority                                              0m  CC̄=0.0   max=0.0 
 
 D:
+  code2llm/analysis/pipeline_detector.py:
+    e: PipelineStage,Pipeline,PipelineDetector
+    PipelineStage  # A single stage in a detected pipeline....
+    Pipeline  # A detected pipeline with stages, purity info, and domain....
+      to_dict(0)  CC=3.0
+    PipelineDetector  # Detect pipelines in a codebase using networkx graph analysis...
+      __init__(2)  CC=3.0
   code2llm/cli.py:
     e: create_parser,_handle_special_commands,_validate_and_setup,_print_start_info,_validate_chunked_output,main,_run_analysis,_run_chunked_analysis,_analyze_subproject,_merge_chunked_results,_run_streaming_analysis,generate_llm_context
     create_parser()
@@ -280,13 +287,6 @@ D:
     _merge_chunked_results(all_results,source_path)
     _run_streaming_analysis(args,config,source_path)
     generate_llm_context(args_list)
-  code2llm/analysis/pipeline_detector.py:
-    e: PipelineStage,Pipeline,PipelineDetector
-    PipelineStage  # A single stage in a detected pipeline....
-    Pipeline  # A detected pipeline with stages, purity info, and domain....
-      to_dict(0)  CC=3.0
-    PipelineDetector  # Detect pipelines in a codebase using networkx graph analysis...
-      __init__(2)  CC=3.0
   validate_toon.py:
     e: load_yaml,load_file,extract_functions_from_yaml,extract_functions_from_toon,extract_classes_from_yaml,extract_classes_from_toon,analyze_class_differences,extract_modules_from_yaml,extract_modules_from_toon,compare_basic_stats,compare_functions,compare_classes,compare_modules,validate_toon_completeness,main
     load_yaml(filepath)
@@ -499,15 +499,15 @@ S...
     e: PromptEngine
     PromptEngine  # Generate refactoring prompts from analysis results and detec...
       __init__(2)  CC=4.0
+  code2llm/exporters/toon/metrics.py:
+    e: MetricsComputer
+    MetricsComputer  # Computes all metrics for TOON export....
+      __init__(0)  CC=1.0
   code2llm/core/core/file_analyzer.py:
     e: FileAnalyzer,_analyze_single_file
     FileAnalyzer  # Analyzes a single file....
       __init__(2)  CC=1.0
     _analyze_single_file(args)
-  code2llm/exporters/toon/metrics.py:
-    e: MetricsComputer
-    MetricsComputer  # Computes all metrics for TOON export....
-      __init__(0)  CC=1.0
   code2llm/exporters/toon/renderer.py:
     e: ToonRenderer
     ToonRenderer  # Renders all sections for TOON export....
@@ -556,6 +556,10 @@ S...
 
 Sections: P...
       __init__(0)  CC=1.0
+  code2llm/analysis/call_graph.py:
+    e: CallGraphExtractor
+    CallGraphExtractor  # Extract call graph from AST....
+      __init__(1)  CC=1.0
   code2llm/core/large_repo.py:
     e: SubProject,HierarchicalRepoSplitter,should_use_chunking,get_analysis_plan
     SubProject  # Represents a sub-project within a larger repository....
@@ -565,10 +569,6 @@ Stra...
       __init__(2)  CC=1.0
     should_use_chunking(project_path,size_threshold_kb)
     get_analysis_plan(project_path,size_limit_kb)
-  code2llm/analysis/call_graph.py:
-    e: CallGraphExtractor
-    CallGraphExtractor  # Extract call graph from AST....
-      __init__(1)  CC=1.0
   code2llm/patterns/detector.py:
     e: PatternDetector
     PatternDetector  # Detect behavioral patterns in code....
