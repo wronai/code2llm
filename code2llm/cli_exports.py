@@ -10,7 +10,10 @@ from typing import List, Optional, Tuple
 from .exporters import (
     YAMLExporter, JSONExporter, MermaidExporter,
     ContextExporter, ToonExporter, MapExporter, FlowExporter,
-    EvolutionExporter, READMEExporter,
+    EvolutionExporter, READMEExporter, ProjectYAMLExporter,
+    ToonViewGenerator, ContextViewGenerator,
+    ArticleViewGenerator, HTMLDashboardGenerator,
+    load_project_yaml,
 )
 
 
@@ -386,8 +389,46 @@ def _export_prompt_txt(args, output_dir: Path, formats: list[str], source_path: 
         print(f"  - PROMPT: {prompt_path}")
 
 
+def _export_project_yaml(args, result, output_dir: Path):
+    """Export unified project.yaml — single source of truth."""
+    exporter = ProjectYAMLExporter()
+    filepath = output_dir / 'project.yaml'
+    exporter.export(result, str(filepath))
+    if getattr(args, 'verbose', False):
+        print(f"  - PROJECT-YAML (single source of truth): {filepath}")
+    return filepath
+
+
+def _run_report(args, project_yaml_path: str, output_dir: Path) -> None:
+    """Generate views from project.yaml.
+
+    Supported formats: toon, context, article, html, all.
+    """
+    data = load_project_yaml(project_yaml_path)
+    report_formats = [f.strip() for f in args.report_format.split(',')]
+    if 'all' in report_formats:
+        report_formats = ['toon', 'context', 'article', 'html']
+
+    generator_map = {
+        'toon': ('project.toon', ToonViewGenerator(), 'TOON view'),
+        'context': ('context.md', ContextViewGenerator(), 'Context view'),
+        'article': ('status.md', ArticleViewGenerator(), 'Article view'),
+        'html': ('dashboard.html', HTMLDashboardGenerator(), 'HTML dashboard'),
+    }
+
+    for fmt in report_formats:
+        if fmt not in generator_map:
+            print(f"Warning: unknown report format '{fmt}', skipping", file=sys.stderr)
+            continue
+        filename, generator, label = generator_map[fmt]
+        filepath = output_dir / filename
+        generator.generate(data, str(filepath))
+        if getattr(args, 'verbose', False):
+            print(f"  - {label}: {filepath}")
+
+
 def _export_simple_formats(args, result, output_dir: Path, formats):
-    """Export toon, map, flow, context, yaml, json formats."""
+    """Export toon, map, flow, context, yaml, json, project-yaml formats."""
     format_map = {
         'toon': ('analysis.toon', ToonExporter, 'TOON (diagnostics)'),
         'map': ('map.toon', MapExporter, 'MAP (structure)'),
@@ -402,6 +443,21 @@ def _export_simple_formats(args, result, output_dir: Path, formats):
             exporter.export(result, str(filepath))
             if args.verbose:
                 print(f"  - {label}: {filepath}")
+
+    # Unified project.yaml (single source of truth)
+    if 'project-yaml' in formats or 'all' in formats:
+        yaml_path = _export_project_yaml(args, result, output_dir)
+        # Auto-generate all views from project.yaml
+        data = load_project_yaml(str(yaml_path))
+        view_map = {
+            'project.toon': ToonViewGenerator(),
+            'dashboard.html': HTMLDashboardGenerator(),
+        }
+        for filename, generator in view_map.items():
+            filepath = output_dir / filename
+            generator.generate(data, str(filepath))
+            if args.verbose:
+                print(f"  - Generated view: {filepath}")
 
     if 'yaml' in formats:
         _export_yaml(args, result, output_dir)

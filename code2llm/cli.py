@@ -16,6 +16,7 @@ from .cli_exports import (
     _export_evolution, _export_data_structures, _export_context_fallback,
     _export_readme, _export_code2logic, _export_prompt_txt, _run_exports,
     _export_simple_formats, _export_yaml, _export_mermaid, _export_refactor_prompts,
+    _export_project_yaml, _run_report,
 )
 
 
@@ -41,20 +42,24 @@ Examples:
   code2llm ./ -f mermaid --no-png                   # Mermaid diagrams without PNG
   code2llm ./ -m static -v -o ./analysis            # Static mode, verbose
   code2llm ./ --no-readme                           # Disable README generation
+  code2llm ./ -f project-yaml                       # Unified project.yaml (single source of truth)
+  code2llm report --format toon                     # Generate view from project.yaml
+  code2llm report --format all                      # All views from project.yaml
   code2llm llm-flow                                 # Generate LLM flow summary
   code2llm llm-context ./                           # Generate LLM context only
 
 Format Options (-f):
-  toon      — Health diagnostics (analysis.toon) [default]
-  map       — Structural map (map.toon) — modules, imports, signatures
-  flow      — Data-flow analysis (flow.toon) — pipelines, contracts, types
-  context   — LLM narrative (context.md) — architecture summary
-  code2logic — Generate project logic (project.toon) via external code2logic
-  yaml      — Standard YAML format
-  json      — Machine-readable JSON
-  mermaid   — Flowchart diagrams (flow.mmd, calls.mmd, compact_flow.mmd)
-  evolution — Refactoring queue (evolution.toon)
-  all       — Generate all formats
+  toon         — Health diagnostics (analysis.toon) [default]
+  map          — Structural map (map.toon) — modules, imports, signatures
+  flow         — Data-flow analysis (flow.toon) — pipelines, contracts, types
+  context      — LLM narrative (context.md) — architecture summary
+  code2logic   — Generate project logic (project.toon) via external code2logic
+  yaml         — Standard YAML format
+  json         — Machine-readable JSON
+  mermaid      — Flowchart diagrams (flow.mmd, calls.mmd, compact_flow.mmd)
+  evolution    — Refactoring queue (evolution.toon)
+  project-yaml — Unified project.yaml (single source of truth) + generated views
+  all          — Generate all formats (including project-yaml)
 
 Strategy Options (--strategy):
   quick     — Fast overview, fewer files analyzed
@@ -244,13 +249,76 @@ Strategy Options (--strategy):
 
 
 def _handle_special_commands() -> Optional[int]:
-    """Handle special sub-commands (llm-flow, llm-context)."""
+    """Handle special sub-commands (llm-flow, llm-context, report)."""
     if len(sys.argv) > 1 and sys.argv[1] == 'llm-flow':
         from .generators.llm_flow import main as llm_flow_main
         return llm_flow_main(sys.argv[2:])
     if len(sys.argv) > 1 and sys.argv[1] == 'llm-context':
         return generate_llm_context(sys.argv[2:])
+    if len(sys.argv) > 1 and sys.argv[1] == 'report':
+        return _handle_report_command(sys.argv[2:])
     return None
+
+
+def _handle_report_command(args_list) -> int:
+    """Generate views from an existing project.yaml.
+
+    Usage:
+        code2llm report --format toon    # → project.toon
+        code2llm report --format context # → context.md
+        code2llm report --format article # → status.md
+        code2llm report --format html    # → dashboard.html
+        code2llm report --format all     # → all views
+    """
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        prog='code2llm report',
+        description='Generate views from project.yaml (single source of truth)',
+    )
+    parser.add_argument(
+        '--input', '-i',
+        default='./project.yaml',
+        help='Path to project.yaml (default: ./project.yaml)',
+    )
+    parser.add_argument(
+        '--format', '-f',
+        dest='report_format',
+        default='all',
+        help='Output format: toon, context, article, html, all (default: all)',
+    )
+    parser.add_argument(
+        '-o', '--output',
+        default='.',
+        help='Output directory (default: current directory)',
+    )
+    parser.add_argument(
+        '-v', '--verbose',
+        action='store_true',
+        help='Verbose output',
+    )
+
+    args = parser.parse_args(args_list)
+
+    input_path = Path(args.input)
+    if not input_path.exists():
+        print(f"Error: project.yaml not found: {input_path}", file=sys.stderr)
+        print("Run 'code2llm <source> -f project-yaml' first to generate it.", file=sys.stderr)
+        return 1
+
+    output_dir = Path(args.output)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    if args.verbose:
+        print(f"Generating views from: {input_path}")
+        print(f"Output directory: {output_dir}")
+
+    _run_report(args, str(input_path), output_dir)
+
+    if args.verbose:
+        print(f"\nAll views saved to: {output_dir}")
+
+    return 0
 
 
 def _validate_and_setup(args) -> tuple[Path, Path]:

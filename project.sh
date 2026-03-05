@@ -5,7 +5,6 @@ source .venv/bin/activate
 
 # Only reinstall if source changed (skip slow pip rebuild when unnecessary)
 if [ "$1" = "--reinstall" ] || [ ! -f .venv/lib/python*/site-packages/code2llm.egg-link ] && [ ! -d .venv/lib/python*/site-packages/__editable__.code2llm-*.pth ]; then
-    python -m pip install -U setuptools wheel
     pip install -e . --no-build-isolation
 else
     echo "✓ code2llm already installed (use --reinstall to force)"

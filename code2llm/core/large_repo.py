@@ -26,9 +26,9 @@ class SubProject:
     @property
     def estimated_size_kb(self) -> int:
         """Estimate output size based on file count."""
-        # Rough estimate: ~3KB per file in TOON format
+        # Rough estimate: ~1KB per file in TOON format
         file_count = len(self.files)
-        return max(1, file_count * 3)
+        return max(1, file_count * 1)
     
     @property
     def file_count(self) -> int:

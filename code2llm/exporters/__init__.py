@@ -25,6 +25,12 @@ from .map_exporter import MapExporter
 from .flow_exporter import FlowExporter
 from .evolution_exporter import EvolutionExporter
 from .readme_exporter import READMEExporter
+from .project_yaml_exporter import ProjectYAMLExporter
+from .report_generators import (
+    ToonViewGenerator, ContextViewGenerator,
+    ArticleViewGenerator, HTMLDashboardGenerator,
+    load_project_yaml,
+)
 
 __all__ = [
     'Exporter',
@@ -38,4 +44,10 @@ __all__ = [
     'FlowExporter',
     'EvolutionExporter',
     'READMEExporter',
+    'ProjectYAMLExporter',
+    'ToonViewGenerator',
+    'ContextViewGenerator',
+    'ArticleViewGenerator',
+    'HTMLDashboardGenerator',
+    'load_project_yaml',
 ]
