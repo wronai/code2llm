@@ -1,0 +1,530 @@
+# code2llm/flow | 777 func | 12 pipelines | 13 hub-types | 2026-03-05
+
+PIPELINES[12] (Analysis:7, Core:1, Export:4):
+  Cli_exports [Export]: ? → Path
+              → main()                                  CC=7    IO ▶
+              → _run_exports(args, result, output_dir:Path, source_path:Optional[Path]) CC=7    IO
+              → _export_single_project(args, result, output_dir:Path, formats:list, source_path:Optional[Path]) CC=5    pure
+              → _export_code2logic(args, source_path:Path, output_dir:Path, formats:list[str]) → None CC=6    IO
+              → _normalize_code2logic_output(found:Path, target:Path, args) → List[Path] CC=2    IO
+              → manage_toon_size(source_file:Path, output_dir:Path, max_kb:int, prefix:str, verbose:bool) → List[Path] CC=8    IO
+              → split_toon_file(source_file:Path, output_dir:Path, max_kb:int, prefix:str) → List[Path] CC=3    IO
+              → _split_by_lines(source_file:Path, output_dir:Path, max_kb:int, prefix:str) → List[Path] CC=8    IO
+              → _write_chunk(output_dir:Path, prefix:str, chunk_num:int, content:str) → Path CC=2    IO ■
+              PURITY: 1/9 pure  BOTTLENECK: manage_toon_size(CC=8)
+
+  Analysis [Analysis]: str → str
+              → analyze_file(file_path:str, module_name:str) → Dict CC=8    IO ▶
+              → _analyze_ast(tree:ast.AST, file_path:str, module_name:str, content:str) → Dict CC=4    pure
+              → _process_class(node:ast.ClassDef, file_path:str, module_name:str, result:Dict) → None CC=5    mutation
+              → _process_function(node:ast.FunctionDef, file_path:str, module_name:str, result:Dict, class_name:Optional[str]) → None CC=12   mutation
+              → _build_cfg(node:ast.FunctionDef, func_name:str, func_info:FunctionInfo, result:Dict) → None CC=1    mutation
+              → _process_cfg_block(body:List[ast.stmt], entry:str, exit:str, func_name:str, func_info:FunctionInfo, result:Dict, depth:int, max_depth:int) → str CC=7    pure
+              → _process_return_stmt(stmt:ast.Return, current:str, exit:str, func_name:str, func_info:FunctionInfo, result:Dict) → str CC=1    mutation ■
+              PURITY: 2/7 pure  BOTTLENECK: _process_function(CC=12)
+
+  Analysis [Analysis]: FunctionInfo → Optional[str]
+              → get_arg_types(fi:FunctionInfo) → List[Dict[str, str]] CC=1    pure ▶
+              → enrich_function(fi:FunctionInfo) → Dict[str, Any] CC=3    pure
+              → _extract_from_node(node:ast.FunctionDef, fi:FunctionInfo) → Dict[str, Any] CC=8    pure
+              → _extract_args(node:ast.FunctionDef) → List[Dict[str, str]] CC=7    mutation
+              → _annotation_to_str(node:Optional[ast.expr]) → Optional[str] CC=6    pure
+              → _ann_binop(node:ast.BinOp) → Optional[str] CC=3    pure ■
+              PURITY: 5/6 pure  BOTTLENECK: _extract_from_node(CC=8)
+
+  Analysis [Analysis]: FunctionInfo → Optional[str]
+              → get_return_type(fi:FunctionInfo) → Optional[str] CC=1    pure ▶
+              → enrich_function(fi:FunctionInfo) → Dict[str, Any] CC=3    pure
+              → _extract_from_node(node:ast.FunctionDef, fi:FunctionInfo) → Dict[str, Any] CC=8    pure
+              → _extract_args(node:ast.FunctionDef) → List[Dict[str, str]] CC=7    mutation
+              → _annotation_to_str(node:Optional[ast.expr]) → Optional[str] CC=6    pure
+              → _ann_binop(node:ast.BinOp) → Optional[str] CC=3    pure ■
+              PURITY: 5/6 pure  BOTTLENECK: _extract_from_node(CC=8)
+
+  Analysis [Analysis]: FunctionInfo → Optional[str]
+              → get_typed_signature(fi:FunctionInfo) → str CC=5    mutation ▶
+              → enrich_function(fi:FunctionInfo) → Dict[str, Any] CC=3    pure
+              → _extract_from_node(node:ast.FunctionDef, fi:FunctionInfo) → Dict[str, Any] CC=8    pure
+              → _extract_args(node:ast.FunctionDef) → List[Dict[str, str]] CC=7    mutation
+              → _annotation_to_str(node:Optional[ast.expr]) → Optional[str] CC=6    pure
+              → _ann_binop(node:ast.BinOp) → Optional[str] CC=3    pure ■
+              PURITY: 4/6 pure  BOTTLENECK: _extract_from_node(CC=8)
+
+  Analysis [Analysis]: Dict[str, FunctionInfo] → Optional[str]
+              → extract_all_types(funcs:Dict[str, FunctionInfo]) → Dict[str, Dict[str, Any]] CC=2    pure ▶
+              → enrich_function(fi:FunctionInfo) → Dict[str, Any] CC=3    pure
+              → _extract_from_node(node:ast.FunctionDef, fi:FunctionInfo) → Dict[str, Any] CC=8    pure
+              → _extract_args(node:ast.FunctionDef) → List[Dict[str, str]] CC=7    mutation
+              → _annotation_to_str(node:Optional[ast.expr]) → Optional[str] CC=6    pure
+              → _ann_binop(node:ast.BinOp) → Optional[str] CC=3    pure ■
+              PURITY: 5/6 pure  BOTTLENECK: _extract_from_node(CC=8)
+
+  Exporters [Export]: AnalysisResult → None
+              → compute_all_metrics(result:AnalysisResult) → Dict[str, Any] CC=1    mutation ▶
+              → _compute_file_metrics(result:AnalysisResult) → Dict[str, Dict[str, Any]] CC=12   pure
+              → _compute_fan_in(files:Dict, result:AnalysisResult) → None CC=3    pure
+              → _process_function_calls(fi:FunctionInfo, result:AnalysisResult, importers:Dict[str, set]) → None CC=1    pure
+              → _process_callee_calls(fi:FunctionInfo, result:AnalysisResult, src_file:str, importers:Dict[str, set]) → None CC=4    pure
+              → _handle_suffix_match(callee:str, result:AnalysisResult, src_file:str, importers:Dict[str, set]) → None CC=4    pure ■
+              PURITY: 5/6 pure  BOTTLENECK: _compute_file_metrics(CC=12)
+
+  Parsers [Export]: ? → dict
+              → main()                                  CC=17   IO  !! ▶
+              → load_file(filepath) → AnalysisResult    CC=2    pure
+              → load_toon(filepath)                     CC=2    IO
+              → parse_toon_content(content) → dict      CC=8    pure
+              → _parse_stats_line(line, data) → dict    CC=5    pure ■
+              PURITY: 3/5 pure  BOTTLENECK: main(CC=17)
+
+  Analysis [Analysis]: Dict[str, FunctionInfo] → Optional[str]
+              → analyze_all(funcs:Dict[str, FunctionInfo]) → Dict[str, SideEffectInfo] CC=2    pure ▶
+              → analyze_function(fi:FunctionInfo) → SideEffectInfo CC=3    pure
+              → _scan_node(func_node:ast.FunctionDef, info:SideEffectInfo) → None CC=2    pure
+              → _check_calls(node:ast.AST, info:SideEffectInfo) → None CC=13   cache
+              → _get_call_name(node:ast.expr) → Optional[str] CC=4    pure ■
+              PURITY: 4/5 pure  BOTTLENECK: _check_calls(CC=13)
+
+  Analysis [Analysis]: FunctionInfo → Optional[str]
+              → get_purity_score(fi:FunctionInfo) → str CC=1    pure ▶
+              → analyze_function(fi:FunctionInfo) → SideEffectInfo CC=3    pure
+              → _scan_node(func_node:ast.FunctionDef, info:SideEffectInfo) → None CC=2    pure
+              → _check_calls(node:ast.AST, info:SideEffectInfo) → None CC=13   cache
+              → _get_call_name(node:ast.expr) → Optional[str] CC=4    pure ■
+              PURITY: 4/5 pure  BOTTLENECK: _check_calls(CC=13)
+
+  Core [Core]: Path → bool
+              → get_analysis_plan(project_path:Path) → List[SubProject] CC=2    pure ▶
+              → _split_hierarchically(project_path:Path) → List[SubProject] CC=8    mutation
+              → _split_level2_consolidated(level1_path:Path, project_path:Path, target_chunk_kb:int) → List[SubProject] CC=9    mutation
+              → _collect_files_in_dir(dir_path:Path, project_path:Path) → List[Tuple[str, str]] CC=6    mutation
+              → _should_skip_file(file_str:str) → bool  CC=2    pure ■
+              PURITY: 2/5 pure  BOTTLENECK: _split_level2_consolidated(CC=9)
+
+  Exporters [Export]: AnalysisResult → bool
+              → export(result:AnalysisResult, output_path:str, **kwargs) → None CC=1    IO ▶
+              → _build_project_yaml(result:AnalysisResult, prev_evolution:List[Dict]) → Dict[str, Any] CC=10   pure
+              → _build_health(result:AnalysisResult, modules:List[Dict]) → Dict[str, Any] CC=7    mutation
+              → _build_alerts(result:AnalysisResult) → List[Dict[str, Any]] CC=10   mutation
+              → _is_excluded(path:str) → bool           CC=6    pure ■
+              PURITY: 2/5 pure  BOTTLENECK: _build_project_yaml(CC=10)
+
+
+TRANSFORMS (fan-out ≥10):
+  _build_modules(result:AnalysisResult, line_counts:Dict[str, int]) → List[Dict[str, Any]] fan=23   !! side-effects
+  _summarize_functions(nodes:Dict[int, Dict[str, Any]], limit_decisions:int, limit_calls:int) → Dict[str, FuncSummary] fan=21   !! side-effects
+  _render(data:Dict[str, Any]) → List[str]                fan=20   !! side-effects
+  run_benchmark() → Dict                                  fan=18   fan=18
+  analyze_project(project_path:str) → AnalysisResult      fan=18   PIPELINE:ProjectAnalyzer.entry
+  _render(data:Dict[str, Any]) → List[str]                fan=18   PIPELINE:ArticleViewGenerator.entry
+  export(result:AnalysisResult, output_path:str, **kwargs) → None fan=18   PIPELINE:ToonExporter.entry
+  _run_chunked_analysis(args, source_path:Path, output_dir:Path) fan=17   fan=17
+  process(query:str, language:str) → NLPPipelineResult    fan=17   PIPELINE:NLPPipeline.entry
+  export_call_graph(result:AnalysisResult, output_path:str) → None fan=17   PIPELINE:MermaidExporter.entry
+  run_benchmark(project_path:str)                         fan=16   fan=16
+  evaluate_format(name:str, content:str, path:Optional[Path]) → FormatScore fan=16   fan=16
+  analyze_streaming(project_path:str, _output_callback:Optional[callable]) → Iterator[Dict] fan=16   PIPELINE:StreamingAnalyzer.entry
+  _build_project_yaml(result:AnalysisResult, prev_evolution:List[Dict]) → Dict[str, Any] fan=16   PIPELINE:ProjectYAMLExporter.entry
+  _render(data:Dict[str, Any]) → str                      fan=16   PIPELINE:HTMLDashboardGenerator.entry
+
+CONTRACTS:
+  Pipeline: Cli_exports
+    main()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print)
+
+    _run_exports(args, result, output_dir:Path, source_path:Optional[Path])
+      IN:  args, result, output_dir:Path, source_path:Optional[Path]
+      OUT: None
+      SIDE-EFFECT: IO(print)
+
+    _export_single_project(args, result, output_dir:Path, formats:list, source_path:Optional[Path])
+      IN:  args, result, output_dir:Path, formats:list, source_path:Optional[Path]
+      OUT: None
+
+    _export_code2logic(args, source_path:Path, output_dir:Path, formats:list[str]) → None
+      IN:  args, source_path:Path, output_dir:Path, formats:list[str]
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+
+    _normalize_code2logic_output(found:Path, target:Path, args) → List[Path]
+      IN:  found:Path, target:Path, args
+      OUT: List[Path]
+      SIDE-EFFECT: IO(mkdir)
+      INVARIANT: len(output) <= len(input)
+
+    manage_toon_size(source_file:Path, output_dir:Path, max_kb:int, prefix:str, verbose:bool) → List[Path]
+      IN:  source_file:Path, output_dir:Path, max_kb:int, prefix:str, verbose:bool
+      OUT: List[Path]
+      SIDE-EFFECT: IO(print, unlink, print)
+
+    split_toon_file(source_file:Path, output_dir:Path, max_kb:int, prefix:str) → List[Path]
+      IN:  source_file:Path, output_dir:Path, max_kb:int, prefix:str
+      OUT: List[Path]
+      SIDE-EFFECT: IO(read_text)
+
+    _split_by_lines(source_file:Path, output_dir:Path, max_kb:int, prefix:str) → List[Path]
+      IN:  source_file:Path, output_dir:Path, max_kb:int, prefix:str
+      OUT: List[Path]
+      SIDE-EFFECT: IO(read_text)
+
+    _write_chunk(output_dir:Path, prefix:str, chunk_num:int, content:str) → Path
+      IN:  output_dir:Path, prefix:str, chunk_num:int, content:str
+      OUT: Path
+      SIDE-EFFECT: IO(write_text)
+
+  Pipeline: Analysis
+    analyze_file(file_path:str, module_name:str) → Dict
+      IN:  file_path:str, module_name:str
+      OUT: Dict
+      SIDE-EFFECT: IO(read_text); cache(self.cache.get, self.cache.put)
+
+    _analyze_ast(tree:ast.AST, file_path:str, module_name:str, content:str) → Dict
+      IN:  tree:ast.AST, file_path:str, module_name:str, content:str
+      OUT: Dict
+
+    _process_class(node:ast.ClassDef, file_path:str, module_name:str, result:Dict) → None
+      IN:  node:ast.ClassDef, file_path:str, module_name:str, result:Dict
+      OUT: None
+      SIDE-EFFECT: pure
+
+    _process_function(node:ast.FunctionDef, file_path:str, module_name:str, result:Dict, class_name:Optional[str]) → None
+      IN:  node:ast.FunctionDef, file_path:str, module_name:str, result:Dict, class_name:Optional[str]
+      OUT: None
+      SIDE-EFFECT: pure
+
+    _build_cfg(node:ast.FunctionDef, func_name:str, func_info:FunctionInfo, result:Dict) → None
+      IN:  node:ast.FunctionDef, func_name:str, func_info:FunctionInfo, result:Dict
+      OUT: None
+      SIDE-EFFECT: pure
+
+    _process_cfg_block(body:List[ast.stmt], entry:str, exit:str, func_name:str, func_info:FunctionInfo, result:Dict, depth:int, max_depth:int) → str
+      IN:  body:List[ast.stmt], entry:str, exit:str, func_name:str, func_info:FunctionInfo, result:Dict, depth:int, max_depth:int
+      OUT: str
+
+    _process_return_stmt(stmt:ast.Return, current:str, exit:str, func_name:str, func_info:FunctionInfo, result:Dict) → str
+      IN:  stmt:ast.Return, current:str, exit:str, func_name:str, func_info:FunctionInfo, result:Dict
+      OUT: str
+      SIDE-EFFECT: pure
+
+  Pipeline: Analysis
+    get_arg_types(fi:FunctionInfo) → List[Dict[str, str]]
+      IN:  fi:FunctionInfo
+      OUT: List[Dict[str, str]]
+
+    enrich_function(fi:FunctionInfo) → Dict[str, Any]
+      IN:  fi:FunctionInfo
+      OUT: Dict[str, Any]
+
+    _extract_from_node(node:ast.FunctionDef, fi:FunctionInfo) → Dict[str, Any]
+      IN:  node:ast.FunctionDef, fi:FunctionInfo
+      OUT: Dict[str, Any]
+
+    _extract_args(node:ast.FunctionDef) → List[Dict[str, str]]
+      IN:  node:ast.FunctionDef
+      OUT: List[Dict[str, str]]
+      SIDE-EFFECT: pure
+
+    _annotation_to_str(node:Optional[ast.expr]) → Optional[str]
+      IN:  node:Optional[ast.expr]
+      OUT: Optional[str]
+
+    _ann_binop(node:ast.BinOp) → Optional[str]
+      IN:  node:ast.BinOp
+      OUT: Optional[str]
+
+  Pipeline: Analysis
+    get_return_type(fi:FunctionInfo) → Optional[str]
+      IN:  fi:FunctionInfo
+      OUT: Optional[str]
+
+    enrich_function(fi:FunctionInfo) → Dict[str, Any]
+      IN:  fi:FunctionInfo
+      OUT: Dict[str, Any]
+
+    _extract_from_node(node:ast.FunctionDef, fi:FunctionInfo) → Dict[str, Any]
+      IN:  node:ast.FunctionDef, fi:FunctionInfo
+      OUT: Dict[str, Any]
+
+    _extract_args(node:ast.FunctionDef) → List[Dict[str, str]]
+      IN:  node:ast.FunctionDef
+      OUT: List[Dict[str, str]]
+      SIDE-EFFECT: pure
+
+    _annotation_to_str(node:Optional[ast.expr]) → Optional[str]
+      IN:  node:Optional[ast.expr]
+      OUT: Optional[str]
+
+    _ann_binop(node:ast.BinOp) → Optional[str]
+      IN:  node:ast.BinOp
+      OUT: Optional[str]
+
+  Pipeline: Analysis
+    get_typed_signature(fi:FunctionInfo) → str
+      IN:  fi:FunctionInfo
+      OUT: str
+      SIDE-EFFECT: pure
+
+    enrich_function(fi:FunctionInfo) → Dict[str, Any]
+      IN:  fi:FunctionInfo
+      OUT: Dict[str, Any]
+
+    _extract_from_node(node:ast.FunctionDef, fi:FunctionInfo) → Dict[str, Any]
+      IN:  node:ast.FunctionDef, fi:FunctionInfo
+      OUT: Dict[str, Any]
+
+    _extract_args(node:ast.FunctionDef) → List[Dict[str, str]]
+      IN:  node:ast.FunctionDef
+      OUT: List[Dict[str, str]]
+      SIDE-EFFECT: pure
+
+    _annotation_to_str(node:Optional[ast.expr]) → Optional[str]
+      IN:  node:Optional[ast.expr]
+      OUT: Optional[str]
+
+    _ann_binop(node:ast.BinOp) → Optional[str]
+      IN:  node:ast.BinOp
+      OUT: Optional[str]
+
+  Pipeline: Analysis
+    extract_all_types(funcs:Dict[str, FunctionInfo]) → Dict[str, Dict[str, Any]]
+      IN:  funcs:Dict[str, FunctionInfo]
+      OUT: Dict[str, Dict[str, Any]]
+
+    enrich_function(fi:FunctionInfo) → Dict[str, Any]
+      IN:  fi:FunctionInfo
+      OUT: Dict[str, Any]
+
+    _extract_from_node(node:ast.FunctionDef, fi:FunctionInfo) → Dict[str, Any]
+      IN:  node:ast.FunctionDef, fi:FunctionInfo
+      OUT: Dict[str, Any]
+
+    _extract_args(node:ast.FunctionDef) → List[Dict[str, str]]
+      IN:  node:ast.FunctionDef
+      OUT: List[Dict[str, str]]
+      SIDE-EFFECT: pure
+
+    _annotation_to_str(node:Optional[ast.expr]) → Optional[str]
+      IN:  node:Optional[ast.expr]
+      OUT: Optional[str]
+
+    _ann_binop(node:ast.BinOp) → Optional[str]
+      IN:  node:ast.BinOp
+      OUT: Optional[str]
+
+  Pipeline: Exporters
+    compute_all_metrics(result:AnalysisResult) → Dict[str, Any]
+      IN:  result:AnalysisResult
+      OUT: Dict[str, Any]
+      SIDE-EFFECT: mutates self.result, self.project_path, self.line_counts
+
+    _compute_file_metrics(result:AnalysisResult) → Dict[str, Dict[str, Any]]
+      IN:  result:AnalysisResult
+      OUT: Dict[str, Dict[str, Any]]
+
+    _compute_fan_in(files:Dict, result:AnalysisResult) → None
+      IN:  files:Dict, result:AnalysisResult
+      OUT: None
+
+    _process_function_calls(fi:FunctionInfo, result:AnalysisResult, importers:Dict[str, set]) → None
+      IN:  fi:FunctionInfo, result:AnalysisResult, importers:Dict[str, set]
+      OUT: None
+
+    _process_callee_calls(fi:FunctionInfo, result:AnalysisResult, src_file:str, importers:Dict[str, set]) → None
+      IN:  fi:FunctionInfo, result:AnalysisResult, src_file:str, importers:Dict[str, set]
+      OUT: None
+
+    _handle_suffix_match(callee:str, result:AnalysisResult, src_file:str, importers:Dict[str, set]) → None
+      IN:  callee:str, result:AnalysisResult, src_file:str, importers:Dict[str, set]
+      OUT: None
+
+  Pipeline: Parsers
+    main()
+      IN:  ()
+      OUT: None
+      SIDE-EFFECT: IO(print, print, print)
+      SMELL: CC=17 → split
+
+    load_file(filepath) → AnalysisResult
+      IN:  filepath
+      OUT: AnalysisResult
+
+    load_toon(filepath)
+      IN:  filepath
+      OUT: None
+      SIDE-EFFECT: IO(open, read, print)
+
+    parse_toon_content(content) → dict
+      IN:  content
+      OUT: dict
+
+    _parse_stats_line(line, data) → dict
+      IN:  line, data
+      OUT: dict
+
+  Pipeline: Analysis
+    analyze_all(funcs:Dict[str, FunctionInfo]) → Dict[str, SideEffectInfo]
+      IN:  funcs:Dict[str, FunctionInfo]
+      OUT: Dict[str, SideEffectInfo]
+
+    analyze_function(fi:FunctionInfo) → SideEffectInfo
+      IN:  fi:FunctionInfo
+      OUT: SideEffectInfo
+
+    _scan_node(func_node:ast.FunctionDef, info:SideEffectInfo) → None
+      IN:  func_node:ast.FunctionDef, info:SideEffectInfo
+      OUT: None
+
+    _check_calls(node:ast.AST, info:SideEffectInfo) → None
+      IN:  node:ast.AST, info:SideEffectInfo
+      OUT: None
+      SIDE-EFFECT: cache(info.cache_operations.append, info.cache_operations.append)
+      INVARIANT: raises on invalid input
+
+    _get_call_name(node:ast.expr) → Optional[str]
+      IN:  node:ast.expr
+      OUT: Optional[str]
+
+  Pipeline: Analysis
+    get_purity_score(fi:FunctionInfo) → str
+      IN:  fi:FunctionInfo
+      OUT: str
+
+    analyze_function(fi:FunctionInfo) → SideEffectInfo
+      IN:  fi:FunctionInfo
+      OUT: SideEffectInfo
+
+    _scan_node(func_node:ast.FunctionDef, info:SideEffectInfo) → None
+      IN:  func_node:ast.FunctionDef, info:SideEffectInfo
+      OUT: None
+
+    _check_calls(node:ast.AST, info:SideEffectInfo) → None
+      IN:  node:ast.AST, info:SideEffectInfo
+      OUT: None
+      SIDE-EFFECT: cache(info.cache_operations.append, info.cache_operations.append)
+      INVARIANT: raises on invalid input
+
+    _get_call_name(node:ast.expr) → Optional[str]
+      IN:  node:ast.expr
+      OUT: Optional[str]
+
+  Pipeline: Core
+    get_analysis_plan(project_path:Path) → List[SubProject]
+      IN:  project_path:Path
+      OUT: List[SubProject]
+
+    _split_hierarchically(project_path:Path) → List[SubProject]
+      IN:  project_path:Path
+      OUT: List[SubProject]
+      SIDE-EFFECT: pure
+
+    _split_level2_consolidated(level1_path:Path, project_path:Path, target_chunk_kb:int) → List[SubProject]
+      IN:  level1_path:Path, project_path:Path, target_chunk_kb:int
+      OUT: List[SubProject]
+      SIDE-EFFECT: pure
+
+    _collect_files_in_dir(dir_path:Path, project_path:Path) → List[Tuple[str, str]]
+      IN:  dir_path:Path, project_path:Path
+      OUT: List[Tuple[str, str]]
+      SIDE-EFFECT: pure
+
+    _should_skip_file(file_str:str) → bool
+      IN:  file_str:str
+      OUT: bool
+
+  Pipeline: Exporters
+    export(result:AnalysisResult, output_path:str, **kwargs) → None
+      IN:  result:AnalysisResult, output_path:str, **kwargs
+      OUT: None
+      SIDE-EFFECT: IO(mkdir, open, dump)
+
+    _build_project_yaml(result:AnalysisResult, prev_evolution:List[Dict]) → Dict[str, Any]
+      IN:  result:AnalysisResult, prev_evolution:List[Dict]
+      OUT: Dict[str, Any]
+
+    _build_health(result:AnalysisResult, modules:List[Dict]) → Dict[str, Any]
+      IN:  result:AnalysisResult, modules:List[Dict]
+      OUT: Dict[str, Any]
+      SIDE-EFFECT: pure
+
+    _build_alerts(result:AnalysisResult) → List[Dict[str, Any]]
+      IN:  result:AnalysisResult
+      OUT: List[Dict[str, Any]]
+      SIDE-EFFECT: pure
+
+    _is_excluded(path:str) → bool
+      IN:  path:str
+      OUT: bool
+
+
+DATA_TYPES (by cross-function usage) [702 annotated, 0 inferred / 777 functions]:
+  str                  consumed:327 produced:176  !! HUB-TYPE → split interface
+  str, Any             consumed:72  produced:59   !! HUB-TYPE → split interface
+  Path                 consumed:117 produced:10   !! HUB-TYPE → split interface
+  AnalysisResult       consumed:108 produced:12   !! HUB-TYPE → split interface
+  int                  consumed:77  produced:18   !! HUB-TYPE → split interface
+  Dict                 consumed:51  produced:27   !! HUB-TYPE → split interface
+  bool                 consumed:16  produced:35   !! HUB-TYPE → split interface
+  dict                 consumed:12  produced:19   !! HUB-TYPE → split interface
+  FunctionInfo         consumed:29  produced:1    !! HUB-TYPE → split interface
+  list                 consumed:14  produced:12   !! HUB-TYPE → split interface
+  str, str             consumed:11  produced:15   !! HUB-TYPE → split interface
+  Entity               consumed:7   produced:13 
+  ast.AST              consumed:18  produced:0    !! HUB-TYPE → split interface
+  float                consumed:1   produced:13   output-heavy
+  str, FunctionInfo    consumed:13  produced:0    !! HUB-TYPE → split interface
+  NLPPipelineResult    consumed:7   produced:4  
+  CodeSmell            consumed:3   produced:8  
+  SideEffectInfo       consumed:9   produced:1    input-heavy (read-only flow)
+  ast.FunctionDef      consumed:8   produced:2  
+  Config               consumed:9   produced:0    input-heavy (read-only flow)
+
+  HUB TYPES (consumed ≥10):
+    str → 327 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    str, Any → 72 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    Path → 117 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    AnalysisResult → 108 consumers → split into:
+      - StructureResult (modules, classes, functions)
+      - MetricsResult (complexity, coupling)
+      - FlowResult (call_graph, cfg, dfg)
+    int → 77 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    Dict → 51 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    bool → 16 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    dict → 12 consumers → split into:
+      - replace with typed alternatives (dataclass/TypedDict)
+    FunctionInfo → 29 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    list → 14 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    str, str → 11 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    ast.AST → 18 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+    str, FunctionInfo → 13 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
+
+SIDE_EFFECTS:
+  IO:        load_previous, save_current, run_benchmark, _print_header, _print_scores_table, _print_problems_detail, _print_pipelines_detail, _print_structural_features, _print_gap_analysis, save_report
+  Cache:     EvolutionaryCache.put, generate, SideEffectDetector._check_calls, SideEffectDetector._heuristic_classify, ProjectAnalyzer.__init__, StreamingAnalyzer.__init__, FlowExporter._classify_side_effects, StreamingFileCache.put
+  Mutation:  extract_functions_from_yaml, extract_functions_from_toon, extract_classes_from_yaml, extract_classes_from_toon, extract_modules_from_yaml, extract_modules_from_toon, ShellEntityPreparer._apply_find_flags, EntityPreparationPipeline.__init__, TemplateLoader.__init__, EvolutionaryCache.__init__
+  Pure:      parse_evolution_metrics, print_results, build_report, load_file, TemplateGenerator.__init__, TemplateGenerator.generate, TemplateGenerator._prepare_shell_entities, TemplateGenerator._prepare_docker_entities, TemplateGenerator._prepare_sql_entities, TemplateGenerator._prepare_kubernetes_entities
+
+  PIPELINE PURITY:
+    Cli_exports     ░░░░ 11% pure
+    Analysis        █░░░ 28% pure
+    Analysis        ███░ 83% pure
+    Analysis        ███░ 83% pure
+    Analysis        ██░░ 66% pure
+    Analysis        ███░ 83% pure
+    Exporters       ███░ 83% pure
+    Parsers         ██░░ 60% pure
+    Analysis        ███░ 80% pure
+    Analysis        ███░ 80% pure
+    Core            █░░░ 40% pure
+    Exporters       █░░░ 40% pure

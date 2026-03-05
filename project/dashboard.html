@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>code2llm — Health Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --border: #334155;
+    --text: #e2e8f0; --muted: #94a3b8;
+    --green: #22c55e; --yellow: #eab308; --red: #ef4444; --blue: #3b82f6;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); padding:2rem; }
+  h1 { font-size:1.5rem; margin-bottom:.5rem; }
+  h2 { font-size:1.1rem; color:var(--muted); margin:1.5rem 0 .75rem; border-bottom:1px solid var(--border); padding-bottom:.25rem; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin:1rem 0; }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:.5rem; padding:1rem; }
+  .card .value { font-size:1.8rem; font-weight:700; }
+  .card .label { color:var(--muted); font-size:.8rem; text-transform:uppercase; }
+  .chart-container { background:var(--surface); border:1px solid var(--border); border-radius:.5rem; padding:1rem; margin:1rem 0; }
+  table { width:100%; border-collapse:collapse; font-size:.85rem; }
+  th { text-align:left; color:var(--muted); padding:.5rem; border-bottom:1px solid var(--border); }
+  td { padding:.5rem; border-bottom:1px solid var(--border); }
+  .badge { padding:.15rem .5rem; border-radius:.25rem; font-size:.75rem; font-weight:600; }
+  .badge.critical { background:var(--red); color:#fff; }
+  .badge.warning { background:var(--yellow); color:#000; }
+  .badge.high { background:var(--red); color:#fff; }
+  .badge.medium { background:var(--yellow); color:#000; }
+  .badge.low { background:var(--green); color:#fff; }
+  tr.critical td { background:rgba(239,68,68,.08); }
+  tr.warning td { background:rgba(234,179,8,.05); }
+  .health-indicator { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:.5rem; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  @media (max-width:768px) { .two-col { grid-template-columns:1fr; } }
+  footer { margin-top:2rem; color:var(--muted); font-size:.75rem; text-align:center; }
+</style>
+</head>
+<body>
+<h1>
+  <span class="health-indicator" style="background:#22c55e"></span>
+  code2llm — Good
+</h1>
+<p style="color:var(--muted);font-size:.85rem;">
+  Analyzed 2026-03-05 by code2llm
+</p>
+
+<div class="grid">
+  <div class="card"><div class="value">4.6</div><div class="label">Avg CC</div></div>
+  <div class="card"><div class="value">56</div><div class="label">Critical (CC≥10)</div></div>
+  <div class="card"><div class="value">673</div><div class="label">Functions</div></div>
+  <div class="card"><div class="value">84</div><div class="label">Classes</div></div>
+  <div class="card"><div class="value">67</div><div class="label">Files</div></div>
+  <div class="card"><div class="value">3431616</div><div class="label">Lines</div></div>
+  <div class="card"><div class="value">1</div><div class="label">Duplicates</div></div>
+  <div class="card"><div class="value">0</div><div class="label">Cycles</div></div>
+</div>
+
+<div class="two-col">
+  <div class="chart-container">
+    <h2 style="border:none;margin:0 0 .5rem;">Evolution</h2>
+    <canvas id="evoChart" height="200"></canvas>
+  </div>
+  <div class="chart-container">
+    <h2 style="border:none;margin:0 0 .5rem;">Module CC (top 15)</h2>
+    <canvas id="modChart" height="200"></canvas>
+  </div>
+</div>
+
+<h2>Alerts (20)</h2>
+<div class="card">
+<table>
+  <thead><tr><th>Severity</th><th>Target</th><th>Type</th><th>Value</th><th>Limit</th></tr></thead>
+  <tbody>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>ContextViewGenerator._render</td>
+                <td>cc_exceeded</td>
+                <td>23</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>ProjectYAMLExporter._build_modules</td>
+                <td>high_fan_out</td>
+                <td>23</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>_summarize_functions</td>
+                <td>high_fan_out</td>
+                <td>21</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>ContextViewGenerator._render</td>
+                <td>high_fan_out</td>
+                <td>20</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>_run_chunked_analysis</td>
+                <td>cc_exceeded</td>
+                <td>18</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>PipelineDetector._resolve_callee</td>
+                <td>cc_exceeded</td>
+                <td>18</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>ProjectYAMLExporter._build_exports</td>
+                <td>cc_exceeded</td>
+                <td>18</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>ArticleViewGenerator._render</td>
+                <td>cc_exceeded</td>
+                <td>18</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>run_benchmark</td>
+                <td>high_fan_out</td>
+                <td>18</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>ProjectAnalyzer.analyze_project</td>
+                <td>high_fan_out</td>
+                <td>18</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>ArticleViewGenerator._render</td>
+                <td>high_fan_out</td>
+                <td>18</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>ToonExporter.export</td>
+                <td>high_fan_out</td>
+                <td>18</td>
+                <td>10</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>main</td>
+                <td>cc_exceeded</td>
+                <td>17</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>_export_chunked_results</td>
+                <td>cc_exceeded</td>
+                <td>17</td>
+                <td>15</td>
+            </tr>
+            <tr class="warning">
+                <td><span class="badge warning">warning</span></td>
+                <td>DataAnalyzer._find_data_pipelines</td>
+                <td>cc_exceeded</td>
+                <td>17</td>
+                <td>15</td>
+            </tr></tbody>
+</table>
+</div>
+
+<div class="two-col">
+<div>
+<h2>Hotspots (10)</h2>
+<div class="card">
+<table>
+  <thead><tr><th>Function</th><th>Fan-out</th><th>Note</th></tr></thead>
+  <tbody>
+            <tr>
+                <td><strong>ProjectYAMLExporter._build_modules</strong></td>
+                <td>23</td>
+                <td>Orchestrates 23 calls</td>
+            </tr>
+            <tr>
+                <td><strong>_summarize_functions</strong></td>
+                <td>21</td>
+                <td>Orchestrates 21 calls</td>
+            </tr>
+            <tr>
+                <td><strong>ContextViewGenerator._render</strong></td>
+                <td>20</td>
+                <td>Orchestrates 20 calls</td>
+            </tr>
+            <tr>
+                <td><strong>run_benchmark</strong></td>
+                <td>18</td>
+                <td>Run the full format quality benchmark.</td>
+            </tr>
+            <tr>
+                <td><strong>ProjectAnalyzer.analyze_project</strong></td>
+                <td>18</td>
+                <td>Analysis pipeline, 18 stages</td>
+            </tr>
+            <tr>
+                <td><strong>ArticleViewGenerator._render</strong></td>
+                <td>18</td>
+                <td>Orchestrates 18 calls</td>
+            </tr>
+            <tr>
+                <td><strong>ToonExporter.export</strong></td>
+                <td>18</td>
+                <td>Export with 18 outputs</td>
+            </tr>
+            <tr>
+                <td><strong>_run_chunked_analysis</strong></td>
+                <td>17</td>
+                <td>Analyze large repository using hierarchical chunking.
+
+Strategy:
+1. Level 1 fold</td>
+            </tr>
+            <tr>
+                <td><strong>NLPPipeline.process</strong></td>
+                <td>17</td>
+                <td>Analysis pipeline, 17 stages</td>
+            </tr>
+            <tr>
+                <td><strong>MermaidExporter.export_call_graph</strong></td>
+                <td>17</td>
+                <td>Export with 17 outputs</td>
+            </tr></tbody>
+</table>
+</div>
+</div>
+
+<div>
+<h2>Refactoring Priorities (15)</h2>
+<div class="card">
+<table>
+  <thead><tr><th>#</th><th>Action</th><th>Impact</th><th>Effort</th></tr></thead>
+  <tbody>
+            <tr>
+                <td>1</td>
+                <td>Split god module code2llm/exporters/report_generators.py (601L, 4 classes)</td>
+                <td><span class="badge high">high</span></td>
+                <td>high</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Split god module code2llm/cli.py (750L, 0 classes)</td>
+                <td><span class="badge high">high</span></td>
+                <td>high</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Split god module code2llm/cli_exports.py (633L, 0 classes)</td>
+                <td><span class="badge high">high</span></td>
+                <td>high</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Split god module code2llm/exporters/readme_exporter.py (501L, 1 classes)</td>
+                <td><span class="badge high">high</span></td>
+                <td>high</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Split god module code2llm/exporters/toon/metrics.py (501L, 1 classes)</td>
+                <td><span class="badge high">high</span></td>
+                <td>high</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Split god module code2llm/core/large_repo.py (596L, 2 classes)</td>
+                <td><span class="badge high">high</span></td>
+                <td>high</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Split main (CC=17 → target CC<10)</td>
+                <td><span class="badge medium">medium</span></td>
+                <td>low</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Split _export_prompt_txt (CC=15 → target CC<10)</td>
+                <td><span class="badge medium">medium</span></td>
+                <td>low</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Split _export_chunked_results (CC=17 → target CC<10)</td>
+                <td><span class="badge medium">medium</span></td>
+                <td>low</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Split _validate_chunked_output (CC=15 → target CC<10)</td>
+                <td><span class="badge medium">medium</span></td>
+                <td>low</td>
+            </tr></tbody>
+</table>
+</div>
+</div>
+</div>
+
+<footer>Generated by code2llm on 2026-03-05 08:24</footer>
+
+<script>
+const evoCtx = document.getElementById('evoChart').getContext('2d');
+new Chart(evoCtx, {
+  type: 'line',
+  data: {
+    labels: ['2026-03-05'],
+    datasets: [
+      { label: 'CC avg', data: [4.6], borderColor: '#3b82f6', tension: .3, yAxisID: 'y' },
+      { label: 'Critical', data: [56], borderColor: '#ef4444', tension: .3, yAxisID: 'y1' }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { position:'left', grid:{color:'#334155'}, ticks:{color:'#94a3b8'} },
+      y1: { position:'right', grid:{drawOnChartArea:false}, ticks:{color:'#94a3b8'} },
+      x: { ticks:{color:'#94a3b8'}, grid:{color:'#334155'} }
+    },
+    plugins: { legend: { labels: { color:'#e2e8f0' } } }
+  }
+});
+
+const modCtx = document.getElementById('modChart').getContext('2d');
+new Chart(modCtx, {
+  type: 'bar',
+  data: {
+    labels: ['report_generators.py', 'pipeline_detector.py', 'cli.py', 'project_yaml_exporter.py', 'data_analysis.py', 'type_inference.py', 'cli_exports.py', 'validate_toon.py', 'side_effects.py', 'analyzer.py', 'scanner.py', 'flow_renderer.py', 'llm_flow.py', 'llm_task.py', 'benchmark_evolution.py'],
+    datasets: [{ label: 'Max CC', data: [23, 18, 18, 18, 17, 17, 17, 17, 14, 14, 14, 14, 14, 14, 13],
+      backgroundColor: [23, 18, 18, 18, 17, 17, 17, 17, 14, 14, 14, 14, 14, 14, 13].map(v => v >= 15 ? '#ef4444' : v >= 10 ? '#eab308' : '#22c55e')
+    }]
+  },
+  options: {
+    responsive: true, indexAxis: 'y',
+    scales: {
+      x: { grid:{color:'#334155'}, ticks:{color:'#94a3b8'} },
+      y: { grid:{color:'#334155'}, ticks:{color:'#94a3b8',font:{size:10}} }
+    },
+    plugins: { legend: { display:false } }
+  }
+});
+</script>
+</body>
+</html>
