@@ -1,12 +1,12 @@
-# code2llm | 90f 17220L | py:90 | 2026-03-05
-# CC̄=4.4 | critical:52/820 | dups:0 | cycles:0
+# code2llm | 91f 17406L | py:91 | 2026-03-07
+# CC̄=4.4 | critical:54/826 | dups:0 | cycles:0
 
 HEALTH[6]:
   🟡 CC    main CC=17 (limit:15)
   🟡 CC    _find_data_pipelines CC=17 (limit:15)
-  🟡 CC    _validate_chunked_output CC=15 (limit:15)
   🟡 CC    _resolve_callee CC=18 (limit:15)
   🟡 CC    _infer_from_name CC=17 (limit:15)
+  🟡 CC    _validate_chunked_output CC=15 (limit:15)
   🟡 CC    _export_chunked_results CC=17 (limit:15)
 
 REFACTOR[1]:
@@ -24,7 +24,7 @@ COUPLING:
   CYCLES: none
 
 LAYERS:
-  code2llm/                       CC̄=4.5    ←in:0  →out:5
+  code2llm/                       CC̄=4.6    ←in:0  →out:5
   │ !! large_repo                 596L  2C   20m  CC=9      ←1
   │ !! cli                        511L  0C    8m  CC=15     ←0
   │ !! readme_exporter            501L  1C    7m  CC=13     ←0
@@ -44,6 +44,7 @@ LAYERS:
   │ !  analyzer                   317L  1C    9m  CC=14     ←0
   │ !! type_inference             315L  1C   18m  CC=17     ←0
   │ intent_matching            297L  3C   15m  CC=7      ←0
+  │ !  prompt                     296L  0C   13m  CC=12     ←1
   │ cfg                        293L  1C   17m  CC=5      ←0
   │ !  llm_task                   284L  0C   15m  CC=14     ←0
   │ !  cli_analysis               282L  0C   11m  CC=10     ←1
@@ -60,7 +61,6 @@ LAYERS:
   │ models                     194L  11C    6m  CC=8      ←0
   │ smells                     192L  1C    9m  CC=7      ←0
   │ !  flow_renderer              188L  1C    6m  CC=14     ←0
-  │ prompt                     183L  0C    9m  CC=6      ←1
   │ !  streaming_analyzer         181L  1C    6m  CC=12     ←0
   │ config                     178L  6C    0m  CC=0.0    ←0
   │ config                     174L  5C    2m  CC=1      ←0
@@ -80,6 +80,7 @@ LAYERS:
   │ !! orchestrator                96L  0C    3m  CC=17     ←1
   │ coupling                    77L  1C    5m  CC=7      ←0
   │ incremental                 75L  1C    5m  CC=5      ←0
+  │ api                         73L  0C    2m  CC=2      ←0
   │ strategies                  68L  1C    0m  CC=0.0    ←0
   │ __init__                    66L  1C    3m  CC=1      ←0
   │ file_cache                  62L  1C    6m  CC=4      ←0
@@ -132,7 +133,7 @@ LAYERS:
 
 DUPLICATES[0]: none
 
-FUNCTIONS (CC≥10, 52 of 716):
+FUNCTIONS (CC≥10, 54 of 722):
    18.0  PipelineDetector._resolve_callee           21n   6exit  cond+ret  !! split
    17.0  main                                       21n   3exit  loops+cond+ret  !! split
    17.0  DataAnalyzer._find_data_pipelines          14n   2exit  loops+cond+ret  !! split
@@ -164,11 +165,12 @@ FUNCTIONS (CC≥10, 52 of 716):
    12.0  DataAnalyzer._find_state_patterns           9n   2exit  loops+cond+ret
    12.0  StreamingAnalyzer.analyze_streaming        16n   1exit  loops+cond
    12.0  ProjectYAMLExporter._build_project_yaml     3n   2exit  ret
-   12.0  _export_mermaid                             8n   1exit  cond
    12.0  _check_node_ids                            15n   1exit  loops+cond
+   12.0  _export_mermaid                             8n   1exit  cond
+   12.0  _build_prompt_footer                       21n   2exit  loops+cond+ret
    12.0  PromptEngine._build_context_for_smell       5n   2exit  cond+ret
-   12.0  MetricsComputer._compute_file_metrics      21n   2exit  loops+cond+ret
    12.0  FileAnalyzer._process_function             14n   2exit  loops+cond+ret
+   12.0  MetricsComputer._compute_file_metrics      21n   2exit  loops+cond+ret
    11.0  ProjectYAMLExporter._build_class_export    12n   2exit  loops+cond+ret
    11.0  ContextViewGenerator._render_exports        7n   2exit  loops+cond+ret
    11.0  validate_project_yaml                      16n   3exit  loops+cond+ret
@@ -177,15 +179,14 @@ FUNCTIONS (CC≥10, 52 of 716):
    10.0  ProjectAnalyzer.analyze_project            17n   2exit  cond+ret
    10.0  _split_by_modules                          15n   2exit  loops+cond+ret
    10.0  NLPPipeline._format_action                 29n  10exit  cond+ret
-   10.0  FlowRenderer.render_pipelines               9n   3exit  loops+cond+ret
    10.0  ContextExporter._trace_flow                14n   3exit  loops+cond+ret
    10.0  EvolutionExporter._build_context            3n   2exit  ret
    10.0  EvolutionExporter._render_next             16n   3exit  loops+cond+ret
+   10.0  FlowRenderer.render_pipelines               9n   3exit  loops+cond+ret
    10.0  FlowExporter._infer_invariant              21n   8exit  cond+ret
-   10.0  render_llm_flow_md                         16n   2exit  loops+cond+ret
 
   summary:
-    critical(≥10): 52 | high(5-10): 243 | medium(2-5): 268 | low(<2): 153
+    critical(≥10): 54 | high(5-10): 245 | medium(2-5): 269 | low(<2): 154
     7% CC≥10  41% CC≥5
 
 HOTSPOTS:
@@ -216,8 +217,8 @@ CLASSES:
   ContextExporter                ████████████              14m  CC̄=4.8   max=10  
   FlowExporter                   ████████████              14m  CC̄=5.6   max=10  
   PipelineDetector               ███████████               13m  CC̄=6.9   max=18    !!
-  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   IntentMatcher                  ███████████               13m  CC̄=3.5   max=7   
+  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   QueryNormalizer                ███████████               13m  CC̄=1.8   max=6   
   MapExporter                    ███████████               13m  CC̄=4.8   max=13  
   DFGExtractor                   ██████████                12m  CC̄=3.6   max=7   
@@ -264,14 +265,14 @@ CLASSES:
   DepthConfig                                               0m  CC̄=0.0   max=0.0 
   OutputConfig                                              0m  CC̄=0.0   max=0.0 
   Config                                                    0m  CC̄=0.0   max=0.0 
-  SubProject                                                0m  CC̄=0.0   max=0.0 
   NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
   IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
   EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
   MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
   IntentMatch                                               0m  CC̄=0.0   max=0.0 
-  NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   Entity                                                    0m  CC̄=0.0   max=0.0 
+  SubProject                                                0m  CC̄=0.0   max=0.0 
+  NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   FlowNode                                                  0m  CC̄=0.0   max=0.0 
   FlowEdge                                                  0m  CC̄=0.0   max=0.0 
   FunctionInfo                                              0m  CC̄=0.0   max=0.0 
@@ -517,19 +518,34 @@ S...
     e: StreamingAnalyzer
     StreamingAnalyzer  # Memory-efficient streaming analyzer with progress tracking....
       __init__(2)  CC=4.0
+  code2llm/cli_exports/prompt.py:
+    e: _export_prompt_txt,_export_chunked_prompt_txt,_get_prompt_paths,_build_prompt_header,_build_main_files_section,_format_size,_get_missing_files,_build_subprojects_section,_build_missing_files_section,_analyze_generated_files,_build_dynamic_focus_areas,_build_dynamic_tasks,_build_prompt_footer
+    _export_prompt_txt(args,output_dir,formats,source_path)
+    _export_chunked_prompt_txt(args,output_dir,formats,source_path,subprojects)
+    _get_prompt_paths(source_path,output_dir)
+    _build_prompt_header(project_path)
+    _build_main_files_section(output_dir,output_rel_path)
+    _format_size(size_bytes)
+    _get_missing_files(output_dir)
+    _build_subprojects_section(subprojects,output_dir,output_rel_path)
+    _build_missing_files_section(output_dir,output_rel_path)
+    _analyze_generated_files(output_dir,subprojects)
+    _build_dynamic_focus_areas(file_analysis)
+    _build_dynamic_tasks(file_analysis)
+    _build_prompt_footer(chunked,file_analysis)
   code2llm/refactor/prompt_engine.py:
     e: PromptEngine
     PromptEngine  # Generate refactoring prompts from analysis results and detec...
       __init__(2)  CC=4.0
-  code2llm/exporters/toon/metrics.py:
-    e: MetricsComputer
-    MetricsComputer  # Computes all metrics for TOON export....
-      __init__(0)  CC=1.0
   code2llm/core/core/file_analyzer.py:
     e: FileAnalyzer,_analyze_single_file
     FileAnalyzer  # Analyzes a single file....
       __init__(2)  CC=1.0
     _analyze_single_file(args)
+  code2llm/exporters/toon/metrics.py:
+    e: MetricsComputer
+    MetricsComputer  # Computes all metrics for TOON export....
+      __init__(0)  CC=1.0
   code2llm/exporters/context_view.py:
     e: ContextViewGenerator
     ContextViewGenerator  # Generate context.md from project.yaml data....
@@ -687,6 +703,10 @@ Stra...
     e: SmellDetector
     SmellDetector  # Detect code smells from analysis results....
       __init__(1)  CC=1.0
+  code2llm/analysis/dfg.py:
+    e: DFGExtractor
+    DFGExtractor  # Extract Data Flow Graph from AST....
+      __init__(1)  CC=1.0
   code2llm/nlp/intent_matching.py:
     e: IntentMatch,IntentMatchingResult,IntentMatcher
     IntentMatch  # Single intent match result....
@@ -694,10 +714,6 @@ Stra...
       get_best_intent(0)  CC=2.0
     IntentMatcher  # Match queries to intents using fuzzy and keyword matching....
       __init__(2)  CC=3.0
-  code2llm/analysis/dfg.py:
-    e: DFGExtractor
-    DFGExtractor  # Extract Data Flow Graph from AST....
-      __init__(1)  CC=1.0
   code2llm/exporters/article_view.py:
     e: ArticleViewGenerator
     ArticleViewGenerator  # Generate status.md — publishable project health article....
@@ -811,17 +827,6 @@ Unlike simple L...
     _handle_code2logic_error(res,cmd)
     _find_code2logic_output(output_dir,res)
     _normalize_code2logic_output(found,target,args)
-  code2llm/cli_exports/prompt.py:
-    e: _export_prompt_txt,_export_chunked_prompt_txt,_get_prompt_paths,_build_prompt_header,_build_main_files_section,_get_missing_files,_build_subprojects_section,_build_missing_files_section,_build_prompt_footer
-    _export_prompt_txt(args,output_dir,formats,source_path)
-    _export_chunked_prompt_txt(args,output_dir,formats,source_path,subprojects)
-    _get_prompt_paths(source_path,output_dir)
-    _build_prompt_header(project_path)
-    _build_main_files_section(output_dir,output_rel_path)
-    _get_missing_files(output_dir)
-    _build_subprojects_section(subprojects,output_dir,output_rel_path)
-    _build_missing_files_section(output_dir,output_rel_path)
-    _build_prompt_footer(chunked)
   examples/streaming-analyzer/sample_project/main.py:
     e: UserRequest,Application,main
     UserRequest  # User request data structure....
@@ -936,6 +941,10 @@ Unlike simple L...
   setup.py:
     e: read_readme
     read_readme()
+  code2llm/api.py:
+    e: analyze,analyze_file
+    analyze(project_path,config)
+    analyze_file(file_path,config)
   code2llm/analysis/__init__.py:
     e: __getattr__
     __getattr__(name)

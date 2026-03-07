@@ -1,5 +1,19 @@
 ## [Unreleased]
 
+## [0.5.45] - 2026-03-07
+
+### Docs
+- Update README.md
+- Update context.md
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update analysis.toon
+- Update project/analysis.toon
+- Update project/batch_1/analysis.toon
+- Update project/root/analysis.toon
+
 ## [0.5.44] - 2026-03-07
 
 ### Other

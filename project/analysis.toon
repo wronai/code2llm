@@ -1,13 +1,13 @@
-# code2llm | 90f 17333L | py:90 | 2026-03-07
-# CC̄=4.4 | critical:54/824 | dups:0 | cycles:0
+# code2llm | 91f 17406L | py:91 | 2026-03-07
+# CC̄=4.4 | critical:54/826 | dups:0 | cycles:0
 
 HEALTH[6]:
-  🟡 CC    main CC=17 (limit:15)
-  🟡 CC    _validate_chunked_output CC=15 (limit:15)
-  🟡 CC    _find_data_pipelines CC=17 (limit:15)
   🟡 CC    _resolve_callee CC=18 (limit:15)
+  🟡 CC    main CC=17 (limit:15)
+  🟡 CC    _find_data_pipelines CC=17 (limit:15)
   🟡 CC    _infer_from_name CC=17 (limit:15)
   🟡 CC    _export_chunked_results CC=17 (limit:15)
+  🟡 CC    _validate_chunked_output CC=15 (limit:15)
 
 REFACTOR[1]:
   1. split 6 high-CC methods  (CC>15)
@@ -80,6 +80,7 @@ LAYERS:
   │ !! orchestrator                96L  0C    3m  CC=17     ←1
   │ coupling                    77L  1C    5m  CC=7      ←0
   │ incremental                 75L  1C    5m  CC=5      ←0
+  │ api                         73L  0C    2m  CC=2      ←0
   │ strategies                  68L  1C    0m  CC=0.0    ←0
   │ __init__                    66L  1C    3m  CC=1      ←0
   │ file_cache                  62L  1C    6m  CC=4      ←0
@@ -132,7 +133,7 @@ LAYERS:
 
 DUPLICATES[0]: none
 
-FUNCTIONS (CC≥10, 54 of 720):
+FUNCTIONS (CC≥10, 54 of 722):
    18.0  PipelineDetector._resolve_callee           21n   6exit  cond+ret  !! split
    17.0  main                                       21n   3exit  loops+cond+ret  !! split
    17.0  DataAnalyzer._find_data_pipelines          14n   2exit  loops+cond+ret  !! split
@@ -168,8 +169,8 @@ FUNCTIONS (CC≥10, 54 of 720):
    12.0  _export_mermaid                             8n   1exit  cond
    12.0  _build_prompt_footer                       21n   2exit  loops+cond+ret
    12.0  PromptEngine._build_context_for_smell       5n   2exit  cond+ret
-   12.0  MetricsComputer._compute_file_metrics      21n   2exit  loops+cond+ret
    12.0  FileAnalyzer._process_function             14n   2exit  loops+cond+ret
+   12.0  MetricsComputer._compute_file_metrics      21n   2exit  loops+cond+ret
    11.0  ProjectYAMLExporter._build_class_export    12n   2exit  loops+cond+ret
    11.0  ContextViewGenerator._render_exports        7n   2exit  loops+cond+ret
    11.0  validate_project_yaml                      16n   3exit  loops+cond+ret
@@ -178,24 +179,24 @@ FUNCTIONS (CC≥10, 54 of 720):
    10.0  ProjectAnalyzer.analyze_project            17n   2exit  cond+ret
    10.0  _split_by_modules                          15n   2exit  loops+cond+ret
    10.0  NLPPipeline._format_action                 29n  10exit  cond+ret
+   10.0  ContextExporter._trace_flow                14n   3exit  loops+cond+ret
    10.0  EvolutionExporter._build_context            3n   2exit  ret
    10.0  EvolutionExporter._render_next             16n   3exit  loops+cond+ret
    10.0  FlowRenderer.render_pipelines               9n   3exit  loops+cond+ret
-   10.0  ContextExporter._trace_flow                14n   3exit  loops+cond+ret
    10.0  FlowExporter._infer_invariant              21n   8exit  cond+ret
 
   summary:
-    critical(≥10): 54 | high(5-10): 245 | medium(2-5): 268 | low(<2): 153
-    8% CC≥10  42% CC≥5
+    critical(≥10): 54 | high(5-10): 245 | medium(2-5): 269 | low(<2): 154
+    7% CC≥10  41% CC≥5
 
 HOTSPOTS:
   #1  _summarize_functions                 fan=21   "calls 21 functions"
   #2  run_benchmark                        fan=18   "calls 18 functions"
   #3  ProjectAnalyzer.analyze_project      fan=18   "analysis pipeline, 18 stages"
   #4  ToonExporter.export                  fan=18   "export with 18 outputs"
-  #5  NLPPipeline.process                  fan=17   "analysis pipeline, 17 stages"
-  #6  MermaidExporter.export_call_graph    fan=17   "export with 17 outputs"
-  #7  ProjectYAMLExporter._build_project_yaml  fan=17   "ProjectYAMLExporter method, fan-out=17"
+  #5  MermaidExporter.export_call_graph    fan=17   "export with 17 outputs"
+  #6  ProjectYAMLExporter._build_project_yaml  fan=17   "ProjectYAMLExporter method, fan-out=17"
+  #7  NLPPipeline.process                  fan=17   "analysis pipeline, 17 stages"
   #8  run_benchmark                        fan=16   "calls 16 functions"
   #9  evaluate_format                      fan=16   "16-way dispatch"
   #10 StreamingAnalyzer.analyze_streaming  fan=16   "analysis pipeline, 16 stages"
@@ -216,8 +217,8 @@ CLASSES:
   ContextExporter                ████████████              14m  CC̄=4.8   max=10  
   FlowExporter                   ████████████              14m  CC̄=5.6   max=10  
   PipelineDetector               ███████████               13m  CC̄=6.9   max=18    !!
-  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   IntentMatcher                  ███████████               13m  CC̄=3.5   max=7   
+  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   QueryNormalizer                ███████████               13m  CC̄=1.8   max=6   
   MapExporter                    ███████████               13m  CC̄=4.8   max=13  
   DFGExtractor                   ██████████                12m  CC̄=3.6   max=7   
@@ -242,8 +243,8 @@ CLASSES:
   IncrementalAnalyzer            ████                       5m  CC̄=2.8   max=5   
   StreamingFileCache             ████                       5m  CC̄=2.0   max=4   
   UserService                    ███                        4m  CC̄=1.8   max=3   
-  NLPPipelineResult              ███                        4m  CC̄=2.0   max=3   
   AnalysisResult                 ███                        4m  CC̄=1.0   max=1   
+  NLPPipelineResult              ███                        4m  CC̄=2.0   max=3   
   SmartPrioritizer               ███                        4m  CC̄=5.2   max=9   
   ToonExporter                   ██                         3m  CC̄=1.0   max=1   
   FastFileFilter                 ██                         3m  CC̄=6.0   max=8   
@@ -264,15 +265,14 @@ CLASSES:
   DepthConfig                                               0m  CC̄=0.0   max=0.0 
   OutputConfig                                              0m  CC̄=0.0   max=0.0 
   Config                                                    0m  CC̄=0.0   max=0.0 
-  SubProject                                                0m  CC̄=0.0   max=0.0 
   NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
   IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
   EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
   MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
   IntentMatch                                               0m  CC̄=0.0   max=0.0 
-  NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   Entity                                                    0m  CC̄=0.0   max=0.0 
-  PipelineStage                                             0m  CC̄=0.0   max=0.0 
+  SubProject                                                0m  CC̄=0.0   max=0.0 
+  NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   FlowNode                                                  0m  CC̄=0.0   max=0.0 
   FlowEdge                                                  0m  CC̄=0.0   max=0.0 
   FunctionInfo                                              0m  CC̄=0.0   max=0.0 
@@ -282,6 +282,7 @@ CLASSES:
   CodeSmell                                                 0m  CC̄=0.0   max=0.0 
   Mutation                                                  0m  CC̄=0.0   max=0.0 
   DataFlow                                                  0m  CC̄=0.0   max=0.0 
+  PipelineStage                                             0m  CC̄=0.0   max=0.0 
   FuncSummary                                               0m  CC̄=0.0   max=0.0 
   ScanStrategy                                              0m  CC̄=0.0   max=0.0 
   FilePriority                                              0m  CC̄=0.0   max=0.0 
@@ -328,6 +329,23 @@ D:
     _run_exports(args,result,output_dir,source_path)
     _export_single_project(args,result,output_dir,formats,source_path)
     _export_chunked_results(args,result,output_dir,source_path,formats)
+  validate_toon.py:
+    e: load_yaml,load_file,extract_functions_from_yaml,extract_functions_from_toon,extract_classes_from_yaml,extract_classes_from_toon,analyze_class_differences,extract_modules_from_yaml,extract_modules_from_toon,compare_basic_stats,compare_functions,compare_classes,compare_modules,validate_toon_completeness,main
+    load_yaml(filepath)
+    load_file(filepath)
+    extract_functions_from_yaml(yaml_data)
+    extract_functions_from_toon(toon_data)
+    extract_classes_from_yaml(yaml_data)
+    extract_classes_from_toon(toon_data)
+    analyze_class_differences(yaml_data,toon_data)
+    extract_modules_from_yaml(yaml_data)
+    extract_modules_from_toon(toon_data)
+    compare_basic_stats(yaml_data,toon_data)
+    compare_functions(yaml_data,toon_data)
+    compare_classes(yaml_data,toon_data)
+    compare_modules(yaml_data,toon_data)
+    validate_toon_completeness(toon_data)
+    main()
   code2llm/cli.py:
     e: create_parser,_handle_special_commands,_handle_report_command,_validate_and_setup,_print_start_info,_validate_chunked_output,main,generate_llm_context
     create_parser()
@@ -536,15 +554,15 @@ S...
     e: PromptEngine
     PromptEngine  # Generate refactoring prompts from analysis results and detec...
       __init__(2)  CC=4.0
-  code2llm/exporters/toon/metrics.py:
-    e: MetricsComputer
-    MetricsComputer  # Computes all metrics for TOON export....
-      __init__(0)  CC=1.0
   code2llm/core/core/file_analyzer.py:
     e: FileAnalyzer,_analyze_single_file
     FileAnalyzer  # Analyzes a single file....
       __init__(2)  CC=1.0
     _analyze_single_file(args)
+  code2llm/exporters/toon/metrics.py:
+    e: MetricsComputer
+    MetricsComputer  # Computes all metrics for TOON export....
+      __init__(0)  CC=1.0
   code2llm/exporters/context_view.py:
     e: ContextViewGenerator
     ContextViewGenerator  # Generate context.md from project.yaml data....
@@ -595,10 +613,6 @@ S...
       is_successful(0)  CC=3.0
     NLPPipeline  # Main NLP processing pipeline (4a-4e)....
       __init__(1)  CC=2.0
-  code2llm/exporters/evolution_exporter.py:
-    e: EvolutionExporter
-    EvolutionExporter  # Export evolution.toon — prioritized refactoring queue....
-      _is_excluded(1)  CC=5.0
   code2llm/exporters/context_exporter.py:
     e: ContextExporter
     ContextExporter  # Export LLM-ready analysis summary with architecture and flow...
@@ -616,12 +630,20 @@ S...
         → _get_behavioral_patterns(1)  CC=4.0
         → _get_api_surface(1)  CC=5.0
         → _get_system_interactions(1)  CC=5.0
+  code2llm/exporters/evolution_exporter.py:
+    e: EvolutionExporter
+    EvolutionExporter  # Export evolution.toon — prioritized refactoring queue....
+      _is_excluded(1)  CC=5.0
   code2llm/exporters/flow_exporter.py:
     e: FlowExporter
     FlowExporter  # Export to flow.toon — data-flow focused format.
 
 Sections: P...
       __init__(0)  CC=1.0
+  code2llm/analysis/call_graph.py:
+    e: CallGraphExtractor
+    CallGraphExtractor  # Extract call graph from AST....
+      __init__(1)  CC=1.0
   code2llm/core/large_repo.py:
     e: SubProject,HierarchicalRepoSplitter,should_use_chunking,get_analysis_plan
     SubProject  # Represents a sub-project within a larger repository....
@@ -631,23 +653,19 @@ Stra...
       __init__(2)  CC=1.0
     should_use_chunking(project_path,size_threshold_kb)
     get_analysis_plan(project_path,size_limit_kb)
-  code2llm/analysis/call_graph.py:
-    e: CallGraphExtractor
-    CallGraphExtractor  # Extract call graph from AST....
-      __init__(1)  CC=1.0
   code2llm/patterns/detector.py:
     e: PatternDetector
     PatternDetector  # Detect behavioral patterns in code....
       __init__(1)  CC=1.0
-  code2llm/core/core/refactoring.py:
-    e: RefactoringAnalyzer
-    RefactoringAnalyzer  # Performs refactoring analysis on code....
-      __init__(2)  CC=1.0
   code2llm/core/streaming/prioritizer.py:
     e: FilePriority,SmartPrioritizer
     FilePriority  # Priority scoring for file analysis order....
     SmartPrioritizer  # Smart file prioritization for optimal analysis order....
       __init__(1)  CC=1.0
+  code2llm/core/core/refactoring.py:
+    e: RefactoringAnalyzer
+    RefactoringAnalyzer  # Performs refactoring analysis on code....
+      __init__(2)  CC=1.0
   code2llm/core/models.py:
     e: BaseModel,FlowNode,FlowEdge,FunctionInfo,ClassInfo,ModuleInfo,Pattern,CodeSmell,Mutation,DataFlow,AnalysisResult
     BaseModel  # Base class for models with automated serialization....
@@ -879,13 +897,6 @@ Unlike simple L...
     DatabaseConnection  # Simple database connection simulator....
       __init__(1)  CC=2.0
         → _load_data(0)  CC=3.0
-  benchmarks/benchmark_format_quality.py:
-    e: _print_benchmark_header,_print_ground_truth_info,_generate_format_outputs,_create_offline_scores,run_benchmark
-    _print_benchmark_header()
-    _print_ground_truth_info(project_path)
-    _generate_format_outputs(result,output_dir)
-    _create_offline_scores()
-    run_benchmark()
   scripts/bump_version.py:
     e: get_current_version,parse_version,format_version,bump_version,update_pyproject_toml,update_version_file,main
     get_current_version()
@@ -900,6 +911,13 @@ Unlike simple L...
     index()
     generate_badges()
     get_badges()
+  benchmarks/benchmark_format_quality.py:
+    e: _print_benchmark_header,_print_ground_truth_info,_generate_format_outputs,_create_offline_scores,run_benchmark
+    _print_benchmark_header()
+    _print_ground_truth_info(project_path)
+    _generate_format_outputs(result,output_dir)
+    _create_offline_scores()
+    run_benchmark()
   code2llm/core/core/file_cache.py:
     e: FileCache
     FileCache  # Cache for parsed AST files....
@@ -937,12 +955,22 @@ Unlike simple L...
     AuthManager  # Manages user authentication and authorization....
       __init__(0)  CC=1.0
         → _hash(1)  CC=1.0
+  code2llm/__init__.py:
+    e: __getattr__
+    __getattr__(name)
   setup.py:
     e: read_readme
     read_readme()
+  code2llm/api.py:
+    e: analyze,analyze_file
+    analyze(project_path,config)
+    analyze_file(file_path,config)
   code2llm/analysis/__init__.py:
     e: __getattr__
     __getattr__(name)
+  setup.py:
+    e: read_readme
+    read_readme()
   benchmarks/project_generator.py:
     e: create_core_py,create_etl_py,create_validation_py,create_utils_py,add_validator_to_core,create_ground_truth_project
     create_core_py(project)
