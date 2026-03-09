@@ -5,7 +5,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from .config import Config, FAST_CONFIG
+from .config import Config, FAST_CONFIG, ALL_EXTENSIONS, LANGUAGE_EXTENSIONS
 from .models import AnalysisResult, FlowEdge, FlowNode, Pattern
 from ..analysis.call_graph import CallGraphExtractor
 
@@ -84,23 +84,28 @@ class ProjectAnalyzer:
         return merged
     
     def _collect_files(self, project_path: Path) -> List[Tuple[str, str]]:
-        """Collect all Python files with their module names."""
+        """Collect all source files with their module names for all supported languages."""
         files = []
         
-        for py_file in project_path.rglob("*.py"):
-            file_str = str(py_file)
-            if not self.file_filter.should_process(file_str):
-                continue
-            
-            # Calculate module name
-            rel_path = py_file.relative_to(project_path)
-            parts = list(rel_path.parts)[:-1]  # Remove .py
-            if py_file.name == '__init__.py':
-                module_name = '.'.join(parts) if parts else project_path.name
-            else:
-                module_name = '.'.join(parts + [py_file.stem])
-            
-            files.append((file_str, module_name))
+        # Collect files for all supported extensions
+        for ext in ALL_EXTENSIONS:
+            for src_file in project_path.rglob(f"*{ext}"):
+                file_str = str(src_file)
+                if not self.file_filter.should_process(file_str):
+                    continue
+                
+                # Calculate module name
+                rel_path = src_file.relative_to(project_path)
+                parts = list(rel_path.parts)[:-1]  # Remove filename
+                
+                # Handle init files for various languages
+                is_init = src_file.name in ('__init__.py', 'index.js', 'index.ts', 'mod.rs', 'lib.rs')
+                if is_init:
+                    module_name = '.'.join(parts) if parts else project_path.name
+                else:
+                    module_name = '.'.join(parts + [src_file.stem])
+                
+                files.append((file_str, module_name))
         
         return files
     

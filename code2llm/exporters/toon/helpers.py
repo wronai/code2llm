@@ -97,19 +97,24 @@ def _hotspot_description(fi: FunctionInfo, fan_out: int) -> str:
 
 
 def _scan_line_counts(project_path) -> Dict[str, int]:
-    """Scan project directory for Python file line counts."""
+    """Scan project directory for all source file line counts."""
+    from ...core.config import ALL_EXTENSIONS
+    
     line_counts: Dict[str, int] = {}
     if not project_path:
         return line_counts
     pp = Path(project_path)
     if not pp.is_dir():
         return line_counts
-    for py in pp.rglob("*.py"):
-        try:
-            lc = len(py.read_text(encoding="utf-8", errors="ignore").splitlines())
-            rel = str(py.relative_to(pp))
-            line_counts[str(py)] = lc
-            line_counts[rel] = lc
-        except Exception:
-            pass
+    
+    # Scan all supported language extensions
+    for ext in ALL_EXTENSIONS:
+        for src_file in pp.rglob(f"*{ext}"):
+            try:
+                lc = len(src_file.read_text(encoding="utf-8", errors="ignore").splitlines())
+                rel = str(src_file.relative_to(pp))
+                line_counts[str(src_file)] = lc
+                line_counts[rel] = lc
+            except Exception:
+                pass
     return line_counts

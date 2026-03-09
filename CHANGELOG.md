@@ -1,5 +1,18 @@
 ## [Unreleased]
 
+## [0.5.46] - 2026-03-09
+
+### Test
+- Update tests/test_multilanguage_e2e.py
+
+### Other
+- Update code2llm/core/analyzer.py
+- Update code2llm/core/config.py
+- Update code2llm/core/core/file_analyzer.py
+- Update code2llm/exporters/map_exporter.py
+- Update code2llm/exporters/project_yaml_exporter.py
+- Update code2llm/exporters/toon/helpers.py
+
 ## [0.5.45] - 2026-03-07
 
 ### Docs

@@ -18,6 +18,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from .base import Exporter
 from ..core.models import AnalysisResult, FunctionInfo, ClassInfo
 from .toon.helpers import _is_excluded, _rel_path, _scan_line_counts
+from ..core.config import LANGUAGE_EXTENSIONS
 
 
 # Thresholds
@@ -79,7 +80,7 @@ class ProjectYAMLExporter(Exporter):
             "project": {
                 "name": Path(result.project_path).name if result.project_path else "unknown",
                 "repo": result.project_path or "",
-                "language": "python",
+                "language": self._detect_primary_language(result),
                 "analyzed_at": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "tool": "code2llm",
                 "stats": {
@@ -470,6 +471,32 @@ class ProjectYAMLExporter(Exporter):
         evolution.append(new_entry)
 
         return evolution
+
+    def _detect_primary_language(self, result: AnalysisResult) -> str:
+        """Detect the primary language of the project based on file counts."""
+        lang_counts: Dict[str, int] = defaultdict(int)
+        
+        # Count files by language
+        for mi in result.modules.values():
+            if _is_excluded(mi.file):
+                continue
+            detected = False
+            for lang, extensions in LANGUAGE_EXTENSIONS.items():
+                if any(mi.file.endswith(ext) for ext in extensions):
+                    lang_counts[lang] += 1
+                    detected = True
+                    break
+            if not detected:
+                # Fallback to extension
+                ext = Path(mi.file).suffix.lstrip('.').lower()
+                if ext:
+                    lang_counts[ext] += 1
+        
+        if not lang_counts:
+            return "unknown"
+        
+        # Return the most common language
+        return max(lang_counts.items(), key=lambda x: x[1])[0]
 
     def _load_previous_evolution(self, output_path: Path) -> List[Dict]:
         if not output_path.exists():

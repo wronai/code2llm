@@ -1,12 +1,13 @@
-"""File analyzer for analyzing individual Python files."""
+"""File analyzer for analyzing individual source files across multiple languages."""
 
 import ast
+import re
 from pathlib import Path
 from typing import Dict, List, Optional
 
 from radon.complexity import cc_visit, cc_rank
 
-from ..config import Config
+from ..config import Config, LANGUAGE_EXTENSIONS
 from ..models import (
     AnalysisResult, ClassInfo, FlowEdge, FlowNode,
     FunctionInfo, ModuleInfo
@@ -32,16 +33,36 @@ class FileAnalyzer:
         }
     
     def analyze_file(self, file_path: str, module_name: str) -> Dict:
-        """Analyze a single Python file."""
+        """Analyze a single source file based on its language."""
         path = Path(file_path)
         if not path.exists():
             return {}
+        
+        # Detect language from extension
+        ext = path.suffix.lower()
         
         try:
             content = path.read_text(encoding='utf-8', errors='ignore')
         except Exception:
             return {}
         
+        # Route to appropriate analyzer based on language
+        if ext == '.py':
+            return self._analyze_python(content, file_path, module_name)
+        elif ext in ('.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'):
+            return self._analyze_typescript_js(content, file_path, module_name, ext)
+        elif ext == '.go':
+            return self._analyze_go(content, file_path, module_name)
+        elif ext == '.rs':
+            return self._analyze_rust(content, file_path, module_name)
+        elif ext == '.java':
+            return self._analyze_java(content, file_path, module_name)
+        else:
+            # For unsupported languages, do basic structural analysis
+            return self._analyze_generic(content, file_path, module_name, ext)
+    
+    def _analyze_python(self, content: str, file_path: str, module_name: str) -> Dict:
+        """Analyze Python file using AST."""
         # Try cache
         if self.cache and self.config.performance.enable_cache:
             cached = self.cache.get(file_path, content)
@@ -354,6 +375,433 @@ class FileAnalyzer:
         elif isinstance(node, ast.Attribute):
             return f"{self._get_call_name(node.value)}.{node.attr}"
         return None
+
+    # ------------------------------------------------------------------
+    # TypeScript/JavaScript analysis (regex-based)
+    # ------------------------------------------------------------------
+    def _analyze_typescript_js(self, content: str, file_path: str, module_name: str, ext: str) -> Dict:
+        """Analyze TypeScript/JavaScript files using regex-based parsing."""
+        result = {
+            'module': ModuleInfo(
+                name=module_name,
+                file=file_path,
+                is_package=Path(file_path).name in ('index.ts', 'index.js', 'index.tsx', 'index.jsx')
+            ),
+            'functions': {},
+            'classes': {},
+            'nodes': {},
+            'edges': [],
+        }
+        
+        lines = content.split('\n')
+        
+        # Patterns for TypeScript/JavaScript
+        import_pattern = re.compile(r"^\s*import\s+.*?\s+from\s+['\"]([^'\"]+)['\"]")
+        class_pattern = re.compile(r"^\s*(?:export\s+)?(?:default\s+)?class\s+(\w+)(?:\s+extends\s+(\w+))?(?:\s+implements\s+([^{]+))?")
+        func_pattern = re.compile(r"^\s*(?:export\s+)?(?:async\s+)?(?:function\s+(\w+)|(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?[\(\w])")
+        interface_pattern = re.compile(r"^\s*(?:export\s+)?interface\s+(\w+)")
+        
+        current_class = None
+        current_class_line = 0
+        
+        for line_no, line in enumerate(lines, 1):
+            line = line.strip()
+            if not line or line.startswith('//') or line.startswith('/*') or line.startswith('*'):
+                continue
+            
+            # Imports
+            import_match = import_pattern.match(line)
+            if import_match:
+                result['module'].imports.append(import_match.group(1))
+            
+            # Classes
+            class_match = class_pattern.match(line)
+            if class_match:
+                class_name = class_match.group(1)
+                qualified_name = f"{module_name}.{class_name}"
+                bases = []
+                if class_match.group(2):
+                    bases.append(class_match.group(2).strip())
+                if class_match.group(3):
+                    bases.extend([b.strip() for b in class_match.group(3).split(',')])
+                
+                result['classes'][qualified_name] = ClassInfo(
+                    name=class_name,
+                    qualified_name=qualified_name,
+                    file=file_path,
+                    line=line_no,
+                    module=module_name,
+                    bases=bases,
+                    methods=[],
+                    docstring="",
+                )
+                result['module'].classes.append(qualified_name)
+                self.stats['classes_found'] += 1
+                current_class = qualified_name
+                current_class_line = line_no
+            
+            # Interfaces (treat as classes)
+            interface_match = interface_pattern.match(line)
+            if interface_match:
+                class_name = interface_match.group(1)
+                qualified_name = f"{module_name}.{class_name}"
+                result['classes'][qualified_name] = ClassInfo(
+                    name=class_name,
+                    qualified_name=qualified_name,
+                    file=file_path,
+                    line=line_no,
+                    module=module_name,
+                    bases=[],
+                    methods=[],
+                    docstring="",
+                )
+                result['module'].classes.append(qualified_name)
+                self.stats['classes_found'] += 1
+            
+            # Functions
+            func_match = func_pattern.match(line)
+            if func_match:
+                func_name = func_match.group(1) or func_match.group(2)
+                if func_name:
+                    if current_class and line_no > current_class_line:
+                        # Method
+                        method_name = func_name
+                        qualified_name = f"{current_class}.{method_name}"
+                        result['classes'][current_class].methods.append(qualified_name)
+                    else:
+                        # Standalone function
+                        qualified_name = f"{module_name}.{func_name}"
+                    
+                    result['functions'][qualified_name] = FunctionInfo(
+                        name=func_name,
+                        qualified_name=qualified_name,
+                        file=file_path,
+                        line=line_no,
+                        column=0,
+                        module=module_name,
+                        class_name=current_class.split('.')[-1] if current_class else None,
+                        is_method=current_class is not None,
+                        is_private=func_name.startswith('_'),
+                        is_property=False,
+                        docstring="",
+                        args=[],
+                        decorators=[],
+                    )
+                    result['module'].functions.append(qualified_name)
+                    self.stats['functions_found'] += 1
+        
+        self.stats['files_processed'] += 1
+        return result
+
+    # ------------------------------------------------------------------
+    # Go analysis (regex-based)
+    # ------------------------------------------------------------------
+    def _analyze_go(self, content: str, file_path: str, module_name: str) -> Dict:
+        """Analyze Go files using regex-based parsing."""
+        result = {
+            'module': ModuleInfo(name=module_name, file=file_path, is_package=False),
+            'functions': {},
+            'classes': {},
+            'nodes': {},
+            'edges': [],
+        }
+        
+        lines = content.split('\n')
+        
+        import_pattern = re.compile(r'^\s*import\s+(?:\(\s*["\']([^"\']+)["\']|["\']([^"\']+)["\'])')
+        func_pattern = re.compile(r'^\s*func\s+(?:\([^)]+\)\s+)?(\w+)\s*\(')
+        struct_pattern = re.compile(r'^\s*type\s+(\w+)\s+struct')
+        interface_pattern = re.compile(r'^\s*type\s+(\w+)\s+interface')
+        
+        for line_no, line in enumerate(lines, 1):
+            line = line.strip()
+            if not line or line.startswith('//'):
+                continue
+            
+            # Imports
+            import_match = import_pattern.match(line)
+            if import_match:
+                imp = import_match.group(1) or import_match.group(2)
+                if imp:
+                    result['module'].imports.append(imp)
+            
+            # Functions
+            func_match = func_pattern.match(line)
+            if func_match:
+                func_name = func_match.group(1)
+                qualified_name = f"{module_name}.{func_name}"
+                result['functions'][qualified_name] = FunctionInfo(
+                    name=func_name, qualified_name=qualified_name,
+                    file=file_path, line=line_no, column=0,
+                    module=module_name, class_name=None,
+                    is_method=False, is_private=func_name.startswith('_'),
+                    is_property=False, docstring="", args=[], decorators=[],
+                )
+                result['module'].functions.append(qualified_name)
+                self.stats['functions_found'] += 1
+            
+            # Structs (treated as classes)
+            struct_match = struct_pattern.match(line)
+            if struct_match:
+                class_name = struct_match.group(1)
+                qualified_name = f"{module_name}.{class_name}"
+                result['classes'][qualified_name] = ClassInfo(
+                    name=class_name, qualified_name=qualified_name,
+                    file=file_path, line=line_no, module=module_name,
+                    bases=[], methods=[], docstring="",
+                )
+                result['module'].classes.append(qualified_name)
+                self.stats['classes_found'] += 1
+            
+            # Interfaces
+            interface_match = interface_pattern.match(line)
+            if interface_match:
+                class_name = interface_match.group(1)
+                qualified_name = f"{module_name}.{class_name}"
+                result['classes'][qualified_name] = ClassInfo(
+                    name=class_name, qualified_name=qualified_name,
+                    file=file_path, line=line_no, module=module_name,
+                    bases=[], methods=[], docstring="", is_interface=True,
+                )
+                result['module'].classes.append(qualified_name)
+                self.stats['classes_found'] += 1
+        
+        self.stats['files_processed'] += 1
+        return result
+
+    # ------------------------------------------------------------------
+    # Rust analysis (regex-based)
+    # ------------------------------------------------------------------
+    def _analyze_rust(self, content: str, file_path: str, module_name: str) -> Dict:
+        """Analyze Rust files using regex-based parsing."""
+        result = {
+            'module': ModuleInfo(name=module_name, file=file_path, is_package=Path(file_path).name == 'mod.rs'),
+            'functions': {},
+            'classes': {},
+            'nodes': {},
+            'edges': [],
+        }
+        
+        lines = content.split('\n')
+        
+        use_pattern = re.compile(r'^\s*use\s+([\w:]+)')
+        fn_pattern = re.compile(r'^\s*(?:pub\s+)?fn\s+(\w+)\s*\(')
+        struct_pattern = re.compile(r'^\s*(?:pub\s+)?struct\s+(\w+)')
+        impl_pattern = re.compile(r'^\s*impl\s+(?:<[^>]+>\s+)?(\w+)')
+        trait_pattern = re.compile(r'^\s*(?:pub\s+)?trait\s+(\w+)')
+        
+        current_impl = None
+        
+        for line_no, line in enumerate(lines, 1):
+            line = line.strip()
+            if not line or line.startswith('//'):
+                continue
+            
+            # Imports
+            use_match = use_pattern.match(line)
+            if use_match:
+                result['module'].imports.append(use_match.group(1))
+            
+            # Functions
+            fn_match = fn_pattern.match(line)
+            if fn_match:
+                func_name = fn_match.group(1)
+                qualified_name = f"{module_name}.{func_name}"
+                result['functions'][qualified_name] = FunctionInfo(
+                    name=func_name, qualified_name=qualified_name,
+                    file=file_path, line=line_no, column=0,
+                    module=module_name, class_name=current_impl,
+                    is_method=current_impl is not None,
+                    is_private=not line.startswith('pub'),
+                    is_property=False, docstring="", args=[], decorators=[],
+                )
+                result['module'].functions.append(qualified_name)
+                self.stats['functions_found'] += 1
+            
+            # Structs
+            struct_match = struct_pattern.match(line)
+            if struct_match:
+                class_name = struct_match.group(1)
+                qualified_name = f"{module_name}.{class_name}"
+                result['classes'][qualified_name] = ClassInfo(
+                    name=class_name, qualified_name=qualified_name,
+                    file=file_path, line=line_no, module=module_name,
+                    bases=[], methods=[], docstring="",
+                )
+                result['module'].classes.append(qualified_name)
+                self.stats['classes_found'] += 1
+            
+            # impl blocks
+            impl_match = impl_pattern.match(line)
+            if impl_match:
+                current_impl = impl_match.group(1)
+            
+            # Traits (interfaces)
+            trait_match = trait_pattern.match(line)
+            if trait_match:
+                class_name = trait_match.group(1)
+                qualified_name = f"{module_name}.{class_name}"
+                result['classes'][qualified_name] = ClassInfo(
+                    name=class_name, qualified_name=qualified_name,
+                    file=file_path, line=line_no, module=module_name,
+                    bases=[], methods=[], docstring="", is_interface=True,
+                )
+                result['module'].classes.append(qualified_name)
+                self.stats['classes_found'] += 1
+        
+        self.stats['files_processed'] += 1
+        return result
+
+    # ------------------------------------------------------------------
+    # Java analysis (regex-based)
+    # ------------------------------------------------------------------
+    def _analyze_java(self, content: str, file_path: str, module_name: str) -> Dict:
+        """Analyze Java files using regex-based parsing."""
+        result = {
+            'module': ModuleInfo(name=module_name, file=file_path, is_package=False),
+            'functions': {},
+            'classes': {},
+            'nodes': {},
+            'edges': [],
+        }
+        
+        lines = content.split('\n')
+        
+        import_pattern = re.compile(r'^\s*import\s+([\w.]+)')
+        class_pattern = re.compile(r'^\s*(?:public\s+|private\s+|protected\s+)?(?:abstract\s+)?(?:final\s+)?class\s+(\w+)(?:\s+extends\s+(\w+))?(?:\s+implements\s+([^{]+))?')
+        interface_pattern = re.compile(r'^\s*(?:public\s+)?interface\s+(\w+)')
+        method_pattern = re.compile(r'^\s*(?:public\s+|private\s+|protected\s+)?(?:static\s+)?(?:final\s+)?(?:abstract\s+)?[\w<>,\[\]]+\s+(\w+)\s*\([^)]*\)\s*\{?')
+        
+        current_class = None
+        
+        for line_no, line in enumerate(lines, 1):
+            line = line.strip()
+            if not line or line.startswith('//') or line.startswith('/*') or line.startswith('*'):
+                continue
+            
+            # Imports
+            import_match = import_pattern.match(line)
+            if import_match:
+                result['module'].imports.append(import_match.group(1))
+            
+            # Classes
+            class_match = class_pattern.match(line)
+            if class_match:
+                class_name = class_match.group(1)
+                qualified_name = f"{module_name}.{class_name}"
+                bases = []
+                if class_match.group(2):
+                    bases.append(class_match.group(2).strip())
+                if class_match.group(3):
+                    bases.extend([b.strip() for b in class_match.group(3).split(',')])
+                
+                result['classes'][qualified_name] = ClassInfo(
+                    name=class_name, qualified_name=qualified_name,
+                    file=file_path, line=line_no, module=module_name,
+                    bases=bases, methods=[], docstring="",
+                )
+                result['module'].classes.append(qualified_name)
+                self.stats['classes_found'] += 1
+                current_class = qualified_name
+            
+            # Interfaces
+            interface_match = interface_pattern.match(line)
+            if interface_match:
+                class_name = interface_match.group(1)
+                qualified_name = f"{module_name}.{class_name}"
+                result['classes'][qualified_name] = ClassInfo(
+                    name=class_name, qualified_name=qualified_name,
+                    file=file_path, line=line_no, module=module_name,
+                    bases=[], methods=[], docstring="", is_interface=True,
+                )
+                result['module'].classes.append(qualified_name)
+                self.stats['classes_found'] += 1
+            
+            # Methods
+            method_match = method_pattern.match(line)
+            if method_match:
+                method_name = method_match.group(1)
+                if current_class and not method_name[0].isupper():  # Skip constructors
+                    qualified_name = f"{current_class}.{method_name}"
+                    result['functions'][qualified_name] = FunctionInfo(
+                        name=method_name, qualified_name=qualified_name,
+                        file=file_path, line=line_no, column=0,
+                        module=module_name, class_name=current_class.split('.')[-1],
+                        is_method=True, is_private=False,
+                        is_property=False, docstring="", args=[], decorators=[],
+                    )
+                    result['module'].functions.append(qualified_name)
+                    result['classes'][current_class].methods.append(qualified_name)
+                    self.stats['functions_found'] += 1
+        
+        self.stats['files_processed'] += 1
+        return result
+
+    # ------------------------------------------------------------------
+    # Generic analysis for other languages
+    # ------------------------------------------------------------------
+    def _analyze_generic(self, content: str, file_path: str, module_name: str, ext: str) -> Dict:
+        """Basic structural analysis for unsupported languages."""
+        result = {
+            'module': ModuleInfo(name=module_name, file=file_path, is_package=False),
+            'functions': {},
+            'classes': {},
+            'nodes': {},
+            'edges': [],
+        }
+        
+        # Count lines as basic metric
+        lines = content.split('\n')
+        non_empty = len([l for l in lines if l.strip()])
+        
+        # Try to detect function-like patterns
+        func_patterns = [
+            re.compile(r'^\s*(?:def|function|func|fn|sub)\s+(\w+)'),
+            re.compile(r'^\s*(\w+)\s*\([^)]*\)\s*\{?\s*$'),
+        ]
+        
+        class_patterns = [
+            re.compile(r'^\s*(?:class|struct|type)\s+(\w+)'),
+        ]
+        
+        for line_no, line in enumerate(lines, 1):
+            line = line.strip()
+            if not line or line.startswith('#') or line.startswith('//'):
+                continue
+            
+            for pattern in class_patterns:
+                match = pattern.match(line)
+                if match:
+                    class_name = match.group(1)
+                    qualified_name = f"{module_name}.{class_name}"
+                    result['classes'][qualified_name] = ClassInfo(
+                        name=class_name, qualified_name=qualified_name,
+                        file=file_path, line=line_no, module=module_name,
+                        bases=[], methods=[], docstring="",
+                    )
+                    result['module'].classes.append(qualified_name)
+                    self.stats['classes_found'] += 1
+                    break
+            
+            for pattern in func_patterns:
+                match = pattern.match(line)
+                if match:
+                    func_name = match.group(1)
+                    if func_name not in ('if', 'for', 'while', 'switch', 'catch', 'return'):
+                        qualified_name = f"{module_name}.{func_name}"
+                        result['functions'][qualified_name] = FunctionInfo(
+                            name=func_name, qualified_name=qualified_name,
+                            file=file_path, line=line_no, column=0,
+                            module=module_name, class_name=None,
+                            is_method=False, is_private=func_name.startswith('_'),
+                            is_property=False, docstring="", args=[], decorators=[],
+                        )
+                        result['module'].functions.append(qualified_name)
+                        self.stats['functions_found'] += 1
+                    break
+        
+        self.stats['files_processed'] += 1
+        return result
 
 
 def _analyze_single_file(args):

@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 from .base import Exporter
 from ..core.models import AnalysisResult, FunctionInfo, ClassInfo, ModuleInfo
+from ..core.config import LANGUAGE_EXTENSIONS
 
 # Patterns to exclude (venv, site-packages, etc.)
 EXCLUDE_PATTERNS = {
@@ -216,10 +217,21 @@ class MapExporter(Exporter):
         return total
 
     def _detect_languages(self, result: AnalysisResult) -> Dict[str, int]:
+        """Detect all supported programming languages in the project."""
         langs: Dict[str, int] = defaultdict(int)
         for mi in result.modules.values():
             if self._is_excluded(mi.file):
                 continue
-            if mi.file.endswith(".py"):
-                langs["python"] += 1
+            # Check all supported language extensions
+            detected = False
+            for lang, extensions in LANGUAGE_EXTENSIONS.items():
+                if any(mi.file.endswith(ext) for ext in extensions):
+                    langs[lang] += 1
+                    detected = True
+                    break
+            if not detected:
+                # Fallback: try to detect from file extension
+                ext = Path(mi.file).suffix.lower()
+                if ext:
+                    langs[ext.lstrip('.')] += 1
         return dict(langs)

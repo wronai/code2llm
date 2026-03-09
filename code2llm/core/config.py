@@ -150,6 +150,37 @@ ANALYSIS_MODES = {
 }
 
 
+# Supported language extensions
+LANGUAGE_EXTENSIONS = {
+    'python': ['.py'],
+    'typescript': ['.ts', '.tsx'],
+    'javascript': ['.js', '.jsx', '.mjs', '.cjs'],
+    'go': ['.go'],
+    'rust': ['.rs'],
+    'java': ['.java'],
+    'cpp': ['.cpp', '.cc', '.cxx', '.hpp', '.hh', '.h'],
+    'c': ['.c', '.h'],
+    'csharp': ['.cs'],
+    'ruby': ['.rb'],
+    'php': ['.php'],
+    'swift': ['.swift'],
+    'kotlin': ['.kt', '.kts'],
+    'scala': ['.scala'],
+    'r': ['.r', '.R'],
+    'matlab': ['.m'],
+    'shell': ['.sh', '.bash', '.zsh'],
+    'dart': ['.dart'],
+    'elixir': ['.ex', '.exs'],
+    'clojure': ['.clj', '.cljs'],
+    'haskell': ['.hs'],
+    'lua': ['.lua'],
+    'perl': ['.pl', '.pm'],
+    'raku': ['.raku', '.rakumod'],
+}
+
+# All supported extensions flat list
+ALL_EXTENSIONS = [ext for exts in LANGUAGE_EXTENSIONS.values() for ext in exts]
+
 # Node types
 NODE_TYPES = {
     'FUNC': 'Function definition',
