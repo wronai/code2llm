@@ -330,11 +330,3 @@ code2llm ./ -f yaml --separate-orphans
 **Modules**: 105  
 
 For more information about code2llm, visit: https://github.com/tom-sapletta/code2llm
-
-## License
-
-Apache License 2.0 - see [LICENSE](LICENSE) for details.
-
-## Author
-
-Created by **Tom Sapletta** - [tom@sapletta.com](mailto:tom@sapletta.com)

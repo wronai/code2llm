@@ -1,12 +1,12 @@
-# code2llm | 97f 18431L | python:90,php:1,shell:1 | 2026-03-09
+# code2llm | 97f 18431L | python:90,java:1,shell:1 | 2026-03-09
 # CC̄=4.4 | critical:59/854 | dups:0 | cycles:0
 
 HEALTH[8]:
   🟡 CC    main CC=17 (limit:15)
   🟡 CC    _find_data_pipelines CC=17 (limit:15)
   🟡 CC    _resolve_callee CC=18 (limit:15)
-  🟡 CC    _validate_chunked_output CC=15 (limit:15)
   🟡 CC    _infer_from_name CC=17 (limit:15)
+  🟡 CC    _validate_chunked_output CC=15 (limit:15)
   🟡 CC    _export_chunked_results CC=17 (limit:15)
   🟡 CC    _analyze_typescript_js CC=18 (limit:15)
   🟡 CC    _analyze_java CC=15 (limit:15)
@@ -128,10 +128,10 @@ LAYERS:
   │ server                     110L  0C    3m  CC=4      ←0
   │
   demo_langs/                     CC̄=0.3    ←in:0  →out:0
-  │ sample.rs                   47L  1C    5m  CC=0.0    ←0
+  │ sample.rs                   47L  1C    4m  CC=0.0    ←0
   │ sample.java                 47L  2C    6m  CC=0.0    ←0
-  │ sample.go                   46L  0C    4m  CC=0.0    ←0
-  │ sample.php                  44L  2C    1m  CC=0.0    ←0
+  │ sample.go                   46L  0C    5m  CC=0.0    ←0
+  │ sample.php                  44L  0C    1m  CC=0.0    ←0
   │ sample                      40L  1C    4m  CC=3      ←0
   │ sample.ts                   26L  1C    1m  CC=0.0    ←0
   │
@@ -157,15 +157,15 @@ FUNCTIONS (CC≥10, 59 of 750):
    14.0  ProjectAnalyzer._build_call_graph          16n   1exit  loops+cond
    14.0  FlowRenderer.render_data_types             13n   3exit  loops+cond+ret
    14.0  normalize_llm_task                          3n   2exit  ret
-   14.0  _summarize_functions                       15n   2exit  loops+cond+ret
    14.0  _export_simple_formats                     21n   1exit  loops+cond
+   14.0  _summarize_functions                       15n   2exit  loops+cond+ret
    14.0  StreamingScanner.quick_scan_file           15n   2exit  loops+cond+ret
    13.0  parse_evolution_metrics                    16n   2exit  loops+cond+ret
    13.0  parse_evolution_metrics                    16n   2exit  loops+cond+ret
    13.0  PipelineDetector._find_pipeline_paths      17n   2exit  loops+cond+ret
    13.0  SideEffectDetector._check_calls            22n   3exit  cond+ret
-   13.0  EntityResolver.resolve                     18n   2exit  loops+cond+ret
    13.0  READMEExporter._extract_insights            7n   2exit  cond+ret
+   13.0  EntityResolver.resolve                     18n   2exit  loops+cond+ret
    13.0  MapExporter._render_map_module             18n   1exit  loops+cond
    13.0  MermaidExporter.export_call_graph          16n   1exit  loops+cond
    13.0  MermaidExporter.export_compact             14n   1exit  loops+cond
@@ -175,8 +175,8 @@ FUNCTIONS (CC≥10, 59 of 750):
    12.0  DataAnalyzer._find_state_patterns           9n   2exit  loops+cond+ret
    12.0  StreamingAnalyzer.analyze_streaming        16n   1exit  loops+cond
    12.0  ProjectYAMLExporter._build_project_yaml     3n   2exit  ret
-   12.0  _export_mermaid                             8n   1exit  cond
    12.0  _check_node_ids                            15n   1exit  loops+cond
+   12.0  _export_mermaid                             8n   1exit  cond
    12.0  PromptEngine._build_context_for_smell       5n   2exit  cond+ret
    12.0  _build_prompt_footer                       21n   2exit  loops+cond+ret
    12.0  MetricsComputer._compute_file_metrics      21n   2exit  loops+cond+ret
@@ -250,22 +250,22 @@ CLASSES:
   CouplingAnalyzer               ████                       5m  CC̄=3.8   max=7   
   IncrementalAnalyzer            ████                       5m  CC̄=2.8   max=5   
   StreamingFileCache             ████                       5m  CC̄=2.0   max=4   
+  UserService                    ███                        4m  CC̄=0.0   max=0   
   AnalysisResult                 ███                        4m  CC̄=1.0   max=1   
   NLPPipelineResult              ███                        4m  CC̄=2.0   max=3   
   SmartPrioritizer               ███                        4m  CC̄=5.2   max=9   
   ToonExporter                   ██                         3m  CC̄=1.0   max=1   
   FastFileFilter                 ██                         3m  CC̄=6.0   max=8   
+  User                           █                          2m  CC̄=0.0   max=0   
   SideEffectInfo                 █                          2m  CC̄=1.0   max=1   
   NLPConfig                      █                          2m  CC̄=1.0   max=1   
   IntentMatchingResult           █                          2m  CC̄=2.0   max=2   
-  EntityResolutionResult         █                          2m  CC̄=2.5   max=3   
   BaseModel                      █                          2m  CC̄=5.0   max=8   
+  EntityResolutionResult         █                          2m  CC̄=2.5   max=3   
   Pipeline                                                  1m  CC̄=3.0   max=3   
   Exporter                                                  1m  CC̄=1.0   max=1   
   JSONExporter                                              1m  CC̄=3.0   max=3   
   FormatScore                                               0m  CC̄=0.0   max=0.0 
-  User                                                      0m  CC̄=0.0   max=0.0 
-  UserService                                               0m  CC̄=0.0   max=0.0 
   PipelineStage                                             0m  CC̄=0.0   max=0.0 
   AnalysisMode                                              0m  CC̄=0.0   max=0.0 
   PerformanceConfig                                         0m  CC̄=0.0   max=0.0 
@@ -273,13 +273,12 @@ CLASSES:
   DepthConfig                                               0m  CC̄=0.0   max=0.0 
   OutputConfig                                              0m  CC̄=0.0   max=0.0 
   Config                                                    0m  CC̄=0.0   max=0.0 
-  SubProject                                                0m  CC̄=0.0   max=0.0 
   NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
   IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
   EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
   MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
+  SubProject                                                0m  CC̄=0.0   max=0.0 
   IntentMatch                                               0m  CC̄=0.0   max=0.0 
-  Entity                                                    0m  CC̄=0.0   max=0.0 
   NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   FlowNode                                                  0m  CC̄=0.0   max=0.0 
   FlowEdge                                                  0m  CC̄=0.0   max=0.0 
@@ -290,6 +289,7 @@ CLASSES:
   CodeSmell                                                 0m  CC̄=0.0   max=0.0 
   Mutation                                                  0m  CC̄=0.0   max=0.0 
   DataFlow                                                  0m  CC̄=0.0   max=0.0 
+  Entity                                                    0m  CC̄=0.0   max=0.0 
   PipelineStage                                             0m  CC̄=0.0   max=0.0 
   FuncSummary                                               0m  CC̄=0.0   max=0.0 
   ScanStrategy                                              0m  CC̄=0.0   max=0.0 
@@ -385,6 +385,18 @@ S...
     dump_yaml(data)
     create_parser()
     main(argv)
+  code2llm/cli_exports/formats.py:
+    e: _export_evolution,_export_data_structures,_export_context_fallback,_export_readme,_export_project_yaml,_run_report,_export_simple_formats,_export_yaml,_export_mermaid,_export_refactor_prompts
+    _export_evolution(args,result,output_dir)
+    _export_data_structures(args,result,output_dir)
+    _export_context_fallback(args,result,output_dir,formats)
+    _export_readme(args,result,output_dir)
+    _export_project_yaml(args,result,output_dir)
+    _run_report(args,project_yaml_path,output_dir)
+    _export_simple_formats(args,result,output_dir,formats)
+    _export_yaml(args,result,output_dir)
+    _export_mermaid(args,result,output_dir)
+    _export_refactor_prompts(args,result,output_dir)
   code2llm/generators/llm_flow.py:
     e: FuncSummary,_strip_bom,_safe_read_yaml,_as_dict,_as_list,_shorten,_parse_call_label,_parse_func_label,_collect_nodes,_group_nodes_by_file,_is_entrypoint_file,_extract_entrypoint_info,_deduplicate_entrypoints,_collect_entrypoints,_collect_functions,_node_counts_by_function,_pick_relevant_functions,_summarize_functions,_build_call_graph,_reachable,generate_llm_flow,render_llm_flow_md,dump_yaml,create_parser,main
     FuncSummary
@@ -412,18 +424,6 @@ S...
     dump_yaml(data)
     create_parser()
     main(argv)
-  code2llm/cli_exports/formats.py:
-    e: _export_evolution,_export_data_structures,_export_context_fallback,_export_readme,_export_project_yaml,_run_report,_export_simple_formats,_export_yaml,_export_mermaid,_export_refactor_prompts
-    _export_evolution(args,result,output_dir)
-    _export_data_structures(args,result,output_dir)
-    _export_context_fallback(args,result,output_dir,formats)
-    _export_readme(args,result,output_dir)
-    _export_project_yaml(args,result,output_dir)
-    _run_report(args,project_yaml_path,output_dir)
-    _export_simple_formats(args,result,output_dir,formats)
-    _export_yaml(args,result,output_dir)
-    _export_mermaid(args,result,output_dir)
-    _export_refactor_prompts(args,result,output_dir)
   code2llm/core/streaming/scanner.py:
     e: StreamingScanner
     StreamingScanner  # Handles file scanning operations....
@@ -445,13 +445,6 @@ S...
     generate_performance_badges(performance_data)
     create_html(badges,title)
     main()
-  code2llm/nlp/entity_resolution.py:
-    e: Entity,EntityResolutionResult,EntityResolver
-    Entity  # Resolved entity....
-    EntityResolutionResult  # Result of entity resolution....
-      get_by_type(1)  CC=3.0
-    EntityResolver  # Resolve entities (functions, classes, etc.) from queries....
-      __init__(2)  CC=3.0
   code2llm/exporters/readme_exporter.py:
     e: READMEExporter
     READMEExporter  # Export README.md with documentation of all generated files....
@@ -462,6 +455,13 @@ S...
         → _build_core_files_section(2)  CC=6.0
         → _build_llm_files_section(1)  CC=5.0
         → _build_viz_files_section(1)  CC=7.0
+  code2llm/nlp/entity_resolution.py:
+    e: Entity,EntityResolutionResult,EntityResolver
+    Entity  # Resolved entity....
+    EntityResolutionResult  # Result of entity resolution....
+      get_by_type(1)  CC=3.0
+    EntityResolver  # Resolve entities (functions, classes, etc.) from queries....
+      __init__(2)  CC=3.0
   code2llm/exporters/map_exporter.py:
     e: MapExporter
     MapExporter  # Export to map.toon — structural map with modules, imports, s...
@@ -651,15 +651,15 @@ Stra...
     e: PatternDetector
     PatternDetector  # Detect behavioral patterns in code....
       __init__(1)  CC=1.0
-  code2llm/core/core/refactoring.py:
-    e: RefactoringAnalyzer
-    RefactoringAnalyzer  # Performs refactoring analysis on code....
-      __init__(2)  CC=1.0
   code2llm/core/streaming/prioritizer.py:
     e: FilePriority,SmartPrioritizer
     FilePriority  # Priority scoring for file analysis order....
     SmartPrioritizer  # Smart file prioritization for optimal analysis order....
       __init__(1)  CC=1.0
+  code2llm/core/core/refactoring.py:
+    e: RefactoringAnalyzer
+    RefactoringAnalyzer  # Performs refactoring analysis on code....
+      __init__(2)  CC=1.0
   code2llm/core/models.py:
     e: BaseModel,FlowNode,FlowEdge,FunctionInfo,ClassInfo,ModuleInfo,Pattern,CodeSmell,Mutation,DataFlow,AnalysisResult
     BaseModel  # Base class for models with automated serialization....
@@ -982,12 +982,12 @@ Unlike simple L...
       __init__(0)  CC=1.0
   benchmarks/benchmark_constants.py:
   code2llm/__main__.py:
-  demo_langs/valid/sample.php:
-    e: User,UserService,foreach,foreach
+  demo_langs/valid/sample.java:
+    e: User,UserService
     User
+      getId(-1)  CC=0.0
     UserService
-    foreach()
-    foreach()
+      addUser(-1)  CC=0.0
   code2llm/core/config.py:
     e: AnalysisMode,PerformanceConfig,FilterConfig,DepthConfig,OutputConfig,Config
     AnalysisMode  # Available analysis modes....
@@ -1005,9 +1005,9 @@ Unlike simple L...
   code2llm/refactor/__init__.py:
   code2llm/patterns/__init__.py:
   code2llm/core/core/__init__.py:
+  code2llm/core/streaming/__init__.py:
   code2llm/core/streaming/strategies.py:
     e: ScanStrategy
     ScanStrategy  # Scanning methodology configuration....
-  code2llm/core/streaming/__init__.py:
   examples/streaming-analyzer/sample_project/__init__.py:
   project.sh:

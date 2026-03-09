@@ -4,9 +4,9 @@
 HEALTH[8]:
   🟡 CC    main CC=17 (limit:15)
   🟡 CC    _validate_chunked_output CC=15 (limit:15)
-  🟡 CC    _resolve_callee CC=18 (limit:15)
-  🟡 CC    _find_data_pipelines CC=17 (limit:15)
   🟡 CC    _infer_from_name CC=17 (limit:15)
+  🟡 CC    _find_data_pipelines CC=17 (limit:15)
+  🟡 CC    _resolve_callee CC=18 (limit:15)
   🟡 CC    _export_chunked_results CC=17 (limit:15)
   🟡 CC    _analyze_typescript_js CC=18 (limit:15)
   🟡 CC    _analyze_java CC=15 (limit:15)
@@ -145,8 +145,8 @@ FUNCTIONS (CC≥10, 59 of 750):
    18.0  PipelineDetector._resolve_callee           21n   6exit  cond+ret  !! split
    18.0  FileAnalyzer._analyze_typescript_js        22n   2exit  loops+cond+ret  !! split
    17.0  main                                       21n   3exit  loops+cond+ret  !! split
-   17.0  DataAnalyzer._find_data_pipelines          14n   2exit  loops+cond+ret  !! split
    17.0  TypeInferenceEngine._infer_from_name       13n   2exit  loops+cond+ret  !! split
+   17.0  DataAnalyzer._find_data_pipelines          14n   2exit  loops+cond+ret  !! split
    17.0  _export_chunked_results                    14n   1exit  loops+cond  !! split
    15.0  _validate_chunked_output                   21n   5exit  loops+cond+ret  !! split
    15.0  FileAnalyzer._analyze_java                 20n   2exit  loops+cond+ret  !! split
@@ -190,8 +190,8 @@ FUNCTIONS (CC≥10, 59 of 750):
    10.0  ProjectAnalyzer.analyze_project            17n   2exit  cond+ret
    10.0  _split_by_modules                          15n   2exit  loops+cond+ret
    10.0  NLPPipeline._format_action                 29n  10exit  cond+ret
-   10.0  ContextExporter._trace_flow                14n   3exit  loops+cond+ret
-   10.0  FlowRenderer.render_pipelines               9n   3exit  loops+cond+ret
+   10.0  EvolutionExporter._build_context            3n   2exit  ret
+   10.0  EvolutionExporter._render_next             16n   3exit  loops+cond+ret
 
   summary:
     critical(≥10): 59 | high(5-10): 253 | medium(2-5): 268 | low(<2): 170
@@ -220,15 +220,15 @@ CLASSES:
   DataAnalyzer                   ██████████████            16m  CC̄=8.2   max=17    !!
   NLPPipeline                    ██████████████            16m  CC̄=2.6   max=10  
   SideEffectDetector             █████████████             15m  CC̄=5.1   max=14  
-  ContextExporter                █████████████             15m  CC̄=5.1   max=10  
   EvolutionExporter              █████████████             15m  CC̄=4.7   max=10  
+  ContextExporter                █████████████             15m  CC̄=5.1   max=10  
   EntityResolver                 ████████████              14m  CC̄=3.7   max=13  
   HTMLDashboardGenerator         ████████████              14m  CC̄=3.3   max=7   
   FlowExporter                   ████████████              14m  CC̄=5.6   max=10  
   PipelineDetector               ███████████               13m  CC̄=6.9   max=18    !!
   IntentMatcher                  ███████████               13m  CC̄=3.5   max=7   
-  QueryNormalizer                ███████████               13m  CC̄=1.8   max=6   
   CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
+  QueryNormalizer                ███████████               13m  CC̄=1.8   max=6   
   MapExporter                    ███████████               13m  CC̄=5.2   max=13  
   DFGExtractor                   ██████████                12m  CC̄=3.6   max=7   
   MermaidExporter                ██████████                12m  CC̄=5.3   max=13  
@@ -257,8 +257,8 @@ CLASSES:
   FastFileFilter                 ██                         3m  CC̄=6.0   max=8   
   SideEffectInfo                 █                          2m  CC̄=1.0   max=1   
   NLPConfig                      █                          2m  CC̄=1.0   max=1   
-  BaseModel                      █                          2m  CC̄=5.0   max=8   
   IntentMatchingResult           █                          2m  CC̄=2.0   max=2   
+  BaseModel                      █                          2m  CC̄=5.0   max=8   
   EntityResolutionResult         █                          2m  CC̄=2.5   max=3   
   Pipeline                                                  1m  CC̄=3.0   max=3   
   Exporter                                                  1m  CC̄=1.0   max=1   
@@ -278,6 +278,8 @@ CLASSES:
   IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
   EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
   MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
+  IntentMatch                                               0m  CC̄=0.0   max=0.0 
+  NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   FlowNode                                                  0m  CC̄=0.0   max=0.0 
   FlowEdge                                                  0m  CC̄=0.0   max=0.0 
   FunctionInfo                                              0m  CC̄=0.0   max=0.0 
@@ -287,8 +289,6 @@ CLASSES:
   CodeSmell                                                 0m  CC̄=0.0   max=0.0 
   Mutation                                                  0m  CC̄=0.0   max=0.0 
   DataFlow                                                  0m  CC̄=0.0   max=0.0 
-  IntentMatch                                               0m  CC̄=0.0   max=0.0 
-  NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   Entity                                                    0m  CC̄=0.0   max=0.0 
   PipelineStage                                             0m  CC̄=0.0   max=0.0 
   FuncSummary                                               0m  CC̄=0.0   max=0.0 
@@ -325,6 +325,10 @@ D:
     compare_modules(yaml_data,toon_data)
     validate_toon_completeness(toon_data)
     main()
+  code2llm/analysis/type_inference.py:
+    e: TypeInferenceEngine
+    TypeInferenceEngine  # Extract and infer type information from Python source files....
+      __init__(0)  CC=1.0
   code2llm/analysis/data_analysis.py:
     e: DataAnalyzer
     DataAnalyzer  # Analyze data flows, structures, and optimization opportuniti...
@@ -333,10 +337,6 @@ D:
         → _find_state_patterns(1)  CC=12.0
         → _find_data_dependencies(1)  CC=9.0
         → _find_event_flows(1)  CC=14.0
-  code2llm/analysis/type_inference.py:
-    e: TypeInferenceEngine
-    TypeInferenceEngine  # Extract and infer type information from Python source files....
-      __init__(0)  CC=1.0
   code2llm/cli_exports/orchestrator.py:
     e: _run_exports,_export_single_project,_export_chunked_results
     _run_exports(args,result,output_dir,source_path)
@@ -606,6 +606,10 @@ S...
       is_successful(0)  CC=3.0
     NLPPipeline  # Main NLP processing pipeline (4a-4e)....
       __init__(1)  CC=2.0
+  code2llm/exporters/evolution_exporter.py:
+    e: EvolutionExporter
+    EvolutionExporter  # Export evolution.toon — prioritized refactoring queue....
+      _is_excluded(1)  CC=5.0
   code2llm/exporters/context_exporter.py:
     e: ContextExporter
     ContextExporter  # Export LLM-ready analysis summary with architecture and flow...
@@ -624,10 +628,6 @@ S...
         → _get_behavioral_patterns(1)  CC=4.0
         → _get_api_surface(1)  CC=5.0
         → _get_system_interactions(1)  CC=5.0
-  code2llm/exporters/evolution_exporter.py:
-    e: EvolutionExporter
-    EvolutionExporter  # Export evolution.toon — prioritized refactoring queue....
-      _is_excluded(1)  CC=5.0
   code2llm/exporters/flow_exporter.py:
     e: FlowExporter
     FlowExporter  # Export to flow.toon — data-flow focused format.
@@ -880,6 +880,11 @@ Unlike simple L...
     e: APIHandler
     APIHandler  # Handles API requests and responses....
       __init__(0)  CC=1.0
+  examples/streaming-analyzer/sample_project/database.py:
+    e: DatabaseConnection
+    DatabaseConnection  # Simple database connection simulator....
+      __init__(1)  CC=2.0
+        → _load_data(0)  CC=3.0
   examples/streaming-analyzer/demo.py:
     e: demo_quick_strategy,demo_standard_strategy,demo_deep_strategy,demo_incremental_analysis,demo_memory_limited,demo_custom_progress,main
     demo_quick_strategy()
@@ -889,11 +894,6 @@ Unlike simple L...
     demo_memory_limited()
     demo_custom_progress()
     main()
-  examples/streaming-analyzer/sample_project/database.py:
-    e: DatabaseConnection
-    DatabaseConnection  # Simple database connection simulator....
-      __init__(1)  CC=2.0
-        → _load_data(0)  CC=3.0
   scripts/bump_version.py:
     e: get_current_version,parse_version,format_version,bump_version,update_pyproject_toml,update_version_file,main
     get_current_version()
@@ -934,13 +934,13 @@ Unlike simple L...
   code2llm/core/__init__.py:
     e: __getattr__
     __getattr__(name)
-  code2llm/exporters/report_generators.py:
-    e: load_project_yaml
-    load_project_yaml(path)
   code2llm/exporters/json_exporter.py:
     e: JSONExporter
     JSONExporter  # Export to JSON format....
       export(4)  CC=3.0
+  code2llm/exporters/report_generators.py:
+    e: load_project_yaml
+    load_project_yaml(path)
   examples/streaming-analyzer/sample_project/auth.py:
     e: AuthManager
     AuthManager  # Manages user authentication and authorization....

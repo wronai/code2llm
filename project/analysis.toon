@@ -1,4 +1,4 @@
-# code2llm | 97f 18431L | python:93,shell:2,php:1 | 2026-03-09
+# code2llm | 97f 18431L | python:93,shell:2,java:1 | 2026-03-09
 # CC̄=4.4 | critical:59/854 | dups:0 | cycles:0
 
 HEALTH[8]:
@@ -128,10 +128,10 @@ LAYERS:
   │ server                     110L  0C    3m  CC=4      ←0
   │
   demo_langs/                     CC̄=0.3    ←in:0  →out:0
-  │ sample.rs                   47L  1C    5m  CC=0.0    ←0
+  │ sample.rs                   47L  1C    4m  CC=0.0    ←0
   │ sample.java                 47L  2C    6m  CC=0.0    ←0
-  │ sample.go                   46L  0C    4m  CC=0.0    ←0
-  │ sample.php                  44L  2C    1m  CC=0.0    ←0
+  │ sample.go                   46L  0C    5m  CC=0.0    ←0
+  │ sample.php                  44L  0C    1m  CC=0.0    ←0
   │ sample                      40L  1C    4m  CC=3      ←0
   │ sample.ts                   26L  1C    1m  CC=0.0    ←0
   │
@@ -165,12 +165,12 @@ FUNCTIONS (CC≥10, 59 of 750):
    13.0  PipelineDetector._find_pipeline_paths      17n   2exit  loops+cond+ret
    13.0  SideEffectDetector._check_calls            22n   3exit  cond+ret
    13.0  EntityResolver.resolve                     18n   2exit  loops+cond+ret
-   13.0  MapExporter._render_map_module             18n   1exit  loops+cond
    13.0  READMEExporter._extract_insights            7n   2exit  cond+ret
-   13.0  MermaidExporter.export_call_graph          16n   1exit  loops+cond
-   13.0  MermaidExporter.export_compact             14n   1exit  loops+cond
+   13.0  MapExporter._render_map_module             18n   1exit  loops+cond
    13.0  ProjectYAMLExporter._build_alerts          25n   2exit  loops+cond+ret
    13.0  ProjectYAMLExporter._build_refactoring     17n   2exit  loops+cond+ret
+   13.0  MermaidExporter.export_call_graph          16n   1exit  loops+cond
+   13.0  MermaidExporter.export_compact             14n   1exit  loops+cond
    13.0  generate_single_png                         2n   1exit  
    12.0  DataAnalyzer._find_state_patterns           9n   2exit  loops+cond+ret
    12.0  StreamingAnalyzer.analyze_streaming        16n   1exit  loops+cond
@@ -182,9 +182,9 @@ FUNCTIONS (CC≥10, 59 of 750):
    12.0  MetricsComputer._compute_file_metrics      21n   2exit  loops+cond+ret
    12.0  FileAnalyzer._process_function             14n   2exit  loops+cond+ret
    12.0  FileAnalyzer._analyze_generic              12n   2exit  loops+cond+ret
+   11.0  ProjectYAMLExporter._build_class_export    12n   2exit  loops+cond+ret
    11.0  ContextViewGenerator._render_exports        7n   2exit  loops+cond+ret
    11.0  validate_project_yaml                      16n   3exit  loops+cond+ret
-   11.0  ProjectYAMLExporter._build_class_export    12n   2exit  loops+cond+ret
    11.0  ToonRenderer.render_refactor               14n   3exit  loops+cond+ret
    10.0  _filter_subprojects                         9n   2exit  cond+ret
    10.0  ProjectAnalyzer.analyze_project            17n   2exit  cond+ret
@@ -226,9 +226,9 @@ CLASSES:
   HTMLDashboardGenerator         ████████████              14m  CC̄=3.3   max=7   
   FlowExporter                   ████████████              14m  CC̄=5.6   max=10  
   PipelineDetector               ███████████               13m  CC̄=6.9   max=18    !!
+  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   IntentMatcher                  ███████████               13m  CC̄=3.5   max=7   
   QueryNormalizer                ███████████               13m  CC̄=1.8   max=6   
-  CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
   MapExporter                    ███████████               13m  CC̄=5.2   max=13  
   DFGExtractor                   ██████████                12m  CC̄=3.6   max=7   
   MermaidExporter                ██████████                12m  CC̄=5.3   max=13  
@@ -250,22 +250,22 @@ CLASSES:
   CouplingAnalyzer               ████                       5m  CC̄=3.8   max=7   
   IncrementalAnalyzer            ████                       5m  CC̄=2.8   max=5   
   StreamingFileCache             ████                       5m  CC̄=2.0   max=4   
+  UserService                    ███                        4m  CC̄=0.0   max=0   
   AnalysisResult                 ███                        4m  CC̄=1.0   max=1   
   NLPPipelineResult              ███                        4m  CC̄=2.0   max=3   
   SmartPrioritizer               ███                        4m  CC̄=5.2   max=9   
   ToonExporter                   ██                         3m  CC̄=1.0   max=1   
   FastFileFilter                 ██                         3m  CC̄=6.0   max=8   
+  User                           █                          2m  CC̄=0.0   max=0   
   SideEffectInfo                 █                          2m  CC̄=1.0   max=1   
-  BaseModel                      █                          2m  CC̄=5.0   max=8   
   NLPConfig                      █                          2m  CC̄=1.0   max=1   
   IntentMatchingResult           █                          2m  CC̄=2.0   max=2   
+  BaseModel                      █                          2m  CC̄=5.0   max=8   
   EntityResolutionResult         █                          2m  CC̄=2.5   max=3   
   Pipeline                                                  1m  CC̄=3.0   max=3   
   Exporter                                                  1m  CC̄=1.0   max=1   
   JSONExporter                                              1m  CC̄=3.0   max=3   
   FormatScore                                               0m  CC̄=0.0   max=0.0 
-  User                                                      0m  CC̄=0.0   max=0.0 
-  UserService                                               0m  CC̄=0.0   max=0.0 
   PipelineStage                                             0m  CC̄=0.0   max=0.0 
   AnalysisMode                                              0m  CC̄=0.0   max=0.0 
   PerformanceConfig                                         0m  CC̄=0.0   max=0.0 
@@ -273,6 +273,12 @@ CLASSES:
   DepthConfig                                               0m  CC̄=0.0   max=0.0 
   OutputConfig                                              0m  CC̄=0.0   max=0.0 
   Config                                                    0m  CC̄=0.0   max=0.0 
+  SubProject                                                0m  CC̄=0.0   max=0.0 
+  NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
+  IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
+  EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
+  MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
+  IntentMatch                                               0m  CC̄=0.0   max=0.0 
   FlowNode                                                  0m  CC̄=0.0   max=0.0 
   FlowEdge                                                  0m  CC̄=0.0   max=0.0 
   FunctionInfo                                              0m  CC̄=0.0   max=0.0 
@@ -282,12 +288,6 @@ CLASSES:
   CodeSmell                                                 0m  CC̄=0.0   max=0.0 
   Mutation                                                  0m  CC̄=0.0   max=0.0 
   DataFlow                                                  0m  CC̄=0.0   max=0.0 
-  NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
-  IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
-  EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
-  MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
-  IntentMatch                                               0m  CC̄=0.0   max=0.0 
-  SubProject                                                0m  CC̄=0.0   max=0.0 
   Entity                                                    0m  CC̄=0.0   max=0.0 
   NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   PipelineStage                                             0m  CC̄=0.0   max=0.0 
@@ -469,6 +469,16 @@ S...
       get_by_type(1)  CC=3.0
     EntityResolver  # Resolve entities (functions, classes, etc.) from queries....
       __init__(2)  CC=3.0
+  code2llm/exporters/readme_exporter.py:
+    e: READMEExporter
+    READMEExporter  # Export README.md with documentation of all generated files....
+      export(2)  CC=5.0
+        → _extract_insights(2)  CC=13.0
+        → _generate_readme_content(6)  CC=1.0
+        → _get_existing_files(1)  CC=2.0
+        → _build_core_files_section(2)  CC=6.0
+        → _build_llm_files_section(1)  CC=5.0
+        → _build_viz_files_section(1)  CC=7.0
   code2llm/exporters/map_exporter.py:
     e: MapExporter
     MapExporter  # Export to map.toon — structural map with modules, imports, s...
@@ -485,29 +495,6 @@ S...
         → _render_map_module(3)  CC=13.0
         → _render_map_class(3)  CC=7.0
         → _function_signature(1)  CC=5.0
-  code2llm/exporters/readme_exporter.py:
-    e: READMEExporter
-    READMEExporter  # Export README.md with documentation of all generated files....
-      export(2)  CC=5.0
-        → _extract_insights(2)  CC=13.0
-        → _generate_readme_content(6)  CC=1.0
-        → _get_existing_files(1)  CC=2.0
-        → _build_core_files_section(2)  CC=6.0
-        → _build_llm_files_section(1)  CC=5.0
-        → _build_viz_files_section(1)  CC=7.0
-  code2llm/exporters/mermaid_exporter.py:
-    e: MermaidExporter
-    MermaidExporter  # Export call graph to Mermaid format....
-      export(2)  CC=1.0
-        → _render_subgraphs(2)  CC=6.0
-        → _module_of(1)  CC=4.0
-        → _safe_module(1)  CC=1.0
-        → _readable_id(1)  CC=3.0
-        → _get_cc(0)  CC=3.0
-        → _render_edges(3)  CC=8.0
-        → _resolve(2)  CC=5.0
-        → _render_cc_styles(2)  CC=6.0
-        → _write(2)  CC=1.0
   code2llm/exporters/project_yaml_exporter.py:
     e: ProjectYAMLExporter
     ProjectYAMLExporter  # Export unified project.yaml — single source of truth for dia...
@@ -527,6 +514,19 @@ S...
         → _build_refactoring(3)  CC=13.0
         → _build_evolution(3)  CC=3.0
         → _detect_primary_language(1)  CC=9.0
+  code2llm/exporters/mermaid_exporter.py:
+    e: MermaidExporter
+    MermaidExporter  # Export call graph to Mermaid format....
+      export(2)  CC=1.0
+        → _render_subgraphs(2)  CC=6.0
+        → _module_of(1)  CC=4.0
+        → _safe_module(1)  CC=1.0
+        → _readable_id(1)  CC=3.0
+        → _get_cc(0)  CC=3.0
+        → _render_edges(3)  CC=8.0
+        → _resolve(2)  CC=5.0
+        → _render_cc_styles(2)  CC=6.0
+        → _write(2)  CC=1.0
   code2llm/generators/mermaid.py:
     e: validate_mermaid_file,_strip_label_segments,_is_balanced_node_line,_check_bracket_balance,_scan_brackets,_check_node_ids,_sanitize_label_text,_sanitize_node_id,fix_mermaid_file,_fix_edge_line,_fix_edge_label_pipes,_fix_subgraph_line,_fix_class_line,generate_pngs,generate_single_png,generate_with_puppeteer
     validate_mermaid_file(mmd_path)
@@ -651,6 +651,10 @@ S...
 
 Sections: P...
       __init__(0)  CC=1.0
+  code2llm/analysis/call_graph.py:
+    e: CallGraphExtractor
+    CallGraphExtractor  # Extract call graph from AST....
+      __init__(1)  CC=1.0
   code2llm/core/large_repo.py:
     e: SubProject,HierarchicalRepoSplitter,should_use_chunking,get_analysis_plan
     SubProject  # Represents a sub-project within a larger repository....
@@ -660,10 +664,6 @@ Stra...
       __init__(2)  CC=1.0
     should_use_chunking(project_path,size_threshold_kb)
     get_analysis_plan(project_path,size_limit_kb)
-  code2llm/analysis/call_graph.py:
-    e: CallGraphExtractor
-    CallGraphExtractor  # Extract call graph from AST....
-      __init__(1)  CC=1.0
   code2llm/patterns/detector.py:
     e: PatternDetector
     PatternDetector  # Detect behavioral patterns in code....
@@ -897,6 +897,11 @@ Unlike simple L...
     e: APIHandler
     APIHandler  # Handles API requests and responses....
       __init__(0)  CC=1.0
+  examples/streaming-analyzer/sample_project/database.py:
+    e: DatabaseConnection
+    DatabaseConnection  # Simple database connection simulator....
+      __init__(1)  CC=2.0
+        → _load_data(0)  CC=3.0
   examples/streaming-analyzer/demo.py:
     e: demo_quick_strategy,demo_standard_strategy,demo_deep_strategy,demo_incremental_analysis,demo_memory_limited,demo_custom_progress,main
     demo_quick_strategy()
@@ -906,11 +911,6 @@ Unlike simple L...
     demo_memory_limited()
     demo_custom_progress()
     main()
-  examples/streaming-analyzer/sample_project/database.py:
-    e: DatabaseConnection
-    DatabaseConnection  # Simple database connection simulator....
-      __init__(1)  CC=2.0
-        → _load_data(0)  CC=3.0
   scripts/bump_version.py:
     e: get_current_version,parse_version,format_version,bump_version,update_pyproject_toml,update_version_file,main
     get_current_version()
@@ -1005,12 +1005,12 @@ Unlike simple L...
       __init__(0)  CC=1.0
   benchmarks/benchmark_constants.py:
   code2llm/__main__.py:
-  demo_langs/valid/sample.php:
-    e: User,UserService,foreach,foreach
+  demo_langs/valid/sample.java:
+    e: User,UserService
     User
+      getId(-1)  CC=0.0
     UserService
-    foreach()
-    foreach()
+      addUser(-1)  CC=0.0
   code2llm/core/config.py:
     e: AnalysisMode,PerformanceConfig,FilterConfig,DepthConfig,OutputConfig,Config
     AnalysisMode  # Available analysis modes....
@@ -1028,10 +1028,10 @@ Unlike simple L...
   code2llm/refactor/__init__.py:
   code2llm/patterns/__init__.py:
   code2llm/core/core/__init__.py:
+  code2llm/core/streaming/__init__.py:
   code2llm/core/streaming/strategies.py:
     e: ScanStrategy
     ScanStrategy  # Scanning methodology configuration....
-  code2llm/core/streaming/__init__.py:
   examples/streaming-analyzer/sample_project/__init__.py:
   project.sh:
   project.sh:

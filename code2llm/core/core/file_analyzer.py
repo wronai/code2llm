@@ -140,6 +140,120 @@ class FileAnalyzer:
             if self.config.verbose:
                 print(f"Error calculating complexity for {file_path}: {e}")
 
+    # ------------------------------------------------------------------
+    # Universal regex-based complexity & call extraction (non-Python)
+    # ------------------------------------------------------------------
+
+    # Branching keywords per language family
+    _CC_PATTERNS = {
+        'c_family': re.compile(
+            r'\b(?:if|else\s+if|for|while|do|switch|case|catch|&&|\|\||\?\?|\?\.)\b'
+            r'|\?\s*[^:]*\s*:'  # ternary
+        ),
+        'go': re.compile(
+            r'\b(?:if|for|switch|case|select|go|defer)\b'
+            r'|&&|\|\|'
+        ),
+        'rust': re.compile(
+            r'\b(?:if|else\s+if|for|while|loop|match|=>)\b'
+            r'|&&|\|\||\?'
+        ),
+    }
+
+    @staticmethod
+    def _extract_function_body(content: str, start_line: int) -> str:
+        """Extract the body of a function between braces from a start line (1-indexed)."""
+        lines = content.split('\n')
+        if start_line < 1 or start_line > len(lines):
+            return ''
+        depth = 0
+        body_lines = []
+        started = False
+        for line in lines[start_line - 1:]:
+            for ch in line:
+                if ch == '{':
+                    depth += 1
+                    started = True
+                elif ch == '}':
+                    depth -= 1
+            if started:
+                body_lines.append(line)
+            if started and depth <= 0:
+                break
+        return '\n'.join(body_lines)
+
+    def _calculate_complexity_regex(self, content: str, result: Dict,
+                                    lang: str = 'c_family') -> None:
+        """Estimate cyclomatic complexity for every function using regex keyword counting."""
+        pattern = self._CC_PATTERNS.get(lang, self._CC_PATTERNS['c_family'])
+        for func_info in result['functions'].values():
+            body = self._extract_function_body(content, func_info.line)
+            if not body:
+                cc = 1
+            else:
+                cc = 1 + len(pattern.findall(body))
+            rank = 'A' if cc <= 5 else ('B' if cc <= 10 else ('C' if cc <= 20 else 'D'))
+            func_info.complexity = {
+                'cyclomatic_complexity': cc,
+                'cc_rank': rank,
+            }
+
+    _CALL_PATTERN_C_FAMILY = re.compile(
+        r'(?<!\bfunction\b\s)'            # not a function declaration
+        r'(?<!\bclass\b\s)'               # not a class declaration
+        r'\b([a-zA-Z_]\w*)\s*\('          # simple call: foo(
+        r'|'
+        r'(?:this|self)\s*\.\s*(\w+)\s*\('  # this.method( / self.method(
+        r'|'
+        r'\b(\w+)\s*\.\s*(\w+)\s*\('      # obj.method(
+    )
+
+    def _extract_calls_regex(self, content: str, module_name: str, result: Dict) -> None:
+        """Extract function calls from function bodies using regex."""
+        # Build set of known function simple names for resolution
+        known_simple: Dict[str, List[str]] = {}
+        for qname in result['functions']:
+            simple = qname.rsplit('.', 1)[-1]
+            known_simple.setdefault(simple, []).append(qname)
+
+        for func_qname, func_info in result['functions'].items():
+            body = self._extract_function_body(content, func_info.line)
+            if not body:
+                continue
+            calls_seen = set()
+            for m in self._CALL_PATTERN_C_FAMILY.finditer(body):
+                simple_call = m.group(1) or m.group(2) or m.group(4)
+                if not simple_call:
+                    continue
+                # Skip language keywords
+                if simple_call in ('if', 'for', 'while', 'switch', 'catch',
+                                   'return', 'throw', 'new', 'typeof', 'instanceof',
+                                   'import', 'export', 'require', 'console',
+                                   'super', 'class', 'function', 'async', 'await',
+                                   'delete', 'void', 'case', 'default'):
+                    continue
+                # Resolve to known qualified name
+                if simple_call in known_simple:
+                    candidates = known_simple[simple_call]
+                    # Prefer same-module match
+                    resolved = None
+                    my_module = func_qname.rsplit('.', 1)[0]
+                    for cand in candidates:
+                        if cand.rsplit('.', 1)[0] == my_module:
+                            resolved = cand
+                            break
+                    if resolved is None:
+                        resolved = candidates[0]
+                    if resolved != func_qname and resolved not in calls_seen:
+                        func_info.calls.append(resolved)
+                        calls_seen.add(resolved)
+                else:
+                    # External call — store as module.name for downstream
+                    ext_name = f"{module_name}.{simple_call}"
+                    if ext_name not in calls_seen:
+                        func_info.calls.append(ext_name)
+                        calls_seen.add(ext_name)
+
     def _perform_deep_analysis(self, tree: ast.AST, module_name: str, file_path: str, result: Dict) -> None:
         """Perform deep analysis including DFG and call graph extraction."""
         try:
@@ -397,22 +511,48 @@ class FileAnalyzer:
         
         # Patterns for TypeScript/JavaScript
         import_pattern = re.compile(r"^\s*import\s+.*?\s+from\s+['\"]([^'\"]+)['\"]")
-        class_pattern = re.compile(r"^\s*(?:export\s+)?(?:default\s+)?class\s+(\w+)(?:\s+extends\s+(\w+))?(?:\s+implements\s+([^{]+))?")
+        class_pattern = re.compile(r"^\s*(?:export\s+)?(?:default\s+)?(?:abstract\s+)?class\s+(\w+)(?:\s+extends\s+(\w+))?(?:\s+implements\s+([^{]+))?")
         func_pattern = re.compile(r"^\s*(?:export\s+)?(?:async\s+)?(?:function\s+(\w+)|(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?[\(\w])")
         interface_pattern = re.compile(r"^\s*(?:export\s+)?interface\s+(\w+)")
+        # Class method patterns: shorthand methods, getters, setters, arrow props
+        method_pattern = re.compile(
+            r"^\s*(?:(?:public|private|protected|static|readonly|abstract|async|override)\s+)*"
+            r"(?:get\s+|set\s+)?"
+            r"(\w+)\s*(?:<[^>]*>)?\s*\([^)]*\)"
+        )
+        arrow_prop_pattern = re.compile(
+            r"^\s*(?:(?:public|private|protected|static|readonly)\s+)*"
+            r"(\w+)\s*=\s*(?:async\s+)?(?:\([^)]*\)|[a-zA-Z_]\w*)\s*=>"
+        )
         
         current_class = None
-        current_class_line = 0
+        class_brace_depth = 0
+        brace_depth = 0
         
         for line_no, line in enumerate(lines, 1):
+            raw_line = line
             line = line.strip()
             if not line or line.startswith('//') or line.startswith('/*') or line.startswith('*'):
+                # Still track braces in comments? No — skip them
                 continue
+            
+            # Track brace depth for class scope
+            for ch in raw_line:
+                if ch == '{':
+                    brace_depth += 1
+                elif ch == '}':
+                    brace_depth -= 1
+            
+            # End of class scope
+            if current_class and brace_depth < class_brace_depth:
+                current_class = None
+                class_brace_depth = 0
             
             # Imports
             import_match = import_pattern.match(line)
             if import_match:
                 result['module'].imports.append(import_match.group(1))
+                continue
             
             # Classes
             class_match = class_pattern.match(line)
@@ -438,7 +578,8 @@ class FileAnalyzer:
                 result['module'].classes.append(qualified_name)
                 self.stats['classes_found'] += 1
                 current_class = qualified_name
-                current_class_line = line_no
+                class_brace_depth = brace_depth
+                continue
             
             # Interfaces (treat as classes)
             interface_match = interface_pattern.match(line)
@@ -457,21 +598,14 @@ class FileAnalyzer:
                 )
                 result['module'].classes.append(qualified_name)
                 self.stats['classes_found'] += 1
+                continue
             
-            # Functions
+            # Standalone functions (function declarations & const/let/var arrows)
             func_match = func_pattern.match(line)
-            if func_match:
+            if func_match and not current_class:
                 func_name = func_match.group(1) or func_match.group(2)
                 if func_name:
-                    if current_class and line_no > current_class_line:
-                        # Method
-                        method_name = func_name
-                        qualified_name = f"{current_class}.{method_name}"
-                        result['classes'][current_class].methods.append(qualified_name)
-                    else:
-                        # Standalone function
-                        qualified_name = f"{module_name}.{func_name}"
-                    
+                    qualified_name = f"{module_name}.{func_name}"
                     result['functions'][qualified_name] = FunctionInfo(
                         name=func_name,
                         qualified_name=qualified_name,
@@ -479,8 +613,8 @@ class FileAnalyzer:
                         line=line_no,
                         column=0,
                         module=module_name,
-                        class_name=current_class.split('.')[-1] if current_class else None,
-                        is_method=current_class is not None,
+                        class_name=None,
+                        is_method=False,
                         is_private=func_name.startswith('_'),
                         is_property=False,
                         docstring="",
@@ -489,6 +623,58 @@ class FileAnalyzer:
                     )
                     result['module'].functions.append(qualified_name)
                     self.stats['functions_found'] += 1
+                    continue
+            
+            # Class members: methods (shorthand syntax) & arrow property methods
+            if current_class:
+                _matched_method = False
+                # Arrow property: myMethod = (args) => { ... }
+                arrow_match = arrow_prop_pattern.match(line)
+                if arrow_match:
+                    method_name = arrow_match.group(1)
+                    if method_name not in ('constructor', 'if', 'for', 'while', 'switch', 'return'):
+                        _matched_method = True
+                
+                # Shorthand method: myMethod(args) { ... }
+                if not _matched_method:
+                    meth_match = method_pattern.match(line)
+                    if meth_match:
+                        method_name = meth_match.group(1)
+                        if method_name not in ('if', 'for', 'while', 'switch', 'return',
+                                               'catch', 'class', 'import', 'export', 'new'):
+                            _matched_method = True
+                
+                # Also catch const/let/var arrows inside class (rare but valid)
+                if not _matched_method and func_match:
+                    fname = func_match.group(1) or func_match.group(2)
+                    if fname:
+                        method_name = fname
+                        _matched_method = True
+                
+                if _matched_method:
+                    qualified_name = f"{current_class}.{method_name}"
+                    result['classes'][current_class].methods.append(qualified_name)
+                    result['functions'][qualified_name] = FunctionInfo(
+                        name=method_name,
+                        qualified_name=qualified_name,
+                        file=file_path,
+                        line=line_no,
+                        column=0,
+                        module=module_name,
+                        class_name=current_class.split('.')[-1],
+                        is_method=True,
+                        is_private=method_name.startswith('_') or method_name.startswith('#'),
+                        is_property=False,
+                        docstring="",
+                        args=[],
+                        decorators=[],
+                    )
+                    result['module'].functions.append(qualified_name)
+                    self.stats['functions_found'] += 1
+        
+        # Regex-based complexity estimation and call extraction
+        self._calculate_complexity_regex(content, result, lang='c_family')
+        self._extract_calls_regex(content, module_name, result)
         
         self.stats['files_processed'] += 1
         return result
@@ -565,6 +751,10 @@ class FileAnalyzer:
                 )
                 result['module'].classes.append(qualified_name)
                 self.stats['classes_found'] += 1
+        
+        # Regex-based complexity estimation and call extraction
+        self._calculate_complexity_regex(content, result, lang='go')
+        self._extract_calls_regex(content, module_name, result)
         
         self.stats['files_processed'] += 1
         return result
@@ -648,6 +838,10 @@ class FileAnalyzer:
                 )
                 result['module'].classes.append(qualified_name)
                 self.stats['classes_found'] += 1
+        
+        # Regex-based complexity estimation and call extraction
+        self._calculate_complexity_regex(content, result, lang='rust')
+        self._extract_calls_regex(content, module_name, result)
         
         self.stats['files_processed'] += 1
         return result
@@ -733,6 +927,10 @@ class FileAnalyzer:
                     result['module'].functions.append(qualified_name)
                     result['classes'][current_class].methods.append(qualified_name)
                     self.stats['functions_found'] += 1
+        
+        # Regex-based complexity estimation and call extraction
+        self._calculate_complexity_regex(content, result, lang='c_family')
+        self._extract_calls_regex(content, module_name, result)
         
         self.stats['files_processed'] += 1
         return result
