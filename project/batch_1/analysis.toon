@@ -1,5 +1,5 @@
-# code2llm | 97f 18221L | python:90,php:1,shell:1 | 2026-03-09
-# CC̄=4.4 | critical:59/850 | dups:0 | cycles:0
+# code2llm | 97f 18431L | python:90,php:1,shell:1 | 2026-03-09
+# CC̄=4.4 | critical:59/854 | dups:0 | cycles:0
 
 HEALTH[8]:
   🟡 CC    main CC=17 (limit:15)
@@ -26,11 +26,12 @@ COUPLING:
   CYCLES: none
 
 LAYERS:
-  code2llm/                       CC̄=4.6    ←in:0  →out:5
+  code2llm/                       CC̄=4.7    ←in:0  →out:5
   │ !! file_analyzer              813L  1C   22m  CC=18     ←0
   │ !! large_repo                 596L  2C   20m  CC=9      ←1
   │ !! project_yaml_exporter      513L  1C   18m  CC=13     ←0
   │ !! cli                        511L  0C    8m  CC=15     ←0
+  │ !! html_dashboard             504L  1C   14m  CC=7      ←0
   │ !! readme_exporter            501L  1C    7m  CC=13     ←0
   │ !! metrics                    501L  1C   27m  CC=12     ←0
   │ !! pipeline_detector          486L  3C   14m  CC=18     ←0
@@ -39,7 +40,6 @@ LAYERS:
   │ !  flow_exporter              391L  1C   14m  CC=10     ←0
   │ !  pipeline                   388L  3C   20m  CC=10     ←0
   │ !  renderer                   385L  1C   22m  CC=11     ←0
-  │ html_dashboard             351L  1C   11m  CC=6      ←0
   │ !  evolution_exporter         350L  1C   15m  CC=10     ←0
   │ !  entity_resolution          326L  3C   16m  CC=13     ←0
   │ !  side_effects               324L  2C   17m  CC=14     ←0
@@ -53,10 +53,10 @@ LAYERS:
   │ !! data_analysis              270L  1C   16m  CC=17     ←0
   │ !  toon_size_manager          265L  0C    8m  CC=10     ←1
   │ !  mermaid_exporter           251L  1C   12m  CC=13     ←0
+  │ !  context_exporter           248L  1C   15m  CC=10     ←0
   │ !  map_exporter               237L  1C   13m  CC=13     ←4
-  │ !  formats                    225L  0C   10m  CC=14     ←3
+  │ !  formats                    226L  0C   10m  CC=14     ←3
   │ dfg                        224L  1C   12m  CC=7      ←0
-  │ !  context_exporter           224L  1C   14m  CC=10     ←0
   │ call_graph                 211L  1C   13m  CC=9      ←0
   │ config                     209L  6C    0m  CC=0.0    ←0
   │ !  scanner                    201L  1C    6m  CC=14     ←0
@@ -69,12 +69,12 @@ LAYERS:
   │ detector                   168L  1C    8m  CC=9      ←0
   │ article_view               163L  1C    9m  CC=7      ←0
   │ module_detail              162L  1C    9m  CC=7      ←0
+  │ toon_view                  157L  1C    9m  CC=6      ←0
   │ !  prompt_engine              150L  1C    7m  CC=12     ←0
   │ toon_parser                147L  0C   10m  CC=8      ←1
   │ !  context_view               140L  1C    8m  CC=11     ←0
   │ prioritizer                131L  2C    4m  CC=9      ←0
   │ code2logic                 127L  0C    8m  CC=6      ←1
-  │ toon_view                  125L  1C    9m  CC=5      ←0
   │ normalization              122L  2C   13m  CC=6      ←0
   │ helpers                    120L  0C    8m  CC=8      ←3
   │ !  validate_project           118L  0C    3m  CC=11     ←1
@@ -141,7 +141,7 @@ LAYERS:
 
 DUPLICATES[0]: none
 
-FUNCTIONS (CC≥10, 59 of 746):
+FUNCTIONS (CC≥10, 59 of 750):
    18.0  PipelineDetector._resolve_callee           21n   6exit  cond+ret  !! split
    18.0  FileAnalyzer._analyze_typescript_js        22n   2exit  loops+cond+ret  !! split
    17.0  main                                       21n   3exit  loops+cond+ret  !! split
@@ -157,8 +157,8 @@ FUNCTIONS (CC≥10, 59 of 746):
    14.0  ProjectAnalyzer._build_call_graph          16n   1exit  loops+cond
    14.0  FlowRenderer.render_data_types             13n   3exit  loops+cond+ret
    14.0  normalize_llm_task                          3n   2exit  ret
-   14.0  _export_simple_formats                     21n   1exit  loops+cond
    14.0  _summarize_functions                       15n   2exit  loops+cond+ret
+   14.0  _export_simple_formats                     21n   1exit  loops+cond
    14.0  StreamingScanner.quick_scan_file           15n   2exit  loops+cond+ret
    13.0  parse_evolution_metrics                    16n   2exit  loops+cond+ret
    13.0  parse_evolution_metrics                    16n   2exit  loops+cond+ret
@@ -175,10 +175,10 @@ FUNCTIONS (CC≥10, 59 of 746):
    12.0  DataAnalyzer._find_state_patterns           9n   2exit  loops+cond+ret
    12.0  StreamingAnalyzer.analyze_streaming        16n   1exit  loops+cond
    12.0  ProjectYAMLExporter._build_project_yaml     3n   2exit  ret
-   12.0  _check_node_ids                            15n   1exit  loops+cond
    12.0  _export_mermaid                             8n   1exit  cond
-   12.0  _build_prompt_footer                       21n   2exit  loops+cond+ret
+   12.0  _check_node_ids                            15n   1exit  loops+cond
    12.0  PromptEngine._build_context_for_smell       5n   2exit  cond+ret
+   12.0  _build_prompt_footer                       21n   2exit  loops+cond+ret
    12.0  MetricsComputer._compute_file_metrics      21n   2exit  loops+cond+ret
    12.0  FileAnalyzer._process_function             14n   2exit  loops+cond+ret
    12.0  FileAnalyzer._analyze_generic              12n   2exit  loops+cond+ret
@@ -190,12 +190,12 @@ FUNCTIONS (CC≥10, 59 of 746):
    10.0  ProjectAnalyzer.analyze_project            17n   2exit  cond+ret
    10.0  _split_by_modules                          15n   2exit  loops+cond+ret
    10.0  NLPPipeline._format_action                 29n  10exit  cond+ret
-   10.0  ContextExporter._trace_flow                14n   3exit  loops+cond+ret
    10.0  EvolutionExporter._build_context            3n   2exit  ret
+   10.0  EvolutionExporter._render_next             16n   3exit  loops+cond+ret
 
   summary:
-    critical(≥10): 59 | high(5-10): 249 | medium(2-5): 267 | low(<2): 171
-    8% CC≥10  41% CC≥5
+    critical(≥10): 59 | high(5-10): 253 | medium(2-5): 268 | low(<2): 170
+    8% CC≥10  42% CC≥5
 
 HOTSPOTS:
   #1  FileAnalyzer._analyze_typescript_js  fan=28   "analysis pipeline, 28 stages"
@@ -221,8 +221,9 @@ CLASSES:
   NLPPipeline                    ██████████████            16m  CC̄=2.6   max=10  
   SideEffectDetector             █████████████             15m  CC̄=5.1   max=14  
   EvolutionExporter              █████████████             15m  CC̄=4.7   max=10  
+  ContextExporter                █████████████             15m  CC̄=5.1   max=10  
   EntityResolver                 ████████████              14m  CC̄=3.7   max=13  
-  ContextExporter                ████████████              14m  CC̄=4.8   max=10  
+  HTMLDashboardGenerator         ████████████              14m  CC̄=3.3   max=7   
   FlowExporter                   ████████████              14m  CC̄=5.6   max=10  
   PipelineDetector               ███████████               13m  CC̄=6.9   max=18    !!
   CallGraphExtractor             ███████████               13m  CC̄=4.2   max=9   
@@ -231,12 +232,11 @@ CLASSES:
   MapExporter                    ███████████               13m  CC̄=5.2   max=13  
   DFGExtractor                   ██████████                12m  CC̄=3.6   max=7   
   MermaidExporter                ██████████                12m  CC̄=5.3   max=13  
-  HTMLDashboardGenerator         █████████                 11m  CC̄=2.8   max=6   
   RefactoringAnalyzer            █████████                 11m  CC̄=4.7   max=9   
   SmellDetector                  ████████                   9m  CC̄=4.4   max=7   
   ProjectAnalyzer                ████████                   9m  CC̄=7.9   max=14  
   ArticleViewGenerator           ████████                   9m  CC̄=2.8   max=7   
-  ToonViewGenerator              ████████                   9m  CC̄=2.4   max=5   
+  ToonViewGenerator              ████████                   9m  CC̄=2.7   max=6   
   ModuleDetailRenderer           ████████                   9m  CC̄=4.4   max=7   
   ContextViewGenerator           ███████                    8m  CC̄=3.8   max=11  
   PatternDetector                ███████                    8m  CC̄=4.6   max=9   
@@ -273,13 +273,13 @@ CLASSES:
   DepthConfig                                               0m  CC̄=0.0   max=0.0 
   OutputConfig                                              0m  CC̄=0.0   max=0.0 
   Config                                                    0m  CC̄=0.0   max=0.0 
+  SubProject                                                0m  CC̄=0.0   max=0.0 
   NormalizationConfig                                       0m  CC̄=0.0   max=0.0 
   IntentMatchingConfig                                      0m  CC̄=0.0   max=0.0 
   EntityResolutionConfig                                    0m  CC̄=0.0   max=0.0 
   MultilingualConfig                                        0m  CC̄=0.0   max=0.0 
   IntentMatch                                               0m  CC̄=0.0   max=0.0 
   Entity                                                    0m  CC̄=0.0   max=0.0 
-  SubProject                                                0m  CC̄=0.0   max=0.0 
   NormalizationResult                                       0m  CC̄=0.0   max=0.0 
   FlowNode                                                  0m  CC̄=0.0   max=0.0 
   FlowEdge                                                  0m  CC̄=0.0   max=0.0 
@@ -385,18 +385,6 @@ S...
     dump_yaml(data)
     create_parser()
     main(argv)
-  code2llm/cli_exports/formats.py:
-    e: _export_evolution,_export_data_structures,_export_context_fallback,_export_readme,_export_project_yaml,_run_report,_export_simple_formats,_export_yaml,_export_mermaid,_export_refactor_prompts
-    _export_evolution(args,result,output_dir)
-    _export_data_structures(args,result,output_dir)
-    _export_context_fallback(args,result,output_dir,formats)
-    _export_readme(args,result,output_dir)
-    _export_project_yaml(args,result,output_dir)
-    _run_report(args,project_yaml_path,output_dir)
-    _export_simple_formats(args,result,output_dir,formats)
-    _export_yaml(args,result,output_dir)
-    _export_mermaid(args,result,output_dir)
-    _export_refactor_prompts(args,result,output_dir)
   code2llm/generators/llm_flow.py:
     e: FuncSummary,_strip_bom,_safe_read_yaml,_as_dict,_as_list,_shorten,_parse_call_label,_parse_func_label,_collect_nodes,_group_nodes_by_file,_is_entrypoint_file,_extract_entrypoint_info,_deduplicate_entrypoints,_collect_entrypoints,_collect_functions,_node_counts_by_function,_pick_relevant_functions,_summarize_functions,_build_call_graph,_reachable,generate_llm_flow,render_llm_flow_md,dump_yaml,create_parser,main
     FuncSummary
@@ -424,6 +412,18 @@ S...
     dump_yaml(data)
     create_parser()
     main(argv)
+  code2llm/cli_exports/formats.py:
+    e: _export_evolution,_export_data_structures,_export_context_fallback,_export_readme,_export_project_yaml,_run_report,_export_simple_formats,_export_yaml,_export_mermaid,_export_refactor_prompts
+    _export_evolution(args,result,output_dir)
+    _export_data_structures(args,result,output_dir)
+    _export_context_fallback(args,result,output_dir,formats)
+    _export_readme(args,result,output_dir)
+    _export_project_yaml(args,result,output_dir)
+    _run_report(args,project_yaml_path,output_dir)
+    _export_simple_formats(args,result,output_dir,formats)
+    _export_yaml(args,result,output_dir)
+    _export_mermaid(args,result,output_dir)
+    _export_refactor_prompts(args,result,output_dir)
   code2llm/core/streaming/scanner.py:
     e: StreamingScanner
     StreamingScanner  # Handles file scanning operations....
@@ -532,6 +532,10 @@ S...
     e: StreamingAnalyzer
     StreamingAnalyzer  # Memory-efficient streaming analyzer with progress tracking....
       __init__(2)  CC=4.0
+  code2llm/refactor/prompt_engine.py:
+    e: PromptEngine
+    PromptEngine  # Generate refactoring prompts from analysis results and detec...
+      __init__(2)  CC=4.0
   code2llm/cli_exports/prompt.py:
     e: _export_prompt_txt,_export_chunked_prompt_txt,_get_prompt_paths,_build_prompt_header,_build_main_files_section,_format_size,_get_missing_files,_build_subprojects_section,_build_missing_files_section,_analyze_generated_files,_build_dynamic_focus_areas,_build_dynamic_tasks,_build_prompt_footer
     _export_prompt_txt(args,output_dir,formats,source_path)
@@ -547,10 +551,6 @@ S...
     _build_dynamic_focus_areas(file_analysis)
     _build_dynamic_tasks(file_analysis)
     _build_prompt_footer(chunked,file_analysis)
-  code2llm/refactor/prompt_engine.py:
-    e: PromptEngine
-    PromptEngine  # Generate refactoring prompts from analysis results and detec...
-      __init__(2)  CC=4.0
   code2llm/exporters/toon/metrics.py:
     e: MetricsComputer
     MetricsComputer  # Computes all metrics for TOON export....
@@ -606,12 +606,17 @@ S...
       is_successful(0)  CC=3.0
     NLPPipeline  # Main NLP processing pipeline (4a-4e)....
       __init__(1)  CC=2.0
+  code2llm/exporters/evolution_exporter.py:
+    e: EvolutionExporter
+    EvolutionExporter  # Export evolution.toon — prioritized refactoring queue....
+      _is_excluded(1)  CC=5.0
   code2llm/exporters/context_exporter.py:
     e: ContextExporter
     ContextExporter  # Export LLM-ready analysis summary with architecture and flow...
       export(2)  CC=1.0
         → _get_important_entries(1)  CC=3.0
-        → _get_overview(1)  CC=1.0
+        → _get_overview(1)  CC=3.0
+        → _detect_languages(0)  CC=7.0
         → _get_architecture_by_module(1)  CC=7.0
         → _get_key_entry_points(1)  CC=4.0
         → _get_process_flows(2)  CC=6.0
@@ -623,10 +628,6 @@ S...
         → _get_behavioral_patterns(1)  CC=4.0
         → _get_api_surface(1)  CC=5.0
         → _get_system_interactions(1)  CC=5.0
-  code2llm/exporters/evolution_exporter.py:
-    e: EvolutionExporter
-    EvolutionExporter  # Export evolution.toon — prioritized refactoring queue....
-      _is_excluded(1)  CC=5.0
   code2llm/exporters/flow_exporter.py:
     e: FlowExporter
     FlowExporter  # Export to flow.toon — data-flow focused format.
@@ -650,15 +651,15 @@ Stra...
     e: PatternDetector
     PatternDetector  # Detect behavioral patterns in code....
       __init__(1)  CC=1.0
+  code2llm/core/core/refactoring.py:
+    e: RefactoringAnalyzer
+    RefactoringAnalyzer  # Performs refactoring analysis on code....
+      __init__(2)  CC=1.0
   code2llm/core/streaming/prioritizer.py:
     e: FilePriority,SmartPrioritizer
     FilePriority  # Priority scoring for file analysis order....
     SmartPrioritizer  # Smart file prioritization for optimal analysis order....
       __init__(1)  CC=1.0
-  code2llm/core/core/refactoring.py:
-    e: RefactoringAnalyzer
-    RefactoringAnalyzer  # Performs refactoring analysis on code....
-      __init__(2)  CC=1.0
   code2llm/core/models.py:
     e: BaseModel,FlowNode,FlowEdge,FunctionInfo,ClassInfo,ModuleInfo,Pattern,CodeSmell,Mutation,DataFlow,AnalysisResult
     BaseModel  # Base class for models with automated serialization....
@@ -736,6 +737,23 @@ Stra...
         → _render_roadmap(0)  CC=3.0
         → _render_evolution(0)  CC=7.0
         → _render_footer(-1)  CC=1.0
+  code2llm/exporters/html_dashboard.py:
+    e: HTMLDashboardGenerator
+    HTMLDashboardGenerator  # Generate dashboard.html from project.yaml data....
+      generate(2)  CC=1.0
+        → _render(1)  CC=1.0
+        → _health_verdict(0)  CC=3.0
+        → _build_evolution_section(0)  CC=4.0
+        → _build_language_breakdown(0)  CC=7.0
+        → _build_module_lines_chart(0)  CC=3.0
+        → _build_module_funcs_chart(0)  CC=3.0
+        → _build_alerts_html(0)  CC=3.0
+        → _build_hotspots_html(0)  CC=2.0
+        → _build_refactoring_html(0)  CC=2.0
+        → _build_top_modules_html(0)  CC=3.0
+        → _assemble_html(0)  CC=6.0
+        → _render_evolution_section(0)  CC=6.0
+        → _render_evolution_script(0)  CC=2.0
   code2llm/exporters/toon/module_detail.py:
     e: ModuleDetailRenderer
     ModuleDetailRenderer  # Renders detailed module information....
@@ -813,20 +831,18 @@ Unlike simple L...
     NormalizationResult  # Result of query normalization....
     QueryNormalizer  # Normalize queries for consistent processing....
       __init__(1)  CC=2.0
-  code2llm/exporters/html_dashboard.py:
-    e: HTMLDashboardGenerator
-    HTMLDashboardGenerator  # Generate dashboard.html from project.yaml data....
+  code2llm/exporters/toon_view.py:
+    e: ToonViewGenerator
+    ToonViewGenerator  # Generate project.toon from project.yaml data....
       generate(2)  CC=1.0
         → _render(1)  CC=1.0
-        → _health_verdict(0)  CC=3.0
-        → _build_evolution_section(0)  CC=4.0
-        → _build_module_chart_data(0)  CC=3.0
-        → _build_alerts_html(0)  CC=3.0
-        → _build_hotspots_html(0)  CC=2.0
-        → _build_refactoring_html(0)  CC=2.0
-        → _assemble_html(0)  CC=4.0
-        → _render_evolution_section(0)  CC=6.0
-        → _render_evolution_script(0)  CC=2.0
+        → _render_header(0)  CC=1.0
+        → _render_health(0)  CC=1.0
+        → _render_alerts(0)  CC=5.0
+        → _render_modules(0)  CC=6.0
+        → _render_hotspots(0)  CC=3.0
+        → _render_refactoring(0)  CC=3.0
+        → _render_evolution(0)  CC=3.0
   code2llm/cli_exports/code2logic.py:
     e: _export_code2logic,_should_run_code2logic,_check_code2logic_installed,_build_code2logic_cmd,_run_code2logic,_handle_code2logic_error,_find_code2logic_output,_normalize_code2logic_output
     _export_code2logic(args,source_path,output_dir,formats)
@@ -855,18 +871,6 @@ Unlike simple L...
     e: CFGExtractor
     CFGExtractor  # Extract Control Flow Graph from AST....
       __init__(1)  CC=1.0
-  code2llm/exporters/toon_view.py:
-    e: ToonViewGenerator
-    ToonViewGenerator  # Generate project.toon from project.yaml data....
-      generate(2)  CC=1.0
-        → _render(1)  CC=1.0
-        → _render_header(0)  CC=1.0
-        → _render_health(0)  CC=1.0
-        → _render_alerts(0)  CC=5.0
-        → _render_modules(0)  CC=4.0
-        → _render_hotspots(0)  CC=3.0
-        → _render_refactoring(0)  CC=3.0
-        → _render_evolution(0)  CC=3.0
   code2llm/core/streaming/incremental.py:
     e: IncrementalAnalyzer
     IncrementalAnalyzer  # Incremental analysis with change detection....

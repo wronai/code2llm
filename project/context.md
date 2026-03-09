@@ -3,8 +3,10 @@
 ## Overview
 
 - **Project**: .
+- **Primary Language**: python
+- **Languages**: python: 102, shell: 2, php: 1
 - **Analysis Mode**: static
-- **Total Functions**: 850
+- **Total Functions**: 854
 - **Total Classes**: 104
 - **Modules**: 105
 - **Entry Points**: 0
@@ -94,6 +96,11 @@
 - **Classes**: 1
 - **File**: `evolution_exporter.py`
 
+### code2llm.exporters.context_exporter
+- **Functions**: 15
+- **Classes**: 1
+- **File**: `context_exporter.py`
+
 ### code2llm.generators.llm_task
 - **Functions**: 15
 - **File**: `llm_task.py`
@@ -101,11 +108,6 @@
 ### batch_1.validate_toon
 - **Functions**: 15
 - **File**: `validate_toon.py`
-
-### code2llm.analysis.pipeline_detector
-- **Functions**: 14
-- **Classes**: 3
-- **File**: `pipeline_detector.py`
 
 ## Key Entry Points
 
@@ -185,18 +187,23 @@ Scans function bodies for IO operations,
 - **Key Methods**: code2llm.exporters.evolution_exporter.EvolutionExporter._is_excluded, code2llm.exporters.evolution_exporter.EvolutionExporter.export, code2llm.exporters.evolution_exporter.EvolutionExporter._build_context, code2llm.exporters.evolution_exporter.EvolutionExporter._compute_func_data, code2llm.exporters.evolution_exporter.EvolutionExporter._scan_file_sizes, code2llm.exporters.evolution_exporter.EvolutionExporter._aggregate_file_stats, code2llm.exporters.evolution_exporter.EvolutionExporter._make_relative_path, code2llm.exporters.evolution_exporter.EvolutionExporter._filter_god_modules, code2llm.exporters.evolution_exporter.EvolutionExporter._compute_god_modules, code2llm.exporters.evolution_exporter.EvolutionExporter._compute_hub_types
 - **Inherits**: Exporter
 
+### code2llm.exporters.context_exporter.ContextExporter
+> Export LLM-ready analysis summary with architecture and flows.
+
+Output: context.md — architecture na
+- **Methods**: 15
+- **Key Methods**: code2llm.exporters.context_exporter.ContextExporter.export, code2llm.exporters.context_exporter.ContextExporter._get_overview, code2llm.exporters.context_exporter.ContextExporter._detect_languages, code2llm.exporters.context_exporter.ContextExporter._get_architecture_by_module, code2llm.exporters.context_exporter.ContextExporter._get_important_entries, code2llm.exporters.context_exporter.ContextExporter._get_key_entry_points, code2llm.exporters.context_exporter.ContextExporter._get_process_flows, code2llm.exporters.context_exporter.ContextExporter._get_key_classes, code2llm.exporters.context_exporter.ContextExporter._get_data_transformations, code2llm.exporters.context_exporter.ContextExporter._get_behavioral_patterns
+- **Inherits**: Exporter
+
 ### code2llm.nlp.entity_resolution.EntityResolver
 > Resolve entities (functions, classes, etc.) from queries.
 - **Methods**: 14
 - **Key Methods**: code2llm.nlp.entity_resolution.EntityResolver.__init__, code2llm.nlp.entity_resolution.EntityResolver.resolve, code2llm.nlp.entity_resolution.EntityResolver._extract_candidates, code2llm.nlp.entity_resolution.EntityResolver._extract_from_patterns, code2llm.nlp.entity_resolution.EntityResolver._disambiguate, code2llm.nlp.entity_resolution.EntityResolver._resolve_hierarchical, code2llm.nlp.entity_resolution.EntityResolver._resolve_aliases, code2llm.nlp.entity_resolution.EntityResolver._name_similarity, code2llm.nlp.entity_resolution.EntityResolver.load_from_analysis, code2llm.nlp.entity_resolution.EntityResolver.step_3a_extract_entities
 
-### code2llm.exporters.context_exporter.ContextExporter
-> Export LLM-ready analysis summary with architecture and flows.
-
-Output: context.md — architecture na
+### code2llm.exporters.html_dashboard.HTMLDashboardGenerator
+> Generate dashboard.html from project.yaml data.
 - **Methods**: 14
-- **Key Methods**: code2llm.exporters.context_exporter.ContextExporter.export, code2llm.exporters.context_exporter.ContextExporter._get_overview, code2llm.exporters.context_exporter.ContextExporter._get_architecture_by_module, code2llm.exporters.context_exporter.ContextExporter._get_important_entries, code2llm.exporters.context_exporter.ContextExporter._get_key_entry_points, code2llm.exporters.context_exporter.ContextExporter._get_process_flows, code2llm.exporters.context_exporter.ContextExporter._get_key_classes, code2llm.exporters.context_exporter.ContextExporter._get_data_transformations, code2llm.exporters.context_exporter.ContextExporter._get_behavioral_patterns, code2llm.exporters.context_exporter.ContextExporter._get_api_surface
-- **Inherits**: Exporter
+- **Key Methods**: code2llm.exporters.html_dashboard.HTMLDashboardGenerator.generate, code2llm.exporters.html_dashboard.HTMLDashboardGenerator._render, code2llm.exporters.html_dashboard.HTMLDashboardGenerator._health_verdict, code2llm.exporters.html_dashboard.HTMLDashboardGenerator._build_evolution_section, code2llm.exporters.html_dashboard.HTMLDashboardGenerator._build_language_breakdown, code2llm.exporters.html_dashboard.HTMLDashboardGenerator._build_module_lines_chart, code2llm.exporters.html_dashboard.HTMLDashboardGenerator._build_module_funcs_chart, code2llm.exporters.html_dashboard.HTMLDashboardGenerator._build_top_modules_html, code2llm.exporters.html_dashboard.HTMLDashboardGenerator._build_alerts_html, code2llm.exporters.html_dashboard.HTMLDashboardGenerator._build_hotspots_html
 
 ### code2llm.exporters.flow_exporter.FlowExporter
 > Export to flow.toon — data-flow focused format.
@@ -213,12 +220,6 @@ Builds a call graph as a DiGraph, fin
 - **Methods**: 13
 - **Key Methods**: code2llm.analysis.pipeline_detector.PipelineDetector.__init__, code2llm.analysis.pipeline_detector.PipelineDetector.detect, code2llm.analysis.pipeline_detector.PipelineDetector._build_graph, code2llm.analysis.pipeline_detector.PipelineDetector._find_pipeline_paths, code2llm.analysis.pipeline_detector.PipelineDetector._longest_path_from, code2llm.analysis.pipeline_detector.PipelineDetector._longest_path_in_dag, code2llm.analysis.pipeline_detector.PipelineDetector._build_pipelines, code2llm.analysis.pipeline_detector.PipelineDetector._build_stages, code2llm.analysis.pipeline_detector.PipelineDetector._classify_domain, code2llm.analysis.pipeline_detector.PipelineDetector._derive_pipeline_name
 
-### code2llm.analysis.call_graph.CallGraphExtractor
-> Extract call graph from AST.
-- **Methods**: 13
-- **Key Methods**: code2llm.analysis.call_graph.CallGraphExtractor.__init__, code2llm.analysis.call_graph.CallGraphExtractor.extract, code2llm.analysis.call_graph.CallGraphExtractor._calculate_metrics, code2llm.analysis.call_graph.CallGraphExtractor.visit_Import, code2llm.analysis.call_graph.CallGraphExtractor.visit_ImportFrom, code2llm.analysis.call_graph.CallGraphExtractor.visit_ClassDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_FunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_AsyncFunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_Call, code2llm.analysis.call_graph.CallGraphExtractor._qualified_name
-- **Inherits**: ast.NodeVisitor
-
 ### code2llm.nlp.intent_matching.IntentMatcher
 > Match queries to intents using fuzzy and keyword matching.
 - **Methods**: 13
@@ -229,6 +230,12 @@ Builds a call graph as a DiGraph, fin
 - **Methods**: 13
 - **Key Methods**: code2llm.nlp.normalization.QueryNormalizer.__init__, code2llm.nlp.normalization.QueryNormalizer.normalize, code2llm.nlp.normalization.QueryNormalizer._unicode_normalize, code2llm.nlp.normalization.QueryNormalizer._lowercase, code2llm.nlp.normalization.QueryNormalizer._remove_punctuation, code2llm.nlp.normalization.QueryNormalizer._normalize_whitespace, code2llm.nlp.normalization.QueryNormalizer._remove_stopwords, code2llm.nlp.normalization.QueryNormalizer._tokenize, code2llm.nlp.normalization.QueryNormalizer.step_1a_lowercase, code2llm.nlp.normalization.QueryNormalizer.step_1b_remove_punctuation
 
+### code2llm.analysis.call_graph.CallGraphExtractor
+> Extract call graph from AST.
+- **Methods**: 13
+- **Key Methods**: code2llm.analysis.call_graph.CallGraphExtractor.__init__, code2llm.analysis.call_graph.CallGraphExtractor.extract, code2llm.analysis.call_graph.CallGraphExtractor._calculate_metrics, code2llm.analysis.call_graph.CallGraphExtractor.visit_Import, code2llm.analysis.call_graph.CallGraphExtractor.visit_ImportFrom, code2llm.analysis.call_graph.CallGraphExtractor.visit_ClassDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_FunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_AsyncFunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_Call, code2llm.analysis.call_graph.CallGraphExtractor._qualified_name
+- **Inherits**: ast.NodeVisitor
+
 ### code2llm.exporters.map_exporter.MapExporter
 > Export to map.toon — structural map with modules, imports, signatures.
 
@@ -236,11 +243,6 @@ Keys: M=modules, D=details,
 - **Methods**: 13
 - **Key Methods**: code2llm.exporters.map_exporter.MapExporter.export, code2llm.exporters.map_exporter.MapExporter._render_header, code2llm.exporters.map_exporter.MapExporter._render_module_list, code2llm.exporters.map_exporter.MapExporter._render_details, code2llm.exporters.map_exporter.MapExporter._rank_modules, code2llm.exporters.map_exporter.MapExporter._render_map_module, code2llm.exporters.map_exporter.MapExporter._render_map_class, code2llm.exporters.map_exporter.MapExporter._function_signature, code2llm.exporters.map_exporter.MapExporter._is_excluded, code2llm.exporters.map_exporter.MapExporter._rel_path
 - **Inherits**: Exporter
-
-### examples.streaming-analyzer.sample_project.database.DatabaseConnection
-> Simple database connection simulator.
-- **Methods**: 13
-- **Key Methods**: examples.streaming-analyzer.sample_project.database.DatabaseConnection.__init__, examples.streaming-analyzer.sample_project.database.DatabaseConnection._load_data, examples.streaming-analyzer.sample_project.database.DatabaseConnection._save_data, examples.streaming-analyzer.sample_project.database.DatabaseConnection.get_user, examples.streaming-analyzer.sample_project.database.DatabaseConnection.get_user_settings, examples.streaming-analyzer.sample_project.database.DatabaseConnection.get_user_logs, examples.streaming-analyzer.sample_project.database.DatabaseConnection.update_user_settings, examples.streaming-analyzer.sample_project.database.DatabaseConnection.update_user_profile, examples.streaming-analyzer.sample_project.database.DatabaseConnection.delete_user, examples.streaming-analyzer.sample_project.database.DatabaseConnection.clear_user_data
 
 ## Data Transformation Functions
 
@@ -306,6 +308,10 @@ Checks:
 > Generate all format outputs and evaluate them.
 - **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
+### code2llm.analysis.cfg.CFGExtractor._format_except
+> Format except handler.
+- **Output to**: self._expr_to_str
+
 ### code2llm.core.toon_size_manager._parse_modules
 > Parse module sections from TOON content.
 
@@ -319,10 +325,6 @@ Returns list of (module_name, start_line, end_line).
 ### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
 > Process Python files directly in level1 directory.
 - **Output to**: len, chunks.append, self._chunk_by_files, chunks.extend, str
-
-### code2llm.analysis.cfg.CFGExtractor._format_except
-> Format except handler.
-- **Output to**: self._expr_to_str
 
 ### code2llm.nlp.pipeline.NLPPipeline.process
 > Process query through full pipeline (4a-4e).
@@ -382,8 +384,8 @@ Functions exposed as public API (no underscore prefix):
 - `validate_toon.compare_classes` - 19 calls
 - `scripts.benchmark_badges.parse_evolution_metrics` - 19 calls
 - `code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped` - 19 calls
-- `code2llm.core.streaming.scanner.StreamingScanner.quick_scan_file` - 19 calls
 - `code2llm.core.streaming.prioritizer.SmartPrioritizer.prioritize_files` - 19 calls
+- `code2llm.core.streaming.scanner.StreamingScanner.quick_scan_file` - 19 calls
 - `examples.streaming-analyzer.demo.demo_incremental_analysis` - 19 calls
 - `code2llm.exporters.flow_renderer.FlowRenderer.render_pipelines` - 18 calls
 - `code2llm.generators.llm_flow.main` - 18 calls
