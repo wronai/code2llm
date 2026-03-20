@@ -330,6 +330,10 @@ def generate_single_png(mmd_file: Path, output_file: Path, timeout: int = 60) ->
                     'white',
                     '-c',
                     cfg_path,
+                    '-w',
+                    '2400',
+                    '-H',
+                    '1800',
                 ],
             ),
             (
@@ -348,6 +352,10 @@ def generate_single_png(mmd_file: Path, output_file: Path, timeout: int = 60) ->
                     'white',
                     '-c',
                     cfg_path,
+                    '-w',
+                    '2400',
+                    '-H',
+                    '1800',
                 ],
             ),
             ('puppeteer', None),  # Special handling
@@ -355,8 +363,8 @@ def generate_single_png(mmd_file: Path, output_file: Path, timeout: int = 60) ->
     except Exception:
         # If creating config fails for any reason, fall back to renderer defaults.
         renderers = [
-            ('mmdc', ['mmdc', '-i', str(mmd_file), '-o', str(output_file), '-t', 'default', '-b', 'white']),
-            ('npx', ['npx', '-y', '@mermaid-js/mermaid-cli', '-i', str(mmd_file), '-o', str(output_file)]),
+            ('mmdc', ['mmdc', '-i', str(mmd_file), '-o', str(output_file), '-t', 'default', '-b', 'white', '-w', '2400', '-H', '1800']),
+            ('npx', ['npx', '-y', '@mermaid-js/mermaid-cli', '-i', str(mmd_file), '-o', str(output_file), '-w', '2400', '-H', '1800']),
             ('puppeteer', None),
         ]
     

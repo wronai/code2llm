@@ -120,6 +120,20 @@ class GitIgnoreParser:
 
 
 def load_gitignore_patterns(project_path: Path) -> GitIgnoreParser:
-    """Load gitignore patterns from project directory."""
-    gitignore_path = project_path / '.gitignore'
+    """Load gitignore patterns from project directory.
+    
+    Searches up the directory tree from project_path until it finds a .gitignore file
+    or reaches the filesystem root. This ensures that gitignore rules are properly applied
+    even when analyzing subdirectories of a larger project.
+    """
+    current_path = project_path.resolve()
+    
+    while current_path != current_path.parent:  # Stop at filesystem root
+        gitignore_path = current_path / '.gitignore'
+        if gitignore_path.exists():
+            return GitIgnoreParser(gitignore_path)
+        current_path = current_path.parent
+    
+    # Check filesystem root as last resort
+    gitignore_path = current_path / '.gitignore'
     return GitIgnoreParser(gitignore_path)

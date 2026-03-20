@@ -2,14 +2,14 @@
 
 ## Overview
 
-- **Project**: .
+- **Project**: /home/tom/github/wronai/code2llm
 - **Primary Language**: python
-- **Languages**: python: 102, shell: 2, php: 1
+- **Languages**: python: 115, php: 1, shell: 1
 - **Analysis Mode**: static
-- **Total Functions**: 861
-- **Total Classes**: 104
-- **Modules**: 105
-- **Entry Points**: 0
+- **Total Functions**: 887
+- **Total Classes**: 106
+- **Modules**: 117
+- **Entry Points**: 663
 
 ## Architecture by Module
 
@@ -17,11 +17,6 @@
 - **Functions**: 50
 - **Classes**: 15
 - **File**: `functional_refactoring_example.py`
-
-### code2llm.core.core.file_analyzer
-- **Functions**: 29
-- **Classes**: 1
-- **File**: `file_analyzer.py`
 
 ### code2llm.exporters.toon.metrics
 - **Functions**: 27
@@ -49,9 +44,14 @@
 - **File**: `pipeline.py`
 
 ### code2llm.analysis.type_inference
-- **Functions**: 18
+- **Functions**: 19
 - **Classes**: 1
 - **File**: `type_inference.py`
+
+### code2llm.analysis.data_analysis
+- **Functions**: 18
+- **Classes**: 1
+- **File**: `data_analysis.py`
 
 ### code2llm.exporters.project_yaml_exporter
 - **Functions**: 18
@@ -68,10 +68,10 @@
 - **Classes**: 1
 - **File**: `cfg.py`
 
-### code2llm.analysis.data_analysis
-- **Functions**: 16
+### code2llm.core.core.file_analyzer
+- **Functions**: 17
 - **Classes**: 1
-- **File**: `data_analysis.py`
+- **File**: `file_analyzer.py`
 
 ### code2llm.nlp.entity_resolution
 - **Functions**: 16
@@ -82,7 +82,7 @@
 - **Functions**: 16
 - **File**: `mermaid.py`
 
-### root.validate_toon
+### validate_toon
 - **Functions**: 15
 - **File**: `validate_toon.py`
 
@@ -105,24 +105,198 @@
 - **Functions**: 15
 - **File**: `llm_task.py`
 
-### batch_1.validate_toon
-- **Functions**: 15
-- **File**: `validate_toon.py`
+### code2llm.analysis.pipeline_detector
+- **Functions**: 14
+- **Classes**: 3
+- **File**: `pipeline_detector.py`
 
 ## Key Entry Points
 
 Main execution flows into the system:
 
+### validate_toon.main
+> Main validation function.
+- **Calls**: len, Path, print, print, validate_toon.load_file, validate_toon.validate_toon_completeness, print, print
+
+### benchmarks.benchmark_performance.main
+> Run benchmark suite.
+- **Calls**: print, print, print, print, benchmarks.benchmark_performance.create_test_project, print, print, print
+
+### code2llm.core.analyzer.ProjectAnalyzer.analyze_project
+> Analyze entire project.
+- **Calls**: time.time, None.resolve, self._collect_files, self._merge_results, self._build_call_graph, self.refactoring_analyzer.perform_refactoring_analysis, project_path.exists, FileNotFoundError
+
+### code2llm.exporters.toon.ToonExporter.export
+> Export analysis result to toon v2 format.
+- **Calls**: self.metrics_computer.compute_all_metrics, sections.extend, sections.append, sections.extend, sections.append, sections.extend, sections.append, sections.extend
+
+### benchmarks.benchmark_evolution.run_benchmark
+> Run evolution analysis and print before/after table.
+- **Calls**: benchmarks.benchmark_evolution.load_previous, print, print, print, print, print, metrics_labels.items, print
+
+### code2llm.nlp.pipeline.NLPPipeline.process
+> Process query through full pipeline (4a-4e).
+- **Calls**: time.time, time.time, self._step_normalize, stages.append, time.time, self._step_match_intent, stages.append, time.time
+
+### code2llm.refactor.prompt_engine.PromptEngine._build_context_for_smell
+> Prepare context data for the Jinja2 template.
+- **Calls**: self._get_source_context, self.result.metrics.get, self.result.metrics.get, self._get_instruction_for_smell, None.replace, None.join, None.join, smell.name.split
+
+### code2llm.exporters.context_view.ContextViewGenerator._render_architecture
+- **Calls**: sorted, m.get, None.append, dir_groups.keys, sum, sum, lines.append, lines.append
+
+### code2llm.core.streaming_analyzer.StreamingAnalyzer.analyze_streaming
+> Analyze project with streaming output (yields partial results).
+- **Calls**: time.time, None.resolve, self.scanner.collect_files, self.prioritizer.prioritize_files, len, self._report_progress, self.scanner.quick_scan_file, self.scanner.build_call_graph_streaming
+
+### code2llm.exporters.mermaid_exporter.MermaidExporter.export_compact
+> Export module-level graph: one node per module, weighted edges.
+- **Calls**: defaultdict, defaultdict, result.functions.items, defaultdict, result.functions.items, set, sorted, sorted
+
+### code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph
+> Export simplified call graph — only connected nodes.
+- **Calls**: set, result.functions.items, sorted, set, self._write, self._module_of, result.functions.get, modules.items
+
+### code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_project_yaml
+- **Calls**: code2llm.exporters.toon.helpers._scan_line_counts, self._build_modules, self._build_health, self._build_hotspots, self._build_refactoring, self._build_evolution, sum, line_counts.items
+
+### code2llm.exporters.context_exporter.ContextExporter.export
+> Generate comprehensive LLM prompt with architecture description.
+- **Calls**: lines.extend, lines.extend, self._get_important_entries, lines.extend, lines.extend, lines.extend, lines.extend, lines.extend
+
+### code2llm.exporters.html_dashboard.HTMLDashboardGenerator._assemble_html
+- **Calls**: self._render_evolution_section, self._render_evolution_script, None.join, proj.get, proj.get, proj.get, stats.get, stats.get
+
+### code2llm.exporters.toon.metrics.MetricsComputer._compute_file_metrics
+> Per-file metrics derived from AnalysisResult.
+- **Calls**: result.functions.items, result.classes.items, result.modules.items, self._compute_fan_in, code2llm.exporters.map_exporter.MapExporter._is_excluded, fi.complexity.get, None.append, max
+
+### code2llm.exporters.toon_view.ToonViewGenerator._render_modules
+- **Calls**: defaultdict, sorted, m.get, None.suffix.lower, _LANG_EXT_MAP.get, lines.append, None.suffix.lower, _LANG_EXT_MAP.get
+
+### scripts.benchmark_badges.main
+> Main function to generate badges.
+- **Calls**: Path, output_dir.mkdir, os.walk, None.glob, None.glob, scripts.benchmark_badges.create_html, output_path.write_text, print
+
+### code2llm.exporters.flow_exporter.FlowExporter.export
+> Export analysis result to flow.toon format.
+- **Calls**: self._build_context, sections.extend, sections.append, sections.extend, sections.append, sections.extend, sections.append, sections.extend
+
+### benchmarks.benchmark_format_quality.run_benchmark
+> Run the full format quality benchmark.
+- **Calls**: benchmarks.benchmark_format_quality._print_benchmark_header, Path, benchmarks.project_generator.create_ground_truth_project, benchmarks.benchmark_format_quality._print_ground_truth_info, output_dir.mkdir, benchmarks.reporting.print_results, benchmarks.reporting.build_report, tempfile.mkdtemp
+
+### code2llm.nlp.intent_matching.IntentMatcher._calculate_similarity
+> Calculate string similarity using configured algorithm.
+- **Calls**: None.ratio, None.ratio, a.lower, b.lower, None.ratio, SequenceMatcher, SequenceMatcher, None.join
+
+### code2llm.analysis.pipeline_detector.PipelineDetector._find_pipeline_paths
+> Find longest paths in the call graph as pipeline candidates.
+
+Strategy:
+1. Find all source nodes (in-degree 0) as potential entry points
+2. Find all s
+- **Calls**: set, nx.weakly_connected_components, self._longest_path_from, len, graph.subgraph, self._longest_path_in_dag, graph.nodes, sorted
+
+### code2llm.core.analyzer.ProjectAnalyzer.analyze_files
+> Analyze specific list of files (for chunked analysis).
+
+Args:
+    files: List of (file_path, module_name) tuples
+    project_path: Base project path f
+- **Calls**: time.time, self._merge_results, self._build_call_graph, self.refactoring_analyzer.perform_refactoring_analysis, print, self._analyze_parallel, self._analyze_sequential, self._detect_patterns
+
+### code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_refactoring
+- **Calls**: result.functions.items, result.metrics.get, proj_metrics.get, priorities.sort, code2llm.exporters.map_exporter.MapExporter._is_excluded, fi.complexity.get, priorities.append, code2llm.exporters.map_exporter.MapExporter._rel_path
+
+### code2llm.exporters.evolution_exporter.EvolutionExporter.export
+> Generate evolution.toon.
+- **Calls**: self._build_context, sections.extend, sections.append, sections.extend, sections.append, sections.extend, sections.append, sections.extend
+
+### code2llm.exporters.toon_view.ToonViewGenerator._render
+- **Calls**: data.get, data.get, data.get, data.get, data.get, data.get, lines.extend, lines.extend
+
+### code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_l1_dirs
+> Merge small L1 directories into consolidated chunks up to size limit.
+- **Calls**: sorted, current_chunk_files.extend, current_chunk_names.append, chunks.append, chunks.append, None.join, SubProject, code2llm.core.repo_files.calculate_priority
+
+### code2llm.core.large_repo.HierarchicalRepoSplitter._split_level2_consolidated
+> Split level 1 directory with aggressive consolidation.
+
+Strategy: Create chunks of ~target_chunk_kb size (up to 384KB with margin).
+- **Calls**: code2llm.core.repo_files.collect_files_in_dir, all_files.sort, len, current_files.append, chunks.append, SubProject, chunks.append, SubProject
+
+### code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped
+> Export with grouped CFG flows by function.
+- **Calls**: defaultdict, result.nodes.items, sorted, None.parent.mkdir, func_flows.items, sorted, open, yaml.dump
+
+### code2llm.exporters.article_view.ArticleViewGenerator._render
+- **Calls**: data.get, data.get, data.get, data.get, data.get, lines.extend, lines.extend, lines.extend
+
+### code2llm.core.streaming.prioritizer.SmartPrioritizer.prioritize_files
+> Score and sort files by importance.
+- **Calls**: self._build_import_graph, scored.sort, self._check_has_main, len, FilePriority, scored.append, reasons.append, reasons.append
+
 ## Process Flows
 
 Key execution flows identified:
 
-## Key Classes
+### Flow 1: main
+```
+main [validate_toon]
+  └─> load_file
+      └─> load_yaml
+      └─ →> is_toon_file
+      └─ →> load_toon
+```
 
-### code2llm.core.core.file_analyzer.FileAnalyzer
-> Analyzes a single file.
-- **Methods**: 28
-- **Key Methods**: code2llm.core.core.file_analyzer.FileAnalyzer.__init__, code2llm.core.core.file_analyzer.FileAnalyzer.analyze_file, code2llm.core.core.file_analyzer.FileAnalyzer._analyze_python, code2llm.core.core.file_analyzer.FileAnalyzer._analyze_ast, code2llm.core.core.file_analyzer.FileAnalyzer._calculate_complexity, code2llm.core.core.file_analyzer.FileAnalyzer._extract_function_body, code2llm.core.core.file_analyzer.FileAnalyzer._calculate_complexity_regex, code2llm.core.core.file_analyzer.FileAnalyzer._extract_calls_regex, code2llm.core.core.file_analyzer.FileAnalyzer._perform_deep_analysis, code2llm.core.core.file_analyzer.FileAnalyzer._process_class
+### Flow 2: analyze_project
+```
+analyze_project [code2llm.core.analyzer.ProjectAnalyzer]
+```
+
+### Flow 3: export
+```
+export [code2llm.exporters.toon.ToonExporter]
+```
+
+### Flow 4: run_benchmark
+```
+run_benchmark [benchmarks.benchmark_evolution]
+  └─> load_previous
+```
+
+### Flow 5: process
+```
+process [code2llm.nlp.pipeline.NLPPipeline]
+```
+
+### Flow 6: _build_context_for_smell
+```
+_build_context_for_smell [code2llm.refactor.prompt_engine.PromptEngine]
+```
+
+### Flow 7: _render_architecture
+```
+_render_architecture [code2llm.exporters.context_view.ContextViewGenerator]
+```
+
+### Flow 8: analyze_streaming
+```
+analyze_streaming [code2llm.core.streaming_analyzer.StreamingAnalyzer]
+```
+
+### Flow 9: export_compact
+```
+export_compact [code2llm.exporters.mermaid_exporter.MermaidExporter]
+```
+
+### Flow 10: export_call_graph
+```
+export_call_graph [code2llm.exporters.mermaid_exporter.MermaidExporter]
+```
+
+## Key Classes
 
 ### code2llm.exporters.toon.metrics.MetricsComputer
 > Computes all metrics for TOON export.
@@ -138,7 +312,7 @@ Key execution flows identified:
 > Extract and infer type information from Python source files.
 
 Operates on source files referenced by
-- **Methods**: 18
+- **Methods**: 19
 - **Key Methods**: code2llm.analysis.type_inference.TypeInferenceEngine.__init__, code2llm.analysis.type_inference.TypeInferenceEngine.enrich_function, code2llm.analysis.type_inference.TypeInferenceEngine.get_arg_types, code2llm.analysis.type_inference.TypeInferenceEngine.get_return_type, code2llm.analysis.type_inference.TypeInferenceEngine.get_typed_signature, code2llm.analysis.type_inference.TypeInferenceEngine.extract_all_types, code2llm.analysis.type_inference.TypeInferenceEngine._get_ast, code2llm.analysis.type_inference.TypeInferenceEngine._find_function_node, code2llm.analysis.type_inference.TypeInferenceEngine._extract_from_node, code2llm.analysis.type_inference.TypeInferenceEngine._extract_args
 
 ### code2llm.core.large_repo.HierarchicalRepoSplitter
@@ -148,7 +322,7 @@ Strategy:
 1. First pass: level 1 folders
 2. 
 - **Methods**: 18
-- **Key Methods**: code2llm.core.large_repo.HierarchicalRepoSplitter.__init__, code2llm.core.large_repo.HierarchicalRepoSplitter.get_analysis_plan, code2llm.core.large_repo.HierarchicalRepoSplitter._split_hierarchically, code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_l1_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._get_level1_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._split_level2_consolidated, code2llm.core.large_repo.HierarchicalRepoSplitter._categorize_subdirs, code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files, code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_dirs
+- **Key Methods**: code2llm.core.large_repo.HierarchicalRepoSplitter.__init__, code2llm.core.large_repo.HierarchicalRepoSplitter.get_analysis_plan, code2llm.core.large_repo.HierarchicalRepoSplitter._split_hierarchically, code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_l1_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._split_level2_consolidated, code2llm.core.large_repo.HierarchicalRepoSplitter._categorize_subdirs, code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files, code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._chunk_by_files
 
 ### code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter
 > Export unified project.yaml — single source of truth for diagnostics.
@@ -173,6 +347,11 @@ Combines data from analysis.t
 > Main NLP processing pipeline (4a-4e).
 - **Methods**: 16
 - **Key Methods**: code2llm.nlp.pipeline.NLPPipeline.__init__, code2llm.nlp.pipeline.NLPPipeline.process, code2llm.nlp.pipeline.NLPPipeline._step_normalize, code2llm.nlp.pipeline.NLPPipeline._step_match_intent, code2llm.nlp.pipeline.NLPPipeline._step_resolve_entities, code2llm.nlp.pipeline.NLPPipeline._infer_entity_types, code2llm.nlp.pipeline.NLPPipeline._calculate_overall_confidence, code2llm.nlp.pipeline.NLPPipeline._calculate_entity_confidence, code2llm.nlp.pipeline.NLPPipeline._apply_fallback, code2llm.nlp.pipeline.NLPPipeline._format_action
+
+### code2llm.core.core.file_analyzer.FileAnalyzer
+> Analyzes a single file.
+- **Methods**: 16
+- **Key Methods**: code2llm.core.core.file_analyzer.FileAnalyzer.__init__, code2llm.core.core.file_analyzer.FileAnalyzer.analyze_file, code2llm.core.core.file_analyzer.FileAnalyzer._analyze_python, code2llm.core.core.file_analyzer.FileAnalyzer._analyze_ast, code2llm.core.core.file_analyzer.FileAnalyzer._calculate_complexity, code2llm.core.core.file_analyzer.FileAnalyzer._perform_deep_analysis, code2llm.core.core.file_analyzer.FileAnalyzer._process_class, code2llm.core.core.file_analyzer.FileAnalyzer._process_function, code2llm.core.core.file_analyzer.FileAnalyzer._build_cfg, code2llm.core.core.file_analyzer.FileAnalyzer._process_cfg_block
 
 ### code2llm.analysis.side_effects.SideEffectDetector
 > Detect side effects in Python functions via AST analysis.
@@ -226,15 +405,15 @@ Builds a call graph as a DiGraph, fin
 - **Key Methods**: code2llm.analysis.call_graph.CallGraphExtractor.__init__, code2llm.analysis.call_graph.CallGraphExtractor.extract, code2llm.analysis.call_graph.CallGraphExtractor._calculate_metrics, code2llm.analysis.call_graph.CallGraphExtractor.visit_Import, code2llm.analysis.call_graph.CallGraphExtractor.visit_ImportFrom, code2llm.analysis.call_graph.CallGraphExtractor.visit_ClassDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_FunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_AsyncFunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_Call, code2llm.analysis.call_graph.CallGraphExtractor._qualified_name
 - **Inherits**: ast.NodeVisitor
 
-### code2llm.nlp.normalization.QueryNormalizer
-> Normalize queries for consistent processing.
-- **Methods**: 13
-- **Key Methods**: code2llm.nlp.normalization.QueryNormalizer.__init__, code2llm.nlp.normalization.QueryNormalizer.normalize, code2llm.nlp.normalization.QueryNormalizer._unicode_normalize, code2llm.nlp.normalization.QueryNormalizer._lowercase, code2llm.nlp.normalization.QueryNormalizer._remove_punctuation, code2llm.nlp.normalization.QueryNormalizer._normalize_whitespace, code2llm.nlp.normalization.QueryNormalizer._remove_stopwords, code2llm.nlp.normalization.QueryNormalizer._tokenize, code2llm.nlp.normalization.QueryNormalizer.step_1a_lowercase, code2llm.nlp.normalization.QueryNormalizer.step_1b_remove_punctuation
-
 ### code2llm.nlp.intent_matching.IntentMatcher
 > Match queries to intents using fuzzy and keyword matching.
 - **Methods**: 13
 - **Key Methods**: code2llm.nlp.intent_matching.IntentMatcher.__init__, code2llm.nlp.intent_matching.IntentMatcher.match, code2llm.nlp.intent_matching.IntentMatcher._fuzzy_match, code2llm.nlp.intent_matching.IntentMatcher._keyword_match, code2llm.nlp.intent_matching.IntentMatcher._apply_context, code2llm.nlp.intent_matching.IntentMatcher._combine_matches, code2llm.nlp.intent_matching.IntentMatcher._resolve_multi_intent, code2llm.nlp.intent_matching.IntentMatcher._calculate_similarity, code2llm.nlp.intent_matching.IntentMatcher.step_2a_fuzzy_match, code2llm.nlp.intent_matching.IntentMatcher.step_2b_semantic_match
+
+### code2llm.nlp.normalization.QueryNormalizer
+> Normalize queries for consistent processing.
+- **Methods**: 13
+- **Key Methods**: code2llm.nlp.normalization.QueryNormalizer.__init__, code2llm.nlp.normalization.QueryNormalizer.normalize, code2llm.nlp.normalization.QueryNormalizer._unicode_normalize, code2llm.nlp.normalization.QueryNormalizer._lowercase, code2llm.nlp.normalization.QueryNormalizer._remove_punctuation, code2llm.nlp.normalization.QueryNormalizer._normalize_whitespace, code2llm.nlp.normalization.QueryNormalizer._remove_stopwords, code2llm.nlp.normalization.QueryNormalizer._tokenize, code2llm.nlp.normalization.QueryNormalizer.step_1a_lowercase, code2llm.nlp.normalization.QueryNormalizer.step_1b_remove_punctuation
 
 ### code2llm.exporters.map_exporter.MapExporter
 > Export to map.toon — structural map with modules, imports, signatures.
@@ -248,13 +427,13 @@ Keys: M=modules, D=details,
 
 Key functions that process and transform data:
 
-### validate_toon.validate_toon_completeness
-> Validate toon format structure.
-- **Output to**: print, print, bool, bool, bool
-
 ### benchmarks.benchmark_evolution.parse_evolution_metrics
 > Extract metrics from evolution.toon content.
 - **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, int
+
+### validate_toon.validate_toon_completeness
+> Validate toon format structure.
+- **Output to**: print, print, bool, bool, bool
 
 ### benchmarks.format_evaluator.evaluate_format
 > Oceń pojedynczy format względem ground truth.
@@ -283,42 +462,42 @@ Key functions that process and transform data:
 ### scripts.bump_version.format_version
 > Format version tuple as string
 
-### demo_langs.valid.sample.UserService.process_users
-- **Output to**: print
+### code2llm.cli_parser.create_parser
+> Create CLI argument parser.
+- **Output to**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
 
 ### benchmarks.benchmark_format_quality._generate_format_outputs
 > Generate all format outputs and evaluate them.
 - **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
-### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
-- **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
+### demo_langs.valid.sample.UserService.process_users
+- **Output to**: print
 
-### code2llm.cli.create_parser
-> Create CLI argument parser.
-- **Output to**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
-
-### code2llm.cli._validate_and_setup
+### code2llm.cli_commands.validate_and_setup
 > Validate source path and setup output directory.
 - **Output to**: Path, Path, output_dir.mkdir, print, print
 
-### code2llm.cli._validate_chunked_output
+### code2llm.cli_commands.validate_chunked_output
 > Validate generated chunked output.
 
 Checks:
 1. All chunks have required files (analysis.toon, contex
 - **Output to**: print, print, sorted, print, print
 
+### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
+- **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
+
+### code2llm.core.repo_files._get_gitignore_parser
+> Load gitignore parser for project if available.
+- **Output to**: code2llm.core.gitignore.load_gitignore_patterns
+
+### code2llm.core.gitignore.GitIgnoreParser._parse_pattern
+> Parse a single gitignore pattern into regex.
+- **Output to**: pattern.startswith, pattern.endswith, pattern.startswith, self._wildcard_to_regex, re.compile
+
 ### code2llm.analysis.cfg.CFGExtractor._format_except
 > Format except handler.
 - **Output to**: self._expr_to_str
-
-### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
-> Process large directories with file-level chunking.
-- **Output to**: self._chunk_by_files, chunks.extend
-
-### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
-> Process Python files directly in level1 directory.
-- **Output to**: len, chunks.append, self._chunk_by_files, chunks.extend, str
 
 ### code2llm.core.toon_size_manager._parse_modules
 > Parse module sections from TOON content.
@@ -326,11 +505,13 @@ Checks:
 Returns list of (module_name, start_line, end_line).
 - **Output to**: content.split, enumerate, modules.append, line.startswith, line.endswith
 
-### code2llm.exporters.validate_project.validate_project_yaml
-> Validate project.yaml against generated views in output_dir.
+### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
+> Process large directories with file-level chunking.
+- **Output to**: self._chunk_by_files, chunks.extend
 
-Returns (is_valid, list_of_issues).
-- **Output to**: issues.extend, toon_path.exists, yaml_path.exists, issues.append, code2llm.exporters.validate_project._check_required_keys
+### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
+> Process Python files directly in level1 directory.
+- **Output to**: code2llm.core.repo_files._get_gitignore_parser, len, chunks.append, self._chunk_by_files, chunks.extend
 
 ### code2llm.nlp.pipeline.NLPPipeline.process
 > Process query through full pipeline (4a-4e).
@@ -348,24 +529,47 @@ Returns (is_valid, list_of_issues).
 > Step 4e: Output formatting.
 - **Output to**: self._format_response
 
-### code2llm.exporters.context_exporter.ContextExporter._get_process_flows
-- **Output to**: set, set, seen_base_names.add, self._trace_flow, ep_name.split
+## Behavioral Patterns
+
+### recursion__is_excluded
+- **Type**: recursion
+- **Confidence**: 0.90
+- **Functions**: code2llm.exporters.toon.ToonExporter._is_excluded
+
+### state_machine_IncrementalAnalyzer
+- **Type**: state_machine
+- **Confidence**: 0.70
+- **Functions**: code2llm.core.streaming.incremental.IncrementalAnalyzer.__init__, code2llm.core.streaming.incremental.IncrementalAnalyzer._load_state, code2llm.core.streaming.incremental.IncrementalAnalyzer._save_state, code2llm.core.streaming.incremental.IncrementalAnalyzer.get_changed_files, code2llm.core.streaming.incremental.IncrementalAnalyzer._get_module_name
+
+### state_machine_DatabaseConnection
+- **Type**: state_machine
+- **Confidence**: 0.70
+- **Functions**: examples.streaming-analyzer.sample_project.database.DatabaseConnection.__init__, examples.streaming-analyzer.sample_project.database.DatabaseConnection._load_data, examples.streaming-analyzer.sample_project.database.DatabaseConnection._save_data, examples.streaming-analyzer.sample_project.database.DatabaseConnection.get_user, examples.streaming-analyzer.sample_project.database.DatabaseConnection.get_user_settings
 
 ## Public API Surface
 
 Functions exposed as public API (no underscore prefix):
 
+- `code2llm.core.core.lang.typescript.analyze_typescript_js` - 67 calls
+- `code2llm.core.core.lang.php.analyze_php` - 53 calls
 - `validate_toon.main` - 45 calls
 - `code2llm.generators.llm_task.normalize_llm_task` - 43 calls
 - `code2llm.generators.llm_flow.render_llm_flow_md` - 42 calls
 - `benchmarks.benchmark_performance.main` - 41 calls
+- `code2llm.core.core.lang.java.analyze_java` - 40 calls
 - `validate_toon.analyze_class_differences` - 39 calls
-- `code2llm.core.analyzer.ProjectAnalyzer.analyze_project` - 38 calls
+- `code2llm.core.analyzer.ProjectAnalyzer.analyze_project` - 39 calls
+- `code2llm.core.core.lang.ruby.analyze_ruby` - 37 calls
 - `code2llm.exporters.toon.ToonExporter.export` - 35 calls
 - `benchmarks.benchmark_evolution.run_benchmark` - 34 calls
-- `code2llm.cli.create_parser` - 32 calls
+- `code2llm.cli_parser.create_parser` - 34 calls
+- `code2llm.cli_commands.validate_chunked_output` - 34 calls
+- `code2llm.core.core.lang.csharp.analyze_csharp` - 34 calls
+- `code2llm.core.core.lang.rust.analyze_rust` - 31 calls
+- `code2llm.core.core.lang.cpp.analyze_cpp` - 31 calls
 - `benchmarks.benchmark_performance.create_test_project` - 29 calls
 - `code2llm.nlp.pipeline.NLPPipeline.process` - 29 calls
+- `code2llm.core.core.lang.go_lang.analyze_go` - 28 calls
 - `validate_toon.compare_modules` - 26 calls
 - `code2llm.core.streaming_analyzer.StreamingAnalyzer.analyze_streaming` - 26 calls
 - `code2llm.exporters.mermaid_exporter.MermaidExporter.export_compact` - 26 calls
@@ -378,23 +582,14 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.exporters.flow_exporter.FlowExporter.export` - 23 calls
 - `benchmarks.format_evaluator.evaluate_format` - 22 calls
 - `benchmarks.benchmark_format_quality.run_benchmark` - 22 calls
-- `code2llm.cli.generate_llm_context` - 21 calls
+- `code2llm.cli_commands.generate_llm_context` - 21 calls
 - `code2llm.core.analyzer.ProjectAnalyzer.analyze_files` - 20 calls
 - `code2llm.exporters.evolution_exporter.EvolutionExporter.export` - 20 calls
+- `code2llm.core.core.lang.generic.analyze_generic` - 20 calls
 - `validate_toon.compare_classes` - 19 calls
 - `scripts.benchmark_badges.parse_evolution_metrics` - 19 calls
 - `code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped` - 19 calls
 - `code2llm.core.streaming.prioritizer.SmartPrioritizer.prioritize_files` - 19 calls
-- `code2llm.core.streaming.scanner.StreamingScanner.quick_scan_file` - 19 calls
-- `examples.streaming-analyzer.demo.demo_incremental_analysis` - 19 calls
-- `code2llm.exporters.flow_renderer.FlowRenderer.render_pipelines` - 18 calls
-- `code2llm.generators.llm_flow.main` - 18 calls
-- `validate_toon.validate_toon_completeness` - 17 calls
-- `code2llm.exporters.validate_project.validate_project_yaml` - 17 calls
-- `examples.litellm.run.main` - 17 calls
-- `examples.streaming-analyzer.demo.main` - 17 calls
-- `examples.functional_refactoring_example.generate` - 16 calls
-- `examples.streaming-analyzer.demo.demo_custom_progress` - 16 calls
 
 ## System Interactions
 
@@ -402,6 +597,36 @@ How components interact:
 
 ```mermaid
 graph TD
+    main --> len
+    main --> Path
+    main --> print
+    main --> load_file
+    main --> create_test_project
+    analyze_project --> time
+    analyze_project --> resolve
+    analyze_project --> _collect_files
+    analyze_project --> _merge_results
+    analyze_project --> _build_call_graph
+    export --> compute_all_metrics
+    export --> extend
+    export --> append
+    run_benchmark --> load_previous
+    run_benchmark --> print
+    process --> time
+    process --> _step_normalize
+    process --> append
+    _build_context_for_s --> _get_source_context
+    _build_context_for_s --> get
+    _build_context_for_s --> _get_instruction_for
+    _build_context_for_s --> replace
+    _render_architecture --> sorted
+    _render_architecture --> get
+    _render_architecture --> append
+    _render_architecture --> keys
+    _render_architecture --> sum
+    analyze_streaming --> time
+    analyze_streaming --> resolve
+    analyze_streaming --> collect_files
 ```
 
 ## Reverse Engineering Guidelines
