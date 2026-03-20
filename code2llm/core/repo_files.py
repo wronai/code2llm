@@ -1,7 +1,9 @@
 """File collection and filtering utilities for repository analysis."""
 
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Optional
+
+from .gitignore import load_gitignore_patterns, GitIgnoreParser
 
 # Directories to skip during analysis
 SKIP_DIRS = {
@@ -23,10 +25,30 @@ SKIP_PATTERNS = [
 ]
 
 
-def should_skip_file(file_str: str) -> bool:
+def _get_gitignore_parser(project_path: Path) -> Optional[GitIgnoreParser]:
+    """Load gitignore parser for project if available."""
+    try:
+        return load_gitignore_patterns(project_path)
+    except Exception:
+        return None
+
+
+def should_skip_file(file_str: str, project_path: Optional[Path] = None, 
+                     gitignore_parser: Optional[GitIgnoreParser] = None) -> bool:
     """Check if file should be skipped."""
     lower_path = file_str.lower()
-    return any(pattern in lower_path for pattern in SKIP_PATTERNS)
+    if any(pattern in lower_path for pattern in SKIP_PATTERNS):
+        return True
+    
+    # Check gitignore if parser provided
+    if gitignore_parser and project_path:
+        try:
+            if gitignore_parser.is_ignored(Path(file_str), project_path):
+                return True
+        except Exception:
+            pass
+    
+    return False
 
 
 def collect_files_in_dir(
@@ -35,11 +57,12 @@ def collect_files_in_dir(
 ) -> List[Tuple[str, str]]:
     """Collect Python files recursively in a directory."""
     files = []
+    gitignore_parser = _get_gitignore_parser(project_path)
 
     for py_file in dir_path.rglob("*.py"):
         file_str = str(py_file)
 
-        if should_skip_file(file_str):
+        if should_skip_file(file_str, project_path, gitignore_parser):
             continue
 
         # Calculate module name
@@ -63,11 +86,12 @@ def collect_files_in_dir(
 def collect_root_files(project_path: Path) -> List[Tuple[str, str]]:
     """Collect Python files at root level."""
     files = []
+    gitignore_parser = _get_gitignore_parser(project_path)
 
     for py_file in project_path.glob("*.py"):
         file_str = str(py_file)
 
-        if should_skip_file(file_str):
+        if should_skip_file(file_str, project_path, gitignore_parser):
             continue
 
         module_name = py_file.stem
@@ -77,18 +101,20 @@ def collect_root_files(project_path: Path) -> List[Tuple[str, str]]:
 
 
 def count_py_files(path: Path) -> int:
-    """Count Python files (excluding tests/cache)."""
+    """Count Python files (excluding tests/cache and gitignore patterns)."""
     count = 0
+    gitignore_parser = _get_gitignore_parser(path)
     for py_file in path.rglob("*.py"):
-        if not should_skip_file(str(py_file)):
+        if not should_skip_file(str(py_file), path, gitignore_parser):
             count += 1
     return count
 
 
 def contains_python_files(dir_path: Path) -> bool:
     """Check if directory contains any Python files."""
+    gitignore_parser = _get_gitignore_parser(dir_path)
     for py_file in dir_path.rglob("*.py"):
-        if not should_skip_file(str(py_file)):
+        if not should_skip_file(str(py_file), dir_path, gitignore_parser):
             return True
     return False
 

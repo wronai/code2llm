@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.5.54] - 2026-03-20
+
+### Other
+- Update code2llm/core/large_repo.py
+- Update code2llm/core/repo_files.py
+
 ## [0.5.53] - 2026-03-20
 
 ### Other

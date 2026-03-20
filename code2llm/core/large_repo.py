@@ -319,10 +319,14 @@ class HierarchicalRepoSplitter:
         """Process Python files directly in level1 directory."""
         chunks = []
         
+        # Load gitignore parser for proper filtering
+        from .repo_files import _get_gitignore_parser, should_skip_file
+        gitignore_parser = _get_gitignore_parser(project_path)
+        
         level1_direct_files = [
             (str(f), f"{level1_path.name}.{f.stem}")
             for f in level1_path.glob("*.py")
-            if not should_skip_file(str(f))
+            if not should_skip_file(str(f), project_path, gitignore_parser)
         ]
         
         if not level1_direct_files:
