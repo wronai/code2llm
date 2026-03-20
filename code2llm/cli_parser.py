@@ -230,6 +230,19 @@ Strategy Options (--strategy):
     )
     
     parser.add_argument(
+        '--exclude',
+        nargs='+',
+        default=[],
+        help='Exclude specific directories or patterns (e.g., --exclude vendor build test)'
+    )
+    
+    parser.add_argument(
+        '--no-gitignore',
+        action='store_true',
+        help='Disable .gitignore support (include all files)'
+    )
+    
+    parser.add_argument(
         '--validate',
         action='store_true',
         help='Validate generated chunked output - check all chunks have required files'

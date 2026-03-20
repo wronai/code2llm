@@ -34,11 +34,35 @@ def analyze_cpp(content: str, file_path: str, module_name: str,
     current_namespace = None
     brace_depth = 0
     class_brace_depth = 0
+    in_block_comment = False
+    in_line_comment = False
 
     for line_no, line in enumerate(lines, 1):
         raw_line = line
         line = line.strip()
-        if not line or line.startswith('//'):
+        
+        # Handle block comments (/* ... */) and line comments
+        if not in_block_comment:
+            if '/*' in raw_line:
+                in_block_comment = True
+                # Remove everything after /* start
+                raw_line = raw_line.split('/*')[0]
+                line = raw_line.strip()
+            elif line.startswith('//'):
+                # Single line comment, skip entirely
+                continue
+        else:
+            if '*/' in raw_line:
+                # End of block comment
+                in_block_comment = False
+                # Remove everything before */ end
+                raw_line = raw_line.split('*/')[1]
+                line = raw_line.strip()
+            else:
+                # Still in block comment, skip this line
+                continue
+        
+        if not line:
             continue
 
         # Track brace depth for class scope
@@ -89,9 +113,11 @@ def analyze_cpp(content: str, file_path: str, module_name: str,
         func_match = func_pattern.match(line)
         if func_match:
             func_name = func_match.group(1)
-            # Skip keywords that look like functions
+            # Skip keywords that look like functions, plus common license terms
             if func_name in ('if', 'for', 'while', 'switch', 'catch', 'return',
-                             'sizeof', 'decltype', 'typeof', 'new', 'delete'):
+                             'sizeof', 'decltype', 'typeof', 'new', 'delete',
+                             'Copyright', 'License', 'TORT', 'WITHOUT', 'WARRANTY',
+                             'Permission', 'Redistribution', 'Conditions', 'Disclaimer'):
                 continue
 
             if current_class:

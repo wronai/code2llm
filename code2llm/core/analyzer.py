@@ -15,13 +15,14 @@ from .core import FileCache, FastFileFilter, FileAnalyzer, RefactoringAnalyzer, 
 class ProjectAnalyzer:
     """Main analyzer with parallel processing."""
     
-    def __init__(self, config: Optional[Config] = None):
+    def __init__(self, config: Optional[Config] = None, project_path: Optional[Path] = None):
         self.config = config or FAST_CONFIG
+        self.project_path = project_path
         self.cache = FileCache(
             self.config.performance.cache_dir,
             self.config.performance.cache_ttl_hours
         ) if self.config.performance.enable_cache else None
-        self.file_filter = FastFileFilter(self.config.filters)
+        self.file_filter = FastFileFilter(self.config.filters, project_path)
         self.refactoring_analyzer = RefactoringAnalyzer(self.config, self.file_filter)
     
     def analyze_project(self, project_path: str) -> AnalysisResult:
@@ -31,6 +32,11 @@ class ProjectAnalyzer:
         project_path = Path(project_path).resolve()
         if not project_path.exists():
             raise FileNotFoundError(f"Project path does not exist: {project_path}")
+        
+        # Update project path for gitignore support if not set during init
+        if not self.project_path:
+            self.project_path = project_path
+            self.file_filter = FastFileFilter(self.config.filters, project_path)
         
         # Collect Python files
         files = self._collect_files(project_path)

@@ -46,6 +46,7 @@ class FilterConfig:
     skip_private: bool = False
     skip_properties: bool = True
     skip_accessors: bool = True
+    gitignore_enabled: bool = True
 
 
 @dataclass

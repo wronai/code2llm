@@ -42,7 +42,7 @@ def _run_standard_analysis(args, source_path: Path, output_dir: Path):
         if args.streaming or args.strategy in ['quick', 'deep']:
             result = _run_streaming_analysis(args, config, source_path)
         else:
-            analyzer = ProjectAnalyzer(config)
+            analyzer = ProjectAnalyzer(config, source_path)
             result = analyzer.analyze_project(str(source_path))
 
         if args.verbose:
@@ -57,13 +57,29 @@ def _run_standard_analysis(args, source_path: Path, output_dir: Path):
 
 def _build_config(args, output_dir: Path):
     """Build analysis Config from CLI args."""
-    from .core.config import Config
+    from .core.config import Config, FilterConfig
+    
+    # Start with default filter config
+    filter_config = FilterConfig()
+    
+    # Apply custom exclude patterns if provided
+    if hasattr(args, 'exclude') and args.exclude:
+        default_patterns = filter_config.exclude_patterns
+        custom_patterns = [f"*{pattern}*" if not pattern.startswith('*') and not pattern.endswith('*') else pattern 
+                          for pattern in args.exclude]
+        filter_config.exclude_patterns = list(set(default_patterns + custom_patterns))
+    
+    # Apply gitignore setting
+    if hasattr(args, 'no_gitignore') and args.no_gitignore:
+        filter_config.gitignore_enabled = False
+    
     return Config(
         mode=args.mode,
         max_depth_enumeration=args.max_depth,
         detect_state_machines=not args.no_patterns,
         detect_recursion=not args.no_patterns,
-        output_dir=str(output_dir)
+        output_dir=str(output_dir),
+        filters=filter_config
     )
 
 
@@ -173,8 +189,22 @@ def _analyze_all_subprojects(args, subprojects, output_dir: Path) -> list:
 def _analyze_subproject(args, subproject, output_dir: Path):
     """Analyze and export a single subproject."""
     from .core.analyzer import ProjectAnalyzer
-    from .core.config import Config
+    from .core.config import Config, FilterConfig
     from .cli_exports import _export_simple_formats, _export_evolution
+
+    # Start with default filter config
+    filter_config = FilterConfig()
+    
+    # Apply custom exclude patterns if provided
+    if hasattr(args, 'exclude') and args.exclude:
+        default_patterns = filter_config.exclude_patterns
+        custom_patterns = [f"*{pattern}*" if not pattern.startswith('*') and not pattern.endswith('*') else pattern 
+                          for pattern in args.exclude]
+        filter_config.exclude_patterns = list(set(default_patterns + custom_patterns))
+    
+    # Apply gitignore setting
+    if hasattr(args, 'no_gitignore') and args.no_gitignore:
+        filter_config.gitignore_enabled = False
 
     config = Config(
         mode=args.mode,
@@ -182,10 +212,11 @@ def _analyze_subproject(args, subproject, output_dir: Path):
         detect_state_machines=not args.no_patterns,
         detect_recursion=not args.no_patterns,
         output_dir=str(output_dir),
-        verbose=args.verbose
+        verbose=args.verbose,
+        filters=filter_config
     )
 
-    analyzer = ProjectAnalyzer(config)
+    analyzer = ProjectAnalyzer(config, subproject.path)
 
     try:
         result = analyzer.analyze_project(str(subproject.path))

@@ -1,5 +1,16 @@
 ## [Unreleased]
 
+## [0.5.53] - 2026-03-20
+
+### Other
+- Update code2llm/cli_analysis.py
+- Update code2llm/cli_parser.py
+- Update code2llm/core/analyzer.py
+- Update code2llm/core/config.py
+- Update code2llm/core/core/file_filter.py
+- Update code2llm/core/core/lang/cpp.py
+- Update code2llm/core/gitignore.py
+
 ## [0.5.52] - 2026-03-09
 
 ### Other
