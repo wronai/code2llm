@@ -1,5 +1,15 @@
 ## [Unreleased]
 
+## [0.5.57] - 2026-03-25
+
+### Other
+- Update code2llm/cli_exports/formats.py
+- Update code2llm/cli_parser.py
+- Update code2llm/exporters/project_yaml_exporter.py
+- Update code2llm/exporters/readme_exporter.py
+- Update code2llm/exporters/report_generators.py
+- Update code2llm/exporters/toon/metrics.py
+
 ## [0.5.56] - 2026-03-25
 
 ### Docs

@@ -437,17 +437,17 @@ class MetricsComputer:
 
     def _check_smells_health(self, result, issues):
         """Check for code smells: CC, cycles, bottlenecks."""
-        CC_WARNING = 15
+        CC_CRITICAL = 10
         for smell in result.smells:
             stype = smell.type
             if stype == "god_function":
                 cc_val = smell.context.get("complexity", 0)
-                if cc_val >= CC_WARNING:
+                if cc_val >= CC_CRITICAL:
                     fname = smell.context.get("function", smell.name)
                     short = fname.split(".")[-1] if "." in fname else fname
                     issues.append({
                         "severity": "yellow", "code": "CC",
-                        "message": f"{short} CC={cc_val} (limit:{CC_WARNING})",
+                        "message": f"{short} CC={cc_val} (limit:{CC_CRITICAL})",
                         "impact": "split method",
                     })
             elif stype == "circular_dependency":
@@ -463,12 +463,12 @@ class MetricsComputer:
 
     def _check_high_cc_health(self, ctx, issues):
         """Check for high CC functions not already caught by smells."""
-        CC_WARNING = 15
-        high_cc = [f for f in ctx["func_metrics"] if f["cc"] >= CC_WARNING]
+        CC_CRITICAL = 10
+        high_cc = [f for f in ctx["func_metrics"] if f["cc"] >= CC_CRITICAL]
         existing_cc_msgs = {i["message"] for i in issues if i["code"] == "CC"}
         for fm in high_cc:
             short = fm["name"]
-            msg = f"{short} CC={fm['cc']} (limit:{CC_WARNING})"
+            msg = f"{short} CC={fm['cc']} (limit:{CC_CRITICAL})"
             if msg not in existing_cc_msgs:
                 issues.append({
                     "severity": "yellow", "code": "CC",

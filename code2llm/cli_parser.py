@@ -14,10 +14,10 @@ def create_parser() -> argparse.ArgumentParser:
         epilog='''
 Examples:
   code2llm ./                                       # Default: TOON diagnostics + README
-  code2llm ./ -f all -o ./docs                      # All formats to ./docs/
+  code2llm ./ -f all -o ./docs                      # Core formats to ./docs/
   code2llm ./ -f toon,map,evolution                 # Consolidated diagnostics + structure + roadmap
   code2llm ./ -f context                            # LLM narrative (context.md)
-  code2llm ./ --streaming --strategy deep -f all    # Deep streaming analysis, all outputs
+  code2llm ./ --streaming --strategy deep -f all    # Deep streaming analysis, core outputs
   code2llm ./ --strategy quick -f toon              # Fast overview
   code2llm ./ --refactor                            # AI refactoring prompts
   code2llm ./ --refactor --smell god_function       # Filter by smell type
@@ -27,7 +27,7 @@ Examples:
   code2llm ./ -m static -v -o ./analysis            # Static mode, verbose
   code2llm ./ --no-readme                           # Disable README generation
   code2llm ./ -f project-yaml                       # Unified project.yaml (single source of truth)
-  code2llm report --format toon                     # Generate view from project.yaml
+  code2llm report --format toon                     # Generate legacy project.toon from project.yaml
   code2llm report --format all                      # All views from project.yaml
   code2llm llm-flow                                 # Generate LLM flow summary
   code2llm llm-context ./                           # Generate LLM context only

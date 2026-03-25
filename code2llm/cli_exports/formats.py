@@ -1,4 +1,4 @@
-"""Format export functions — toon, map, flow, context, yaml, json, mermaid, evolution, project-yaml."""
+"""Format export functions — toon, map, context, yaml, json, mermaid, evolution, and legacy project-yaml/flow exports."""
 
 import os
 import sys
@@ -101,7 +101,7 @@ def _export_simple_formats(args, result, output_dir: Path, formats):
     """Export toon, map, flow, context, yaml, json, project-yaml formats."""
     format_map = {
         'toon': ('analysis.toon', ToonExporter, 'TOON (diagnostics)'),
-        'map': ('map.toon', MapExporter, 'MAP (structure)'),
+        'map': ('map.toon', MapExporter, 'MAP (structure + header)'),
         'flow': ('flow.toon', FlowExporter, 'FLOW (data-flow)'),
         'context': ('context.md', ContextExporter, 'CONTEXT (LLM narrative)'),
     }
