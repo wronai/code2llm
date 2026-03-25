@@ -1,6 +1,6 @@
-# code2llm | 137f 23064L | python:121/go:4/java:4/php:4/rust:4/typescript:4
+# code2llm | 156f 26844L | python:140/go:4/java:4/php:4/rust:4/typescript:4
 # Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
-M[137]:
+M[156]:
   badges/server.py,91
   benchmarks/benchmark_constants.py,22
   benchmarks/benchmark_evolution.py,105
@@ -16,29 +16,45 @@ M[137]:
   code2llm/analysis/call_graph.py,156
   code2llm/analysis/cfg.py,219
   code2llm/analysis/coupling.py,61
-  code2llm/analysis/data_analysis.py,246
+  code2llm/analysis/data_analysis.py,258
   code2llm/analysis/dfg.py,165
   code2llm/analysis/pipeline_detector.py,365
   code2llm/analysis/side_effects.py,260
   code2llm/analysis/smells.py,163
-  code2llm/analysis/type_inference.py,252
-  code2llm/cli.py,403
-  code2llm/cli_analysis.py,203
+  code2llm/analysis/type_inference.py,255
+  code2llm/api.py,58
+  code2llm/cli.py,45
+  code2llm/cli_analysis.py,221
+  code2llm/cli_commands.py,170
   code2llm/cli_exports/__init__.py,45
   code2llm/cli_exports/code2logic.py,102
-  code2llm/cli_exports/formats.py,187
-  code2llm/cli_exports/orchestrator.py,71
+  code2llm/cli_exports/formats.py,200
+  code2llm/cli_exports/orchestrator.py,74
   code2llm/cli_exports/prompt.py,220
+  code2llm/cli_parser.py,212
   code2llm/core/__init__.py,38
-  code2llm/core/analyzer.py,227
-  code2llm/core/config.py,137
+  code2llm/core/analyzer.py,233
+  code2llm/core/config.py,165
   code2llm/core/core/__init__.py,5
-  code2llm/core/core/file_analyzer.py,295
+  code2llm/core/core/file_analyzer.py,323
   code2llm/core/core/file_cache.py,48
-  code2llm/core/core/file_filter.py,33
+  code2llm/core/core/file_filter.py,43
+  code2llm/core/core/lang/__init__.py,10
+  code2llm/core/core/lang/base.py,101
+  code2llm/core/core/lang/cpp.py,115
+  code2llm/core/core/lang/csharp.py,123
+  code2llm/core/core/lang/generic.py,58
+  code2llm/core/core/lang/go_lang.py,69
+  code2llm/core/core/lang/java.py,75
+  code2llm/core/core/lang/php.py,150
+  code2llm/core/core/lang/ruby.py,137
+  code2llm/core/core/lang/rust.py,73
+  code2llm/core/core/lang/typescript.py,191
   code2llm/core/core/refactoring.py,142
-  code2llm/core/large_repo.py,443
+  code2llm/core/gitignore.py,93
+  code2llm/core/large_repo.py,359
   code2llm/core/models.py,155
+  code2llm/core/repo_files.py,120
   code2llm/core/streaming/__init__.py,6
   code2llm/core/streaming/cache.py,39
   code2llm/core/streaming/incremental.py,62
@@ -47,36 +63,37 @@ M[137]:
   code2llm/core/streaming/strategies.py,52
   code2llm/core/streaming_analyzer.py,141
   code2llm/core/toon_size_manager.py,185
-  code2llm/exporters/__init__.py,49
+  code2llm/exporters/__init__.py,51
   code2llm/exporters/article_view.py,146
   code2llm/exporters/base.py,9
-  code2llm/exporters/context_exporter.py,195
+  code2llm/exporters/context_exporter.py,218
   code2llm/exporters/context_view.py,126
   code2llm/exporters/evolution_exporter.py,282
   code2llm/exporters/flow_constants.py,22
   code2llm/exporters/flow_exporter.py,298
   code2llm/exporters/flow_renderer.py,160
-  code2llm/exporters/html_dashboard.py,308
+  code2llm/exporters/html_dashboard.py,451
+  code2llm/exporters/index_generator.py,528
   code2llm/exporters/json_exporter.py,13
   code2llm/exporters/llm_exporter.py,7
-  code2llm/exporters/map_exporter.py,176
-  code2llm/exporters/mermaid_exporter.py,191
-  code2llm/exporters/project_yaml_exporter.py,398
+  code2llm/exporters/map_exporter.py,186
+  code2llm/exporters/mermaid_exporter.py,192
+  code2llm/exporters/project_yaml_exporter.py,418
   code2llm/exporters/readme_exporter.py,319
   code2llm/exporters/report_generators.py,27
   code2llm/exporters/toon.py,5
   code2llm/exporters/toon/__init__.py,52
-  code2llm/exporters/toon/helpers.py,95
+  code2llm/exporters/toon/helpers.py,97
   code2llm/exporters/toon/metrics.py,408
   code2llm/exporters/toon/module_detail.py,127
-  code2llm/exporters/toon/renderer.py,302
-  code2llm/exporters/toon_view.py,111
+  code2llm/exporters/toon/renderer.py,328
+  code2llm/exporters/toon_view.py,138
   code2llm/exporters/validate_project.py,86
   code2llm/exporters/yaml_exporter.py,86
   code2llm/generators/__init__.py,9
   code2llm/generators/llm_flow.py,374
   code2llm/generators/llm_task.py,226
-  code2llm/generators/mermaid.py,371
+  code2llm/generators/mermaid.py,379
   code2llm/nlp/__init__.py,19
   code2llm/nlp/config.py,129
   code2llm/nlp/entity_resolution.py,239
@@ -131,7 +148,9 @@ M[137]:
   tests/test_edge_cases.py,282
   tests/test_flow_exporter.py,344
   tests/test_format_quality.py,258
+  tests/test_multilanguage_e2e.py,256
   tests/test_nlp_pipeline.py,239
+  tests/test_nonpython_cc_calls.py,502
   tests/test_pipeline_detector.py,314
   tests/test_prompt_engine.py,61
   tests/test_prompt_txt.py,148
@@ -224,8 +243,10 @@ D:
     CouplingAnalyzer: __init__(1),analyze(0),_analyze_module_interactions(0),_detect_data_leakage(0),_detect_shared_state(0)  # Analyze coupling between modules.
   code2llm/analysis/data_analysis.py:
     i: core.models.AnalysisResult,typing.{Any,Dict,List}
-    e: DataAnalyzer
+    e: _INPUT_INDICATORS,_TRANSFORM_INDICATORS,_OUTPUT_INDICATORS,_MAX_PIPELINES,DataAnalyzer
     DataAnalyzer: analyze_data_flow(1),analyze_data_structures(1),_find_data_pipelines(1),_find_state_patterns(1),_find_data_dependencies(1)  # Analyze data flows, structures, and o...
+    _categorize_functions(result:AnalysisResult)
+    _make_stage(label:str;func_name:str;func)->Dict[str, str]
   code2llm/analysis/dfg.py:
     i: ast,collections.defaultdict,core.config.Config,core.models.{AnalysisResult,DataFlow,FlowEdge,Mutation},typing.{Dict,List,Set}
     e: DFGExtractor
@@ -247,19 +268,17 @@ D:
     SmellDetector: __init__(1),detect(0),_detect_god_functions(0),_detect_god_modules(0),_detect_feature_envy(0)  # Detect code smells from analysis resu...
   code2llm/analysis/type_inference.py:
     i: ast,logging,core.models.FunctionInfo,pathlib.Path,typing.{Any,Dict,List,Optional,Tuple}
-    e: NAME_PATTERNS,TypeInferenceEngine
+    e: ARG_NAME_TYPE_MAP,NAME_PATTERNS,TypeInferenceEngine
     TypeInferenceEngine: __init__(0),enrich_function(1),get_arg_types(1),get_return_type(1),get_typed_signature(1)  # Extract and infer type information fr...
+  code2llm/api.py:
+    i: core.config.{Config,FAST_CONFIG},core.models,pathlib.Path,typing.Optional
+    e: analyze,analyze_file
+    analyze(project_path:str;config:Optional[Config]=None)->AnalysisResult
+    analyze_file(file_path:str;config:Optional[Config]=None)->AnalysisResult
   code2llm/cli.py:
-    i: argparse,sys,cli_exports.{_export_data_structures,_export_evolution},core.analyzer.ProjectAnalyzer,core.config.{ANALYSIS_MODES,Config},pathlib.Path,typing.{List,Optional}
-    e: create_parser,main,generate_llm_context
-    create_parser()->argparse.ArgumentParser
-    _handle_special_commands()->Optional[int]
-    _handle_report_command(args_list)->int
-    _validate_and_setup(args)->tuple[Path, Path]
-    _print_start_info(args;source_path:Path;output_dir:Path)->None
-    _validate_chunked_output(output_dir:Path;args)->bool
+    i: sys,cli_commands,cli_exports.{_export_data_structures,_export_evolution},cli_parser.create_parser
+    e: main
     main()
-    generate_llm_context(args_list)
   code2llm/cli_analysis.py:
     i: sys,pathlib.Path,typing.{List,Optional,Tuple}
     _run_analysis(args;source_path:Path;output_dir:Path)
@@ -270,6 +289,15 @@ D:
     _print_chunked_plan(subprojects)->None
     _filter_subprojects(args;subprojects)->list
     _analyze_all_subprojects(args;subprojects;output_dir:Path)->list
+  code2llm/cli_commands.py:
+    i: argparse,sys,cli_exports._run_report,pathlib.Path,typing.Optional
+    e: handle_special_commands,handle_report_command,validate_and_setup,print_start_info,validate_chunked_output,generate_llm_context
+    handle_special_commands()->Optional[int]
+    handle_report_command(args_list)->int
+    validate_and_setup(args)->tuple[Path, Path]
+    print_start_info(args;source_path:Path;output_dir:Path)->None
+    validate_chunked_output(output_dir:Path;args)->bool
+    generate_llm_context(args_list)
   code2llm/cli_exports/code2logic.py:
     i: os,shutil,subprocess,sys,pathlib.Path,typing.List
     _export_code2logic(args;source_path:Path;output_dir:Path;formats:list[str])->None
@@ -306,13 +334,17 @@ D:
     _format_size(size_bytes:int)->str
     _get_missing_files(output_dir:Path)->List[str]
     _build_subprojects_section(subprojects:list;output_dir:Path;output_rel_path:str)->List[str]
+  code2llm/cli_parser.py:
+    i: argparse,core.config.ANALYSIS_MODES
+    e: create_parser
+    create_parser()->argparse.ArgumentParser
   code2llm/core/__init__.py:
     i: config.{Config,FAST_CONFIG,FilterConfig,PerformanceConfig},models
     __getattr__(name)
   code2llm/core/analyzer.py:
     i: time,concurrent.futures.{ProcessPoolExecutor,as_completed},config.{Config,FAST_CONFIG},pathlib.Path,typing.{Dict,List,Optional,Tuple}
     e: ProjectAnalyzer
-    ProjectAnalyzer: __init__(1),analyze_project(1),_collect_files(1),_analyze_parallel(1),_analyze_sequential(1)  # Main analyzer with parallel processing.
+    ProjectAnalyzer: __init__(2),analyze_project(1),_collect_files(1),_analyze_parallel(1),_analyze_sequential(1)  # Main analyzer with parallel processing.
   code2llm/core/config.py:
     i: dataclasses.{dataclass,field},enum.Enum,typing.{List,Set}
     e: AnalysisMode,PerformanceConfig,FilterConfig,DepthConfig,OutputConfig,Config,FAST_CONFIG,ANALYSIS_MODES
@@ -322,27 +354,75 @@ D:
     DepthConfig:   # Depth limiting for control flow analy...
     OutputConfig:   # Output formatting options.
   code2llm/core/core/file_analyzer.py:
-    i: ast,config.Config,models.{AnalysisResult,ClassInfo},pathlib.Path,radon.complexity.{cc_rank,cc_visit},typing.{Dict,List,Optional}
+    i: ast,re,config.{Config,LANGUAGE_EXTENSIONS},pathlib.Path,radon.complexity.{cc_rank,cc_visit},typing.{Dict,List,Optional}
     e: FileAnalyzer
-    FileAnalyzer: __init__(2),analyze_file(2),_analyze_ast(4),_calculate_complexity(3),_perform_deep_analysis(4)  # Analyzes a single file.
+    FileAnalyzer: __init__(2),analyze_file(2),_analyze_python(3),_analyze_ast(4),_calculate_complexity(3)  # Analyzes a single file.
     _analyze_single_file(args)
   code2llm/core/core/file_cache.py:
     i: hashlib,pickle,time,ast,pathlib.Path,typing.{Optional,Tuple}
     e: FileCache
     FileCache: __init__(2),_get_cache_key(2),_get_cache_path(1),get(2),put(3)  # Cache for parsed AST files.
   code2llm/core/core/file_filter.py:
-    i: fnmatch,config.FilterConfig
+    i: fnmatch,config.FilterConfig,gitignore.load_gitignore_patterns,pathlib.Path
     e: FastFileFilter
-    FastFileFilter: __init__(1),should_process(1),should_skip_function(4)  # Fast file filtering with pattern matc...
+    FastFileFilter: __init__(2),should_process(1),should_skip_function(4)  # Fast file filtering with pattern matc...
+  code2llm/core/core/lang/base.py:
+    i: re,typing.{Dict,List}
+    e: CC_PATTERNS,CALL_PATTERN_C_FAMILY,extract_function_body,calculate_complexity_regex,extract_calls_regex
+    extract_function_body(content:str;start_line:int)->str
+    calculate_complexity_regex(content:str;result:Dict;lang:str='c_family')->None
+    extract_calls_regex(content:str;module_name:str;result:Dict)->None
+  code2llm/core/core/lang/cpp.py:
+    i: re,base.{calculate_complexity_regex,extract_calls_regex},models.{ClassInfo,FunctionInfo,ModuleInfo},typing.Dict
+    e: analyze_cpp
+    analyze_cpp(content:str;file_path:str;module_name:str;ext:str;stats:Dict)->Dict
+  code2llm/core/core/lang/csharp.py:
+    i: re,base.{calculate_complexity_regex,extract_calls_regex},models.{ClassInfo,FunctionInfo,ModuleInfo},typing.Dict
+    e: analyze_csharp
+    analyze_csharp(content:str;file_path:str;module_name:str;stats:Dict)->Dict
+  code2llm/core/core/lang/generic.py:
+    i: re,models.{ClassInfo,FunctionInfo,ModuleInfo},typing.Dict
+    e: analyze_generic
+    analyze_generic(content:str;file_path:str;module_name:str;ext:str;stats:Dict)->Dict
+  code2llm/core/core/lang/go_lang.py:
+    i: re,base.{calculate_complexity_regex,extract_calls_regex},models.{ClassInfo,FunctionInfo,ModuleInfo},pathlib.Path,typing.Dict
+    e: analyze_go
+    analyze_go(content:str;file_path:str;module_name:str;stats:Dict)->Dict
+  code2llm/core/core/lang/java.py:
+    i: re,base.{calculate_complexity_regex,extract_calls_regex},models.{ClassInfo,FunctionInfo,ModuleInfo},typing.Dict
+    e: analyze_java
+    analyze_java(content:str;file_path:str;module_name:str;stats:Dict)->Dict
+  code2llm/core/core/lang/php.py:
+    i: re,base.{calculate_complexity_regex,extract_calls_regex},models.{ClassInfo,FunctionInfo,ModuleInfo},typing.Dict
+    e: analyze_php
+    analyze_php(content:str;file_path:str;module_name:str;stats:Dict)->Dict
+  code2llm/core/core/lang/ruby.py:
+    i: re,base.extract_calls_regex,models.{ClassInfo,FunctionInfo,ModuleInfo},typing.Dict
+    e: _RUBY_CC_PATTERN,analyze_ruby
+    _extract_ruby_body(content:str;start_line:int)->str
+    analyze_ruby(content:str;file_path:str;module_name:str;stats:Dict)->Dict
+  code2llm/core/core/lang/rust.py:
+    i: re,base.{calculate_complexity_regex,extract_calls_regex},models.{ClassInfo,FunctionInfo,ModuleInfo},pathlib.Path,typing.Dict
+    e: analyze_rust
+    analyze_rust(content:str;file_path:str;module_name:str;stats:Dict)->Dict
+  code2llm/core/core/lang/typescript.py:
+    i: re,base.{calculate_complexity_regex,extract_calls_regex},models.{ClassInfo,FunctionInfo,ModuleInfo},pathlib.Path,typing.Dict
+    e: analyze_typescript_js
+    analyze_typescript_js(content:str;file_path:str;module_name:str;ext:str;stats:Dict)->Dict
   code2llm/core/core/refactoring.py:
     i: config.Config,file_filter.FastFileFilter,models.AnalysisResult,pathlib.Path,typing.Optional
     e: RefactoringAnalyzer
     RefactoringAnalyzer: __init__(2),perform_refactoring_analysis(1),_build_call_graph(1),_calculate_centrality(2),_detect_cycles(2)  # Performs refactoring analysis on code.
+  code2llm/core/gitignore.py:
+    i: re,pathlib.Path,typing.{List,Set}
+    e: GitIgnoreParser,load_gitignore_patterns
+    GitIgnoreParser: __init__(1),_load_gitignore(1),_parse_pattern(1),_wildcard_to_regex(1),is_ignored(2)  # Parse and apply .gitignore patterns t...
+    load_gitignore_patterns(project_path:Path)->GitIgnoreParser
   code2llm/core/large_repo.py:
-    i: os,dataclasses.{dataclass,field},pathlib.Path,typing.{Dict,List,Optional,Tuple}
+    i: dataclasses.{dataclass,field},pathlib.Path,repo_files.{collect_files_in_dir,collect_root_files,should_skip_file},typing.{Dict,List,Optional,Tuple}
     e: SubProject,HierarchicalRepoSplitter,should_use_chunking,get_analysis_plan
     SubProject: estimated_size_kb(0),file_count(0)  # Represents a sub-project within a lar...
-    HierarchicalRepoSplitter: __init__(2),get_analysis_plan(1),_split_hierarchically(1),_merge_small_l1_dirs(2),_get_level1_dirs(1)  # Splits large repositories using hiera...
+    HierarchicalRepoSplitter: __init__(2),get_analysis_plan(1),_split_hierarchically(1),_merge_small_l1_dirs(2),_split_level2_consolidated(3)  # Splits large repositories using hiera...
     should_use_chunking(project_path:Path;size_threshold_kb:int=256)->bool
     get_analysis_plan(project_path:Path;size_limit_kb:int=256)->List[SubProject]
   code2llm/core/models.py:
@@ -353,6 +433,17 @@ D:
     FlowEdge:   # Represents an edge in the control flo...
     FunctionInfo:   # Information about a function/method.
     ClassInfo:   # Information about a class.
+  code2llm/core/repo_files.py:
+    i: gitignore.{GitIgnoreParser,load_gitignore_patterns},pathlib.Path,typing.{List,Optional,Tuple}
+    e: SKIP_DIRS,SKIP_PATTERNS,should_skip_file,collect_files_in_dir,collect_root_files,count_py_files,contains_python_files,get_level1_dirs
+    _get_gitignore_parser(project_path:Path)->Optional[GitIgnoreParser]
+    should_skip_file(file_str:str;project_path:Optional[Path]=None;gitignore_parser:Optional[GitIgnoreParser]=None)->bool
+    collect_files_in_dir(dir_path:Path;project_path:Path)->List[Tuple[str, str]]
+    collect_root_files(project_path:Path)->List[Tuple[str, str]]
+    count_py_files(path:Path)->int
+    contains_python_files(dir_path:Path)->bool
+    get_level1_dirs(project_path:Path)->List[Path]
+    calculate_priority(name:str;level:int)->int
   code2llm/core/streaming/cache.py:
     i: ast,hashlib,pathlib.Path,typing.{Dict,List,Optional,Tuple}
     e: StreamingFileCache
@@ -398,9 +489,9 @@ D:
     e: Exporter
     Exporter: export(2)  # Abstract base class for all exporters.
   code2llm/exporters/context_exporter.py:
-    i: base.Exporter,core.models.{AnalysisResult,FunctionInfo},pathlib.Path,typing.{Any,Dict,List,Tuple}
+    i: base.Exporter,collections.defaultdict,core.config.LANGUAGE_EXTENSIONS,core.models.{AnalysisResult,FunctionInfo},pathlib.Path,typing.{Any,Dict,List,Tuple}
     e: ContextExporter
-    ContextExporter: export(2),_get_overview(1),_get_architecture_by_module(1),_get_important_entries(1),_get_key_entry_points(1)  # Export LLM-ready analysis summary wit...
+    ContextExporter: export(2),_get_overview(1),_detect_languages(1),_get_architecture_by_module(1),_get_important_entries(1)  # Export LLM-ready analysis summary wit...
   code2llm/exporters/context_view.py:
     i: pathlib.Path,typing.{Any,Dict,List}
     e: ContextViewGenerator
@@ -418,9 +509,13 @@ D:
     e: FlowRenderer
     FlowRenderer: render_header(1),render_pipelines(1),render_transforms(1),render_contracts(1),render_data_types(1)  # Renderer dla sekcji formatu flow.toon.
   code2llm/exporters/html_dashboard.py:
-    i: datetime,pathlib.Path,typing.{Any,Dict,List}
-    e: HTMLDashboardGenerator
-    HTMLDashboardGenerator: generate(2),_render(1),_health_verdict(1),_build_evolution_section(1),_build_module_chart_data(1)  # Generate dashboard.html from project....
+    i: datetime,collections.defaultdict,pathlib.Path,typing.{Any,Dict,List}
+    e: _LANG_EXT_MAP,_LANG_COLORS,HTMLDashboardGenerator
+    HTMLDashboardGenerator: generate(2),_render(1),_health_verdict(1),_build_evolution_section(1),_build_language_breakdown(1)  # Generate dashboard.html from project....
+  code2llm/exporters/index_generator.py:
+    i: json,pathlib.Path,typing.{Any,Dict,List,Optional}
+    e: IndexHTMLGenerator
+    IndexHTMLGenerator: __init__(1),generate(0),_scan_files(0),_read_file_content(2),_escape_html(1)  # Generate index.html for browsing all...
   code2llm/exporters/json_exporter.py:
     i: json,base.Exporter,core.models.AnalysisResult,pathlib.Path
     e: JSONExporter
@@ -468,12 +563,12 @@ D:
     e: CC_WARNING,ModuleDetailRenderer
     ModuleDetailRenderer: render_details(1),_rank_modules_by_cc(1),_render_module_detail(4),_get_module_exports(2),_render_module_classes(4)  # Renders detailed module information.
   code2llm/exporters/toon/renderer.py:
-    i: core.models.{AnalysisResult,FunctionInfo},helpers.{_dup_file_set,_package_of},typing.{Any,Dict,List}
+    i: collections.defaultdict,core.config.LANGUAGE_EXTENSIONS,core.models.{AnalysisResult,FunctionInfo},helpers.{_dup_file_set,_package_of},pathlib.Path,typing.{Any,Dict,List}
     e: CC_CRITICAL,CC_HIGH,CC_WARNING,GOD_MODULE_LINES,MAX_HEALTH_ISSUES,MAX_COUPLING_PACKAGES,MAX_FUNCTIONS_SHOWN,ToonRenderer
-    ToonRenderer: render_header(1),render_health(1),render_refactor(1),render_coupling(1),_select_top_packages(2)  # Renders all sections for TOON export.
+    ToonRenderer: render_header(1),_detect_language_label(1),render_health(1),render_refactor(1),render_coupling(1)  # Renders all sections for TOON export.
   code2llm/exporters/toon_view.py:
-    i: pathlib.Path,typing.{Any,Dict,List}
-    e: ToonViewGenerator
+    i: collections.defaultdict,pathlib.Path,typing.{Any,Dict,List}
+    e: _LANG_EXT_MAP,ToonViewGenerator
     ToonViewGenerator: generate(2),_render(1),_render_header(1),_render_health(1),_render_alerts(1)  # Generate project.toon from project.ya...
   code2llm/exporters/validate_project.py:
     i: re,pathlib.Path,typing.{Any,Dict,List,Tuple}
@@ -820,6 +915,10 @@ D:
     TestCrossFormat: all_formats(2),test_flow_toon_has_unique_pipeline_info(1),test_analysis_toon_has_unique_health_info(1),test_project_map_has_unique_structure_info(1),test_formats_have_different_sizes(1)  # Test that formats are complementary,...
     ground_truth_project(tmp_path_factory)->Path
     analysis_result(ground_truth_project)
+  tests/test_multilanguage_e2e.py:
+    i: tempfile,os,code2llm.core.analyzer.ProjectAnalyzer,code2llm.core.config.{Config,FAST_CONFIG},pathlib.Path
+    e: TestMultiLanguageE2E
+    TestMultiLanguageE2E: test_typescript_analysis(0),test_javascript_analysis(0),test_go_analysis(0),test_rust_analysis(0),test_java_analysis(0)  # E2E tests for multi-language project...
   tests/test_nlp_pipeline.py:
     i: pytest,code2llm.nlp,code2llm.nlp.intent_matching.IntentMatchingResult,code2llm.nlp.normalization.NormalizationResult
     e: TestQueryNormalization,TestIntentMatching,TestEntityResolution,TestNLPPipeline,TestNLPConfig,TestMultilingualSupport
@@ -828,6 +927,14 @@ D:
     TestEntityResolution: mock_entities(0),test_step_3a_extract_entities(1),test_step_3b_name_match_threshold(1),test_step_3c_disambiguation(1),test_step_3d_hierarchical_resolution(1)  # Test Entity Resolution steps 3a-3e.
     TestNLPPipeline: test_step_4a_orchestration(0),test_step_4c_confidence_scoring(0),test_step_4d_fallback_handling(0),test_step_4e_output_formatting(0),test_polish_query_processing(0)  # Test complete NLP Pipeline integratio...
     TestNLPConfig: test_config_from_yaml(1),test_config_to_yaml(1)  # Test YAML-driven configuration.
+  tests/test_nonpython_cc_calls.py:
+    i: tempfile,code2llm.core.analyzer.ProjectAnalyzer,code2llm.core.config.{Config,FAST_CONFIG},pathlib.Path
+    e: TestTypeScriptComplexityAndCalls,TestGoComplexityAndCalls,TestRustComplexityAndCalls,TestJavaComplexityAndCalls,TestCppComplexityAndCalls,TestCSharpComplexityAndCalls,TestPhpComplexityAndCalls,TestRubyComplexityAndCalls
+    TestTypeScriptComplexityAndCalls: _analyze(0),test_ts_functions_detected(0),test_ts_complexity_not_zero(0),test_ts_calls_extracted(0),test_ts_cc_avg_not_zero(0)  # Verify TS/JS files get CC > 0 and cal...
+    TestGoComplexityAndCalls: _analyze(0),test_go_complexity_not_zero(0),test_go_calls_extracted(0)  # Verify Go files get CC > 0.
+    TestRustComplexityAndCalls: _analyze(0),test_rust_complexity_not_zero(0)  # Verify Rust files get CC > 0.
+    TestJavaComplexityAndCalls: _analyze(0),test_java_complexity_not_zero(0),test_java_calls_extracted(0)  # Verify Java files get CC > 0.
+    TestCppComplexityAndCalls: _analyze(0),test_cpp_classes_detected(0),test_cpp_complexity_not_zero(0),test_cpp_includes_extracted(0)  # Verify C/C++ files get CC > 0.
   tests/test_pipeline_detector.py:
     i: textwrap,pytest,code2llm.analysis.pipeline_detector.{Pipeline,PipelineDetector,PipelineStage},code2llm.analysis.side_effects.SideEffectDetector,code2llm.core.models.{AnalysisResult,FunctionInfo,ModuleInfo},pathlib.Path
     e: TestPipelineDetector,TestDomainClassification,TestMultiplePipelines,TestFlowExporterSprint3,TestPipelineEdgeCases

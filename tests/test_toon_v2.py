@@ -105,13 +105,13 @@ class TestToonExporterV2:
         assert "HEALTH[" in content
     
     def test_refactor_section(self, sample_result, tmp_path):
-        """Test REFACTOR section is present."""
+        """REFACTOR section should no longer be present in analysis.toon."""
         exporter = ToonExporter()
         output_file = tmp_path / "test.toon"
         exporter.export(sample_result, str(output_file))
         
         content = output_file.read_text()
-        assert "REFACTOR[" in content
+        assert "REFACTOR[" not in content
     
     def test_layers_section(self, sample_result, tmp_path):
         """Test LAYERS section shows package structure."""
@@ -124,45 +124,51 @@ class TestToonExporterV2:
         assert "test_module" in content
     
     def test_functions_section_filters_by_cc(self, sample_result, tmp_path):
-        """Test FUNCTIONS section only shows CC >= 10."""
+        """High-CC functions should be surfaced in HEALTH/LAYERS, not a separate FUNCTIONS section."""
+        sample_result.functions["test_module.func_critical"] = FunctionInfo(
+            name="func_critical",
+            qualified_name="test_module.func_critical",
+            file="/test/project/test_module.py",
+            line=40,
+            module="test_module",
+            complexity={"cyclomatic_complexity": 20},
+            calls=[],
+        )
         exporter = ToonExporter()
         output_file = tmp_path / "test.toon"
         exporter.export(sample_result, str(output_file))
-        
+
         content = output_file.read_text()
-        assert "FUNCTIONS (CC≥10" in content
-        # func2 has CC=12, should be shown
-        assert "func2" in content
+        assert "FUNCTIONS (CC≥10" not in content
+        assert "func_critical" in content
     
     def test_classes_section_with_bar_chart(self, sample_result, tmp_path):
-        """Test CLASSES section has visual bar chart."""
+        """CLASSES section should no longer be emitted in the trimmed analysis.toon format."""
         exporter = ToonExporter()
         output_file = tmp_path / "test.toon"
         exporter.export(sample_result, str(output_file))
         
         content = output_file.read_text()
-        assert "CLASSES:" in content
-        assert "MyClass" in content
-        # Check for bar chart character
-        assert "█" in content
+        assert "CLASSES:" not in content
+        assert "MyClass" not in content
     
     def test_hotspots_section(self, sample_result, tmp_path):
-        """Test HOTSPOTS section shows fan-out."""
+        """HOTSPOTS should no longer be emitted in the trimmed analysis.toon format."""
         exporter = ToonExporter()
         output_file = tmp_path / "test.toon"
         exporter.export(sample_result, str(output_file))
         
         content = output_file.read_text()
-        assert "HOTSPOTS:" in content
+        assert "HOTSPOTS:" not in content
     
     def test_details_section(self, sample_result, tmp_path):
-        """Test D: section shows module details."""
+        """D: detail section should no longer be emitted in analysis.toon."""
         exporter = ToonExporter()
         output_file = tmp_path / "test.toon"
         exporter.export(sample_result, str(output_file))
         
         content = output_file.read_text()
-        assert "D:" in content
+        assert "D:" not in content
     
     def test_excluded_paths_venv(self):
         """Test that venv paths are excluded."""

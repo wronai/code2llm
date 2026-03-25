@@ -85,7 +85,8 @@ class TestPromptTxtGeneration:
             assert "- " in content, "File should be listed with bullet point"
         
         # Check that missing files are marked
-        assert "Missing files" in content or "project.toon" in content, "Missing files should be indicated"
+        assert "Missing files" in content, "Missing files should be indicated"
+        assert "map.toon" in content, "map.toon should be listed when it is missing"
     
     def test_prompt_txt_shows_missing_files(self, temp_output_dir, mock_args):
         """Test that prompt.txt shows missing files section when files don't exist."""
@@ -123,7 +124,7 @@ class TestPromptTxtGeneration:
         source_path = Path('/home/user/myproject')
         
         # Create all expected files
-        all_files = ['analysis.toon', 'context.md', 'evolution.toon', 'project.toon', 'README.md']
+        all_files = ['analysis.toon', 'map.toon', 'context.md', 'evolution.toon', 'README.md']
         for f in all_files:
             (temp_output_dir / f).write_text('test')
         

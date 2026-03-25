@@ -1,7 +1,7 @@
 flowchart LR
     subgraph benchmarks_benchmark_evolution
-        benchmarks__benchmark_evolution__load_previous["load_previous"]
         benchmarks__benchmark_evolution__run_benchmark["run_benchmark"]
+        benchmarks__benchmark_evolution__load_previous["load_previous"]
         benchmarks__benchmark_evolution__save_current["save_current"]
     end
     subgraph benchmarks_benchmark_format_quality
@@ -10,198 +10,259 @@ flowchart LR
         benchmarks__run_benchmark["run_benchmark"]
     end
     subgraph benchmarks_benchmark_performance
-        benchmarks__create_test_project["create_test_project"]
         benchmarks__benchmark_performance__main["main"]
+        benchmarks__create_test_project["create_test_project"]
     end
     subgraph benchmarks_format_evaluator
-        benchmarks__format_evaluator___detect_pipelines["_detect_pipelines"]
-        benchmarks__format_evaluator___detect_hub_types["_detect_hub_types"]
         benchmarks__format_evaluator___detect_problems["_detect_problems"]
-        benchmarks___check_structural_features["_check_structural_features"]
+        benchmarks__format_evaluator___detect_hub_types["_detect_hub_types"]
         benchmarks__format_evaluator__evaluate_format["evaluate_format"]
+        benchmarks__format_evaluator___detect_pipelines["_detect_pipelines"]
+        benchmarks___check_structural_features["_check_structural_features"]
     end
     subgraph benchmarks_project_generator
+        benchmarks__project_generator__create_etl_py["create_etl_py"]
         benchmarks__project_generator__create_core_py["create_core_py"]
-        benchmarks__create_validation_py["create_validation_py"]
+        benchmarks__add_validator_to_core["add_validator_to_core"]
         benchmarks__create_ground_truth_project["create_ground_truth_project"]
         benchmarks__project_generator__create_utils_py["create_utils_py"]
-        benchmarks__add_validator_to_core["add_validator_to_core"]
-        benchmarks__project_generator__create_etl_py["create_etl_py"]
+        benchmarks__create_validation_py["create_validation_py"]
     end
     subgraph benchmarks_reporting
         benchmarks__reporting___print_structural_features["_print_structural_features"]
-        benchmarks__reporting___print_header["_print_header"]
         benchmarks__reporting__build_report["build_report"]
-        benchmarks__reporting__print_results["print_results"]
-        benchmarks__reporting___print_problems_detail["_print_problems_detail"]
         benchmarks__reporting___print_scores_table["_print_scores_table"]
-        benchmarks__reporting___print_gap_analysis["_print_gap_analysis"]
+        benchmarks__reporting___print_header["_print_header"]
         benchmarks__reporting___print_pipelines_detail["_print_pipelines_detail"]
+        benchmarks__reporting___print_problems_detail["_print_problems_detail"]
+        benchmarks__reporting___print_gap_analysis["_print_gap_analysis"]
+        benchmarks__reporting__print_results["print_results"]
+    end
+    subgraph code2llm_analysis
+        code2llm___find_data_pipelines["_find_data_pipelines"]
+        code2llm__analysis__data_analysis___make_stage["_make_stage"]
+        code2llm___categorize_functions["_categorize_functions"]
+    end
+    subgraph code2llm_api
+        code2llm__api__analyze["analyze"]
+        code2llm__api__analyze_file["analyze_file"]
     end
     subgraph code2llm_cli
         code2llm__cli__main["main"]
-        code2llm__cli__generate_llm_context["generate_llm_context"]
-        code2llm__cli__create_parser["create_parser"]
-        code2llm__cli___validate_and_setup["_validate_and_setup"]
-        code2llm__cli___handle_special_commands["_handle_special_commands"]
-        code2llm__cli___handle_report_command["_handle_report_command"]
-        code2llm__cli___print_start_info["_print_start_info"]
-        code2llm__cli___validate_chunked_output["_validate_chunked_output"]
     end
     subgraph code2llm_cli_analysis
-        code2llm__cli_analysis___run_standard_analysis["_run_standard_analysis"]
-        code2llm__cli_analysis___run_streaming_analysis["_run_streaming_analysis"]
-        code2llm__cli_analysis___print_chunked_plan["_print_chunked_plan"]
         code2llm__cli_analysis___print_analysis_summary["_print_analysis_summary"]
+        code2llm__cli_analysis___analyze_subproject["_analyze_subproject"]
         code2llm__cli_analysis___merge_chunked_results["_merge_chunked_results"]
-        code2llm__cli_analysis___analyze_all_subprojects["_analyze_all_subprojects"]
+        code2llm__cli_analysis___run_streaming_analysis["_run_streaming_analysis"]
         code2llm__cli_analysis___build_config["_build_config"]
+        code2llm__cli_analysis___run_standard_analysis["_run_standard_analysis"]
+        code2llm__cli_analysis___run_chunked_analysis["_run_chunked_analysis"]
         code2llm__cli_analysis___run_analysis["_run_analysis"]
         code2llm__cli_analysis___filter_subprojects["_filter_subprojects"]
-        code2llm__cli_analysis___analyze_subproject["_analyze_subproject"]
-        code2llm__cli_analysis___run_chunked_analysis["_run_chunked_analysis"]
+        code2llm__cli_analysis___analyze_all_subprojects["_analyze_all_subprojects"]
+        code2llm__cli_analysis___print_chunked_plan["_print_chunked_plan"]
+    end
+    subgraph code2llm_cli_commands
+        code2llm__cli_commands__print_start_info["print_start_info"]
+        code2llm__cli_commands__handle_special_commands["handle_special_commands"]
+        code2llm__cli_commands__generate_llm_context["generate_llm_context"]
+        code2llm__cli_commands__validate_and_setup["validate_and_setup"]
+        code2llm__cli_commands__validate_chunked_output["validate_chunked_output"]
+        code2llm__cli_commands__handle_report_command["handle_report_command"]
     end
     subgraph code2llm_cli_exports
-        code2llm__cli_exports__formats___export_evolution["_export_evolution"]
-        code2llm___find_code2logic_output["_find_code2logic_output"]
-        code2llm___build_missing_files_section["_build_missing_files_section"]
-        code2llm___export_context_fallback["_export_context_fallback"]
-        code2llm__cli_exports__orchestrator___run_exports["_run_exports"]
-        code2llm___export_single_project["_export_single_project"]
-        code2llm___check_code2logic_installed["_check_code2logic_installed"]
-        code2llm___normalize_code2logic_output["_normalize_code2logic_output"]
-        code2llm___export_chunked_results["_export_chunked_results"]
-        code2llm__cli_exports__prompt___export_prompt_txt["_export_prompt_txt"]
-        code2llm___should_run_code2logic["_should_run_code2logic"]
-        code2llm___handle_code2logic_error["_handle_code2logic_error"]
-        code2llm___export_refactor_prompts["_export_refactor_prompts"]
-        code2llm___build_prompt_footer["_build_prompt_footer"]
-        code2llm__cli_exports__prompt___get_prompt_paths["_get_prompt_paths"]
-        code2llm___build_dynamic_focus_areas["_build_dynamic_focus_areas"]
-        code2llm__cli_exports__prompt___format_size["_format_size"]
-        code2llm___export_project_yaml["_export_project_yaml"]
-        code2llm___export_simple_formats["_export_simple_formats"]
         code2llm___export_code2logic["_export_code2logic"]
-        code2llm___analyze_generated_files["_analyze_generated_files"]
-        code2llm___build_code2logic_cmd["_build_code2logic_cmd"]
-        code2llm___export_chunked_prompt_txt["_export_chunked_prompt_txt"]
-        code2llm__cli_exports__formats___export_yaml["_export_yaml"]
+        code2llm___normalize_code2logic_output["_normalize_code2logic_output"]
+        code2llm__cli_exports__prompt___get_prompt_paths["_get_prompt_paths"]
         code2llm___build_main_files_section["_build_main_files_section"]
-        code2llm__cli_exports__formats___run_report["_run_report"]
+        code2llm___export_chunked_results["_export_chunked_results"]
+        code2llm___export_simple_formats["_export_simple_formats"]
+        code2llm__cli_exports__formats___export_evolution["_export_evolution"]
+        code2llm___build_missing_files_section["_build_missing_files_section"]
         code2llm__cli_exports__formats___export_mermaid["_export_mermaid"]
-        code2llm__cli_exports__code2logic___run_code2logic["_run_code2logic"]
-        code2llm___export_data_structures["_export_data_structures"]
+        code2llm___export_project_yaml["_export_project_yaml"]
+        code2llm___build_code2logic_cmd["_build_code2logic_cmd"]
+        code2llm___export_context_fallback["_export_context_fallback"]
+        code2llm___analyze_generated_files["_analyze_generated_files"]
+        code2llm___export_chunked_prompt_txt["_export_chunked_prompt_txt"]
+        code2llm___export_single_project["_export_single_project"]
         code2llm___build_subprojects_section["_build_subprojects_section"]
-        code2llm___build_prompt_header["_build_prompt_header"]
+        code2llm__cli_exports__formats___export_index_html["_export_index_html"]
+        code2llm___should_run_code2logic["_should_run_code2logic"]
         code2llm___build_dynamic_tasks["_build_dynamic_tasks"]
+        code2llm__cli_exports__formats___run_report["_run_report"]
+        code2llm__cli_exports__code2logic___run_code2logic["_run_code2logic"]
+        code2llm___build_dynamic_focus_areas["_build_dynamic_focus_areas"]
         code2llm__cli_exports__formats___export_readme["_export_readme"]
+        code2llm__cli_exports__prompt___format_size["_format_size"]
+        code2llm__cli_exports__orchestrator___run_exports["_run_exports"]
+        code2llm___handle_code2logic_error["_handle_code2logic_error"]
+        code2llm___export_data_structures["_export_data_structures"]
+        code2llm__cli_exports__prompt___export_prompt_txt["_export_prompt_txt"]
         code2llm__cli_exports__prompt___get_missing_files["_get_missing_files"]
+        code2llm___find_code2logic_output["_find_code2logic_output"]
+        code2llm___build_prompt_header["_build_prompt_header"]
+        code2llm___build_prompt_footer["_build_prompt_footer"]
+        code2llm___check_code2logic_installed["_check_code2logic_installed"]
+        code2llm__cli_exports__formats___export_yaml["_export_yaml"]
+    end
+    subgraph code2llm_cli_parser
+        code2llm__cli_parser__create_parser["create_parser"]
     end
     subgraph code2llm_core
+        code2llm__core__core__lang__csharp__analyze_csharp["analyze_csharp"]
         code2llm__core__toon_size_manager__split_toon_file["split_toon_file"]
-        code2llm__core__toon_size_manager___parse_modules["_parse_modules"]
-        code2llm__core__toon_size_manager___split_by_lines["_split_by_lines"]
-        code2llm__get_file_size_kb["get_file_size_kb"]
-        code2llm__core__toon_size_manager___write_chunk["_write_chunk"]
-        code2llm__manage_toon_size["manage_toon_size"]
-        code2llm__should_split_toon["should_split_toon"]
-        code2llm___split_by_modules["_split_by_modules"]
         code2llm__core__large_repo__should_use_chunking["should_use_chunking"]
+        code2llm__extract_calls_regex["extract_calls_regex"]
+        code2llm__analyze_typescript_js["analyze_typescript_js"]
+        code2llm__core__toon_size_manager___parse_modules["_parse_modules"]
+        code2llm___split_level2_consolidated["_split_level2_consolidated"]
+        code2llm__core__repo_files___get_gitignore_parser["_get_gitignore_parser"]
+        code2llm__get_file_size_kb["get_file_size_kb"]
+        code2llm___should_skip_file["_should_skip_file"]
+        code2llm__core__toon_size_manager___split_by_lines["_split_by_lines"]
+        code2llm__core__core__lang__cpp__analyze_cpp["analyze_cpp"]
+        code2llm__core__gitignore__load_gitignore_patterns["load_gitignore_patterns"]
+        code2llm___collect_files_recursive["_collect_files_recursive"]
+        code2llm___merge_small_l1_dirs["_merge_small_l1_dirs"]
+        code2llm__core__core__lang__java__analyze_java["analyze_java"]
+        code2llm__core__core__lang__ruby__analyze_ruby["analyze_ruby"]
+        code2llm__core__repo_files__calculate_priority["calculate_priority"]
+        code2llm___split_hierarchically["_split_hierarchically"]
+        code2llm___get_level1_dirs["_get_level1_dirs"]
+        code2llm__core__core__lang__php__analyze_php["analyze_php"]
+        code2llm__calculate_complexity_regex["calculate_complexity_regex"]
+        code2llm__extract_function_body["extract_function_body"]
+        code2llm__core__toon_size_manager___write_chunk["_write_chunk"]
+        code2llm____init__["__init__"]
+        code2llm___contains_python_files["_contains_python_files"]
+        code2llm___calculate_priority["_calculate_priority"]
+        code2llm__core__core__lang__go_lang__analyze_go["analyze_go"]
+        code2llm___categorize_subdirs["_categorize_subdirs"]
+        code2llm__manage_toon_size["manage_toon_size"]
+        code2llm___count_py_files["_count_py_files"]
+        code2llm__core__repo_files__should_skip_file["should_skip_file"]
+        code2llm___process_level1_files["_process_level1_files"]
+        code2llm___collect_files_in_dir["_collect_files_in_dir"]
+        code2llm__should_split_toon["should_split_toon"]
+        code2llm__core__repo_files__collect_root_files["collect_root_files"]
+        code2llm__analyze_file["analyze_file"]
+        code2llm__core__repo_files__count_py_files["count_py_files"]
+        code2llm__get_analysis_plan["get_analysis_plan"]
+        code2llm___collect_root_files["_collect_root_files"]
+        code2llm__core__repo_files__contains_python_files["contains_python_files"]
+        code2llm___split_by_modules["_split_by_modules"]
+        code2llm__core__repo_files__get_level1_dirs["get_level1_dirs"]
+        code2llm__core__core__lang__rust__analyze_rust["analyze_rust"]
+        code2llm__core__repo_files__collect_files_in_dir["collect_files_in_dir"]
     end
     subgraph code2llm_exporters
-        code2llm___package_of_module["_package_of_module"]
-        code2llm__render_layers["render_layers"]
-        code2llm___compute_function_metrics["_compute_function_metrics"]
-        code2llm__load_project_yaml["load_project_yaml"]
+        code2llm__validate_project_yaml["validate_project_yaml"]
+        code2llm___compute_fan_in["_compute_fan_in"]
+        code2llm__exporters__toon__helpers___dup_file_set["_dup_file_set"]
+        code2llm___check_required_keys["_check_required_keys"]
         code2llm___rel_path["_rel_path"]
+        code2llm___hotspot_description["_hotspot_description"]
+        code2llm___render_module_detail["_render_module_detail"]
+        code2llm___is_excluded["_is_excluded"]
+        code2llm__exporters__toon__helpers___package_of["_package_of"]
+        code2llm___process_function_calls["_process_function_calls"]
+        code2llm___compute_package_metrics["_compute_package_metrics"]
         code2llm___detect_duplicates["_detect_duplicates"]
-        code2llm___build_refactoring["_build_refactoring"]
-        code2llm___build_project_yaml["_build_project_yaml"]
+        code2llm___build_function_to_module_map["_build_function_to_module_map"]
+        code2llm___package_of_module["_package_of_module"]
+        code2llm___calculate_duplicate_info["_calculate_duplicate_info"]
         code2llm___traits_from_cfg["_traits_from_cfg"]
-        code2llm__compute_all_metrics["compute_all_metrics"]
-        code2llm___group_by_file["_group_by_file"]
+        code2llm___build_project_yaml["_build_project_yaml"]
+        code2llm___compute_function_metrics["_compute_function_metrics"]
+        code2llm___build_refactoring["_build_refactoring"]
+        code2llm___process_callee_calls["_process_callee_calls"]
+        code2llm___handle_suffix_match["_handle_suffix_match"]
+        code2llm___build_coupling_matrix["_build_coupling_matrix"]
+        code2llm___count_duplicates["_count_duplicates"]
+        code2llm__load_project_yaml["load_project_yaml"]
+        code2llm___compute_module_entry["_compute_module_entry"]
         code2llm___build_hotspots["_build_hotspots"]
-        code2llm___build_alerts["_build_alerts"]
         code2llm___compute_class_metrics["_compute_class_metrics"]
         code2llm___build_health["_build_health"]
-        code2llm___compute_module_entry["_compute_module_entry"]
-        code2llm___render_module_detail["_render_module_detail"]
-        code2llm___process_function_calls["_process_function_calls"]
-        code2llm___hotspot_description["_hotspot_description"]
-        code2llm___build_function_to_module_map["_build_function_to_module_map"]
+        code2llm___group_by_file["_group_by_file"]
         code2llm___process_called_by["_process_called_by"]
+        code2llm___detect_primary_language["_detect_primary_language"]
+        code2llm__compute_all_metrics["compute_all_metrics"]
+        code2llm__render_layers["render_layers"]
+        code2llm___build_alerts["_build_alerts"]
+        code2llm___detect_language_label["_detect_language_label"]
         code2llm___scan_line_counts["_scan_line_counts"]
-        code2llm___check_required_keys["_check_required_keys"]
-        code2llm___handle_suffix_match["_handle_suffix_match"]
-        code2llm__exporters__toon__helpers___package_of["_package_of"]
-        code2llm___compute_fan_in["_compute_fan_in"]
-        code2llm___count_duplicates["_count_duplicates"]
-        code2llm__validate_project_yaml["validate_project_yaml"]
-        code2llm___compute_package_metrics["_compute_package_metrics"]
+        code2llm___resolve_callee_module["_resolve_callee_module"]
         code2llm___compute_file_metrics["_compute_file_metrics"]
         code2llm___compute_hotspots["_compute_hotspots"]
-        code2llm___build_coupling_matrix["_build_coupling_matrix"]
-        code2llm___calculate_duplicate_info["_calculate_duplicate_info"]
-        code2llm___process_callee_calls["_process_callee_calls"]
-        code2llm___is_excluded["_is_excluded"]
-        code2llm___resolve_callee_module["_resolve_callee_module"]
-        code2llm__exporters__toon__helpers___dup_file_set["_dup_file_set"]
     end
     subgraph code2llm_generators
-        code2llm__parse_llm_task_text["parse_llm_task_text"]
-        code2llm___node_counts_by_function["_node_counts_by_function"]
-        code2llm__validate_mermaid_file["validate_mermaid_file"]
-        code2llm__generators__llm_task__load_input["load_input"]
-        code2llm___is_balanced_node_line["_is_balanced_node_line"]
-        code2llm__generators__mermaid___fix_class_line["_fix_class_line"]
-        code2llm__generators__mermaid___sanitize_node_id["_sanitize_node_id"]
-        code2llm__generators__mermaid__fix_mermaid_file["fix_mermaid_file"]
-        code2llm__generators__mermaid___fix_subgraph_line["_fix_subgraph_line"]
-        code2llm___fix_edge_label_pipes["_fix_edge_label_pipes"]
-        code2llm___create_empty_task_data["_create_empty_task_data"]
-        code2llm___check_bracket_balance["_check_bracket_balance"]
-        code2llm___summarize_functions["_summarize_functions"]
-        code2llm___is_entrypoint_file["_is_entrypoint_file"]
-        code2llm__generators__llm_flow___strip_bom["_strip_bom"]
+        code2llm__generators__llm_flow___collect_nodes["_collect_nodes"]
+        code2llm___group_nodes_by_file["_group_nodes_by_file"]
+        code2llm__generators__llm_task___parse_bullets["_parse_bullets"]
         code2llm__generators__llm_flow___parse_func_label["_parse_func_label"]
-        code2llm__generators__llm_flow__dump_yaml["dump_yaml"]
+        code2llm__generators__llm_task__main["main"]
+        code2llm__generators__llm_task___parse_sections["_parse_sections"]
+        code2llm__validate_mermaid_file["validate_mermaid_file"]
         code2llm__generators__llm_flow___as_dict["_as_dict"]
-        code2llm__generators__mermaid___fix_edge_line["_fix_edge_line"]
-        code2llm___strip_label_segments["_strip_label_segments"]
+        code2llm__generators__llm_task___strip_bom["_strip_bom"]
         code2llm__generators__llm_flow___as_list["_as_list"]
-        code2llm___apply_simple_sections["_apply_simple_sections"]
         code2llm__generators__llm_flow___safe_read_yaml["_safe_read_yaml"]
         code2llm___collect_entrypoints["_collect_entrypoints"]
-        code2llm__generators__llm_task___parse_bullets["_parse_bullets"]
-        code2llm__generators__llm_task___ensure_list["_ensure_list"]
-        code2llm__generators__mermaid___scan_brackets["_scan_brackets"]
-        code2llm__generators__llm_flow__render_llm_flow_md["render_llm_flow_md"]
-        code2llm__generators__llm_task__main["main"]
-        code2llm__generators__llm_flow___collect_nodes["_collect_nodes"]
-        code2llm__generators__llm_task___parse_sections["_parse_sections"]
         code2llm__generators__llm_flow___collect_functions["_collect_functions"]
-        code2llm___parse_acceptance_tests["_parse_acceptance_tests"]
         code2llm___pick_relevant_functions["_pick_relevant_functions"]
-        code2llm___deduplicate_entrypoints["_deduplicate_entrypoints"]
-        code2llm__generators__mermaid___check_node_ids["_check_node_ids"]
+        code2llm__generators__mermaid__fix_mermaid_file["fix_mermaid_file"]
+        code2llm__generators__mermaid___sanitize_node_id["_sanitize_node_id"]
+        code2llm___parse_acceptance_tests["_parse_acceptance_tests"]
         code2llm___extract_entrypoint_info["_extract_entrypoint_info"]
-        code2llm___apply_bullet_sections["_apply_bullet_sections"]
-        code2llm__generators__llm_task___strip_bom["_strip_bom"]
-        code2llm___sanitize_label_text["_sanitize_label_text"]
-        code2llm__generators__mermaid__generate_single_png["generate_single_png"]
-        code2llm__generators__mermaid__generate_pngs["generate_pngs"]
-        code2llm___group_nodes_by_file["_group_nodes_by_file"]
+        code2llm__generators__mermaid___fix_class_line["_fix_class_line"]
+        code2llm___is_entrypoint_file["_is_entrypoint_file"]
         code2llm__generators__llm_task__normalize_llm_task["normalize_llm_task"]
+        code2llm__generators__llm_flow___strip_bom["_strip_bom"]
+        code2llm__generators__llm_flow__dump_yaml["dump_yaml"]
+        code2llm___apply_bullet_sections["_apply_bullet_sections"]
+        code2llm__generators__mermaid__generate_single_png["generate_single_png"]
+        code2llm___create_empty_task_data["_create_empty_task_data"]
+        code2llm___node_counts_by_function["_node_counts_by_function"]
+        code2llm___summarize_functions["_summarize_functions"]
+        code2llm__generators__llm_task__load_input["load_input"]
+        code2llm__generators__mermaid__generate_pngs["generate_pngs"]
+        code2llm__generators__llm_task___ensure_list["_ensure_list"]
+        code2llm___is_balanced_node_line["_is_balanced_node_line"]
+        code2llm__generators__mermaid___fix_subgraph_line["_fix_subgraph_line"]
+        code2llm__generators__mermaid___check_node_ids["_check_node_ids"]
+        code2llm___check_bracket_balance["_check_bracket_balance"]
+        code2llm___deduplicate_entrypoints["_deduplicate_entrypoints"]
+        code2llm__generators__mermaid___scan_brackets["_scan_brackets"]
+        code2llm___strip_label_segments["_strip_label_segments"]
         code2llm__generators__llm_flow__generate_llm_flow["generate_llm_flow"]
         code2llm__generators__llm_flow__main["main"]
+        code2llm___sanitize_label_text["_sanitize_label_text"]
+        code2llm__generators__llm_flow__render_llm_flow_md["render_llm_flow_md"]
+        code2llm___fix_edge_label_pipes["_fix_edge_label_pipes"]
+        code2llm__generators__mermaid___fix_edge_line["_fix_edge_line"]
+        code2llm__parse_llm_task_text["parse_llm_task_text"]
+        code2llm___apply_simple_sections["_apply_simple_sections"]
     end
     subgraph code2llm_parsers
         code2llm__parsers__toon_parser__is_toon_file["is_toon_file"]
-        code2llm__parsers__toon_parser___parse_header_line["_parse_header_line"]
         code2llm__parsers__toon_parser__parse_toon_content["parse_toon_content"]
-        code2llm__parsers__toon_parser__load_toon["load_toon"]
+        code2llm__parsers__toon_parser___parse_header_line["_parse_header_line"]
         code2llm__parsers__toon_parser___detect_section["_detect_section"]
+        code2llm__parsers__toon_parser__load_toon["load_toon"]
         code2llm__parsers__toon_parser___parse_stats_line["_parse_stats_line"]
+    end
+    subgraph demo_langs_valid
+        demo_langs__valid__sample__UserService__main["main"]
+        demo_langs__valid__sample__UserService__addUser["addUser"]
+        demo_langs__valid__sample__get_user["get_user"]
+        demo_langs__valid__sample__add_user["add_user"]
+        demo_langs__valid__sample__main["main"]
+        demo_langs__valid__sample__User__getName["getName"]
+        demo_langs__valid__sample__UserService__getUser["getUser"]
+        demo_langs__valid__sample__service["service"]
     end
     subgraph examples_litellm
         examples__litellm__run__get_refactoring_advice["get_refactoring_advice"]
@@ -210,8 +271,8 @@ flowchart LR
     end
     subgraph examples_streaming_analyzer
         examples__handle_get_request["handle_get_request"]
-        examples__process_request["process_request"]
         examples__format_output["format_output"]
+        examples__process_request["process_request"]
         examples__validate_input["validate_input"]
     end
     subgraph scripts_benchmark_badges
@@ -220,30 +281,38 @@ flowchart LR
         scripts__benchmark_badges__main["main"]
     end
     subgraph scripts_bump_version
-        scripts__bump_version__update_version_file["update_version_file"]
         scripts__bump_version__bump_version["bump_version"]
         scripts__bump_version__parse_version["parse_version"]
-        scripts__bump_version__update_pyproject_toml["update_pyproject_toml"]
-        scripts__bump_version__get_current_version["get_current_version"]
         scripts__bump_version__main["main"]
         scripts__bump_version__format_version["format_version"]
+        scripts__bump_version__update_version_file["update_version_file"]
+        scripts__bump_version__get_current_version["get_current_version"]
+        scripts__bump_version__update_pyproject_toml["update_pyproject_toml"]
     end
     subgraph validate_toon
-        validate_toon__extract_functions_from_toon["extract_functions_from_toon"]
-        validate_toon__extract_classes_from_yaml["extract_classes_from_yaml"]
-        validate_toon__extract_modules_from_toon["extract_modules_from_toon"]
-        validate_toon__analyze_class_differences["analyze_class_differences"]
-        validate_toon__compare_functions["compare_functions"]
         validate_toon__load_file["load_file"]
-        validate_toon__main["main"]
-        validate_toon__extract_classes_from_toon["extract_classes_from_toon"]
-        validate_toon__validate_toon_completeness["validate_toon_completeness"]
+        validate_toon__analyze_class_differences["analyze_class_differences"]
         validate_toon__extract_modules_from_yaml["extract_modules_from_yaml"]
+        validate_toon__extract_classes_from_toon["extract_classes_from_toon"]
         validate_toon__load_yaml["load_yaml"]
-        validate_toon__extract_functions_from_yaml["extract_functions_from_yaml"]
-        validate_toon__compare_classes["compare_classes"]
+        validate_toon__compare_functions["compare_functions"]
+        validate_toon__extract_classes_from_yaml["extract_classes_from_yaml"]
+        validate_toon__extract_functions_from_toon["extract_functions_from_toon"]
         validate_toon__compare_modules["compare_modules"]
+        validate_toon__extract_functions_from_yaml["extract_functions_from_yaml"]
+        validate_toon__validate_toon_completeness["validate_toon_completeness"]
+        validate_toon__compare_classes["compare_classes"]
+        validate_toon__extract_modules_from_toon["extract_modules_from_toon"]
+        validate_toon__main["main"]
     end
+    benchmarks__reporting__print_results --> benchmarks__reporting___print_header
+    benchmarks__reporting__print_results --> benchmarks__reporting___print_scores_table
+    benchmarks__reporting__print_results --> benchmarks__reporting___print_problems_detail
+    benchmarks__reporting__print_results --> benchmarks__reporting___print_pipelines_detail
+    benchmarks__reporting__print_results --> benchmarks__reporting___print_structural_features
+    benchmarks__reporting__print_results --> benchmarks__reporting___print_gap_analysis
+    benchmarks__benchmark_evolution__run_benchmark --> benchmarks__benchmark_evolution__load_previous
+    benchmarks__benchmark_evolution__run_benchmark --> benchmarks__benchmark_evolution__save_current
     validate_toon__load_file --> code2llm__parsers__toon_parser__is_toon_file
     validate_toon__load_file --> validate_toon__load_yaml
     validate_toon__load_file --> code2llm__parsers__toon_parser__load_toon
@@ -256,26 +325,15 @@ flowchart LR
     validate_toon__compare_modules --> validate_toon__extract_modules_from_toon
     validate_toon__main --> validate_toon__load_file
     validate_toon__main --> validate_toon__validate_toon_completeness
-    benchmarks__benchmark_evolution__run_benchmark --> benchmarks__benchmark_evolution__load_previous
-    benchmarks__benchmark_evolution__run_benchmark --> benchmarks__benchmark_evolution__save_current
-    benchmarks__reporting__print_results --> benchmarks__reporting___print_header
-    benchmarks__reporting__print_results --> benchmarks__reporting___print_scores_table
-    benchmarks__reporting__print_results --> benchmarks__reporting___print_problems_detail
-    benchmarks__reporting__print_results --> benchmarks__reporting___print_pipelines_detail
-    benchmarks__reporting__print_results --> benchmarks__reporting___print_structural_features
-    benchmarks__reporting__print_results --> benchmarks__reporting___print_gap_analysis
-    benchmarks__run_benchmark --> benchmarks___print_benchmark_header
-    benchmarks__run_benchmark --> benchmarks__create_ground_truth_project
-    benchmarks__run_benchmark --> benchmarks___print_ground_truth_info
-    benchmarks__run_benchmark --> benchmarks__reporting__print_results
-    benchmarks__run_benchmark --> benchmarks__reporting__build_report
+    benchmarks__format_evaluator__evaluate_format --> benchmarks__format_evaluator___detect_problems
+    benchmarks__format_evaluator__evaluate_format --> benchmarks__format_evaluator___detect_pipelines
+    benchmarks__format_evaluator__evaluate_format --> benchmarks__format_evaluator___detect_hub_types
+    benchmarks__format_evaluator__evaluate_format --> benchmarks___check_structural_features
     benchmarks__create_ground_truth_project --> benchmarks__project_generator__create_core_py
     benchmarks__create_ground_truth_project --> benchmarks__project_generator__create_etl_py
     benchmarks__create_ground_truth_project --> benchmarks__create_validation_py
     benchmarks__create_ground_truth_project --> benchmarks__project_generator__create_utils_py
     benchmarks__create_ground_truth_project --> benchmarks__add_validator_to_core
-    scripts__benchmark_badges__create_html --> scripts__benchmark_badges__get_shield_url
-    scripts__benchmark_badges__main --> scripts__benchmark_badges__create_html
     scripts__bump_version__bump_version --> scripts__bump_version__get_current_version
     scripts__bump_version__bump_version --> scripts__bump_version__parse_version
     scripts__bump_version__bump_version --> scripts__bump_version__format_version
@@ -283,10 +341,16 @@ flowchart LR
     scripts__bump_version__main --> scripts__bump_version__bump_version
     scripts__bump_version__main --> scripts__bump_version__update_pyproject_toml
     scripts__bump_version__main --> scripts__bump_version__update_version_file
-    benchmarks__format_evaluator__evaluate_format --> benchmarks__format_evaluator___detect_problems
-    benchmarks__format_evaluator__evaluate_format --> benchmarks__format_evaluator___detect_pipelines
-    benchmarks__format_evaluator__evaluate_format --> benchmarks__format_evaluator___detect_hub_types
-    benchmarks__format_evaluator__evaluate_format --> benchmarks___check_structural_features
+    code2llm__cli__main --> code2llm__cli_commands__handle_special_commands
+    code2llm__cli__main --> code2llm__cli_parser__create_parser
+    code2llm__cli__main --> code2llm__cli_commands__validate_and_setup
+    code2llm__cli__main --> code2llm__cli_commands__print_start_info
+    code2llm__cli__main --> code2llm__cli_analysis___run_analysis
+    code2llm__cli__main --> code2llm__cli_exports__orchestrator___run_exports
+    code2llm__cli__main --> code2llm__cli_commands__validate_chunked_output
+    scripts__benchmark_badges__create_html --> scripts__benchmark_badges__get_shield_url
+    scripts__benchmark_badges__main --> scripts__benchmark_badges__create_html
+    code2llm__api__analyze_file --> code2llm__api__analyze
     code2llm__cli_analysis___run_analysis --> code2llm__cli_analysis___run_standard_analysis
     code2llm__cli_analysis___run_analysis --> code2llm__cli_analysis___run_chunked_analysis
     code2llm__cli_analysis___run_analysis --> code2llm__core__large_repo__should_use_chunking
@@ -299,18 +363,49 @@ flowchart LR
     code2llm__cli_analysis___run_chunked_analysis --> code2llm__cli_analysis___print_chunked_plan
     code2llm__cli_analysis___analyze_all_subprojects --> code2llm__cli_analysis___analyze_subproject
     code2llm__cli_analysis___analyze_subproject --> code2llm___export_simple_formats
-    code2llm__cli_analysis___analyze_subproject --> code2llm__cli_exports__formats___export_evolution
-    code2llm__cli___handle_special_commands --> code2llm__cli__generate_llm_context
-    code2llm__cli___handle_special_commands --> code2llm__cli___handle_report_command
-    code2llm__cli___handle_report_command --> code2llm__cli_exports__formats___run_report
-    code2llm__cli__main --> code2llm__cli___handle_special_commands
-    code2llm__cli__main --> code2llm__cli__create_parser
-    code2llm__cli__main --> code2llm__cli___validate_and_setup
-    code2llm__cli__main --> code2llm__cli___print_start_info
-    code2llm__cli__main --> code2llm__cli_analysis___run_analysis
-    code2llm__cli__main --> code2llm__cli_exports__orchestrator___run_exports
-    code2llm__cli__main --> code2llm__cli___validate_chunked_output
+    demo_langs__valid__sample__main --> demo_langs__valid__sample__add_user
+    demo_langs__valid__sample__main --> demo_langs__valid__sample__get_user
+    code2llm__cli_commands__handle_special_commands --> code2llm__cli_commands__generate_llm_context
+    code2llm__cli_commands__handle_special_commands --> code2llm__cli_commands__handle_report_command
+    code2llm__cli_commands__handle_report_command --> code2llm__cli_exports__formats___run_report
+    code2llm___find_data_pipelines --> code2llm___categorize_functions
+    code2llm___find_data_pipelines --> code2llm__analysis__data_analysis___make_stage
+    benchmarks__run_benchmark --> benchmarks___print_benchmark_header
+    benchmarks__run_benchmark --> benchmarks__create_ground_truth_project
+    benchmarks__run_benchmark --> benchmarks___print_ground_truth_info
+    benchmarks__run_benchmark --> benchmarks__reporting__print_results
+    benchmarks__run_benchmark --> benchmarks__reporting__build_report
     benchmarks__benchmark_performance__main --> benchmarks__create_test_project
+    code2llm__get_analysis_plan --> code2llm__core__repo_files__count_py_files
+    code2llm__get_analysis_plan --> code2llm__core__repo_files__collect_files_in_dir
+    code2llm___split_hierarchically --> code2llm__core__repo_files__get_level1_dirs
+    code2llm___split_hierarchically --> code2llm__core__repo_files__collect_root_files
+    code2llm___split_hierarchically --> code2llm__core__repo_files__collect_files_in_dir
+    code2llm___merge_small_l1_dirs --> code2llm__core__repo_files__calculate_priority
+    code2llm___split_level2_consolidated --> code2llm__core__repo_files__collect_files_in_dir
+    code2llm___categorize_subdirs --> code2llm__core__repo_files__collect_files_in_dir
+    code2llm___categorize_subdirs --> code2llm__core__repo_files__calculate_priority
+    code2llm___process_level1_files --> code2llm__core__repo_files___get_gitignore_parser
+    code2llm___process_level1_files --> code2llm__core__repo_files__should_skip_file
+    code2llm___collect_files_in_dir --> code2llm__core__repo_files__collect_files_in_dir
+    code2llm___collect_files_recursive --> code2llm__core__repo_files__collect_files_in_dir
+    code2llm___collect_root_files --> code2llm__core__repo_files__collect_root_files
+    code2llm___count_py_files --> code2llm__core__repo_files__count_py_files
+    code2llm___contains_python_files --> code2llm__core__repo_files__contains_python_files
+    code2llm___should_skip_file --> code2llm__core__repo_files__should_skip_file
+    code2llm___calculate_priority --> code2llm__core__repo_files__calculate_priority
+    code2llm___get_level1_dirs --> code2llm__core__repo_files__get_level1_dirs
+    code2llm__core__large_repo__should_use_chunking --> code2llm__core__repo_files__count_py_files
+    code2llm__core__repo_files___get_gitignore_parser --> code2llm__core__gitignore__load_gitignore_patterns
+    code2llm__core__repo_files__collect_files_in_dir --> code2llm__core__repo_files___get_gitignore_parser
+    code2llm__core__repo_files__collect_files_in_dir --> code2llm__core__repo_files__should_skip_file
+    code2llm__core__repo_files__collect_root_files --> code2llm__core__repo_files___get_gitignore_parser
+    code2llm__core__repo_files__collect_root_files --> code2llm__core__repo_files__should_skip_file
+    code2llm__core__repo_files__count_py_files --> code2llm__core__repo_files___get_gitignore_parser
+    code2llm__core__repo_files__count_py_files --> code2llm__core__repo_files__should_skip_file
+    code2llm__core__repo_files__contains_python_files --> code2llm__core__repo_files___get_gitignore_parser
+    code2llm__core__repo_files__contains_python_files --> code2llm__core__repo_files__should_skip_file
+    code2llm__core__repo_files__get_level1_dirs --> code2llm__core__repo_files__contains_python_files
     code2llm__should_split_toon --> code2llm__get_file_size_kb
     code2llm__core__toon_size_manager__split_toon_file --> code2llm__core__toon_size_manager___parse_modules
     code2llm__core__toon_size_manager__split_toon_file --> code2llm___split_by_modules
@@ -327,6 +422,7 @@ flowchart LR
     code2llm___build_hotspots --> code2llm___is_excluded
     code2llm___build_refactoring --> code2llm___is_excluded
     code2llm___build_refactoring --> code2llm___rel_path
+    code2llm___detect_primary_language --> code2llm___is_excluded
     code2llm__validate_project_yaml --> code2llm___check_required_keys
     code2llm__generators__llm_task__normalize_llm_task --> code2llm__generators__llm_task___ensure_list
     code2llm___apply_bullet_sections --> code2llm__generators__llm_task___parse_bullets
@@ -342,6 +438,14 @@ flowchart LR
     code2llm__generators__llm_task__load_input --> code2llm__parse_llm_task_text
     code2llm__generators__llm_task__main --> code2llm__generators__llm_task__load_input
     code2llm__generators__llm_task__main --> code2llm__generators__llm_task__normalize_llm_task
+    code2llm___export_code2logic --> code2llm___check_code2logic_installed
+    code2llm___export_code2logic --> code2llm___build_code2logic_cmd
+    code2llm___export_code2logic --> code2llm__cli_exports__code2logic___run_code2logic
+    code2llm___export_code2logic --> code2llm___find_code2logic_output
+    code2llm___export_code2logic --> code2llm___normalize_code2logic_output
+    code2llm___export_code2logic --> code2llm___should_run_code2logic
+    code2llm___export_code2logic --> code2llm___handle_code2logic_error
+    code2llm___normalize_code2logic_output --> code2llm__manage_toon_size
     code2llm__validate_mermaid_file --> code2llm___check_bracket_balance
     code2llm__validate_mermaid_file --> code2llm__generators__mermaid___check_node_ids
     code2llm___check_bracket_balance --> code2llm___is_balanced_node_line
@@ -357,14 +461,12 @@ flowchart LR
     code2llm__generators__mermaid__generate_pngs --> code2llm__validate_mermaid_file
     code2llm__generators__mermaid__generate_pngs --> code2llm__generators__mermaid__generate_single_png
     code2llm__generators__mermaid__generate_pngs --> code2llm__generators__mermaid__fix_mermaid_file
-    code2llm___export_code2logic --> code2llm___check_code2logic_installed
-    code2llm___export_code2logic --> code2llm___build_code2logic_cmd
-    code2llm___export_code2logic --> code2llm__cli_exports__code2logic___run_code2logic
-    code2llm___export_code2logic --> code2llm___find_code2logic_output
-    code2llm___export_code2logic --> code2llm___normalize_code2logic_output
-    code2llm___export_code2logic --> code2llm___should_run_code2logic
-    code2llm___export_code2logic --> code2llm___handle_code2logic_error
-    code2llm___normalize_code2logic_output --> code2llm__manage_toon_size
+    code2llm__cli_exports__formats___run_report --> code2llm__load_project_yaml
+    code2llm___export_simple_formats --> code2llm___export_project_yaml
+    code2llm___export_simple_formats --> code2llm__load_project_yaml
+    code2llm___export_simple_formats --> code2llm__validate_project_yaml
+    code2llm___export_simple_formats --> code2llm__cli_exports__formats___export_yaml
+    code2llm__cli_exports__formats___export_mermaid --> code2llm__generators__mermaid__generate_pngs
     code2llm__generators__llm_flow___safe_read_yaml --> code2llm__generators__llm_flow___strip_bom
     code2llm___collect_entrypoints --> code2llm___group_nodes_by_file
     code2llm___collect_entrypoints --> code2llm___deduplicate_entrypoints
@@ -382,12 +484,6 @@ flowchart LR
     code2llm__generators__llm_flow__main --> code2llm__generators__llm_flow___safe_read_yaml
     code2llm__generators__llm_flow__main --> code2llm__generators__llm_flow__generate_llm_flow
     code2llm__generators__llm_flow__main --> code2llm__generators__llm_flow__dump_yaml
-    code2llm__cli_exports__formats___run_report --> code2llm__load_project_yaml
-    code2llm___export_simple_formats --> code2llm___export_project_yaml
-    code2llm___export_simple_formats --> code2llm__load_project_yaml
-    code2llm___export_simple_formats --> code2llm__validate_project_yaml
-    code2llm___export_simple_formats --> code2llm__cli_exports__formats___export_yaml
-    code2llm__cli_exports__formats___export_mermaid --> code2llm__generators__mermaid__generate_pngs
     code2llm__cli_exports__orchestrator___run_exports --> code2llm___export_chunked_results
     code2llm__cli_exports__orchestrator___run_exports --> code2llm___export_single_project
     code2llm___export_single_project --> code2llm___export_simple_formats
@@ -395,13 +491,14 @@ flowchart LR
     code2llm___export_single_project --> code2llm___export_data_structures
     code2llm___export_single_project --> code2llm___export_context_fallback
     code2llm___export_single_project --> code2llm__cli_exports__formats___export_readme
+    code2llm___export_single_project --> code2llm__cli_exports__formats___export_index_html
     code2llm___export_single_project --> code2llm__cli_exports__formats___export_mermaid
     code2llm___export_single_project --> code2llm___export_code2logic
     code2llm___export_single_project --> code2llm__cli_exports__prompt___export_prompt_txt
-    code2llm___export_single_project --> code2llm___export_refactor_prompts
     code2llm___export_chunked_results --> code2llm___export_simple_formats
     code2llm___export_chunked_results --> code2llm__cli_exports__formats___export_evolution
     code2llm___export_chunked_results --> code2llm__cli_exports__formats___export_readme
+    code2llm___export_chunked_results --> code2llm__cli_exports__formats___export_index_html
     code2llm___export_chunked_results --> code2llm___export_code2logic
     code2llm___export_chunked_results --> code2llm___export_chunked_prompt_txt
     code2llm__cli_exports__prompt___export_prompt_txt --> code2llm__cli_exports__prompt___get_prompt_paths
@@ -424,7 +521,7 @@ flowchart LR
     code2llm__parsers__toon_parser__parse_toon_content --> code2llm__parsers__toon_parser___parse_stats_line
     code2llm__parsers__toon_parser__load_toon --> code2llm__parsers__toon_parser__parse_toon_content
     code2llm___render_module_detail --> code2llm___rel_path
-    code2llm__render_layers --> code2llm__exporters__toon__helpers___dup_file_set
+    code2llm____init__ --> code2llm__core__gitignore__load_gitignore_patterns
     code2llm__compute_all_metrics --> code2llm___scan_line_counts
     code2llm___compute_file_metrics --> code2llm___is_excluded
     code2llm___compute_fan_in --> code2llm___process_function_calls
@@ -443,7 +540,32 @@ flowchart LR
     code2llm___calculate_duplicate_info --> code2llm___rel_path
     code2llm___compute_hotspots --> code2llm___is_excluded
     code2llm___compute_hotspots --> code2llm___hotspot_description
+    code2llm__analyze_file --> code2llm__analyze_typescript_js
+    code2llm__analyze_file --> code2llm__core__core__lang__go_lang__analyze_go
+    code2llm__analyze_file --> code2llm__core__core__lang__rust__analyze_rust
+    code2llm__analyze_file --> code2llm__core__core__lang__java__analyze_java
+    code2llm__analyze_file --> code2llm__core__core__lang__cpp__analyze_cpp
+    code2llm___detect_language_label --> code2llm___is_excluded
+    code2llm__render_layers --> code2llm__exporters__toon__helpers___dup_file_set
+    code2llm__core__core__lang__rust__analyze_rust --> code2llm__calculate_complexity_regex
+    code2llm__core__core__lang__rust__analyze_rust --> code2llm__extract_calls_regex
+    code2llm__calculate_complexity_regex --> code2llm__extract_function_body
+    code2llm__extract_calls_regex --> code2llm__extract_function_body
+    code2llm__core__core__lang__cpp__analyze_cpp --> code2llm__calculate_complexity_regex
+    code2llm__core__core__lang__cpp__analyze_cpp --> code2llm__extract_calls_regex
+    code2llm__core__core__lang__ruby__analyze_ruby --> code2llm__extract_calls_regex
+    code2llm__core__core__lang__php__analyze_php --> code2llm__calculate_complexity_regex
+    code2llm__core__core__lang__go_lang__analyze_go --> code2llm__calculate_complexity_regex
+    code2llm__core__core__lang__go_lang__analyze_go --> code2llm__extract_calls_regex
+    code2llm__core__core__lang__java__analyze_java --> code2llm__calculate_complexity_regex
+    code2llm__core__core__lang__java__analyze_java --> code2llm__extract_calls_regex
+    code2llm__core__core__lang__csharp__analyze_csharp --> code2llm__calculate_complexity_regex
+    code2llm__core__core__lang__csharp__analyze_csharp --> code2llm__extract_calls_regex
     examples__litellm__run__main --> examples__litellm__run__run_analysis
     examples__litellm__run__main --> examples__litellm__run__get_refactoring_advice
+    demo_langs__valid__sample__service --> demo_langs__valid__sample__UserService__addUser
+    demo_langs__valid__sample__UserService__main --> demo_langs__valid__sample__UserService__addUser
+    demo_langs__valid__sample__UserService__main --> demo_langs__valid__sample__UserService__getUser
+    demo_langs__valid__sample__UserService__main --> demo_langs__valid__sample__User__getName
     examples__process_request --> examples__validate_input
     examples__handle_get_request --> examples__format_output

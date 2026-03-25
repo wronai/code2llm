@@ -84,6 +84,9 @@ class IndexHTMLGenerator:
                     # Limit size
                     if len(content) > 100000:
                         content = content[:100000] + '\n\n... [truncated - file too large]'
+                    # Don't escape markdown - it will be rendered as HTML
+                    if file_type == 'markdown':
+                        return content
                     return self._escape_html(content)
             return '[Binary file]'
         except Exception as e:
@@ -116,6 +119,7 @@ class IndexHTMLGenerator:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>code2llm Analysis Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {{
             --bg: #0f172a;
@@ -418,6 +422,101 @@ class IndexHTMLGenerator:
             word-break: break-word;
         }}
         
+        /* Markdown rendered content styles */
+        .markdown-content {{
+            line-height: 1.6;
+            max-width: 100%;
+        }}
+        
+        .markdown-content h1, .markdown-content h2, .markdown-content h3,
+        .markdown-content h4, .markdown-content h5, .markdown-content h6 {{
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }}
+        
+        .markdown-content h1 {{ font-size: 1.75rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }}
+        .markdown-content h2 {{ font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }}
+        .markdown-content h3 {{ font-size: 1.25rem; }}
+        .markdown-content h4 {{ font-size: 1.1rem; }}
+        
+        .markdown-content p {{
+            margin-bottom: 1rem;
+        }}
+        
+        .markdown-content ul, .markdown-content ol {{
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }}
+        
+        .markdown-content li {{
+            margin-bottom: 0.25rem;
+        }}
+        
+        .markdown-content code {{
+            background: var(--surface);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.875em;
+        }}
+        
+        .markdown-content pre code {{
+            background: none;
+            padding: 0;
+        }}
+        
+        .markdown-content blockquote {{
+            border-left: 4px solid var(--accent);
+            padding-left: 1rem;
+            margin-left: 0;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }}
+        
+        .markdown-content table {{
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1rem;
+        }}
+        
+        .markdown-content th, .markdown-content td {{
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+        }}
+        
+        .markdown-content th {{
+            background: var(--surface);
+            font-weight: 600;
+        }}
+        
+        .markdown-content tr:nth-child(even) {{
+            background: var(--surface-hover);
+        }}
+        
+        .markdown-content a {{
+            color: var(--accent);
+            text-decoration: none;
+        }}
+        
+        .markdown-content a:hover {{
+            text-decoration: underline;
+        }}
+        
+        .markdown-content img {{
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+        }}
+        
+        .markdown-content hr {{
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }}
+        
         /* Mobile responsive */
         @media (max-width: 768px) {{
             .container {{
@@ -568,9 +667,12 @@ class IndexHTMLGenerator:
             
             // Content
             const body = document.getElementById('contentBody');
-            if (file.type === 'markdown' || file.type === 'html') {{
-                // For markdown, show formatted but also offer raw view
-                body.innerHTML = `<pre>${{file.content}}</pre>`;
+            if (file.type === 'markdown') {{
+                // Render markdown as HTML using marked.js
+                body.innerHTML = `<div class="markdown-content">${{marked.parse(file.content)}}</div>`;
+            }} else if (file.type === 'html') {{
+                // For HTML files, show in iframe for safety
+                body.innerHTML = `<iframe src="${{file.rel_path}}" style="width:100%;height:100%;border:none;border-radius:0.5rem;"></iframe>`;
             }} else if (file.type === 'json') {{
                 try {{
                     const json = JSON.parse(file.content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&'));

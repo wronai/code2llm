@@ -15,7 +15,7 @@ def create_parser() -> argparse.ArgumentParser:
 Examples:
   code2llm ./                                       # Default: TOON diagnostics + README
   code2llm ./ -f all -o ./docs                      # All formats to ./docs/
-  code2llm ./ -f toon,map,flow                      # Diagnostics + structure + data-flow
+  code2llm ./ -f toon,map,evolution                 # Consolidated diagnostics + structure + roadmap
   code2llm ./ -f context                            # LLM narrative (context.md)
   code2llm ./ --streaming --strategy deep -f all    # Deep streaming analysis, all outputs
   code2llm ./ --strategy quick -f toon              # Fast overview
@@ -34,16 +34,16 @@ Examples:
 
 Format Options (-f):
   toon         — Health diagnostics (analysis.toon) [default]
-  map          — Structural map (map.toon) — modules, imports, signatures
-  flow         — Data-flow analysis (flow.toon) — pipelines, contracts, types
+  map          — Structural map (map.toon) — modules, imports, exports, signatures, project header
+  evolution    — Refactoring queue (evolution.toon)
   context      — LLM narrative (context.md) — architecture summary
-  code2logic   — Generate project logic (project.toon) via external code2logic
   yaml         — Standard YAML format
   json         — Machine-readable JSON
   mermaid      — Flowchart diagrams (flow.mmd, calls.mmd, compact_flow.mmd)
-  evolution    — Refactoring queue (evolution.toon)
+  flow         — Data-flow analysis (flow.toon) — legacy, explicit opt-in
+  code2logic   — Generate project logic (legacy project.toon) via external code2logic
   project-yaml — Unified project.yaml (single source of truth) + generated views
-  all          — Generate all formats (including project-yaml)
+  all          — Generate core formats (analysis.toon, map.toon, evolution.toon, context, yaml, json, mermaid)
 
 Strategy Options (--strategy):
   quick     — Fast overview, fewer files analyzed

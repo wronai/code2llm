@@ -1,14 +1,16 @@
 """Map Exporter — generates map.toon (structural map).
 
-Produces a compact key:value format showing modules, imports, signatures,
-and type information. Formerly the project.toon format.
+Produces a compact project header plus a key:value structural map showing
+modules, imports, exports, and signatures.
 
 Purpose: "what exists and how it's connected"
-Format: M[] module list, D: details with i: imports, e: exports, signatures
+Format: header summary + M[] module list, D: details with i: imports,
+e: exports, signatures
 """
 
 from collections import defaultdict
 from datetime import datetime
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -25,15 +27,16 @@ EXCLUDE_PATTERNS = {
 
 
 class MapExporter(Exporter):
-    """Export to map.toon — structural map with modules, imports, signatures.
+    """Export to map.toon — structural map with a compact project header.
 
-    Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods
+    Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions,
+    m=methods
     """
 
     def export(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
         """Export analysis result to .map format."""
         lines: List[str] = []
-        lines.extend(self._render_header(result))
+        lines.extend(self._render_header(result, output_path))
         lines.extend(self._render_module_list(result))
         lines.extend(self._render_details(result))
 
@@ -44,16 +47,32 @@ class MapExporter(Exporter):
     # ------------------------------------------------------------------
     # header
     # ------------------------------------------------------------------
-    def _render_header(self, result: AnalysisResult) -> List[str]:
-        nfiles = len(result.modules)
+    def _render_header(self, result: AnalysisResult, output_path: str) -> List[str]:
+        project_name = Path(result.project_path).name if result.project_path else "project"
         total_lines = self._count_total_lines(result)
         langs = self._detect_languages(result)
-        lang_str = ",".join(f"{lang}:{count}" for lang, count in langs.items())
+        lang_str = ",".join(f"{lang}:{count}" for lang, count in langs.items()) or "unknown"
+
+        included_files = [mi for mi in result.modules.values() if not self._is_excluded(mi.file)]
+        included_funcs = [fi for fi in result.functions.values() if not self._is_excluded(fi.file)]
+        included_classes = [ci for ci in result.classes.values() if not self._is_excluded(ci.file)]
+
+        cc_scores = [fi.complexity.get("cyclomatic_complexity", 0) for fi in included_funcs]
+        avg_cc = round(sum(cc_scores) / len(cc_scores), 1) if cc_scores else 0.0
+        critical_count = len([cc for cc in cc_scores if cc >= 15])
+        cycles = len(result.metrics.get("project", {}).get("circular_dependencies", []))
+
+        alerts = self._build_alerts(included_funcs)
+        hotspots = self._build_hotspots(included_funcs)
+        trend = self._load_evolution_trend(Path(output_path).with_name("evolution.toon"), avg_cc)
 
         lines = [
-            f"# {Path(result.project_path).name if result.project_path else 'project'}"
-            f" | {nfiles}f {total_lines}L | {lang_str}",
-            "# Keys: M=modules, D=details, i=imports, c=classes, f=functions, m=methods",
+            f"# {project_name} | {len(included_files)}f {total_lines}L | {lang_str} | {datetime.now().strftime('%Y-%m-%d')}",
+            f"# stats: {len(included_funcs)} func | {len(included_classes)} cls | {len(included_files)} mod | CC̄={avg_cc} | critical:{critical_count} | cycles:{cycles}",
+            f"# alerts[{len(alerts)}]: {'; '.join(alerts) if alerts else 'none'}",
+            f"# hotspots[{len(hotspots)}]: {'; '.join(hotspots) if hotspots else 'none'}",
+            f"# evolution: {trend}",
+            "# Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods",
         ]
         return lines
 
@@ -235,3 +254,73 @@ class MapExporter(Exporter):
                 if ext:
                     langs[ext.lstrip('.')] += 1
         return dict(langs)
+
+    @staticmethod
+    def _build_alerts(funcs: List[FunctionInfo]) -> List[str]:
+        """Build a compact list of top alerts for the header."""
+        alerts: List[Tuple[int, int, str]] = []
+        for fi in funcs:
+            display = fi.name if not fi.class_name else f"{fi.class_name}.{fi.name}"
+            cc = fi.complexity.get("cyclomatic_complexity", 0)
+            if cc >= 15:
+                severity = 0 if cc >= 25 else 1
+                alerts.append((severity, cc, f"CC {display}={cc}"))
+
+            fan_out = len(set(fi.calls))
+            if fan_out >= 10:
+                severity = 0 if fan_out >= 20 else 1
+                alerts.append((severity, fan_out, f"fan-out {display}={fan_out}"))
+
+        alerts.sort(key=lambda item: (item[0], -item[1], item[2]))
+        return [label for _, _, label in alerts[:5]]
+
+    @staticmethod
+    def _build_hotspots(funcs: List[FunctionInfo]) -> List[str]:
+        """Build a compact list of top fan-out hotspots for the header."""
+        spots: List[Tuple[int, str]] = []
+        for fi in funcs:
+            fan_out = len(set(fi.calls))
+            if fan_out >= 5:
+                display = fi.name if not fi.class_name else f"{fi.class_name}.{fi.name}"
+                spots.append((fan_out, f"{display} fan={fan_out}"))
+
+        spots.sort(key=lambda item: item[0], reverse=True)
+        return [label for _, label in spots[:5]]
+
+    @staticmethod
+    def _load_evolution_trend(evolution_path: Path, current_cc: float) -> str:
+        """Summarize the latest CC trend from the previous evolution.toon file."""
+        previous_cc = MapExporter._read_previous_cc_avg(evolution_path)
+        if previous_cc is None:
+            return "baseline"
+
+        delta = round(current_cc - previous_cc, 1)
+        if delta < 0:
+            direction = "improved"
+        elif delta > 0:
+            direction = "regressed"
+        else:
+            direction = "flat"
+
+        sign = "+" if delta > 0 else ""
+        return f"CC̄ {previous_cc:.1f}→{current_cc:.1f} ({direction} {sign}{delta:.1f})"
+
+    @staticmethod
+    def _read_previous_cc_avg(evolution_path: Path) -> Optional[float]:
+        """Read the previous CC average from an existing evolution.toon file."""
+        if not evolution_path.exists():
+            return None
+
+        try:
+            content = evolution_path.read_text(encoding="utf-8")
+        except Exception:
+            return None
+
+        for line in content.splitlines():
+            match = re.search(r"CC̄:\s*([0-9]+(?:\.[0-9]+)?)\s*→", line)
+            if match:
+                try:
+                    return float(match.group(1))
+                except ValueError:
+                    return None
+        return None

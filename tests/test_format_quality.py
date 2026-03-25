@@ -176,15 +176,15 @@ class TestAnalysisToon:
         assert "!!" in toon_content or "CC" in toon_content
 
     def test_detects_high_fan_out(self, toon_content):
-        """main() should appear in HOTSPOTS with high fan-out."""
-        assert "HOTSPOTS" in toon_content
-        assert "main" in toon_content
+        """High fan-out should be reflected in the retained sections."""
+        assert "COUPLING" in toon_content
+        assert "LAYERS" in toon_content
 
     def test_has_health_section(self, toon_content):
         assert "HEALTH[" in toon_content
 
     def test_has_refactor_section(self, toon_content):
-        assert "REFACTOR[" in toon_content
+        assert "REFACTOR[" not in toon_content
 
     def test_has_coupling_section(self, toon_content):
         assert "COUPLING" in toon_content
@@ -247,7 +247,7 @@ class TestProjectMap:
     @pytest.fixture
     def map_content(self, analysis_result, tmp_path):
         from code2llm.exporters.map_exporter import MapExporter
-        out = tmp_path / "project.map"
+        out = tmp_path / "map.toon"
         MapExporter().export(analysis_result, str(out))
         return out.read_text()
 
@@ -307,7 +307,7 @@ class TestCrossFormat:
         exporters = {
             "analysis.toon": ("code2llm.exporters.toon", "ToonExporter"),
             "flow.toon":     ("code2llm.exporters.flow_exporter", "FlowExporter"),
-            "project.map":   ("code2llm.exporters.map_exporter", "MapExporter"),
+            "map.toon":      ("code2llm.exporters.map_exporter", "MapExporter"),
             "context.md":    ("code2llm.exporters.llm_exporter", "LLMPromptExporter"),
         }
         for name, (mod_path, cls_name) in exporters.items():
@@ -331,14 +331,16 @@ class TestCrossFormat:
         assert flow_has >= 2, f"flow.toon should have ≥2 pipeline keywords, found {flow_has}"
 
     def test_analysis_toon_has_unique_health_info(self, all_formats):
-        """analysis.toon should have health diagnostics that others don't."""
+        """analysis.toon should keep the compact health/layers/coupling focus."""
         toon = all_formats.get("analysis.toon", "")
         assert "HEALTH[" in toon
-        assert "REFACTOR[" in toon
+        assert "LAYERS" in toon
+        assert "COUPLING" in toon
+        assert "REFACTOR[" not in toon
 
     def test_project_map_has_unique_structure_info(self, all_formats):
-        """project.map should have import graph that others don't."""
-        pmap = all_formats.get("project.map", "")
+        """map.toon should have the structural import/signature map."""
+        pmap = all_formats.get("map.toon", "")
         assert "i:" in pmap or "import" in pmap.lower()
 
     def test_formats_have_different_sizes(self, all_formats):

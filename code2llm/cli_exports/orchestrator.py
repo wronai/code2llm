@@ -25,7 +25,7 @@ def _run_exports(args, result, output_dir: Path, source_path: Optional[Path] = N
     """
     formats = [f.strip() for f in args.format.split(',')]
     if 'all' in formats:
-        formats = ['toon', 'map', 'flow', 'context', 'code2logic', 'yaml', 'json', 'mermaid', 'evolution', 'project-yaml']
+        formats = ['toon', 'map', 'context', 'yaml', 'json', 'mermaid', 'evolution']
 
     is_chunked = args.chunk if hasattr(args, 'chunk') else False
 

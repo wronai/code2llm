@@ -1,4 +1,4 @@
-# code2llm/flow | 824 func | 12 pipelines | 13 hub-types | 2026-03-07
+# code2llm/flow | 887 func | 12 pipelines | 14 hub-types | 2026-03-25
 
 PIPELINES[12] (Analysis:7, Core:1, Export:4):
   Cli_exports [Export]: ? → Path
@@ -14,14 +14,15 @@ PIPELINES[12] (Analysis:7, Core:1, Export:4):
               PURITY: 1/9 pure  BOTTLENECK: manage_toon_size(CC=8)
 
   Analysis [Analysis]: str → str
-              → analyze_file(file_path:str, module_name:str) → Dict CC=8    IO ▶
+              → analyze_file(file_path:str, module_name:str) → Dict CC=12   IO ▶
+              → _analyze_python(content:str, file_path:str, module_name:str) → Dict CC=6    cache
               → _analyze_ast(tree:ast.AST, file_path:str, module_name:str, content:str) → Dict CC=4    pure
               → _process_class(node:ast.ClassDef, file_path:str, module_name:str, result:Dict) → None CC=5    mutation
               → _process_function(node:ast.FunctionDef, file_path:str, module_name:str, result:Dict, class_name:Optional[str]) → None CC=12   mutation
               → _build_cfg(node:ast.FunctionDef, func_name:str, func_info:FunctionInfo, result:Dict) → None CC=1    mutation
               → _process_cfg_block(body:List[ast.stmt], entry:str, exit:str, func_name:str, func_info:FunctionInfo, result:Dict, depth:int, max_depth:int) → str CC=7    pure
               → _process_return_stmt(stmt:ast.Return, current:str, exit:str, func_name:str, func_info:FunctionInfo, result:Dict) → str CC=1    mutation ■
-              PURITY: 2/7 pure  BOTTLENECK: _process_function(CC=12)
+              PURITY: 2/8 pure  BOTTLENECK: analyze_file(CC=12)
 
   Analysis [Analysis]: FunctionInfo → Optional[str]
               → get_arg_types(fi:FunctionInfo) → List[Dict[str, str]] CC=1    pure ▶
@@ -58,6 +59,15 @@ PIPELINES[12] (Analysis:7, Core:1, Export:4):
               → _annotation_to_str(node:Optional[ast.expr]) → Optional[str] CC=6    pure
               → _ann_binop(node:ast.BinOp) → Optional[str] CC=3    pure ■
               PURITY: 5/6 pure  BOTTLENECK: _extract_from_node(CC=8)
+
+  Core [Core]: Path → GitIgnoreParser
+              → get_analysis_plan(project_path:Path) → List[SubProject] CC=2    pure ▶
+              → _split_hierarchically(project_path:Path) → List[SubProject] CC=8    mutation
+              → _split_level2_consolidated(level1_path:Path, project_path:Path, target_chunk_kb:int) → List[SubProject] CC=9    mutation
+              → collect_files_in_dir(dir_path:Path, project_path:Path) → List[Tuple[str, str]] CC=6    mutation
+              → _get_gitignore_parser(project_path:Path) → Optional[GitIgnoreParser] CC=2    pure
+              → load_gitignore_patterns(project_path:Path) → GitIgnoreParser CC=3    pure ■
+              PURITY: 3/6 pure  BOTTLENECK: _split_level2_consolidated(CC=9)
 
   Exporters [Export]: AnalysisResult → List[Dict[str, Any]]
               → export(result:AnalysisResult, output_path:str, **kwargs) → None CC=1    IO ▶
@@ -101,31 +111,23 @@ PIPELINES[12] (Analysis:7, Core:1, Export:4):
               → _get_call_name(node:ast.expr) → Optional[str] CC=4    pure ■
               PURITY: 4/5 pure  BOTTLENECK: _check_calls(CC=13)
 
-  Core [Core]: Path → bool
-              → get_analysis_plan(project_path:Path) → List[SubProject] CC=2    pure ▶
-              → _split_hierarchically(project_path:Path) → List[SubProject] CC=8    mutation
-              → _split_level2_consolidated(level1_path:Path, project_path:Path, target_chunk_kb:int) → List[SubProject] CC=9    mutation
-              → _collect_files_in_dir(dir_path:Path, project_path:Path) → List[Tuple[str, str]] CC=6    mutation
-              → _should_skip_file(file_str:str) → bool  CC=2    pure ■
-              PURITY: 2/5 pure  BOTTLENECK: _split_level2_consolidated(CC=9)
-
 
 TRANSFORMS (fan-out ≥10):
+  analyze_typescript_js(content:str, file_path:str, module_name:str, ext:str, stats:Dict) → Dict fan=41   !! mutation-heavy
+  analyze_php(content:str, file_path:str, module_name:str, stats:Dict) → Dict fan=35   !! mutation-heavy
+  analyze_ruby(content:str, file_path:str, module_name:str, stats:Dict) → Dict fan=30   !! mutation-heavy
+  analyze_java(content:str, file_path:str, module_name:str, stats:Dict) → Dict fan=29   !! side-effects
+  analyze_cpp(content:str, file_path:str, module_name:str, ext:str, stats:Dict) → Dict fan=26   !! side-effects
+  analyze_csharp(content:str, file_path:str, module_name:str, stats:Dict) → Dict fan=25   !! side-effects
+  analyze_rust(content:str, file_path:str, module_name:str, stats:Dict) → Dict fan=24   !! side-effects
+  analyze_go(content:str, file_path:str, module_name:str, stats:Dict) → Dict fan=22   !! side-effects
   _summarize_functions(nodes:Dict[int, Dict[str, Any]], limit_decisions:int, limit_calls:int) → Dict[str, FuncSummary] fan=21   !! side-effects
+  analyze_project(project_path:str) → AnalysisResult      fan=19   PIPELINE:ProjectAnalyzer.entry
   run_benchmark() → Dict                                  fan=18   fan=18
-  analyze_project(project_path:str) → AnalysisResult      fan=18   PIPELINE:ProjectAnalyzer.entry
+  _build_project_yaml(result:AnalysisResult, prev_evolution:List[Dict]) → Dict[str, Any] fan=18   PIPELINE:ProjectYAMLExporter.entry
   export(result:AnalysisResult, output_path:str, **kwargs) → None fan=18   PIPELINE:ToonExporter.entry
   process(query:str, language:str) → NLPPipelineResult    fan=17   PIPELINE:NLPPipeline.entry
   export_call_graph(result:AnalysisResult, output_path:str) → None fan=17   PIPELINE:MermaidExporter.entry
-  _build_project_yaml(result:AnalysisResult, prev_evolution:List[Dict]) → Dict[str, Any] fan=17   PIPELINE:ProjectYAMLExporter.entry
-  run_benchmark(project_path:str)                         fan=16   fan=16
-  evaluate_format(name:str, content:str, path:Optional[Path]) → FormatScore fan=16   fan=16
-  analyze_streaming(project_path:str, _output_callback:Optional[callable]) → Iterator[Dict] fan=16   PIPELINE:StreamingAnalyzer.entry
-  export(result:AnalysisResult, output_path:str) → None   fan=16   PIPELINE:ContextExporter.entry
-  main()                                                  fan=15   !! script-in-disguise
-  _build_refactoring(result:AnalysisResult, modules:List[Dict], hotspots:List[Dict]) → Dict[str, Any] fan=15   PIPELINE:ProjectYAMLExporter.entry
-  _export_simple_formats(args, result, output_dir:Path, formats) fan=15   fan=15
-  _export_chunked_results(args, result, output_dir:Path, source_path:Path, formats:list) fan=15   fan=15
 
 CONTRACTS:
   Pipeline: Cli_exports
@@ -178,7 +180,12 @@ CONTRACTS:
     analyze_file(file_path:str, module_name:str) → Dict
       IN:  file_path:str, module_name:str
       OUT: Dict
-      SIDE-EFFECT: IO(read_text); cache(self.cache.get, self.cache.put)
+      SIDE-EFFECT: IO(read_text)
+
+    _analyze_python(content:str, file_path:str, module_name:str) → Dict
+      IN:  content:str, file_path:str, module_name:str
+      OUT: Dict
+      SIDE-EFFECT: cache(self.cache.get, self.cache.put)
 
     _analyze_ast(tree:ast.AST, file_path:str, module_name:str, content:str) → Dict
       IN:  tree:ast.AST, file_path:str, module_name:str, content:str
@@ -313,6 +320,34 @@ CONTRACTS:
       IN:  node:ast.BinOp
       OUT: Optional[str]
 
+  Pipeline: Core
+    get_analysis_plan(project_path:Path) → List[SubProject]
+      IN:  project_path:Path
+      OUT: List[SubProject]
+
+    _split_hierarchically(project_path:Path) → List[SubProject]
+      IN:  project_path:Path
+      OUT: List[SubProject]
+      SIDE-EFFECT: pure
+
+    _split_level2_consolidated(level1_path:Path, project_path:Path, target_chunk_kb:int) → List[SubProject]
+      IN:  level1_path:Path, project_path:Path, target_chunk_kb:int
+      OUT: List[SubProject]
+      SIDE-EFFECT: pure
+
+    collect_files_in_dir(dir_path:Path, project_path:Path) → List[Tuple[str, str]]
+      IN:  dir_path:Path, project_path:Path
+      OUT: List[Tuple[str, str]]
+      SIDE-EFFECT: pure
+
+    _get_gitignore_parser(project_path:Path) → Optional[GitIgnoreParser]
+      IN:  project_path:Path
+      OUT: Optional[GitIgnoreParser]
+
+    load_gitignore_patterns(project_path:Path) → GitIgnoreParser
+      IN:  project_path:Path
+      OUT: GitIgnoreParser
+
   Pipeline: Exporters
     export(result:AnalysisResult, output_path:str, **kwargs) → None
       IN:  result:AnalysisResult, output_path:str, **kwargs
@@ -438,39 +473,15 @@ CONTRACTS:
       IN:  node:ast.expr
       OUT: Optional[str]
 
-  Pipeline: Core
-    get_analysis_plan(project_path:Path) → List[SubProject]
-      IN:  project_path:Path
-      OUT: List[SubProject]
 
-    _split_hierarchically(project_path:Path) → List[SubProject]
-      IN:  project_path:Path
-      OUT: List[SubProject]
-      SIDE-EFFECT: pure
-
-    _split_level2_consolidated(level1_path:Path, project_path:Path, target_chunk_kb:int) → List[SubProject]
-      IN:  level1_path:Path, project_path:Path, target_chunk_kb:int
-      OUT: List[SubProject]
-      SIDE-EFFECT: pure
-
-    _collect_files_in_dir(dir_path:Path, project_path:Path) → List[Tuple[str, str]]
-      IN:  dir_path:Path, project_path:Path
-      OUT: List[Tuple[str, str]]
-      SIDE-EFFECT: pure
-
-    _should_skip_file(file_str:str) → bool
-      IN:  file_str:str
-      OUT: bool
-
-
-DATA_TYPES (by cross-function usage) [749 annotated, 0 inferred / 824 functions]:
-  str                  consumed:328 produced:207  !! HUB-TYPE → split interface
-  str, Any             consumed:74  produced:64   !! HUB-TYPE → split interface
-  Path                 consumed:124 produced:10   !! HUB-TYPE → split interface
-  AnalysisResult       consumed:111 produced:12   !! HUB-TYPE → split interface
-  Dict                 consumed:79  produced:27   !! HUB-TYPE → split interface
-  int                  consumed:79  produced:18   !! HUB-TYPE → split interface
-  bool                 consumed:18  produced:35   !! HUB-TYPE → split interface
+DATA_TYPES (by cross-function usage) [790 annotated, 0 inferred / 887 functions]:
+  str                  consumed:377 produced:218  !! HUB-TYPE → split interface
+  Path                 consumed:134 produced:11   !! HUB-TYPE → split interface
+  str, Any             consumed:75  produced:67   !! HUB-TYPE → split interface
+  AnalysisResult       consumed:115 produced:20   !! HUB-TYPE → split interface
+  Dict                 consumed:93  produced:37   !! HUB-TYPE → split interface
+  int                  consumed:82  produced:18   !! HUB-TYPE → split interface
+  bool                 consumed:18  produced:36   !! HUB-TYPE → split interface
   dict                 consumed:15  produced:20   !! HUB-TYPE → split interface
   FunctionInfo         consumed:31  produced:1    !! HUB-TYPE → split interface
   list                 consumed:15  produced:14   !! HUB-TYPE → split interface
@@ -479,26 +490,26 @@ DATA_TYPES (by cross-function usage) [749 annotated, 0 inferred / 824 functions]
   ast.AST              consumed:18  produced:0    !! HUB-TYPE → split interface
   float                consumed:1   produced:13   output-heavy
   str, FunctionInfo    consumed:13  produced:0    !! HUB-TYPE → split interface
-  NLPPipelineResult    consumed:7   produced:4  
+  Config               consumed:11  produced:0    !! HUB-TYPE → split interface
   CodeSmell            consumed:3   produced:8  
-  SideEffectInfo       consumed:9   produced:1    input-heavy (read-only flow)
+  NLPPipelineResult    consumed:7   produced:4  
   ast.FunctionDef      consumed:8   produced:2  
-  IntentMatch          consumed:4   produced:5  
+  SideEffectInfo       consumed:9   produced:1    input-heavy (read-only flow)
 
   HUB TYPES (consumed ≥10):
-    str → 328 consumers → split into:
+    str → 377 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    str, Any → 74 consumers → split into:
+    Path → 134 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    Path → 124 consumers → split into:
+    str, Any → 75 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    AnalysisResult → 111 consumers → split into:
+    AnalysisResult → 115 consumers → split into:
       - StructureResult (modules, classes, functions)
       - MetricsResult (complexity, coupling)
       - FlowResult (call_graph, cfg, dfg)
-    Dict → 79 consumers → split into:
+    Dict → 93 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
-    int → 79 consumers → split into:
+    int → 82 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
     bool → 18 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
@@ -514,23 +525,25 @@ DATA_TYPES (by cross-function usage) [749 annotated, 0 inferred / 824 functions]
       - (analyze consumers to suggest sub-interfaces)
     str, FunctionInfo → 13 consumers → split into:
       - (analyze consumers to suggest sub-interfaces)
+    Config → 11 consumers → split into:
+      - (analyze consumers to suggest sub-interfaces)
 
 SIDE_EFFECTS:
-  IO:        load_yaml, analyze_class_differences, compare_basic_stats, compare_functions, compare_classes, compare_modules, validate_toon_completeness, main, load_previous, save_current
-  Cache:     EvolutionaryCache.put, generate, SideEffectDetector._check_calls, SideEffectDetector._heuristic_classify, ProjectAnalyzer.__init__, StreamingAnalyzer.__init__, FlowExporter._classify_side_effects, StreamingFileCache.put
-  Mutation:  extract_functions_from_yaml, extract_functions_from_toon, extract_classes_from_yaml, extract_classes_from_toon, extract_modules_from_yaml, extract_modules_from_toon, generate_badges, generate_format_quality_badges, generate_performance_badges, ShellEntityPreparer._apply_find_flags
-  Pure:      load_file, parse_evolution_metrics, print_results, build_report, _create_offline_scores, get_shield_url, parse_evolution_metrics, create_html, parse_version, format_version
+  IO:        read_readme, _print_header, _print_scores_table, _print_problems_detail, _print_pipelines_detail, _print_structural_features, _print_gap_analysis, save_report, load_previous, save_current
+  Cache:     EvolutionaryCache.put, generate, SideEffectDetector._check_calls, SideEffectDetector._heuristic_classify, ProjectAnalyzer.__init__, StreamingAnalyzer.__init__, FlowExporter._classify_side_effects, FileAnalyzer._analyze_python, StreamingFileCache.put
+  Mutation:  extract_functions_from_yaml, extract_functions_from_toon, extract_classes_from_yaml, extract_classes_from_toon, extract_modules_from_yaml, extract_modules_from_toon, ShellEntityPreparer._apply_find_flags, EntityPreparationPipeline.__init__, TemplateLoader.__init__, EvolutionaryCache.__init__
+  Pure:      print_results, build_report, parse_evolution_metrics, load_file, _detect_problems, _detect_pipelines, _detect_hub_types, _check_structural_features, evaluate_format, TemplateGenerator.__init__
 
   PIPELINE PURITY:
     Cli_exports     ░░░░ 11% pure
-    Analysis        █░░░ 28% pure
+    Analysis        █░░░ 25% pure
     Analysis        ███░ 83% pure
     Analysis        ███░ 83% pure
     Analysis        ██░░ 66% pure
     Analysis        ███░ 83% pure
+    Core            ██░░ 50% pure
     Exporters       █░░░ 33% pure
     Exporters       ███░ 83% pure
     Parsers         ██░░ 60% pure
     Analysis        ███░ 80% pure
     Analysis        ███░ 80% pure
-    Core            █░░░ 40% pure

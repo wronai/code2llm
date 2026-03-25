@@ -7,7 +7,6 @@ from ...core.models import AnalysisResult
 
 from .metrics import MetricsComputer
 from .renderer import ToonRenderer
-from .module_detail import ModuleDetailRenderer
 from .helpers import _is_excluded, _rel_path, _package_of, _package_of_module, _traits_from_cfg, _dup_file_set, _hotspot_description, _scan_line_counts
 
 # Re-export constants for backward compatibility
@@ -29,7 +28,6 @@ class ToonExporter:
     def __init__(self):
         self.metrics_computer = MetricsComputer()
         self.renderer = ToonRenderer()
-        self.detail_renderer = ModuleDetailRenderer()
 
     def export(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
         """Export analysis result to toon v2 format."""
@@ -40,21 +38,9 @@ class ToonExporter:
         sections.append("")
         sections.extend(self.renderer.render_health(ctx))
         sections.append("")
-        sections.extend(self.renderer.render_refactor(ctx))
-        sections.append("")
-        sections.extend(self.renderer.render_coupling(ctx))
-        sections.append("")
         sections.extend(self.renderer.render_layers(ctx))
         sections.append("")
-        sections.extend(self.renderer.render_duplicates(ctx))
-        sections.append("")
-        sections.extend(self.renderer.render_functions(ctx))
-        sections.append("")
-        sections.extend(self.renderer.render_hotspots(ctx))
-        sections.append("")
-        sections.extend(self.renderer.render_classes(ctx))
-        sections.append("")
-        sections.extend(self.detail_renderer.render_details(ctx))
+        sections.extend(self.renderer.render_coupling(ctx))
 
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, "w", encoding="utf-8") as f:

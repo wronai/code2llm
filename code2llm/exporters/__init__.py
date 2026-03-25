@@ -2,7 +2,7 @@
 
 Available exporters:
   - ToonExporter      → analysis.toon  (health diagnostics)
-  - MapExporter       → project.map    (structural map)
+  - MapExporter       → map.toon       (structural map + project header)
   - FlowExporter      → flow.toon      (data-flow: pipelines, contracts, types)
   - EvolutionExporter  → evolution.toon (ranked refactoring queue)
   - ContextExporter   → context.md     (LLM narrative)

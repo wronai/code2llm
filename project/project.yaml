@@ -3,32 +3,97 @@ project:
   name: code2llm
   repo: /home/tom/github/wronai/code2llm
   language: python
-  analyzed_at: '2026-03-07T18:48:14Z'
+  analyzed_at: '2026-03-25T11:43:45Z'
   tool: code2llm
   stats:
-    files: 76
-    lines: 20768
-    functions: 720
-    classes: 84
+    files: 97
+    lines: 25202
+    functions: 783
+    classes: 86
 health:
-  cc_avg: 4.4
-  critical_count: 54
+  cc_avg: 4.6
+  critical_count: 68
   critical_limit: 10
   duplicates: 1
   cycles: 0
   alerts:
+  - type: cc_exceeded
+    target: analyze_typescript_js
+    value: 41
+    limit: 15
+    severity: critical
+  - type: high_fan_out
+    target: analyze_typescript_js
+    value: 41
+    limit: 10
+    severity: critical
+  - type: high_fan_out
+    target: analyze_php
+    value: 35
+    limit: 10
+    severity: critical
+  - type: high_fan_out
+    target: analyze_ruby
+    value: 30
+    limit: 10
+    severity: critical
+  - type: cc_exceeded
+    target: analyze_php
+    value: 29
+    limit: 15
+    severity: critical
+  - type: high_fan_out
+    target: analyze_java
+    value: 29
+    limit: 10
+    severity: critical
+  - type: high_fan_out
+    target: analyze_cpp
+    value: 26
+    limit: 10
+    severity: critical
+  - type: high_fan_out
+    target: analyze_csharp
+    value: 25
+    limit: 10
+    severity: critical
+  - type: high_fan_out
+    target: analyze_rust
+    value: 24
+    limit: 10
+    severity: critical
+  - type: high_fan_out
+    target: analyze_go
+    value: 22
+    limit: 10
+    severity: critical
   - type: high_fan_out
     target: _summarize_functions
     value: 21
     limit: 10
     severity: critical
+  - type: cc_exceeded
+    target: analyze_cpp
+    value: 20
+    limit: 15
+    severity: error
+  - type: cc_exceeded
+    target: analyze_csharp
+    value: 20
+    limit: 15
+    severity: error
+  - type: high_fan_out
+    target: ProjectAnalyzer.analyze_project
+    value: 19
+    limit: 10
+    severity: error
   - type: high_fan_out
     target: run_benchmark
     value: 18
     limit: 10
     severity: error
   - type: high_fan_out
-    target: ProjectAnalyzer.analyze_project
+    target: ProjectYAMLExporter._build_project_yaml
     value: 18
     limit: 10
     severity: error
@@ -48,76 +113,71 @@ health:
     limit: 10
     severity: error
   - type: high_fan_out
-    target: ProjectYAMLExporter._build_project_yaml
-    value: 17
-    limit: 10
-    severity: error
-  - type: high_fan_out
     target: run_benchmark
     value: 16
     limit: 10
     severity: error
-  - type: high_fan_out
-    target: evaluate_format
-    value: 16
-    limit: 10
-    severity: error
-  - type: high_fan_out
-    target: StreamingAnalyzer.analyze_streaming
-    value: 16
-    limit: 10
-    severity: error
-  - type: high_fan_out
-    target: ContextExporter.export
-    value: 16
-    limit: 10
-    severity: error
-  - type: high_fan_out
-    target: main
-    value: 15
-    limit: 10
-    severity: error
-  - type: high_fan_out
-    target: ProjectYAMLExporter._build_refactoring
-    value: 15
-    limit: 10
-    severity: error
-  - type: high_fan_out
-    target: _export_simple_formats
-    value: 15
-    limit: 10
-    severity: error
-  - type: high_fan_out
-    target: _export_chunked_results
-    value: 15
-    limit: 10
-    severity: error
-  - type: cc_exceeded
-    target: PipelineDetector._resolve_callee
-    value: 18
-    limit: 15
-    severity: warning
-  - type: cc_exceeded
-    target: main
-    value: 17
-    limit: 15
-    severity: warning
-  - type: cc_exceeded
-    target: DataAnalyzer._find_data_pipelines
-    value: 17
-    limit: 15
-    severity: warning
-  - type: cc_exceeded
-    target: TypeInferenceEngine._infer_from_name
-    value: 17
-    limit: 15
-    severity: warning
-  - type: cc_exceeded
-    target: _export_chunked_results
-    value: 17
-    limit: 15
-    severity: warning
 modules:
+- path: code2llm/core/core/lang/typescript.py
+  lines: 234
+  classes: 0
+  methods: 1
+  cc_max: 41
+  inbound_deps: 1
+  exports:
+  - name: analyze_typescript_js
+    type: function
+    cc: 41
+    flag: split
+    fan_out: 41
+- path: code2llm/core/core/lang/php.py
+  lines: 185
+  classes: 0
+  methods: 1
+  cc_max: 29
+  inbound_deps: 1
+  exports:
+  - name: analyze_php
+    type: function
+    cc: 29
+    flag: split
+    fan_out: 35
+- path: code2llm/core/core/lang/cpp.py
+  lines: 151
+  classes: 0
+  methods: 1
+  cc_max: 20
+  inbound_deps: 1
+  exports:
+  - name: analyze_cpp
+    type: function
+    cc: 20
+    flag: split
+    fan_out: 26
+- path: code2llm/core/core/lang/csharp.py
+  lines: 153
+  classes: 0
+  methods: 1
+  cc_max: 20
+  inbound_deps: 1
+  exports:
+  - name: analyze_csharp
+    type: function
+    cc: 20
+    flag: split
+    fan_out: 25
+- path: code2llm/core/core/lang/ruby.py
+  lines: 186
+  classes: 0
+  methods: 2
+  cc_max: 19
+  inbound_deps: 1
+  exports:
+  - name: analyze_ruby
+    type: function
+    cc: 19
+    flag: split
+    fan_out: 30
 - path: code2llm/analysis/pipeline_detector.py
   lines: 486
   classes: 3
@@ -144,51 +204,8 @@ modules:
     - name: _resolve_callee
       cc: 18
       flag: split
-- path: code2llm/analysis/data_analysis.py
-  lines: 270
-  classes: 1
-  methods: 16
-  cc_max: 17
-  inbound_deps: 0
-  exports:
-  - name: DataAnalyzer
-    type: class
-    cc_avg: 8.2
-    methods:
-    - name: _find_data_pipelines
-      cc: 17
-      flag: split
-    - name: _find_state_patterns
-      cc: 12
-    - name: _find_event_flows
-      cc: 14
-      fan_out: 10
-    - name: _analyze_data_types
-      cc: 8
-      fan_out: 12
-    - name: _get_function_data_types
-      cc: 14
-    - name: _identify_process_patterns
-      cc: 9
-      fan_out: 10
-    - name: _analyze_optimization_opportunities
-      cc: 14
-- path: code2llm/analysis/type_inference.py
-  lines: 315
-  classes: 1
-  methods: 18
-  cc_max: 17
-  inbound_deps: 0
-  exports:
-  - name: TypeInferenceEngine
-    type: class
-    cc_avg: 4.3
-    methods:
-    - name: _infer_from_name
-      cc: 17
-      flag: split
 - path: code2llm/cli_exports/orchestrator.py
-  lines: 96
+  lines: 103
   classes: 0
   methods: 3
   cc_max: 17
@@ -248,23 +265,90 @@ modules:
     cc: 17
     flag: split
     fan_out: 14
-- path: code2llm/cli.py
-  lines: 511
+- path: code2llm/core/core/lang/base.py
+  lines: 118
   classes: 0
-  methods: 8
-  cc_max: 15
-  inbound_deps: 0
+  methods: 3
+  cc_max: 16
+  inbound_deps: 8
   exports:
-  - name: create_parser
+  - name: extract_function_body
     type: function
-    cc: 1
-  - name: main
+    cc: 10
+  - name: calculate_complexity_regex
+    type: function
+    cc: 6
+  - name: extract_calls_regex
+    type: function
+    cc: 16
+    flag: split
+    fan_out: 12
+- path: code2llm/cli_commands.py
+  lines: 220
+  classes: 0
+  methods: 6
+  cc_max: 15
+  inbound_deps: 1
+  exports:
+  - name: handle_special_commands
     type: function
     cc: 7
+  - name: handle_report_command
+    type: function
+    cc: 4
+  - name: validate_and_setup
+    type: function
+    cc: 3
+  - name: print_start_info
+    type: function
+    cc: 2
+  - name: validate_chunked_output
+    type: function
+    cc: 15
+    flag: split
+    fan_out: 14
   - name: generate_llm_context
     type: function
     cc: 3
     fan_out: 12
+- path: code2llm/core/core/lang/java.py
+  lines: 95
+  classes: 0
+  methods: 1
+  cc_max: 15
+  inbound_deps: 1
+  exports:
+  - name: analyze_java
+    type: function
+    cc: 15
+    flag: split
+    fan_out: 29
+- path: code2llm/analysis/data_analysis.py
+  lines: 286
+  classes: 1
+  methods: 18
+  cc_max: 14
+  inbound_deps: 0
+  exports:
+  - name: DataAnalyzer
+    type: class
+    cc_avg: 7.6
+    methods:
+    - name: _find_state_patterns
+      cc: 12
+    - name: _find_event_flows
+      cc: 14
+      fan_out: 10
+    - name: _analyze_data_types
+      cc: 8
+      fan_out: 12
+    - name: _get_function_data_types
+      cc: 14
+    - name: _identify_process_patterns
+      cc: 9
+      fan_out: 10
+    - name: _analyze_optimization_opportunities
+      cc: 14
 - path: code2llm/analysis/side_effects.py
   lines: 324
   classes: 2
@@ -283,14 +367,20 @@ modules:
       cc: 13
     - name: _heuristic_classify
       cc: 14
-- path: code2llm/cli_exports/formats.py
-  lines: 225
+- path: code2llm/cli_analysis.py
+  lines: 313
   classes: 0
-  methods: 10
+  methods: 11
+  cc_max: 14
+  inbound_deps: 1
+- path: code2llm/cli_exports/formats.py
+  lines: 242
+  classes: 0
+  methods: 11
   cc_max: 14
   inbound_deps: 3
 - path: code2llm/core/analyzer.py
-  lines: 317
+  lines: 328
   classes: 1
   methods: 9
   cc_max: 14
@@ -298,11 +388,11 @@ modules:
   exports:
   - name: ProjectAnalyzer
     type: class
-    cc_avg: 7.8
+    cc_avg: 8.0
     methods:
     - name: analyze_project
-      cc: 10
-      fan_out: 18
+      cc: 11
+      fan_out: 19
     - name: _build_call_graph
       cc: 14
       fan_out: 10
@@ -414,20 +504,23 @@ modules:
     cc: 9
     fan_out: 16
 - path: code2llm/exporters/map_exporter.py
-  lines: 225
+  lines: 237
   classes: 1
   methods: 13
   cc_max: 13
-  inbound_deps: 3
+  inbound_deps: 4
   exports:
   - name: MapExporter
     type: class
-    cc_avg: 4.8
+    cc_avg: 5.2
     methods:
     - name: _render_map_module
       cc: 13
+    - name: _detect_languages
+      cc: 8
+      fan_out: 10
 - path: code2llm/exporters/mermaid_exporter.py
-  lines: 251
+  lines: 253
   classes: 1
   methods: 12
   cc_max: 13
@@ -447,19 +540,19 @@ modules:
       cc: 13
       fan_out: 14
 - path: code2llm/exporters/project_yaml_exporter.py
-  lines: 486
+  lines: 513
   classes: 1
-  methods: 17
+  methods: 18
   cc_max: 13
   inbound_deps: 0
   exports:
   - name: ProjectYAMLExporter
     type: class
-    cc_avg: 6.5
+    cc_avg: 6.7
     methods:
     - name: _build_project_yaml
       cc: 12
-      fan_out: 17
+      fan_out: 18
     - name: _build_health
       cc: 7
       fan_out: 11
@@ -473,6 +566,9 @@ modules:
     - name: _build_refactoring
       cc: 13
       fan_out: 15
+    - name: _detect_primary_language
+      cc: 9
+      fan_out: 11
 - path: code2llm/exporters/readme_exporter.py
   lines: 501
   classes: 1
@@ -488,7 +584,7 @@ modules:
       cc: 13
       fan_out: 11
 - path: code2llm/generators/mermaid.py
-  lines: 477
+  lines: 485
   classes: 0
   methods: 16
   cc_max: 13
@@ -573,19 +669,33 @@ modules:
   cc_max: 12
   inbound_deps: 1
 - path: code2llm/core/core/file_analyzer.py
-  lines: 365
+  lines: 398
   classes: 1
-  methods: 16
+  methods: 17
   cc_max: 12
   inbound_deps: 0
   exports:
   - name: FileAnalyzer
     type: class
-    cc_avg: 4.5
+    cc_avg: 4.8
     methods:
+    - name: analyze_file
+      cc: 12
+      fan_out: 14
     - name: _process_function
       cc: 12
       fan_out: 12
+- path: code2llm/core/core/lang/generic.py
+  lines: 71
+  classes: 0
+  methods: 1
+  cc_max: 12
+  inbound_deps: 1
+  exports:
+  - name: analyze_generic
+    type: function
+    cc: 12
+    fan_out: 15
 - path: code2llm/core/streaming_analyzer.py
   lines: 181
   classes: 1
@@ -657,16 +767,19 @@ modules:
     - name: _render_exports
       cc: 11
 - path: code2llm/exporters/toon/renderer.py
-  lines: 357
+  lines: 385
   classes: 1
-  methods: 21
+  methods: 22
   cc_max: 11
   inbound_deps: 0
   exports:
   - name: ToonRenderer
     type: class
-    cc_avg: 5.6
+    cc_avg: 5.8
     methods:
+    - name: _detect_language_label
+      cc: 10
+      fan_out: 12
     - name: render_refactor
       cc: 11
     - name: render_classes
@@ -682,12 +795,46 @@ modules:
     type: function
     cc: 11
     fan_out: 11
-- path: code2llm/cli_analysis.py
-  lines: 282
+- path: code2llm/core/core/file_filter.py
+  lines: 58
+  classes: 1
+  methods: 3
+  cc_max: 10
+  inbound_deps: 0
+  exports:
+  - name: FastFileFilter
+    type: class
+    cc_avg: 7.7
+    methods:
+    - name: should_process
+      cc: 10
+- path: code2llm/core/core/lang/go_lang.py
+  lines: 87
   classes: 0
-  methods: 11
+  methods: 1
   cc_max: 10
   inbound_deps: 1
+  exports:
+  - name: analyze_go
+    type: function
+    cc: 10
+    fan_out: 22
+- path: code2llm/core/gitignore.py
+  lines: 139
+  classes: 1
+  methods: 6
+  cc_max: 10
+  inbound_deps: 2
+  exports:
+  - name: GitIgnoreParser
+    type: class
+    cc_avg: 5.6
+    methods:
+    - name: is_ignored
+      cc: 10
+  - name: load_gitignore_patterns
+    type: function
+    cc: 3
 - path: code2llm/core/toon_size_manager.py
   lines: 265
   classes: 0
@@ -708,19 +855,22 @@ modules:
     type: function
     cc: 8
 - path: code2llm/exporters/context_exporter.py
-  lines: 224
+  lines: 248
   classes: 1
-  methods: 14
+  methods: 15
   cc_max: 10
   inbound_deps: 0
   exports:
   - name: ContextExporter
     type: class
-    cc_avg: 4.8
+    cc_avg: 5.1
     methods:
     - name: export
       cc: 1
       fan_out: 16
+    - name: _detect_languages
+      cc: 7
+      fan_out: 10
     - name: _trace_flow
       cc: 10
       fan_out: 13
@@ -800,6 +950,27 @@ modules:
   - name: CallGraphExtractor
     type: class
     cc_avg: 4.2
+- path: code2llm/analysis/type_inference.py
+  lines: 321
+  classes: 1
+  methods: 19
+  cc_max: 9
+  inbound_deps: 0
+  exports:
+  - name: TypeInferenceEngine
+    type: class
+    cc_avg: 3.9
+- path: code2llm/core/core/lang/rust.py
+  lines: 94
+  classes: 0
+  methods: 1
+  cc_max: 9
+  inbound_deps: 1
+  exports:
+  - name: analyze_rust
+    type: function
+    cc: 9
+    fan_out: 24
 - path: code2llm/core/core/refactoring.py
   lines: 196
   classes: 1
@@ -818,7 +989,7 @@ modules:
       cc: 8
       fan_out: 12
 - path: code2llm/core/large_repo.py
-  lines: 596
+  lines: 488
   classes: 2
   methods: 20
   cc_max: 9
@@ -829,7 +1000,7 @@ modules:
     cc_avg: 0.0
   - name: HierarchicalRepoSplitter
     type: class
-    cc_avg: 4.6
+    cc_avg: 3.2
     methods:
     - name: _split_hierarchically
       cc: 8
@@ -842,7 +1013,7 @@ modules:
       fan_out: 10
     - name: _process_level1_files
       cc: 5
-      fan_out: 10
+      fan_out: 11
     - name: _merge_small_dirs
       cc: 7
       fan_out: 10
@@ -879,16 +1050,6 @@ modules:
   - name: PatternDetector
     type: class
     cc_avg: 4.6
-- path: code2llm/core/core/file_filter.py
-  lines: 44
-  classes: 1
-  methods: 3
-  cc_max: 8
-  inbound_deps: 0
-  exports:
-  - name: FastFileFilter
-    type: class
-    cc_avg: 6.0
 - path: code2llm/core/models.py
   lines: 194
   classes: 11
@@ -929,8 +1090,36 @@ modules:
   - name: AnalysisResult
     type: class
     cc_avg: 1.0
+- path: code2llm/core/repo_files.py
+  lines: 171
+  classes: 0
+  methods: 8
+  cc_max: 8
+  inbound_deps: 1
+  exports:
+  - name: should_skip_file
+    type: function
+    cc: 7
+  - name: collect_files_in_dir
+    type: function
+    cc: 6
+  - name: collect_root_files
+    type: function
+    cc: 3
+  - name: count_py_files
+    type: function
+    cc: 3
+  - name: contains_python_files
+    type: function
+    cc: 3
+  - name: get_level1_dirs
+    type: function
+    cc: 8
+  - name: calculate_priority
+    type: function
+    cc: 7
 - path: code2llm/exporters/toon/helpers.py
-  lines: 115
+  lines: 120
   classes: 0
   methods: 8
   cc_max: 8
@@ -1009,6 +1198,16 @@ modules:
     - name: _detect_feature_envy
       cc: 7
       fan_out: 10
+- path: code2llm/cli.py
+  lines: 69
+  classes: 0
+  methods: 1
+  cc_max: 7
+  inbound_deps: 0
+  exports:
+  - name: main
+    type: function
+    cc: 7
 - path: code2llm/exporters/article_view.py
   lines: 163
   classes: 1
@@ -1019,6 +1218,26 @@ modules:
   - name: ArticleViewGenerator
     type: class
     cc_avg: 2.8
+- path: code2llm/exporters/html_dashboard.py
+  lines: 504
+  classes: 1
+  methods: 14
+  cc_max: 7
+  inbound_deps: 0
+  exports:
+  - name: HTMLDashboardGenerator
+    type: class
+    cc_avg: 3.3
+    methods:
+    - name: _render
+      cc: 1
+      fan_out: 13
+    - name: _build_language_breakdown
+      cc: 7
+      fan_out: 10
+    - name: _assemble_html
+      cc: 6
+      fan_out: 11
 - path: code2llm/exporters/toon/module_detail.py
   lines: 162
   classes: 1
@@ -1097,20 +1316,20 @@ modules:
   methods: 8
   cc_max: 6
   inbound_deps: 1
-- path: code2llm/exporters/html_dashboard.py
-  lines: 351
+- path: code2llm/exporters/toon_view.py
+  lines: 157
   classes: 1
-  methods: 11
+  methods: 9
   cc_max: 6
   inbound_deps: 0
   exports:
-  - name: HTMLDashboardGenerator
+  - name: ToonViewGenerator
     type: class
-    cc_avg: 2.8
+    cc_avg: 2.7
     methods:
-    - name: _render
-      cc: 1
-      fan_out: 10
+    - name: _render_modules
+      cc: 6
+      fan_out: 11
 - path: code2llm/nlp/normalization.py
   lines: 122
   classes: 2
@@ -1158,16 +1377,20 @@ modules:
   - name: IncrementalAnalyzer
     type: class
     cc_avg: 2.8
-- path: code2llm/exporters/toon_view.py
-  lines: 125
+- path: code2llm/exporters/index_generator.py
+  lines: 619
   classes: 1
-  methods: 9
+  methods: 7
   cc_max: 5
   inbound_deps: 0
   exports:
-  - name: ToonViewGenerator
+  - name: IndexHTMLGenerator
     type: class
-    cc_avg: 2.4
+    cc_avg: 2.3
+    methods:
+    - name: _scan_files
+      cc: 5
+      fan_out: 13
 - path: badges/server.py
   lines: 110
   classes: 0
@@ -1275,26 +1498,93 @@ modules:
   - name: load_project_yaml
     type: function
     cc: 3
-- path: demo_langs/valid/sample.py
-  lines: 40
-  classes: 2
-  methods: 5
+- path: demo_langs/valid/sample.go
+  lines: 46
+  classes: 0
+  methods: 4
   cc_max: 3
   inbound_deps: 0
   exports:
-  - name: User
-    type: class
-    cc_avg: 0.0
-  - name: UserService
-    type: class
-    cc_avg: 1.8
-  - name: main
+  - name: NewUserService
+    type: function
+    cc: 1
+  - name: AddUser
+    type: function
+    cc: 1
+  - name: GetUser
+    type: function
+    cc: 3
+  - name: ProcessUsers
+    type: function
+    cc: 2
+- path: demo_langs/valid/sample.py
+  lines: 40
+  classes: 0
+  methods: 4
+  cc_max: 3
+  inbound_deps: 0
+  exports:
+  - name: add_user
+    type: function
+    cc: 1
+  - name: get_user
+    type: function
+    cc: 3
+  - name: process_users
     type: function
     cc: 2
 - path: code2llm/analysis/__init__.py
   lines: 33
   classes: 0
   methods: 1
+  cc_max: 2
+  inbound_deps: 0
+- path: code2llm/api.py
+  lines: 73
+  classes: 0
+  methods: 2
+  cc_max: 2
+  inbound_deps: 0
+  exports:
+  - name: analyze
+    type: function
+    cc: 2
+  - name: analyze_file
+    type: function
+    cc: 1
+- path: demo_langs/valid/sample.java
+  lines: 47
+  classes: 0
+  methods: 3
+  cc_max: 2
+  inbound_deps: 0
+  exports:
+  - name: getId
+    type: function
+    cc: 1
+  - name: getName
+    type: function
+    cc: 1
+  - name: main
+    type: function
+    cc: 2
+- path: demo_langs/valid/sample.php
+  lines: 44
+  classes: 2
+  methods: 4
+  cc_max: 2
+  inbound_deps: 2
+  exports:
+  - name: User
+    type: class
+    cc_avg: 1.0
+  - name: UserService
+    type: class
+    cc_avg: 1.3
+- path: demo_langs/valid/sample.rs
+  lines: 47
+  classes: 0
+  methods: 5
   cc_max: 2
   inbound_deps: 0
 - path: setup.py
@@ -1330,6 +1620,16 @@ modules:
     type: function
     cc: 1
   - name: create_ground_truth_project
+    type: function
+    cc: 1
+- path: code2llm/cli_parser.py
+  lines: 251
+  classes: 0
+  methods: 1
+  cc_max: 1
+  inbound_deps: 1
+  exports:
+  - name: create_parser
     type: function
     cc: 1
 - path: code2llm/exporters/base.py
@@ -1378,6 +1678,16 @@ modules:
   - name: NLPConfig
     type: class
     cc_avg: 1.0
+- path: demo_langs/valid/sample.ts
+  lines: 26
+  classes: 0
+  methods: 1
+  cc_max: 1
+  inbound_deps: 0
+  exports:
+  - name: service
+    type: function
+    cc: 1
 - path: benchmarks/benchmark_constants.py
   lines: 29
   classes: 0
@@ -1397,7 +1707,7 @@ modules:
   cc_max: 0
   inbound_deps: 0
 - path: code2llm/core/config.py
-  lines: 178
+  lines: 210
   classes: 6
   methods: 0
   cc_max: 0
@@ -1427,6 +1737,12 @@ modules:
   methods: 0
   cc_max: 0
   inbound_deps: 0
+- path: code2llm/core/core/lang/__init__.py
+  lines: 11
+  classes: 0
+  methods: 0
+  cc_max: 0
+  inbound_deps: 0
 - path: code2llm/core/streaming/__init__.py
   lines: 7
   classes: 0
@@ -1444,7 +1760,7 @@ modules:
     type: class
     cc_avg: 0.0
 - path: code2llm/exporters/__init__.py
-  lines: 53
+  lines: 55
   classes: 0
   methods: 0
   cc_max: 0
@@ -1485,40 +1801,55 @@ modules:
   methods: 0
   cc_max: 0
   inbound_deps: 0
+- path: project.sh
+  lines: 49
+  classes: 0
+  methods: 0
+  cc_max: 0
+  inbound_deps: 0
 hotspots:
+- name: analyze_typescript_js
+  fan_out: 41
+  note: Analysis pipeline, 41 stages
+- name: analyze_php
+  fan_out: 35
+  note: Analysis pipeline, 35 stages
+- name: analyze_ruby
+  fan_out: 30
+  note: Analysis pipeline, 30 stages
+- name: analyze_java
+  fan_out: 29
+  note: Analysis pipeline, 29 stages
+- name: analyze_cpp
+  fan_out: 26
+  note: Analysis pipeline, 26 stages
+- name: analyze_csharp
+  fan_out: 25
+  note: Analysis pipeline, 25 stages
+- name: analyze_rust
+  fan_out: 24
+  note: Analysis pipeline, 24 stages
+- name: analyze_go
+  fan_out: 22
+  note: Analysis pipeline, 22 stages
 - name: _summarize_functions
   fan_out: 21
   note: Orchestrates 21 calls
-- name: run_benchmark
-  fan_out: 18
-  note: Run the full format quality benchmark.
 - name: ProjectAnalyzer.analyze_project
-  fan_out: 18
-  note: Analysis pipeline, 18 stages
-- name: ToonExporter.export
-  fan_out: 18
-  note: Export with 18 outputs
-- name: NLPPipeline.process
-  fan_out: 17
-  note: Analysis pipeline, 17 stages
-- name: MermaidExporter.export_call_graph
-  fan_out: 17
-  note: Export with 17 outputs
-- name: ProjectYAMLExporter._build_project_yaml
-  fan_out: 17
-  note: Orchestrates 17 calls
-- name: run_benchmark
-  fan_out: 16
-  note: Run evolution analysis and print before/after table.
-- name: evaluate_format
-  fan_out: 16
-  note: 16-way dispatch
-- name: StreamingAnalyzer.analyze_streaming
-  fan_out: 16
-  note: Analysis pipeline, 16 stages
+  fan_out: 19
+  note: Analysis pipeline, 19 stages
 refactoring:
   priorities:
-  - action: Split god module code2llm/cli.py (511L, 0 classes)
+  - action: Split analyze_php (CC=29 → target CC<10)
+    impact: high
+    effort: low
+    module: php.py
+  - action: Split analyze_typescript_js (CC=41 → target CC<10)
+    impact: high
+    effort: low
+    module: typescript.py
+  - action: Split god module code2llm/exporters/project_yaml_exporter.py (513L, 1
+      classes)
     impact: high
     effort: high
   - action: Split god module code2llm/exporters/readme_exporter.py (501L, 1 classes)
@@ -1527,42 +1858,44 @@ refactoring:
   - action: Split god module code2llm/exporters/toon/metrics.py (501L, 1 classes)
     impact: high
     effort: high
-  - action: Split god module code2llm/core/large_repo.py (596L, 2 classes)
+  - action: Split god module code2llm/exporters/html_dashboard.py (504L, 1 classes)
+    impact: high
+    effort: high
+  - action: Split god module code2llm/exporters/index_generator.py (619L, 1 classes)
     impact: high
     effort: high
   - action: Split main (CC=17 → target CC<10)
     impact: medium
     effort: low
     module: validate_toon.py
-  - action: Split _validate_chunked_output (CC=15 → target CC<10)
+  - action: Split validate_chunked_output (CC=15 → target CC<10)
     impact: medium
     effort: low
-    module: cli.py
-  - action: Split DataAnalyzer._find_data_pipelines (CC=17 → target CC<10)
-    impact: medium
-    effort: low
-    module: data_analysis.py
+    module: cli_commands.py
   - action: Split PipelineDetector._resolve_callee (CC=18 → target CC<10)
     impact: medium
     effort: low
     module: pipeline_detector.py
-  - action: Split TypeInferenceEngine._infer_from_name (CC=17 → target CC<10)
-    impact: medium
-    effort: low
-    module: type_inference.py
   - action: Split _export_chunked_results (CC=17 → target CC<10)
     impact: medium
     effort: low
     module: orchestrator.py
-  - action: Reduce _summarize_functions fan-out (currently 21)
+  - action: Split extract_calls_regex (CC=16 → target CC<10)
     impact: medium
-    effort: medium
-  - action: Reduce run_benchmark fan-out (currently 18)
+    effort: low
+    module: base.py
+  - action: Split analyze_cpp (CC=20 → target CC<10)
     impact: medium
-    effort: medium
-  - action: Reduce ProjectAnalyzer.analyze_project fan-out (currently 18)
+    effort: low
+    module: cpp.py
+  - action: Split analyze_ruby (CC=19 → target CC<10)
     impact: medium
-    effort: medium
+    effort: low
+    module: ruby.py
+  - action: Split analyze_java (CC=15 → target CC<10)
+    impact: medium
+    effort: low
+    module: java.py
 evolution:
 - date: '2026-03-05'
   cc_avg: 4.4
@@ -1573,4 +1906,9 @@ evolution:
   cc_avg: 4.4
   critical: 54
   lines: 20768
+  note: Automated analysis
+- date: '2026-03-25'
+  cc_avg: 4.6
+  critical: 68
+  lines: 25202
   note: Automated analysis

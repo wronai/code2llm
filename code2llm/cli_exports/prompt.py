@@ -78,9 +78,9 @@ def _get_prompt_paths(source_path: Optional[Path], output_dir: Path) -> Tuple[st
 
 _MAIN_FILES = [
     ('analysis.toon', 'Health diagnostics - complexity metrics, god modules, coupling issues, refactoring priorities'),
+    ('map.toon', 'Structural map - files, sizes, imports, exports, signatures, project header'),
     ('context.md', 'LLM narrative - architecture summary, key entry points, process flows, public API surface'),
     ('evolution.toon', 'Refactoring queue - ranked actions by impact/effort, risks, metrics targets, history'),
-    ('project.toon', 'Project logic - compact module view from code2logic, file sizes, dependencies overview'),
     ('README.md', 'Documentation - complete guide to all generated files, usage examples, interpretation'),
 ]
 
@@ -121,7 +121,7 @@ def _format_size(size_bytes: int) -> str:
 
 def _get_missing_files(output_dir: Path) -> List[str]:
     """Return names of expected main files that are missing."""
-    return [name for name, _ in _MAIN_FILES if name != 'project.toon' and not (output_dir / name).exists()]
+    return [name for name, _ in _MAIN_FILES if not (output_dir / name).exists()]
 
 
 def _build_subprojects_section(subprojects: list, output_dir: Path, output_rel_path: str) -> List[str]:
@@ -169,9 +169,9 @@ def _analyze_generated_files(output_dir: Path, subprojects: list = None) -> dict
     """Analyze which files were generated and determine appropriate focus areas."""
     analysis = {
         'has_analysis_toon': (output_dir / 'analysis.toon').exists(),
+        'has_map_toon': (output_dir / 'map.toon').exists(),
         'has_context_md': (output_dir / 'context.md').exists(),
         'has_evolution_toon': (output_dir / 'evolution.toon').exists(),
-        'has_project_toon': (output_dir / 'project.toon').exists(),
         'has_readme': (output_dir / 'README.md').exists(),
         'has_yaml': (output_dir / 'analysis.yaml').exists(),
         'has_json': (output_dir / 'analysis.json').exists(),
@@ -194,15 +194,15 @@ def _build_dynamic_focus_areas(file_analysis: dict) -> List[str]:
     
     if file_analysis['has_analysis_toon']:
         focus_areas.append("1. **Code Health Analysis** - Review complexity metrics, god modules, coupling issues from analysis.toon")
+
+    if file_analysis['has_map_toon']:
+        focus_areas.append("2. **Structural Map** - Use map.toon to inspect imports, exports, signatures, and the project header")
     
     if file_analysis['has_evolution_toon']:
-        focus_areas.append("2. **Refactoring Priorities** - Examine ranked refactoring actions and risk assessment from evolution.toon")
+        focus_areas.append("3. **Refactoring Priorities** - Examine ranked refactoring actions and risk assessment from evolution.toon")
     
     if file_analysis['has_context_md']:
-        focus_areas.append("3. **Architecture Overview** - Understand main flows, entry points, and public API from context.md")
-    
-    if file_analysis['has_project_toon']:
-        focus_areas.append("4. **Project Structure** - Analyze module organization and dependencies from project.toon")
+        focus_areas.append("4. **Architecture Overview** - Understand main flows, entry points, and public API from context.md")
     
     if file_analysis['has_yaml'] or file_analysis['has_json']:
         focus_areas.append("5. **Structured Data** - Use machine-readable formats for automated analysis and metrics extraction")
@@ -222,20 +222,23 @@ def _build_dynamic_focus_areas(file_analysis: dict) -> List[str]:
 def _build_dynamic_tasks(file_analysis: dict) -> List[str]:
     """Build tasks based on available files."""
     tasks = [
-        "- Summarize the architecture and main flows.",
+        "- Summarize the architecture, main flows, and structural dependencies.",
         "- Identify the highest-risk areas and propose a refactoring plan.",
         "- If you suggest changes, keep behavior backward compatible and provide concrete steps.",
     ]
     
     if file_analysis['has_analysis_toon']:
-        tasks.append("- Highlight critical functions (CC ≥ 10) and god modules from analysis.toon.")
+        tasks.append("- Highlight critical functions (CC ≥ 10) and top problem areas from analysis.toon.")
+
+    if file_analysis['has_map_toon']:
+        tasks.append("- Cross-check imports, exports, and signatures against map.toon before proposing splits.")
     
     if file_analysis['has_evolution_toon']:
         tasks.append("- Prioritize refactoring actions by impact/effort ratio from evolution.toon.")
     
     if file_analysis['has_context_md']:
         tasks.append("- Validate entry points and public API surface match the architecture described.")
-    
+
     if file_analysis['is_chunked']:
         tasks.append("- Analyze cross-chunk dependencies and suggest consolidation strategies.")
     
@@ -267,12 +270,12 @@ def _build_prompt_footer(chunked: bool = False, file_analysis: dict = None) -> L
     if file_analysis['file_count'] > 0:
         lines.append("")
         lines.append("Analysis Strategy:")
-        if file_analysis['has_analysis_toon'] and file_analysis['has_evolution_toon']:
-            lines.append("- Start with analysis.toon for health metrics, then evolution.toon for action priorities")
+        if file_analysis['has_analysis_toon'] and file_analysis['has_map_toon']:
+            lines.append("- Start with analysis.toon for health metrics, then map.toon for structure and signatures")
+            if file_analysis['has_evolution_toon']:
+                lines.append("- Finish with evolution.toon for action priorities and next steps")
         elif file_analysis['has_context_md']:
             lines.append("- Use context.md as the primary reference for architectural understanding")
-        elif file_analysis['has_project_toon']:
-            lines.append("- Begin with project.toon for structural overview")
         
         if file_analysis['has_yaml']:
             lines.append("- Reference analysis.yaml for precise metrics and programmatic data")

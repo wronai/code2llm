@@ -1,5 +1,31 @@
 ## [Unreleased]
 
+## [0.5.56] - 2026-03-25
+
+### Docs
+- Update README.md
+- Update context.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_format_quality.py
+- Update tests/test_prompt_txt.py
+- Update tests/test_toon_v2.py
+
+### Other
+- Update analysis.toon
+- Update batch_1/analysis.toon
+- Update code2llm/cli_commands.py
+- Update code2llm/cli_exports/orchestrator.py
+- Update code2llm/cli_exports/prompt.py
+- Update code2llm/cli_parser.py
+- Update code2llm/exporters/__init__.py
+- Update code2llm/exporters/index_generator.py
+- Update code2llm/exporters/map_exporter.py
+- Update code2llm/exporters/readme_exporter.py
+- ... and 19 more files
+
 ## [0.5.55] - 2026-03-21
 
 ### Docs
