@@ -4,8 +4,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List
 
-from ...core.models import AnalysisResult, FunctionInfo
-from ...core.config import LANGUAGE_EXTENSIONS
+from code2llm.core.models import AnalysisResult, FunctionInfo
+from code2llm.core.config import LANGUAGE_EXTENSIONS
 
 from .helpers import _dup_file_set, _package_of
 

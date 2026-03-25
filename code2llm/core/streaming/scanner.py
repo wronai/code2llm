@@ -4,7 +4,7 @@ import ast
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from ...core.models import ClassInfo, FlowNode, FunctionInfo, ModuleInfo
+from code2llm.core.models import ClassInfo, FlowNode, FunctionInfo, ModuleInfo
 
 from .cache import StreamingFileCache
 from .prioritizer import FilePriority

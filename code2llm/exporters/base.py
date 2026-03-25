@@ -1,7 +1,7 @@
 """Base Exporter class for code2llm."""
 
 from abc import ABC, abstractmethod
-from ..core.models import AnalysisResult
+from code2llm.core.models import AnalysisResult
 
 
 class Exporter(ABC):

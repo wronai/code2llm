@@ -8,6 +8,7 @@ Format: header summary + M[] module list, D: details with i: imports,
 e: exports, signatures
 """
 
+import yaml
 from collections import defaultdict
 from datetime import datetime
 import re
@@ -15,8 +16,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from .base import Exporter
-from ..core.models import AnalysisResult, FunctionInfo, ClassInfo, ModuleInfo
-from ..core.config import LANGUAGE_EXTENSIONS
+from code2llm.core.models import AnalysisResult, FunctionInfo, ClassInfo, ModuleInfo
+from code2llm.core.config import LANGUAGE_EXTENSIONS
 
 # Patterns to exclude (venv, site-packages, etc.)
 EXCLUDE_PATTERNS = {

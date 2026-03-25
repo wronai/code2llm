@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any, Dict, Set
 
-from ...core.models import AnalysisResult, FunctionInfo
+from code2llm.core.models import AnalysisResult, FunctionInfo
 
 
 def _is_excluded(path: str) -> bool:

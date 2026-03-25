@@ -4,8 +4,8 @@ import yaml
 from collections import defaultdict
 from pathlib import Path
 from .base import Exporter
-from ..core.models import AnalysisResult
-from ..analysis.data_analysis import DataAnalyzer
+from code2llm.core.models import AnalysisResult
+from code2llm.analysis.data_analysis import DataAnalyzer
 
 
 class YAMLExporter(Exporter):

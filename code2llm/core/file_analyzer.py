@@ -12,8 +12,8 @@ from .models import (
     AnalysisResult, ClassInfo, FlowEdge, FlowNode,
     FunctionInfo, ModuleInfo
 )
-from ..analysis.dfg import DFGExtractor
-from ..analysis.call_graph import CallGraphExtractor
+from code2llm.analysis.dfg import DFGExtractor
+from code2llm.analysis.call_graph import CallGraphExtractor
 from .file_filter import FastFileFilter
 from .lang import (
     analyze_typescript_js, analyze_go, analyze_rust, analyze_java,

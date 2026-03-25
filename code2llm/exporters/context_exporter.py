@@ -8,8 +8,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 from .base import Exporter
-from ..core.models import AnalysisResult, FunctionInfo
-from ..core.config import LANGUAGE_EXTENSIONS
+from code2llm.core.models import AnalysisResult, FunctionInfo
+from code2llm.core.config import LANGUAGE_EXTENSIONS
 
 
 class ContextExporter(Exporter):

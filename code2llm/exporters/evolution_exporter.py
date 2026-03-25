@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from .base import Exporter
-from ..core.models import AnalysisResult, FunctionInfo
+from code2llm.core.models import AnalysisResult, FunctionInfo
 
 
 # Thresholds

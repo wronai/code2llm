@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 from .base import Exporter
-from ..core.models import AnalysisResult
+from code2llm.core.models import AnalysisResult
 
 
 class JSONExporter(Exporter):

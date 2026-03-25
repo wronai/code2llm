@@ -16,9 +16,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from .base import Exporter
-from ..core.models import AnalysisResult, FunctionInfo, ClassInfo
+from code2llm.core.models import AnalysisResult, FunctionInfo, ClassInfo
 from .toon.helpers import _is_excluded, _rel_path, _scan_line_counts
-from ..core.config import LANGUAGE_EXTENSIONS
+from code2llm.core.config import LANGUAGE_EXTENSIONS
 
 
 # Thresholds

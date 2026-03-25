@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Tuple
 
 from .config import Config, FAST_CONFIG, ALL_EXTENSIONS, LANGUAGE_EXTENSIONS
 from .models import AnalysisResult, FlowEdge, FlowNode, Pattern
-from ..analysis.call_graph import CallGraphExtractor
+from code2llm.analysis.call_graph import CallGraphExtractor
 
 from .file_cache import FileCache
 from .file_filter import FastFileFilter

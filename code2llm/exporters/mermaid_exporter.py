@@ -15,7 +15,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Optional
 from .base import Exporter
-from ..core.models import AnalysisResult
+from code2llm.core.models import AnalysisResult
 
 
 class MermaidExporter(Exporter):

@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from ..config import Config, FAST_CONFIG
+from code2llm.core.config import Config, FAST_CONFIG
 
 
 class IncrementalAnalyzer:

@@ -4,7 +4,7 @@ import yaml
 from pathlib import Path
 from typing import Any, Dict, List
 
-from ...core.models import AnalysisResult
+from code2llm.core.models import AnalysisResult
 
 from .metrics import MetricsComputer
 from .renderer import ToonRenderer
