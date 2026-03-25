@@ -9,21 +9,21 @@ flowchart TD
     code2llm_cli_exports["code2llm.cli_exports<br/>37 funcs"]
     code2llm_cli_parser["code2llm.cli_parser<br/>1 funcs"]
     code2llm_core["code2llm.core<br/>135 funcs"]
-    code2llm_exporters["code2llm.exporters<br/>246 funcs"]
+    code2llm_exporters["code2llm.exporters<br/>255 funcs"]
     code2llm_generators["code2llm.generators<br/>55 funcs"]
     code2llm_parsers["code2llm.parsers<br/>10 funcs"]
     validate_toon["validate_toon<br/>15 funcs"]
     code2llm_cli ==>|5| code2llm_cli_commands
     code2llm_cli_exports -->|3| code2llm_exporters
     validate_toon -->|2| code2llm_parsers
-    benchmarks_benchmark_format_quality -->|2| benchmarks_reporting
     code2llm_cli_analysis -->|2| code2llm_cli_exports
+    benchmarks_benchmark_format_quality -->|2| benchmarks_reporting
     code2llm_cli -->|1| code2llm_cli_parser
     code2llm_cli -->|1| code2llm_cli_analysis
     code2llm_cli -->|1| code2llm_cli_exports
+    code2llm_cli_analysis -->|1| code2llm_core
     benchmarks_benchmark_format_quality -->|1| benchmarks_format_evaluator
     benchmarks_benchmark_format_quality -->|1| benchmarks_project_generator
-    code2llm_cli_analysis -->|1| code2llm_core
     code2llm_cli_commands -->|1| code2llm_cli_exports
-    code2llm_cli_exports -->|1| code2llm_core
     code2llm_cli_exports -->|1| code2llm_generators
+    code2llm_cli_exports -->|1| code2llm_core

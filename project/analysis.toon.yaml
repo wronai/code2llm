@@ -1,0 +1,64 @@
+format: toon-v2-yaml
+timestamp: '2026-03-25'
+header:
+  files: 113
+  lines: 21044
+  functions: 917
+  avg_cc: 4.6
+  critical_count: 11
+  duplicates: 0
+  cycles: 0
+health:
+  count: 11
+  status: issues_found
+  issues:
+  - severity: yellow
+    code: CC
+    message: main CC=17 (limit:15)
+  - severity: yellow
+    code: CC
+    message: validate_chunked_output CC=15 (limit:15)
+  - severity: yellow
+    code: CC
+    message: _resolve_callee CC=18 (limit:15)
+  - severity: yellow
+    code: CC
+    message: export_flow_compact CC=23 (limit:15)
+  - severity: yellow
+    code: CC
+    message: export_flow_detailed CC=25 (limit:15)
+  - severity: yellow
+    code: CC
+    message: export_flow_full CC=23 (limit:15)
+  - severity: yellow
+    code: CC
+    message: _export_simple_formats CC=16 (limit:15)
+  - severity: yellow
+    code: CC
+    message: _export_mermaid CC=16 (limit:15)
+  - severity: yellow
+    code: CC
+    message: extract_calls_regex CC=16 (limit:15)
+  - severity: yellow
+    code: CC
+    message: _extract_declarations CC=65 (limit:15)
+  - severity: yellow
+    code: CC
+    message: analyze_ruby CC=17 (limit:15)
+refactor:
+  steps:
+  - action: split_methods
+    count: 11
+    reason: high_cc
+pipelines:
+  count: 0
+  pipelines: []
+layers:
+  count: 0
+  layers: []
+coupling:
+  count: 0
+  packages: []
+external:
+  count: 0
+  libraries: []
