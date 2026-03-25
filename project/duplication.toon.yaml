@@ -1,0 +1,99 @@
+# redup/duplication | 13 groups | 100f 21992L | 2026-03-25
+
+SUMMARY:
+  files_scanned: 100
+  total_lines:   21992
+  dup_groups:    13
+  dup_fragments: 30
+  saved_lines:   412
+  scan_ms:       3288
+
+DUPLICATES[13] (ranked by impact):
+  [dac0598af4ab17cb] !! STRU  create_core_py  L=88 N=4 saved=264 sim=1.00
+      benchmarks/project_generator.py:11-98  (create_core_py)
+      benchmarks/project_generator.py:101-130  (create_etl_py)
+      benchmarks/project_generator.py:133-173  (create_validation_py)
+      benchmarks/project_generator.py:176-203  (create_utils_py)
+  [35fc22b4154bf52d] ! STRU  analyze_csharp  L=40 N=2 saved=40 sim=1.00
+      code2llm/core/lang/csharp.py:10-49  (analyze_csharp)
+      code2llm/core/lang/java.py:10-50  (analyze_java)
+  [31cdc7ed05ed2ee2]   EXAC  _get_ast  L=16 N=2 saved=16 sim=1.00
+      code2llm/analysis/type_inference.py:129-144  (_get_ast)
+      code2llm/analysis/side_effects.py:284-299  (_get_ast)
+  [cda17a98c0c13954]   STRU  _expr_to_str  L=8 N=3 saved=16 sim=1.00
+      code2llm/analysis/dfg.py:209-216  (_expr_to_str)
+      code2llm/analysis/call_graph.py:204-211  (_expr_to_str)
+      code2llm/analysis/cfg.py:277-284  (_expr_to_str)
+  [3fadc971e0c6e871]   EXAC  _find_function_node  L=14 N=2 saved=14 sim=1.00
+      code2llm/analysis/type_inference.py:146-159  (_find_function_node)
+      code2llm/analysis/side_effects.py:301-313  (_find_function_node)
+  [5d307b974a3f2b02]   STRU  extract_functions_from_toon  L=11 N=2 saved=11 sim=1.00
+      validate_toon.py:42-52  (extract_functions_from_toon)
+      validate_toon.py:64-74  (extract_classes_from_toon)
+  [422d78dbe06f5996]   EXAC  generate  L=5 N=3 saved=10 sim=1.00
+      code2llm/exporters/article_view.py:14-18  (generate)
+      code2llm/exporters/toon_view.py:27-31  (generate)
+      code2llm/exporters/context_view.py:13-17  (generate)
+  [bcb3f9f38c88d7ef]   EXAC  _is_excluded  L=10 N=2 saved=10 sim=1.00
+      code2llm/exporters/flow_exporter.py:382-391  (_is_excluded)
+      code2llm/exporters/map_exporter.py:310-319  (_is_excluded)
+  [7aa67848d003c169]   STRU  extract_classes_from_yaml  L=9 N=2 saved=9 sim=1.00
+      validate_toon.py:54-62  (extract_classes_from_yaml)
+      validate_toon.py:120-128  (extract_modules_from_yaml)
+  [9e673b6a7113c738]   EXAC  dump_yaml  L=8 N=2 saved=8 sim=1.00
+      code2llm/generators/llm_task.py:233-240  (dump_yaml)
+      code2llm/generators/llm_flow.py:405-412  (dump_yaml)
+  [8ce608e75583dc78]   EXAC  _qualified_name  L=7 N=2 saved=7 sim=1.00
+      code2llm/analysis/call_graph.py:141-147  (_qualified_name)
+      code2llm/analysis/cfg.py:262-268  (_qualified_name)
+  [54d9f117655e9665]   EXAC  _get_cache_key  L=4 N=2 saved=4 sim=1.00
+      code2llm/core/file_cache.py:19-22  (_get_cache_key)
+      code2llm/core/streaming/cache.py:19-22  (_get_cache_key)
+  [c427db29782c2b80]   EXAC  visit_AsyncFunctionDef  L=3 N=2 saved=3 sim=1.00
+      code2llm/analysis/call_graph.py:108-110  (visit_AsyncFunctionDef)
+      code2llm/analysis/cfg.py:106-108  (visit_AsyncFunctionDef)
+
+REFACTOR[13] (ranked by priority):
+  [1] ○ extract_module     → benchmarks/utils/create_core_py.py
+      WHY: 4 occurrences of 88-line block across 1 files — saves 264 lines
+      FILES: benchmarks/project_generator.py
+  [2] ◐ extract_function   → code2llm/core/lang/utils/analyze_csharp.py
+      WHY: 2 occurrences of 40-line block across 2 files — saves 40 lines
+      FILES: code2llm/core/lang/csharp.py, code2llm/core/lang/java.py
+  [3] ○ extract_function   → code2llm/analysis/utils/_get_ast.py
+      WHY: 2 occurrences of 16-line block across 2 files — saves 16 lines
+      FILES: code2llm/analysis/side_effects.py, code2llm/analysis/type_inference.py
+  [4] ○ extract_function   → code2llm/analysis/utils/_expr_to_str.py
+      WHY: 3 occurrences of 8-line block across 3 files — saves 16 lines
+      FILES: code2llm/analysis/call_graph.py, code2llm/analysis/cfg.py, code2llm/analysis/dfg.py
+  [5] ○ extract_function   → code2llm/analysis/utils/_find_function_node.py
+      WHY: 2 occurrences of 14-line block across 2 files — saves 14 lines
+      FILES: code2llm/analysis/side_effects.py, code2llm/analysis/type_inference.py
+  [6] ○ extract_function   → utils/extract_functions_from_toon.py
+      WHY: 2 occurrences of 11-line block across 1 files — saves 11 lines
+      FILES: validate_toon.py
+  [7] ○ extract_function   → code2llm/exporters/utils/generate.py
+      WHY: 3 occurrences of 5-line block across 3 files — saves 10 lines
+      FILES: code2llm/exporters/article_view.py, code2llm/exporters/context_view.py, code2llm/exporters/toon_view.py
+  [8] ○ extract_function   → code2llm/exporters/utils/_is_excluded.py
+      WHY: 2 occurrences of 10-line block across 2 files — saves 10 lines
+      FILES: code2llm/exporters/flow_exporter.py, code2llm/exporters/map_exporter.py
+  [9] ○ extract_function   → utils/extract_classes_from_yaml.py
+      WHY: 2 occurrences of 9-line block across 1 files — saves 9 lines
+      FILES: validate_toon.py
+  [10] ○ extract_function   → code2llm/generators/utils/dump_yaml.py
+      WHY: 2 occurrences of 8-line block across 2 files — saves 8 lines
+      FILES: code2llm/generators/llm_flow.py, code2llm/generators/llm_task.py
+  [11] ○ extract_function   → code2llm/analysis/utils/_qualified_name.py
+      WHY: 2 occurrences of 7-line block across 2 files — saves 7 lines
+      FILES: code2llm/analysis/call_graph.py, code2llm/analysis/cfg.py
+  [12] ○ extract_function   → code2llm/core/utils/_get_cache_key.py
+      WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines
+      FILES: code2llm/core/file_cache.py, code2llm/core/streaming/cache.py
+  [13] ○ extract_function   → code2llm/analysis/utils/visit_AsyncFunctionDef.py
+      WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines
+      FILES: code2llm/analysis/call_graph.py, code2llm/analysis/cfg.py
+
+METRICS-TARGET:
+  dup_groups:  13 → 0
+  saved_lines: 412 lines recoverable

@@ -1,51 +1,51 @@
 # code2llm/evolution | 745 func | 83f | 2026-03-25
 
 NEXT[10] (ranked by impact):
-  [1] !! SPLIT-FUNC      _extract_declarations  CC=65  fan=45
+  [1] !! SPLIT           code2llm/exporters/mermaid_exporter.py
+      WHY: 637L, 1 classes, max CC=25
+      EFFORT: ~4h  IMPACT: 15925
+
+  [2] !! SPLIT           code2llm/exporters/project_yaml_exporter.py
+      WHY: 513L, 1 classes, max CC=13
+      EFFORT: ~4h  IMPACT: 6669
+
+  [3] !! SPLIT           code2llm/exporters/index_generator.py
+      WHY: 790L, 1 classes, max CC=5
+      EFFORT: ~4h  IMPACT: 3950
+
+  [4] !! SPLIT-FUNC      _extract_declarations  CC=65  fan=45
       WHY: CC=65 exceeds 15
       EFFORT: ~1h  IMPACT: 2925
 
-  [2] !! SPLIT-FUNC      MapExporter.export_to_yaml  CC=25  fan=23
+  [5] !! SPLIT-FUNC      MapExporter.export_to_yaml  CC=25  fan=23
       WHY: CC=25 exceeds 15
       EFFORT: ~1h  IMPACT: 575
 
-  [3] !! SPLIT-FUNC      MermaidExporter.export_flow_detailed  CC=25  fan=21
+  [6] !! SPLIT-FUNC      MermaidExporter.export_flow_detailed  CC=25  fan=21
       WHY: CC=25 exceeds 15
       EFFORT: ~1h  IMPACT: 525
 
-  [4] !  SPLIT-FUNC      MermaidExporter.export_flow_full  CC=23  fan=20
+  [7] !  SPLIT-FUNC      MermaidExporter.export_flow_full  CC=23  fan=20
       WHY: CC=23 exceeds 15
       EFFORT: ~1h  IMPACT: 460
 
-  [5] !  SPLIT-FUNC      MermaidExporter.export_flow_compact  CC=23  fan=18
+  [8] !  SPLIT-FUNC      MermaidExporter.export_flow_compact  CC=23  fan=18
       WHY: CC=23 exceeds 15
       EFFORT: ~1h  IMPACT: 414
 
-  [6] !  SPLIT-FUNC      analyze_ruby  CC=17  fan=19
+  [9] !  SPLIT-FUNC      analyze_ruby  CC=17  fan=19
       WHY: CC=17 exceeds 15
       EFFORT: ~1h  IMPACT: 323
 
-  [7] !  SPLIT-FUNC      _export_mermaid  CC=16  fan=16
+  [10] !  SPLIT-FUNC      _export_mermaid  CC=16  fan=16
       WHY: CC=16 exceeds 15
       EFFORT: ~1h  IMPACT: 256
 
-  [8] !  SPLIT-FUNC      main  CC=17  fan=14
-      WHY: CC=17 exceeds 15
-      EFFORT: ~1h  IMPACT: 238
-
-  [9] !  SPLIT-FUNC      validate_chunked_output  CC=15  fan=14
-      WHY: CC=15 exceeds 15
-      EFFORT: ~1h  IMPACT: 210
-
-  [10] !! SPLIT           code2llm/exporters/index_generator.py
-      WHY: 790L, 0 classes, max CC=0
-      EFFORT: ~4h  IMPACT: 0
-
 
 RISKS[3]:
-  ⚠ Splitting code2llm/exporters/index_generator.py may break 0 import paths
-  ⚠ Splitting code2llm/exporters/mermaid_exporter.py may break 0 import paths
-  ⚠ Splitting code2llm/exporters/project_yaml_exporter.py may break 0 import paths
+  ⚠ Splitting code2llm/exporters/index_generator.py may break 7 import paths
+  ⚠ Splitting code2llm/exporters/mermaid_exporter.py may break 18 import paths
+  ⚠ Splitting code2llm/exporters/project_yaml_exporter.py may break 18 import paths
 
 METRICS-TARGET:
   CC̄:          4.8 → ≤3.4
