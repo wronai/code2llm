@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.5.72] - 2026-03-25
+
+### Other
+- Update code2llm/cli_exports/formats.py
+
 ## [0.5.71] - 2026-03-25
 
 ### Docs

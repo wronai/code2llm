@@ -16,11 +16,11 @@ from code2llm.exporters import (
 
 
 def _export_evolution(args, result, output_dir: Path):
-    """Export evolution.toon.yaml format (plain text TOON)."""
+    """Export evolution.yaml format (plain text TOON)."""
     if 'evolution' not in [f.strip() for f in args.format.split(',')] and 'all' not in [f.strip() for f in args.format.split(',')]:
         return
     exporter = EvolutionExporter()
-    filepath = output_dir / 'evolution.toon.yaml'
+    filepath = output_dir / 'evolution.yaml'
     exporter.export(result, str(filepath))
     if args.verbose:
         print(f"  - EVOLUTION (refactoring queue): {filepath}")
@@ -100,16 +100,16 @@ def _run_report(args, project_yaml_path: str, output_dir: Path) -> None:
 def _export_simple_formats(args, result, output_dir: Path, formats):
     """Export toon, map, flow, context, yaml, json, project-yaml formats."""
     format_map = {
-        'toon': (ToonExporter, 'analysis.toon.yaml', 'TOON (diagnostics)'),
-        'map': (MapExporter, 'map.toon.yaml', 'MAP (structure)'),
-        'flow': (FlowExporter, 'flow.toon.yaml', 'FLOW (data-flow)'),
+        'toon': (ToonExporter, 'toon.yaml', 'TOON (diagnostics)'),
+        'map': (MapExporter, 'map.yaml', 'MAP (structure)'),
+        'flow': (FlowExporter, 'flow.yaml', 'FLOW (data-flow)'),
         'context': (ContextExporter, 'context.md', 'CONTEXT (LLM narrative)'),
     }
 
     for fmt, (exporter_cls, filename, label) in format_map.items():
         if fmt in formats:
             exporter = exporter_cls()
-            # Export as plain text TOON format but with .toon.yaml extension
+            # Export as plain text TOON format but with .yaml extension
             filepath = output_dir / filename
             exporter.export(result, str(filepath))
             if args.verbose:
