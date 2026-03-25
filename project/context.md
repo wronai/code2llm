@@ -63,25 +63,25 @@
 - **Classes**: 3
 - **File**: `pipeline_detector.py`
 
-### code2llm.exporters.mermaid_exporter
-- **Functions**: 18
-- **Classes**: 1
-- **File**: `mermaid_exporter.py`
-
 ### code2llm.exporters.project_yaml_exporter
 - **Functions**: 18
 - **Classes**: 1
 - **File**: `project_yaml_exporter.py`
 
-### code2llm.analysis.cfg
-- **Functions**: 17
+### code2llm.exporters.mermaid_exporter
+- **Functions**: 18
 - **Classes**: 1
-- **File**: `cfg.py`
+- **File**: `mermaid_exporter.py`
 
 ### code2llm.analysis.side_effects
 - **Functions**: 17
 - **Classes**: 2
 - **File**: `side_effects.py`
+
+### code2llm.analysis.cfg
+- **Functions**: 17
+- **Classes**: 1
+- **File**: `cfg.py`
 
 ### code2llm.core.file_analyzer
 - **Functions**: 17
@@ -176,6 +176,9 @@ Shows entry points, high-level modules, and critical path.
 > Export analysis result to toon v2 format.
 - **Calls**: self.metrics_computer.compute_all_metrics, sections.extend, sections.append, sections.extend, sections.append, sections.extend, sections.append, sections.extend
 
+### code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_project_yaml
+- **Calls**: code2llm.exporters.toon.helpers._scan_line_counts, self._build_modules, self._build_health, self._build_hotspots, self._build_refactoring, self._build_evolution, sum, line_counts.items
+
 ### code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph
 > Export simplified call graph — only connected nodes.
 - **Calls**: set, result.functions.items, sorted, set, self._write, self._module_of, result.functions.get, modules.items
@@ -183,9 +186,6 @@ Shows entry points, high-level modules, and critical path.
 ### code2llm.exporters.context_exporter.ContextExporter.export
 > Generate comprehensive LLM prompt with architecture description.
 - **Calls**: lines.extend, lines.extend, self._get_important_entries, lines.extend, lines.extend, lines.extend, lines.extend, lines.extend
-
-### code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_project_yaml
-- **Calls**: code2llm.exporters.toon.helpers._scan_line_counts, self._build_modules, self._build_health, self._build_hotspots, self._build_refactoring, self._build_evolution, sum, line_counts.items
 
 ### code2llm.exporters.html_dashboard.HTMLDashboardGenerator._assemble_html
 - **Calls**: self._render_evolution_section, self._render_evolution_script, None.join, proj.get, proj.get, proj.get, stats.get, stats.get
@@ -339,18 +339,18 @@ Strategy:
 - **Methods**: 18
 - **Key Methods**: code2llm.core.large_repo.HierarchicalRepoSplitter.__init__, code2llm.core.large_repo.HierarchicalRepoSplitter.get_analysis_plan, code2llm.core.large_repo.HierarchicalRepoSplitter._split_hierarchically, code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_l1_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._split_level2_consolidated, code2llm.core.large_repo.HierarchicalRepoSplitter._categorize_subdirs, code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files, code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._chunk_by_files
 
-### code2llm.exporters.mermaid_exporter.MermaidExporter
-> Export call graph to Mermaid format.
-- **Methods**: 18
-- **Key Methods**: code2llm.exporters.mermaid_exporter.MermaidExporter.export, code2llm.exporters.mermaid_exporter.MermaidExporter._render_subgraphs, code2llm.exporters.mermaid_exporter.MermaidExporter._render_edges, code2llm.exporters.mermaid_exporter.MermaidExporter._render_cc_styles, code2llm.exporters.mermaid_exporter.MermaidExporter._get_cc, code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph, code2llm.exporters.mermaid_exporter.MermaidExporter.export_compact, code2llm.exporters.mermaid_exporter.MermaidExporter._should_skip_module, code2llm.exporters.mermaid_exporter.MermaidExporter._is_entry_point, code2llm.exporters.mermaid_exporter.MermaidExporter._find_critical_path
-- **Inherits**: Exporter
-
 ### code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter
 > Export unified project.yaml — single source of truth for diagnostics.
 
 Combines data from analysis.t
 - **Methods**: 18
 - **Key Methods**: code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter.export, code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_project_yaml, code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_health, code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_alerts, code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._count_duplicates, code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_modules, code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._group_by_file, code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._compute_module_entry, code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._compute_inbound_deps, code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_exports
+- **Inherits**: Exporter
+
+### code2llm.exporters.mermaid_exporter.MermaidExporter
+> Export call graph to Mermaid format.
+- **Methods**: 18
+- **Key Methods**: code2llm.exporters.mermaid_exporter.MermaidExporter.export, code2llm.exporters.mermaid_exporter.MermaidExporter._render_subgraphs, code2llm.exporters.mermaid_exporter.MermaidExporter._render_edges, code2llm.exporters.mermaid_exporter.MermaidExporter._render_cc_styles, code2llm.exporters.mermaid_exporter.MermaidExporter._get_cc, code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph, code2llm.exporters.mermaid_exporter.MermaidExporter.export_compact, code2llm.exporters.mermaid_exporter.MermaidExporter._should_skip_module, code2llm.exporters.mermaid_exporter.MermaidExporter._is_entry_point, code2llm.exporters.mermaid_exporter.MermaidExporter._find_critical_path
 - **Inherits**: Exporter
 
 ### code2llm.analysis.pipeline_detector.PipelineDetector
@@ -420,27 +420,28 @@ Sections: PIPELINES, TRANSFORMS, CONTRACTS, DATA_TY
 - **Key Methods**: code2llm.exporters.flow_exporter.FlowExporter.__init__, code2llm.exporters.flow_exporter.FlowExporter.export, code2llm.exporters.flow_exporter.FlowExporter._build_context, code2llm.exporters.flow_exporter.FlowExporter._pipeline_to_dict, code2llm.exporters.flow_exporter.FlowExporter._compute_transforms, code2llm.exporters.flow_exporter.FlowExporter._transform_label, code2llm.exporters.flow_exporter.FlowExporter._compute_type_usage, code2llm.exporters.flow_exporter.FlowExporter._normalize_type, code2llm.exporters.flow_exporter.FlowExporter._type_label, code2llm.exporters.flow_exporter.FlowExporter._classify_side_effects
 - **Inherits**: Exporter
 
+### code2llm.analysis.call_graph.CallGraphExtractor
+> Extract call graph from AST.
+- **Methods**: 13
+- **Key Methods**: code2llm.analysis.call_graph.CallGraphExtractor.__init__, code2llm.analysis.call_graph.CallGraphExtractor.extract, code2llm.analysis.call_graph.CallGraphExtractor._calculate_metrics, code2llm.analysis.call_graph.CallGraphExtractor.visit_Import, code2llm.analysis.call_graph.CallGraphExtractor.visit_ImportFrom, code2llm.analysis.call_graph.CallGraphExtractor.visit_ClassDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_FunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_AsyncFunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_Call, code2llm.analysis.call_graph.CallGraphExtractor._qualified_name
+- **Inherits**: ast.NodeVisitor
+
 ### code2llm.nlp.intent_matching.IntentMatcher
 > Match queries to intents using fuzzy and keyword matching.
 - **Methods**: 13
 - **Key Methods**: code2llm.nlp.intent_matching.IntentMatcher.__init__, code2llm.nlp.intent_matching.IntentMatcher.match, code2llm.nlp.intent_matching.IntentMatcher._fuzzy_match, code2llm.nlp.intent_matching.IntentMatcher._keyword_match, code2llm.nlp.intent_matching.IntentMatcher._apply_context, code2llm.nlp.intent_matching.IntentMatcher._combine_matches, code2llm.nlp.intent_matching.IntentMatcher._resolve_multi_intent, code2llm.nlp.intent_matching.IntentMatcher._calculate_similarity, code2llm.nlp.intent_matching.IntentMatcher.step_2a_fuzzy_match, code2llm.nlp.intent_matching.IntentMatcher.step_2b_semantic_match
 
-### code2llm.nlp.normalization.QueryNormalizer
-> Normalize queries for consistent processing.
-- **Methods**: 13
-- **Key Methods**: code2llm.nlp.normalization.QueryNormalizer.__init__, code2llm.nlp.normalization.QueryNormalizer.normalize, code2llm.nlp.normalization.QueryNormalizer._unicode_normalize, code2llm.nlp.normalization.QueryNormalizer._lowercase, code2llm.nlp.normalization.QueryNormalizer._remove_punctuation, code2llm.nlp.normalization.QueryNormalizer._normalize_whitespace, code2llm.nlp.normalization.QueryNormalizer._remove_stopwords, code2llm.nlp.normalization.QueryNormalizer._tokenize, code2llm.nlp.normalization.QueryNormalizer.step_1a_lowercase, code2llm.nlp.normalization.QueryNormalizer.step_1b_remove_punctuation
-
 ## Data Transformation Functions
 
 Key functions that process and transform data:
 
-### validate_toon.validate_toon_completeness
-> Validate toon format structure.
-- **Output to**: print, print, bool, bool, bool
-
 ### benchmarks.benchmark_evolution.parse_evolution_metrics
 > Extract metrics from evolution.toon content.
 - **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, int
+
+### validate_toon.validate_toon_completeness
+> Validate toon format structure.
+- **Output to**: print, print, bool, bool, bool
 
 ### benchmarks.format_evaluator.evaluate_format
 > Oceń pojedynczy format względem ground truth.
@@ -473,6 +474,9 @@ Key functions that process and transform data:
 > Create CLI argument parser.
 - **Output to**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
 
+### demo_langs.valid.sample.UserService.process_users
+- **Output to**: print
+
 ### code2llm.cli_commands.validate_and_setup
 > Validate source path and setup output directory.
 - **Output to**: Path, Path, output_dir.mkdir, print, print
@@ -484,19 +488,20 @@ Checks:
 1. All chunks have required files (analysis.toon, contex
 - **Output to**: print, print, sorted, print, print
 
-### demo_langs.valid.sample.UserService.process_users
-- **Output to**: print
-
 ### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
 - **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
-
-### code2llm.analysis.cfg.CFGExtractor._format_except
-> Format except handler.
-- **Output to**: self._expr_to_str
 
 ### benchmarks.benchmark_format_quality._generate_format_outputs
 > Generate all format outputs and evaluate them.
 - **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
+
+### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
+> Process large directories with file-level chunking.
+- **Output to**: self._chunk_by_files, chunks.extend
+
+### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
+> Process Python files directly in level1 directory.
+- **Output to**: code2llm.core.repo_files._get_gitignore_parser, len, chunks.append, self._chunk_by_files, chunks.extend
 
 ### code2llm.core.repo_files._get_gitignore_parser
 > Load gitignore parser for project if available.
@@ -506,19 +511,15 @@ Checks:
 > Parse a single gitignore pattern into regex.
 - **Output to**: pattern.startswith, pattern.endswith, pattern.startswith, self._wildcard_to_regex, re.compile
 
+### code2llm.analysis.cfg.CFGExtractor._format_except
+> Format except handler.
+- **Output to**: self._expr_to_str
+
 ### code2llm.core.toon_size_manager._parse_modules
 > Parse module sections from TOON content.
 
 Returns list of (module_name, start_line, end_line).
 - **Output to**: content.split, enumerate, modules.append, line.startswith, line.endswith
-
-### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
-> Process large directories with file-level chunking.
-- **Output to**: self._chunk_by_files, chunks.extend
-
-### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
-> Process Python files directly in level1 directory.
-- **Output to**: code2llm.core.repo_files._get_gitignore_parser, len, chunks.append, self._chunk_by_files, chunks.extend
 
 ### code2llm.core.file_filter.FastFileFilter.should_process
 > Check if file should be processed.
