@@ -1,11 +1,11 @@
 format: evolution-toon-yaml
 timestamp: '2026-03-25'
 stats:
-  total_funcs: 741
+  total_funcs: 745
   total_files: 83
   avg_cc: 4.8
   max_cc: 65
-  high_cc_count: 12
+  high_cc_count: 11
   critical_count: 70
 refactoring:
   action_count: 13
@@ -94,11 +94,11 @@ metrics_target:
     current: 65
     target: 20
   god_modules:
-    current: 5
+    current: 6
     target: 0
   high_cc:
-    current: 12
-    target: 6
+    current: 11
+    target: 5
   hub_types:
     current: 0
     target: 0

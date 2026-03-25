@@ -6,10 +6,10 @@
 - **Primary Language**: python
 - **Languages**: python: 114, shell: 2, php: 1
 - **Analysis Mode**: static
-- **Total Functions**: 919
+- **Total Functions**: 923
 - **Total Classes**: 106
 - **Modules**: 117
-- **Entry Points**: 691
+- **Entry Points**: 695
 
 ## Architecture by Module
 
@@ -58,6 +58,11 @@
 - **Classes**: 1
 - **File**: `data_analysis.py`
 
+### code2llm.analysis.pipeline_detector
+- **Functions**: 18
+- **Classes**: 3
+- **File**: `pipeline_detector.py`
+
 ### code2llm.exporters.project_yaml_exporter
 - **Functions**: 18
 - **Classes**: 1
@@ -73,15 +78,15 @@
 - **Classes**: 2
 - **File**: `side_effects.py`
 
-### code2llm.analysis.cfg
-- **Functions**: 17
-- **Classes**: 1
-- **File**: `cfg.py`
-
 ### code2llm.core.file_analyzer
 - **Functions**: 17
 - **Classes**: 1
 - **File**: `file_analyzer.py`
+
+### code2llm.analysis.cfg
+- **Functions**: 17
+- **Classes**: 1
+- **File**: `cfg.py`
 
 ### code2llm.exporters.evolution_exporter
 - **Functions**: 17
@@ -105,11 +110,6 @@
 - **Functions**: 15
 - **Classes**: 3
 - **File**: `intent_matching.py`
-
-### code2llm.exporters.context_exporter
-- **Functions**: 15
-- **Classes**: 1
-- **File**: `context_exporter.py`
 
 ## Key Entry Points
 
@@ -179,13 +179,13 @@ Shows entry points, high-level modules, and critical path.
 ### code2llm.exporters.project_yaml_exporter.ProjectYAMLExporter._build_project_yaml
 - **Calls**: code2llm.exporters.toon.helpers._scan_line_counts, self._build_modules, self._build_health, self._build_hotspots, self._build_refactoring, self._build_evolution, sum, line_counts.items
 
-### code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph
-> Export simplified call graph — only connected nodes.
-- **Calls**: set, result.functions.items, sorted, set, self._write, self._module_of, result.functions.get, modules.items
-
 ### code2llm.exporters.context_exporter.ContextExporter.export
 > Generate comprehensive LLM prompt with architecture description.
 - **Calls**: lines.extend, lines.extend, self._get_important_entries, lines.extend, lines.extend, lines.extend, lines.extend, lines.extend
+
+### code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph
+> Export simplified call graph — only connected nodes.
+- **Calls**: set, result.functions.items, sorted, set, self._write, self._module_of, result.functions.get, modules.items
 
 ### code2llm.exporters.html_dashboard.HTMLDashboardGenerator._assemble_html
 - **Calls**: self._render_evolution_section, self._render_evolution_script, None.join, proj.get, proj.get, proj.get, stats.get, stats.get
@@ -353,6 +353,13 @@ Combines data from analysis.t
 - **Key Methods**: code2llm.exporters.mermaid_exporter.MermaidExporter.export, code2llm.exporters.mermaid_exporter.MermaidExporter._render_subgraphs, code2llm.exporters.mermaid_exporter.MermaidExporter._render_edges, code2llm.exporters.mermaid_exporter.MermaidExporter._render_cc_styles, code2llm.exporters.mermaid_exporter.MermaidExporter._get_cc, code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph, code2llm.exporters.mermaid_exporter.MermaidExporter.export_compact, code2llm.exporters.mermaid_exporter.MermaidExporter._should_skip_module, code2llm.exporters.mermaid_exporter.MermaidExporter._is_entry_point, code2llm.exporters.mermaid_exporter.MermaidExporter._find_critical_path
 - **Inherits**: Exporter
 
+### code2llm.analysis.pipeline_detector.PipelineDetector
+> Detect pipelines in a codebase using networkx graph analysis.
+
+Builds a call graph as a DiGraph, fin
+- **Methods**: 17
+- **Key Methods**: code2llm.analysis.pipeline_detector.PipelineDetector.__init__, code2llm.analysis.pipeline_detector.PipelineDetector.detect, code2llm.analysis.pipeline_detector.PipelineDetector._build_graph, code2llm.analysis.pipeline_detector.PipelineDetector._find_pipeline_paths, code2llm.analysis.pipeline_detector.PipelineDetector._longest_path_from, code2llm.analysis.pipeline_detector.PipelineDetector._longest_path_in_dag, code2llm.analysis.pipeline_detector.PipelineDetector._build_pipelines, code2llm.analysis.pipeline_detector.PipelineDetector._build_stages, code2llm.analysis.pipeline_detector.PipelineDetector._classify_domain, code2llm.analysis.pipeline_detector.PipelineDetector._derive_pipeline_name
+
 ### code2llm.analysis.cfg.CFGExtractor
 > Extract Control Flow Graph from AST.
 - **Methods**: 17
@@ -413,13 +420,6 @@ Sections: PIPELINES, TRANSFORMS, CONTRACTS, DATA_TY
 - **Key Methods**: code2llm.exporters.flow_exporter.FlowExporter.__init__, code2llm.exporters.flow_exporter.FlowExporter.export, code2llm.exporters.flow_exporter.FlowExporter._build_context, code2llm.exporters.flow_exporter.FlowExporter._pipeline_to_dict, code2llm.exporters.flow_exporter.FlowExporter._compute_transforms, code2llm.exporters.flow_exporter.FlowExporter._transform_label, code2llm.exporters.flow_exporter.FlowExporter._compute_type_usage, code2llm.exporters.flow_exporter.FlowExporter._normalize_type, code2llm.exporters.flow_exporter.FlowExporter._type_label, code2llm.exporters.flow_exporter.FlowExporter._classify_side_effects
 - **Inherits**: Exporter
 
-### code2llm.analysis.pipeline_detector.PipelineDetector
-> Detect pipelines in a codebase using networkx graph analysis.
-
-Builds a call graph as a DiGraph, fin
-- **Methods**: 13
-- **Key Methods**: code2llm.analysis.pipeline_detector.PipelineDetector.__init__, code2llm.analysis.pipeline_detector.PipelineDetector.detect, code2llm.analysis.pipeline_detector.PipelineDetector._build_graph, code2llm.analysis.pipeline_detector.PipelineDetector._find_pipeline_paths, code2llm.analysis.pipeline_detector.PipelineDetector._longest_path_from, code2llm.analysis.pipeline_detector.PipelineDetector._longest_path_in_dag, code2llm.analysis.pipeline_detector.PipelineDetector._build_pipelines, code2llm.analysis.pipeline_detector.PipelineDetector._build_stages, code2llm.analysis.pipeline_detector.PipelineDetector._classify_domain, code2llm.analysis.pipeline_detector.PipelineDetector._derive_pipeline_name
-
 ### code2llm.analysis.call_graph.CallGraphExtractor
 > Extract call graph from AST.
 - **Methods**: 13
@@ -435,24 +435,17 @@ Builds a call graph as a DiGraph, fin
 
 Key functions that process and transform data:
 
-### benchmarks.benchmark_evolution.parse_evolution_metrics
-> Extract metrics from evolution.toon content.
-- **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, int
-
 ### validate_toon.validate_toon_completeness
 > Validate toon format structure.
 - **Output to**: print, print, bool, bool, bool
 
-### benchmarks.format_evaluator.evaluate_format
-> Oceń pojedynczy format względem ground truth.
-- **Output to**: FormatScore, benchmarks.format_evaluator._detect_problems, sum, benchmarks.format_evaluator._detect_pipelines, sum
+### benchmarks.benchmark_evolution.parse_evolution_metrics
+> Extract metrics from evolution.toon content.
+- **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, int
 
-### scripts.bump_version.parse_version
-> Parse version string into tuple of (major, minor, patch)
-- **Output to**: version_str.split, tuple, int
-
-### scripts.bump_version.format_version
-> Format version tuple as string
+### benchmarks.benchmark_format_quality._generate_format_outputs
+> Generate all format outputs and evaluate them.
+- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
 ### scripts.benchmark_badges.parse_evolution_metrics
 > Extract metrics from evolution.toon content.
@@ -470,9 +463,20 @@ Key functions that process and transform data:
 > Generate badges from format quality scores.
 - **Output to**: enumerate, badges.append, sorted, badges.append, format_scores.items
 
+### scripts.bump_version.parse_version
+> Parse version string into tuple of (major, minor, patch)
+- **Output to**: version_str.split, tuple, int
+
+### scripts.bump_version.format_version
+> Format version tuple as string
+
 ### code2llm.cli_parser.create_parser
 > Create CLI argument parser.
 - **Output to**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
+
+### benchmarks.format_evaluator.evaluate_format
+> Oceń pojedynczy format względem ground truth.
+- **Output to**: FormatScore, benchmarks.format_evaluator._detect_problems, sum, benchmarks.format_evaluator._detect_pipelines, sum
 
 ### demo_langs.valid.sample.UserService.process_users
 - **Output to**: print
@@ -491,14 +495,6 @@ Checks:
 ### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
 - **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
 
-### benchmarks.benchmark_format_quality._generate_format_outputs
-> Generate all format outputs and evaluate them.
-- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
-
-### code2llm.analysis.cfg.CFGExtractor._format_except
-> Format except handler.
-- **Output to**: self._expr_to_str
-
 ### code2llm.core.repo_files._get_gitignore_parser
 > Load gitignore parser for project if available.
 - **Output to**: code2llm.core.gitignore.load_gitignore_patterns
@@ -507,6 +503,12 @@ Checks:
 > Parse a single gitignore pattern into regex.
 - **Output to**: pattern.startswith, pattern.endswith, pattern.startswith, self._wildcard_to_regex, re.compile
 
+### code2llm.core.toon_size_manager._parse_modules
+> Parse module sections from TOON content.
+
+Returns list of (module_name, start_line, end_line).
+- **Output to**: content.split, enumerate, modules.append, line.startswith, line.endswith
+
 ### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
 > Process large directories with file-level chunking.
 - **Output to**: self._chunk_by_files, chunks.extend
@@ -514,12 +516,6 @@ Checks:
 ### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
 > Process Python files directly in level1 directory.
 - **Output to**: code2llm.core.repo_files._get_gitignore_parser, len, chunks.append, self._chunk_by_files, chunks.extend
-
-### code2llm.core.toon_size_manager._parse_modules
-> Parse module sections from TOON content.
-
-Returns list of (module_name, start_line, end_line).
-- **Output to**: content.split, enumerate, modules.append, line.startswith, line.endswith
 
 ### code2llm.core.file_filter.FastFileFilter.should_process
 > Check if file should be processed.
@@ -536,6 +532,10 @@ Returns list of (module_name, start_line, end_line).
 ### code2llm.core.file_analyzer.FileAnalyzer._process_cfg_block
 > Process a block of statements for CFG with depth limiting.
 - **Output to**: None.append, isinstance, None.append, FlowEdge, self._process_if_stmt
+
+### code2llm.core.file_analyzer.FileAnalyzer._process_if_stmt
+> Process if statement for CFG.
+- **Output to**: FlowNode, func_info.cfg_nodes.append, None.append, self._process_cfg_block, FlowNode
 
 ## Behavioral Patterns
 
@@ -582,15 +582,15 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.exporters.mermaid_exporter.MermaidExporter.export_compact` - 26 calls
 - `code2llm.exporters.toon.ToonExporter.export` - 26 calls
 - `benchmarks.benchmark_evolution.parse_evolution_metrics` - 25 calls
-- `code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph` - 25 calls
 - `code2llm.exporters.context_exporter.ContextExporter.export` - 25 calls
+- `code2llm.exporters.mermaid_exporter.MermaidExporter.export_call_graph` - 25 calls
 - `validate_toon.compare_functions` - 24 calls
 - `code2llm.generators.mermaid.generate_single_png` - 24 calls
 - `scripts.benchmark_badges.main` - 23 calls
 - `code2llm.exporters.evolution_exporter.EvolutionExporter.export` - 23 calls
 - `code2llm.exporters.flow_exporter.FlowExporter.export` - 23 calls
-- `benchmarks.format_evaluator.evaluate_format` - 22 calls
 - `benchmarks.benchmark_format_quality.run_benchmark` - 22 calls
+- `benchmarks.format_evaluator.evaluate_format` - 22 calls
 - `code2llm.exporters.evolution_exporter.EvolutionExporter.export_to_yaml` - 22 calls
 - `code2llm.cli_commands.generate_llm_context` - 21 calls
 - `code2llm.core.analyzer.ProjectAnalyzer.analyze_files` - 20 calls

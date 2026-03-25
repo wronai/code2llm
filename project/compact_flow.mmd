@@ -16,14 +16,14 @@ flowchart TD
     code2llm_cli ==>|5| code2llm_cli_commands
     code2llm_cli_exports -->|3| code2llm_exporters
     validate_toon -->|2| code2llm_parsers
-    code2llm_cli_analysis -->|2| code2llm_cli_exports
     benchmarks_benchmark_format_quality -->|2| benchmarks_reporting
+    code2llm_cli_analysis -->|2| code2llm_cli_exports
+    benchmarks_benchmark_format_quality -->|1| benchmarks_format_evaluator
+    benchmarks_benchmark_format_quality -->|1| benchmarks_project_generator
     code2llm_cli -->|1| code2llm_cli_parser
     code2llm_cli -->|1| code2llm_cli_analysis
     code2llm_cli -->|1| code2llm_cli_exports
     code2llm_cli_analysis -->|1| code2llm_core
     code2llm_cli_commands -->|1| code2llm_cli_exports
-    benchmarks_benchmark_format_quality -->|1| benchmarks_format_evaluator
-    benchmarks_benchmark_format_quality -->|1| benchmarks_project_generator
     code2llm_cli_exports -->|1| code2llm_core
     code2llm_cli_exports -->|1| code2llm_generators

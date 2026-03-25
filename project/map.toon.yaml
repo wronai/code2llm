@@ -3,8 +3,8 @@ project: code2llm
 timestamp: '2026-03-25'
 stats:
   files: 108
-  lines: 21011
-  functions: 815
+  lines: 21041
+  functions: 819
   languages:
     python: 105
     php: 1
@@ -527,7 +527,7 @@ modules:
       arity: 0
   functions: []
 - path: code2llm/analysis/pipeline_detector.py
-  lines: 486
+  lines: 506
   imports: []
   exports:
   - type: class
@@ -573,6 +573,14 @@ modules:
     - name: _get_exit_type
       arity: 1
     - name: _resolve_callee
+      arity: 3
+    - name: _strip_self_prefix
+      arity: 1
+    - name: _try_same_class_resolution
+      arity: 3
+    - name: _get_suffix_candidates
+      arity: 2
+    - name: _select_same_class_candidate
       arity: 3
   functions: []
 - path: code2llm/analysis/side_effects.py
@@ -735,7 +743,7 @@ modules:
     args: []
     returns: null
 - path: code2llm/cli_analysis.py
-  lines: 313
+  lines: 323
   imports: []
   exports:
   - type: function
