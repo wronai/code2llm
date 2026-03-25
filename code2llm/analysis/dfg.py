@@ -4,8 +4,8 @@ import ast
 from collections import defaultdict
 from typing import Set, Dict, List
 
-from ..core.config import Config
-from ..core.models import AnalysisResult, FlowEdge, DataFlow, Mutation
+from code2llm.core.config import Config
+from code2llm.core.models import AnalysisResult, FlowEdge, DataFlow, Mutation
 
 
 class DFGExtractor(ast.NodeVisitor):

@@ -1,7 +1,7 @@
 """Data Analysis logic for code2llm - extracted from YAMLExporter."""
 
 from typing import Any, Dict, List
-from ..core.models import AnalysisResult
+from code2llm.core.models import AnalysisResult
 
 
 _INPUT_INDICATORS = ['parse', 'load', 'read', 'fetch', 'get', 'input', 'receive', 'extract']

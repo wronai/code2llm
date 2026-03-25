@@ -267,4 +267,11 @@ Strategy Options (--strategy):
         help='Include examples/, benchmarks/, demo_langs/, tests/ in flow diagrams'
     )
 
+    # Toon YAML export option
+    parser.add_argument(
+        '--toon-yaml',
+        action='store_true',
+        help='Export TOON format as YAML (analysis.toon.yaml) instead of plain text'
+    )
+
     return parser

@@ -14,7 +14,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
-from ..core.models import FunctionInfo
+from code2llm.core.models import FunctionInfo
 
 logger = logging.getLogger(__name__)
 

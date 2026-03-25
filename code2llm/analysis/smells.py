@@ -1,6 +1,6 @@
 """Detection of code smells using analysis metrics."""
 from typing import List, Dict, Any
-from ..core.models import AnalysisResult, CodeSmell
+from code2llm.core.models import AnalysisResult, CodeSmell
 
 class SmellDetector:
     """Detect code smells from analysis results."""

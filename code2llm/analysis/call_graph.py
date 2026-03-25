@@ -3,8 +3,8 @@
 import ast
 from typing import Optional, Set, List, Dict
 
-from ..core.config import Config
-from ..core.models import AnalysisResult, FlowEdge
+from code2llm.core.config import Config
+from code2llm.core.models import AnalysisResult, FlowEdge
 
 
 class CallGraphExtractor(ast.NodeVisitor):

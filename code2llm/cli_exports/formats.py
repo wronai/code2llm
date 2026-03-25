@@ -99,6 +99,9 @@ def _run_report(args, project_yaml_path: str, output_dir: Path) -> None:
 
 def _export_simple_formats(args, result, output_dir: Path, formats):
     """Export toon, map, flow, context, yaml, json, project-yaml formats."""
+    # Check if toon-yaml mode is enabled
+    toon_yaml_mode = getattr(args, 'toon_yaml', False)
+
     format_map = {
         'toon': ('analysis.toon', ToonExporter, 'TOON (diagnostics)'),
         'map': ('map.toon', MapExporter, 'MAP (structure + header)'),
@@ -109,10 +112,17 @@ def _export_simple_formats(args, result, output_dir: Path, formats):
     for fmt, (filename, exporter_cls, label) in format_map.items():
         if fmt in formats:
             exporter = exporter_cls()
-            filepath = output_dir / filename
-            exporter.export(result, str(filepath))
-            if args.verbose:
-                print(f"  - {label}: {filepath}")
+            # Handle toon-yaml mode
+            if fmt == 'toon' and toon_yaml_mode:
+                filepath = output_dir / 'analysis.toon.yaml'
+                exporter.export_to_yaml(result, str(filepath))
+                if args.verbose:
+                    print(f"  - TOON-YAML (diagnostics): {filepath}")
+            else:
+                filepath = output_dir / filename
+                exporter.export(result, str(filepath))
+                if args.verbose:
+                    print(f"  - {label}: {filepath}")
 
     # Unified project.yaml (single source of truth)
     if 'project-yaml' in formats or 'all' in formats:

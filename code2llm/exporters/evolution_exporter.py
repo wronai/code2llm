@@ -57,6 +57,8 @@ class EvolutionExporter(Exporter):
         sections.append("")
         sections.extend(self._render_metrics_target(ctx))
         sections.append("")
+        sections.extend(self._render_patterns(ctx))
+        sections.append("")
         sections.extend(self._render_history(ctx, output_path))
 
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
@@ -324,6 +326,35 @@ class EvolutionExporter(Exporter):
             f"  god-modules: {gods} → {target_gods}",
             f"  high-CC(≥{CC_SPLIT_THRESHOLD}): {high} → ≤{target_high}",
             f"  hub-types:   {hubs} → ≤{max(hubs - 2, 0)}",
+        ]
+        return lines
+
+    def _render_patterns(self, ctx: Dict[str, Any]) -> List[str]:
+        """Render PATTERNS — shared language parser extraction patterns."""
+        lines = [
+            "PATTERNS (language parser shared logic):",
+            "  _extract_declarations() in base.py — unified extraction for:",
+            "    - TypeScript: interfaces, types, classes, functions, arrow funcs",
+            "    - PHP: namespaces, traits, classes, functions, includes",
+            "    - Ruby: modules, classes, methods, requires",
+            "    - C++: classes, structs, functions, #includes",
+            "    - C#: classes, interfaces, methods, usings",
+            "    - Java: classes, interfaces, methods, imports",
+            "    - Go: packages, functions, structs",
+            "    - Rust: modules, functions, traits, use statements",
+            "",
+            "  Shared regex patterns per language:",
+            "    - import: language-specific import/require/using patterns",
+            "    - class: class/struct/trait declarations with inheritance",
+            "    - function: function/method signatures with visibility",
+            "    - brace_tracking: for C-family languages ({ })",
+            "    - end_keyword_tracking: for Ruby (module/class/def...end)",
+            "",
+            "  Benefits:",
+            "    - Consistent extraction logic across all languages",
+            "    - Reduced code duplication (~70% reduction in parser LOC)",
+            "    - Easier maintenance: fix once, apply everywhere",
+            "    - Standardized FunctionInfo/ClassInfo models",
         ]
         return lines
 

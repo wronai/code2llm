@@ -3,8 +3,8 @@
 import re
 from typing import Dict
 
-from ..models import ClassInfo, FunctionInfo, ModuleInfo
-from .base import extract_calls_regex, _extract_declarations
+from code2llm.core.models import ClassInfo, FunctionInfo, ModuleInfo
+from code2llm.core.lang.base import extract_calls_regex, _extract_declarations
 
 
 def _extract_ruby_body(content: str, start_line: int) -> str:

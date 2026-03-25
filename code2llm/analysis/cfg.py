@@ -4,8 +4,8 @@ import ast
 from collections import defaultdict
 from typing import Optional
 
-from ..core.config import Config
-from ..core.models import AnalysisResult, FlowNode, FlowEdge, FunctionInfo
+from code2llm.core.config import Config
+from code2llm.core.models import AnalysisResult, FlowNode, FlowEdge, FunctionInfo
 
 
 class CFGExtractor(ast.NodeVisitor):

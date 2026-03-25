@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 import networkx as nx
 
-from ..core.models import AnalysisResult, FunctionInfo
+from code2llm.core.models import AnalysisResult, FunctionInfo
 from .side_effects import SideEffectDetector, SideEffectInfo
 from .type_inference import TypeInferenceEngine
 

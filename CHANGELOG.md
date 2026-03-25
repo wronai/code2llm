@@ -1,5 +1,20 @@
 ## [Unreleased]
 
+## [0.5.67] - 2026-03-25
+
+### Other
+- Update code2llm/analysis/call_graph.py
+- Update code2llm/analysis/cfg.py
+- Update code2llm/analysis/coupling.py
+- Update code2llm/analysis/data_analysis.py
+- Update code2llm/analysis/dfg.py
+- Update code2llm/analysis/pipeline_detector.py
+- Update code2llm/analysis/side_effects.py
+- Update code2llm/analysis/smells.py
+- Update code2llm/analysis/type_inference.py
+- Update code2llm/cli_exports/formats.py
+- ... and 12 more files
+
 ## [0.5.66] - 2026-03-25
 
 ### Docs

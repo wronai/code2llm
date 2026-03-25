@@ -3,7 +3,7 @@
 import re
 from typing import Dict
 
-from ..models import ClassInfo, FunctionInfo, ModuleInfo
+from code2llm.core.models import ClassInfo, FunctionInfo, ModuleInfo
 
 
 def analyze_generic(content: str, file_path: str, module_name: str,

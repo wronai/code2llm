@@ -4,8 +4,8 @@ import re
 from pathlib import Path
 from typing import Dict
 
-from ..models import ClassInfo, FunctionInfo, ModuleInfo
-from .base import calculate_complexity_regex, extract_calls_regex
+from code2llm.core.models import ClassInfo, FunctionInfo, ModuleInfo
+from code2llm.core.lang.base import calculate_complexity_regex, extract_calls_regex
 
 
 def analyze_go(content: str, file_path: str, module_name: str,

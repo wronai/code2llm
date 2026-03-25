@@ -1,6 +1,6 @@
 """Analysis of coupling between modules."""
 from typing import Dict, List, Set, Any
-from ..core.models import AnalysisResult
+from code2llm.core.models import AnalysisResult
 
 class CouplingAnalyzer:
     """Analyze coupling between modules."""
