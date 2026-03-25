@@ -23,8 +23,8 @@ flowchart TD
     end
 
     subgraph Core
-        setup__read_readme["read_readme"]
         validate_toon__main["main"]
+        setup__read_readme["read_readme"]
         badges__server__index["index"]
         badges__server__generate_badges["generate_badges"]
         badges__server__get_badges["get_badges"]
@@ -42,7 +42,6 @@ flowchart TD
     end
 
     subgraph Exporters
-        code2llm__exporters__base__Exporter__export["export"]
         code2llm__exporters__readme_exporter__READMEExporter__export["export"]
         code2llm__READMEExporter___extract_insights["_extract_insights"]
         code2llm__READMEExporter___generate_readme_content["_generate_readme_content"]
@@ -50,14 +49,15 @@ flowchart TD
         code2llm__READMEExporter___build_core_files_section["_build_core_files_section"]
         code2llm__READMEExporter___build_llm_files_section["_build_llm_files_section"]
         code2llm__READMEExporter___build_viz_files_section["_build_viz_files_section"]
-        code2llm__exporters__json_exporter__JSONExporter__export["export"]
+        code2llm__exporters__base__Exporter__export["export"]
         code2llm__exporters__map_exporter__MapExporter__export["export"]
         code2llm__MapExporter__export_to_yaml["export_to_yaml"]
         code2llm__MapExporter___render_header["_render_header"]
         code2llm__MapExporter___render_stats_line["_render_stats_line"]
         code2llm__MapExporter___render_alerts_line["_render_alerts_line"]
         code2llm__MapExporter___render_hotspots_line["_render_hotspots_line"]
+        code2llm__MapExporter___render_module_list["_render_module_list"]
         ...["+224 more"]
     end
 
-    class setup__read_readme,validate_toon__main,badges__server__index,badges__server__generate_badges,badges__server__get_badges,code2llm__cli__main,code2llm__api__analyze,code2llm__api__analyze_file,code2llm__cli_analysis___run_analysis,code2llm__cli_analysis___run_standard_analysis entry
+    class validate_toon__main,setup__read_readme,badges__server__index,badges__server__generate_badges,badges__server__get_badges,code2llm__cli__main,code2llm__cli_analysis___run_analysis,code2llm__cli_analysis___run_standard_analysis,code2llm__cli_analysis___build_config,code2llm__cli_analysis___print_analysis_summary entry
