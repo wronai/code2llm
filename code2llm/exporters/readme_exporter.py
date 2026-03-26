@@ -233,6 +233,7 @@ grep -E "^  .*[0-9]{{3,}}$" project.toon.yaml | sort -t',' -k2 -n -r | head -10
 
 ### `prompt.txt` - Ready-to-Send LLM Prompt
 **Purpose**: Pre-formatted prompt listing all generated files for LLM conversation
+**Generation**: Written when `code2llm` runs with a source path and requests `-f all` (including `--no-chunk`) or `code2logic`
 **Contents**:
 - **Files section**: Lists all existing generated files with descriptions
 - **Source files section**: Highlights important source files such as `cli_exports/orchestrator.py`

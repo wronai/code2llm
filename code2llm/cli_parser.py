@@ -14,7 +14,7 @@ def create_parser() -> argparse.ArgumentParser:
         epilog='''
 Examples:
   code2llm ./                                       # Default: TOON diagnostics + README
-  code2llm ./ -f all -o ./docs                      # All core formats to ./docs/
+  code2llm ./ -f all -o ./docs --no-chunk           # All core formats + prompt.txt to ./docs/
   code2llm ./ -f toon,map,evolution                 # Consolidated diagnostics + structure + roadmap
   code2llm ./ -f context                            # LLM narrative (context.md)
   code2llm ./ --streaming --strategy deep -f all    # Deep streaming analysis, all core outputs
@@ -43,7 +43,7 @@ Format Options (-f):
   flow         — Data-flow analysis (flow.toon) — legacy, explicit opt-in
   code2logic   — Generate project logic (legacy project.toon) via external code2logic
   project-yaml — Legacy project.yaml export (single source of truth) + generated views
-  all          — Generate core formats (analysis.toon, map.toon.yaml, evolution.toon.yaml, context, mermaid)
+  all          — Generate core formats (analysis.toon, map.toon.yaml, evolution.toon.yaml, context, mermaid) plus prompt.txt in single-project runs
 
 Strategy Options (--strategy):
   quick     — Fast overview, fewer files analyzed

@@ -1,4 +1,4 @@
-# code2llm | 113f 21433L | python:105,shell:2,java:1 | 2026-03-26
+# code2llm | 113f 21434L | python:105,shell:2,php:1 | 2026-03-26
 # CC̄=4.6 | critical:10/932 | dups:0 | cycles:0
 
 HEALTH[10]:
@@ -17,15 +17,15 @@ REFACTOR[1]:
   1. split 10 high-CC methods  (CC>15)
 
 PIPELINES[637]:
-  [1] Src [read_readme]: read_readme
+  [1] Src [run_benchmark]: run_benchmark → load_previous
       PURITY: 100% pure
-  [2] Src [save_report]: save_report
+  [2] Src [read_readme]: read_readme
       PURITY: 100% pure
   [3] Src [main]: main → load_file → is_toon_file
       PURITY: 100% pure
-  [4] Src [run_benchmark]: run_benchmark → load_previous
+  [4] Src [save_report]: save_report
       PURITY: 100% pure
-  [5] Src [__init__]: __init__
+  [5] Src [main]: main → create_html → get_shield_url
       PURITY: 100% pure
 
 LAYERS:
@@ -36,7 +36,7 @@ LAYERS:
   │ !! pipeline_detector          506L  3C   18m  CC=13     ←0
   │ !! html_dashboard             504L  1C   14m  CC=7      ←0
   │ !! metrics                    501L  1C   27m  CC=12     ←0
-  │ readme_exporter            494L  1C    7m  CC=13     ←0
+  │ readme_exporter            495L  1C    7m  CC=13     ←0
   │ large_repo                 488L  2C   20m  CC=9      ←1
   │ mermaid                    485L  0C   16m  CC=13     ←1
   │ llm_flow                   472L  1C   24m  CC=14     ←0
@@ -148,9 +148,9 @@ LAYERS:
   │
   demo_langs/                     CC̄=1.5    ←in:0  →out:0
   │ sample.rs                   47L  1C    5m  CC=2      ←0
-  │ sample.java                 47L  2C    7m  CC=3      ←1
+  │ sample.java                 47L  2C    4m  CC=2      ←0
   │ sample.go                   46L  0C    4m  CC=3      ←0
-  │ sample.php                  44L  1C    1m  CC=1      ←0
+  │ sample.php                  44L  2C    4m  CC=2      ←2
   │ sample                      40L  1C    4m  CC=3      ←0
   │ sample.ts                   26L  1C    1m  CC=1      ←0
   │

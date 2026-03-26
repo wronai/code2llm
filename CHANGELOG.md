@@ -1,5 +1,22 @@
 ## [Unreleased]
 
+## [0.5.86] - 2026-03-26
+
+### Docs
+- Update README.md
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update code2llm/cli_parser.py
+- Update code2llm/exporters/readme_exporter.py
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/flow.mmd
+- Update project/index.html
+- Update project/map.toon.yaml
+
 ## [0.5.85] - 2026-03-26
 
 ### Docs
