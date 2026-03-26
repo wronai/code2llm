@@ -72,7 +72,8 @@ def _export_project_yaml(args, result, output_dir: Path):
 def _export_project_toon(args, result, output_dir: Path):
     """Export project.toon.yaml directly from the current analysis result."""
     project_yaml_exporter = ProjectYAMLExporter()
-    data = project_yaml_exporter._build_project_yaml(result, [])
+    prev_evolution = project_yaml_exporter._load_previous_evolution(output_dir / 'project.yaml')
+    data = project_yaml_exporter._build_project_yaml(result, prev_evolution)
 
     exporter = ToonViewGenerator()
     filepath = output_dir / 'project.toon.yaml'

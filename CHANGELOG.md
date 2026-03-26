@@ -1,5 +1,20 @@
 ## [Unreleased]
 
+## [0.5.88] - 2026-03-26
+
+### Docs
+- Update README.md
+
+### Test
+- Update tests/test_project_toon_export.py
+- Update tests/test_prompt_txt.py
+
+### Other
+- Update code2llm/cli_exports/formats.py
+- Update code2llm/cli_exports/prompt.py
+- Update code2llm/cli_parser.py
+- Update code2llm/exporters/readme_exporter.py
+
 ## [0.5.87] - 2026-03-26
 
 ### Docs

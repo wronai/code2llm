@@ -148,7 +148,7 @@ class TestPromptTxtGeneration:
         source_path = Path('/home/user/myproject')
         
         # Create all expected files
-        all_files = ['analysis.toon', 'map.toon.yaml', 'context.md', 'evolution.toon.yaml', 'README.md']
+        all_files = ['analysis.toon', 'map.toon.yaml', 'evolution.toon.yaml', 'project.toon.yaml', 'context.md', 'README.md']
         for f in all_files:
             (temp_output_dir / f).write_text('test')
         

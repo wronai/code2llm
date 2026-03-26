@@ -84,6 +84,7 @@ _MAIN_FILES = [
     ('analysis.toon', 'Health diagnostics - complexity metrics, god modules, coupling issues, refactoring priorities', ('analysis.toon', 'analysis.toon.yaml')),
     ('map.toon.yaml', 'Structural map - files, sizes, imports, exports, signatures, project header', ('map.toon.yaml',)),
     ('evolution.toon.yaml', 'Refactoring queue - ranked actions by impact/effort, risks, metrics targets, history', ('evolution.toon.yaml',)),
+    ('project.toon.yaml', 'Compact project overview - generated from project.yaml data', ('project.toon.yaml',)),
     ('context.md', 'LLM narrative - architecture summary and project context', ('context.md',)),
     ('README.md', 'Generated documentation - overview and usage guide', ('README.md',)),
 ]
@@ -242,6 +243,7 @@ def _analyze_generated_files(output_dir: Path, subprojects: list = None) -> dict
     analysis_file = _find_existing_prompt_file(output_dir, ('analysis.toon', 'analysis.toon.yaml'))
     map_file = _find_existing_prompt_file(output_dir, ('map.toon.yaml',))
     evolution_file = _find_existing_prompt_file(output_dir, ('evolution.toon.yaml',))
+    project_toon_file = _find_existing_prompt_file(output_dir, ('project.toon.yaml',))
     context_file = _find_existing_prompt_file(output_dir, ('context.md',))
     readme_file = _find_existing_prompt_file(output_dir, ('README.md',))
     project_logic_file = _find_existing_prompt_file(output_dir, ('project.toon', 'project/project.toon', 'project.toon.txt'))
@@ -255,6 +257,8 @@ def _analyze_generated_files(output_dir: Path, subprojects: list = None) -> dict
         'map_file': map_file or 'map.toon.yaml',
         'has_evolution_toon': evolution_file is not None,
         'evolution_file': evolution_file or 'evolution.toon.yaml',
+        'has_project_toon_yaml': project_toon_file is not None,
+        'project_toon_file': project_toon_file or 'project.toon.yaml',
         'has_context_md': context_file is not None,
         'context_file': context_file or 'context.md',
         'has_readme_md': readme_file is not None,
@@ -274,6 +278,7 @@ def _analyze_generated_files(output_dir: Path, subprojects: list = None) -> dict
         'has_analysis_toon',
         'has_map_toon',
         'has_evolution_toon',
+        'has_project_toon_yaml',
         'has_project_logic',
         'has_validation_toon',
         'has_duplication_toon',
@@ -292,6 +297,7 @@ def _build_dynamic_focus_areas(file_analysis: dict) -> List[str]:
     analysis_file = file_analysis.get('analysis_file', 'analysis.toon')
     map_file = file_analysis.get('map_file', 'map.toon.yaml')
     evolution_file = file_analysis.get('evolution_file', 'evolution.toon.yaml')
+    project_toon_file = file_analysis.get('project_toon_file', 'project.toon.yaml')
     project_logic_file = file_analysis.get('project_logic_file', 'project.toon')
     validation_file = file_analysis.get('validation_file', 'project/validation.toon.yaml')
     duplication_file = file_analysis.get('duplication_file', 'project/duplication.toon.yaml')
@@ -305,14 +311,17 @@ def _build_dynamic_focus_areas(file_analysis: dict) -> List[str]:
     if file_analysis['has_evolution_toon']:
         focus_areas.append(f"3. **Refactoring Priorities** - Examine ranked refactoring actions and risk assessment from {evolution_file}")
 
+    if file_analysis.get('has_project_toon_yaml'):
+        focus_areas.append(f"4. **Project Overview** - Review the compact project overview from {project_toon_file}")
+
     if file_analysis.get('has_project_logic'):
-        focus_areas.append(f"4. **Project Logic** - Review the compact module overview from {project_logic_file}")
+        focus_areas.append(f"5. **Project Logic** - Review the compact module overview from {project_logic_file}")
     
     if file_analysis['has_validation_toon']:
-        focus_areas.append(f"5. **Validation Analysis** - Review validation results and issues identified by vallm from {validation_file}")
+        focus_areas.append(f"6. **Validation Analysis** - Review validation results and issues identified by vallm from {validation_file}")
     
     if file_analysis['has_duplication_toon']:
-        focus_areas.append(f"6. **Code Duplication** - Examine duplicate code patterns detected by redup from {duplication_file}")
+        focus_areas.append(f"7. **Code Duplication** - Examine duplicate code patterns detected by redup from {duplication_file}")
     
     if not focus_areas:
         focus_areas.append("1. **General Code Review** - Provide overall architecture assessment and improvement recommendations")
@@ -325,6 +334,7 @@ def _build_dynamic_tasks(file_analysis: dict) -> List[str]:
     analysis_file = file_analysis.get('analysis_file', 'analysis.toon')
     map_file = file_analysis.get('map_file', 'map.toon.yaml')
     evolution_file = file_analysis.get('evolution_file', 'evolution.toon.yaml')
+    project_toon_file = file_analysis.get('project_toon_file', 'project.toon.yaml')
     validation_file = file_analysis.get('validation_file', 'project/validation.toon.yaml')
     duplication_file = file_analysis.get('duplication_file', 'project/duplication.toon.yaml')
     project_logic_file = file_analysis.get('project_logic_file', 'project.toon')
@@ -343,6 +353,9 @@ def _build_dynamic_tasks(file_analysis: dict) -> List[str]:
     
     if file_analysis['has_evolution_toon']:
         tasks.append(f"- Prioritize refactoring actions by impact/effort ratio from {evolution_file}.")
+
+    if file_analysis.get('has_project_toon_yaml'):
+        tasks.append(f"- Compare the compact project overview in {project_toon_file} with the main analysis files.")
 
     if file_analysis.get('has_project_logic'):
         tasks.append(f"- Use {project_logic_file} to validate the compact project overview against the rest of the analysis.")
@@ -385,6 +398,8 @@ def _build_prompt_footer(chunked: bool = False, file_analysis: dict = None) -> L
             lines.append(f"- Start with {file_analysis.get('analysis_file', 'analysis.toon')} for health metrics, then {file_analysis.get('map_file', 'map.toon.yaml')} for structure and signatures")
             if file_analysis['has_evolution_toon']:
                 lines.append(f"- Review {file_analysis.get('evolution_file', 'evolution.toon.yaml')} for action priorities and next steps")
+        if file_analysis.get('has_project_toon_yaml'):
+            lines.append(f"- Compare the compact project overview in {file_analysis.get('project_toon_file', 'project.toon.yaml')} with the main analysis files")
         if file_analysis.get('has_project_logic'):
             lines.append(f"- Compare the compact project overview in {file_analysis.get('project_logic_file', 'project.toon')} with the main analysis files")
         if file_analysis['has_validation_toon']:

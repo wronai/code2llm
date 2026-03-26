@@ -26,7 +26,7 @@ When you run `code2llm ./ -f all`, the following files are created:
 # Quick health check (TOON format only)
 code2llm ./ -f toon
 
-# Generate all formats + prompt.txt (single-project mode)
+# Generate all formats + project.toon.yaml + prompt.txt (single-project mode)
 code2llm ./ -f all -o ./project --no-chunk
 
 # LLM-ready context only
@@ -142,7 +142,7 @@ grep -E "^  .*[0-9]{3,}$" project.toon.yaml | sort -t',' -k2 -n -r | head -10
 
 ### `prompt.txt` - Ready-to-Send LLM Prompt
 **Purpose**: Pre-formatted prompt listing all generated files for LLM conversation
-**Generation**: Written when `code2llm` runs with a source path and requests `-f all` (including `--no-chunk`) or `code2logic`
+**Generation**: Written when `code2llm` runs with a source path and requests `-f all` (including `--no-chunk`) or `code2logic`; `-f all` also writes `project.toon.yaml`
 **Contents**:
 - **Files section**: Lists all existing generated files with descriptions
 - **Source files section**: Highlights important source files such as `cli_exports/orchestrator.py`
