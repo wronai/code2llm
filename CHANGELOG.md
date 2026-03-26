@@ -1,5 +1,20 @@
 ## [Unreleased]
 
+## [0.5.82] - 2026-03-26
+
+### Other
+- Update code2llm/cli_analysis.py
+- Update code2llm/cli_commands.py
+- Update code2llm/cli_exports/formats.py
+- Update code2llm/cli_exports/orchestrator.py
+- Update code2llm/cli_exports/prompt.py
+- Update code2llm/cli_parser.py
+- Update code2llm/exporters/project_yaml_exporter.py
+- Update code2llm/exporters/readme_exporter.py
+- Update code2llm/exporters/report_generators.py
+- Update code2llm/exporters/toon_view.py
+- ... and 1 more files
+
 ## [0.5.81] - 2026-03-26
 
 ### Other

@@ -21,10 +21,10 @@ def handle_special_commands() -> Optional[int]:
 
 
 def handle_report_command(args_list) -> int:
-    """Generate views from an existing project.yaml.
+    """Generate views from an existing project.yaml (legacy).
 
     Usage:
-        code2llm report --format toon    # → project.toon (legacy)
+        code2llm report --format toon    # → analysis_view.toon (legacy)
         code2llm report --format context # → context.md
         code2llm report --format article # → status.md
         code2llm report --format html    # → dashboard.html
@@ -34,12 +34,12 @@ def handle_report_command(args_list) -> int:
 
     parser = argparse.ArgumentParser(
         prog='code2llm report',
-        description='Generate views from project.yaml (single source of truth)',
+        description='Generate views from an existing project.yaml (legacy, single source of truth)',
     )
     parser.add_argument(
         '--input', '-i',
         default='./project.yaml',
-        help='Path to project.yaml (default: ./project.yaml)',
+        help='Path to legacy project.yaml (default: ./project.yaml)',
     )
     parser.add_argument(
         '--format', '-f',
@@ -63,7 +63,7 @@ def handle_report_command(args_list) -> int:
     input_path = Path(args.input)
     if not input_path.exists():
         print(f"Error: project.yaml not found: {input_path}", file=sys.stderr)
-        print("Run 'code2llm <source> -f project-yaml' first to generate it.", file=sys.stderr)
+        print("If you still need it, use the legacy 'code2llm <source> -f project-yaml' export.", file=sys.stderr)
         return 1
 
     output_dir = Path(args.output)

@@ -1,6 +1,6 @@
 """TOON View Generator — compact ~50 lines for quick human scanning.
 
-Generates analysis_view.toon.yaml.toon from project.yaml data.
+Generates project.toon.yaml from project.yaml data.
 """
 
 from collections import defaultdict
@@ -22,7 +22,7 @@ _LANG_EXT_MAP = {
 
 
 class ToonViewGenerator:
-    """Generate analysis_view.toon.yaml.toon from project.yaml data."""
+    """Generate project.toon.yaml from project.yaml data."""
 
     def generate(self, data: Dict[str, Any], output_path: str) -> None:
         lines = self._render(data)

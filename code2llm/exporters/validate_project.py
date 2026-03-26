@@ -1,7 +1,7 @@
 """Validate consistency between project.yaml and its generated views.
 
 Quick sanity check that key metrics in project.yaml match the
-generated analysis_view.toon.yaml.toon output.
+generated project.toon.yaml output.
 """
 
 import re
@@ -17,7 +17,7 @@ def validate_project_yaml(output_dir: Path, verbose: bool = False) -> Tuple[bool
     issues: List[str] = []
 
     yaml_path = output_dir / "project.yaml"
-    toon_path = output_dir / "analysis_view.toon.yaml.toon"
+    toon_path = output_dir / "project.toon.yaml"
 
     if not yaml_path.exists():
         issues.append(f"project.yaml not found in {output_dir}")
@@ -36,12 +36,12 @@ def validate_project_yaml(output_dir: Path, verbose: bool = False) -> Tuple[bool
     issues.extend(_check_required_keys(data))
 
     # Validate views exist
-    expected_views = ["analysis_view.toon.yaml.toon", "dashboard.html"]
+    expected_views = ["project.toon.yaml", "dashboard.html"]
     for view in expected_views:
         if not (output_dir / view).exists():
             issues.append(f"Expected view {view} not found")
 
-    # Cross-check analysis_view.toon.yaml.toon if it exists
+    # Cross-check project.toon.yaml if it exists
     if toon_path.exists():
         issues.extend(_cross_check_toon(data, toon_path))
 
@@ -80,7 +80,7 @@ def _check_required_keys(data: Dict[str, Any]) -> List[str]:
 
 
 def _cross_check_toon(data: Dict[str, Any], toon_path: Path) -> List[str]:
-    """Cross-check project.yaml metrics against analysis_view.toon.yaml.toon header."""
+    """Cross-check project.yaml metrics against project.toon.yaml header."""
     issues = []
     try:
         content = toon_path.read_text(encoding="utf-8")
@@ -102,7 +102,7 @@ def _cross_check_toon(data: Dict[str, Any], toon_path: Path) -> List[str]:
         if toon_funcs != yaml_funcs:
             issues.append(
                 f"Function count mismatch: project.yaml={yaml_funcs}, "
-                f"analysis_view.toon.yaml.toon={toon_funcs}"
+                f"project.toon.yaml={toon_funcs}"
             )
 
     # Extract lines count from toon header
@@ -112,7 +112,7 @@ def _cross_check_toon(data: Dict[str, Any], toon_path: Path) -> List[str]:
         if toon_lines != yaml_lines:
             issues.append(
                 f"Lines count mismatch: project.yaml={yaml_lines}, "
-                f"analysis_view.toon.yaml.toon={toon_lines}"
+                f"project.toon.yaml={toon_lines}"
             )
 
     return issues

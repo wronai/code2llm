@@ -223,7 +223,7 @@ def _analyze_subproject(args, subproject, output_dir: Path):
 
         formats = [f.strip() for f in args.format.split(',')]
         if 'all' in formats:
-            formats = ['toon', 'context', 'evolution', 'code2logic']
+            formats = ['toon', 'context', 'evolution']
 
         _export_simple_formats(args, result, output_dir, formats)
 

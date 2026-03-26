@@ -14,10 +14,10 @@ def create_parser() -> argparse.ArgumentParser:
         epilog='''
 Examples:
   code2llm ./                                       # Default: TOON diagnostics + README
-  code2llm ./ -f all -o ./docs                      # All formats to ./docs/
+  code2llm ./ -f all -o ./docs                      # All core formats to ./docs/
   code2llm ./ -f toon,map,evolution                 # Consolidated diagnostics + structure + roadmap
   code2llm ./ -f context                            # LLM narrative (context.md)
-  code2llm ./ --streaming --strategy deep -f all    # Deep streaming analysis, all outputs
+  code2llm ./ --streaming --strategy deep -f all    # Deep streaming analysis, all core outputs
   code2llm ./ --strategy quick -f toon              # Fast overview
   code2llm ./ --refactor                            # AI refactoring prompts
   code2llm ./ --refactor --smell god_function       # Filter by smell type
@@ -26,9 +26,9 @@ Examples:
   code2llm ./ -f mermaid --no-png                   # Mermaid diagrams without PNG
   code2llm ./ -m static -v -o ./analysis            # Static mode, verbose
   code2llm ./ --no-readme                           # Disable README generation
-  code2llm ./ -f project-yaml                       # Unified project.yaml (single source of truth)
-  code2llm report --format toon                     # Generate view from project.yaml
-  code2llm report --format all                      # All views from project.yaml
+  code2llm ./ -f project-yaml                       # Legacy project.yaml export (opt-in)
+  code2llm report --format toon                     # Generate analysis_view.toon from existing project.yaml
+  code2llm report --format all                      # All legacy views from existing project.yaml
   code2llm llm-flow                                 # Generate LLM flow summary
   code2llm llm-context ./                           # Generate LLM context only
 
@@ -37,13 +37,13 @@ Format Options (-f):
   map          — Structural map (map.toon.yaml) — modules, imports, exports, signatures, project header
   evolution    — Refactoring queue (evolution.toon.yaml)
   context      — LLM narrative (context.md) — architecture summary
-  yaml         — Standard YAML format
-  json         — Machine-readable JSON
+  yaml         — Standard YAML format (legacy / explicit opt-in)
+  json         — Machine-readable JSON (legacy / explicit opt-in)
   mermaid      — Flowchart diagrams (flow.mmd, calls.mmd, compact_flow.mmd)
   flow         — Data-flow analysis (flow.toon) — legacy, explicit opt-in
   code2logic   — Generate project logic (legacy project.toon) via external code2logic
-  project-yaml — Unified project.yaml (single source of truth) + generated views
-  all          — Generate core formats (analysis.toon, map.toon.yaml, evolution.toon.yaml, context, yaml, json, mermaid)
+  project-yaml — Legacy project.yaml export (single source of truth) + generated views
+  all          — Generate core formats (analysis.toon, map.toon.yaml, evolution.toon.yaml, context, mermaid)
 
 Strategy Options (--strategy):
   quick     — Fast overview, fewer files analyzed
@@ -75,7 +75,7 @@ Strategy Options (--strategy):
     parser.add_argument(
         '-f', '--format',
         default='toon',
-        help='Output formats: toon,map,flow,context,code2logic,yaml,json,mermaid,evolution,png,all (default: toon)'
+        help='Output formats: toon,map,flow,context,code2logic,yaml,json,mermaid,evolution,png,project-yaml,all (default: toon)'
     )
     
     parser.add_argument(

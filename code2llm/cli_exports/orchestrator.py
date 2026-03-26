@@ -23,7 +23,8 @@ def _run_exports(args, result, output_dir: Path, source_path: Optional[Path] = N
 
     For chunked analysis, exports to subproject subdirectories.
     """
-    formats = [f.strip() for f in args.format.split(',')]
+    requested_formats = [f.strip() for f in args.format.split(',')]
+    formats = requested_formats[:]
     if 'all' in formats:
         formats = ['toon', 'map', 'context', 'mermaid', 'evolution']
 
@@ -31,16 +32,26 @@ def _run_exports(args, result, output_dir: Path, source_path: Optional[Path] = N
 
     try:
         if is_chunked and source_path:
-            _export_chunked_results(args, result, output_dir, source_path, formats)
+            _export_chunked_results(args, result, output_dir, source_path, formats, requested_formats)
         else:
-            _export_single_project(args, result, output_dir, formats, source_path)
+            _export_single_project(args, result, output_dir, formats, requested_formats, source_path)
     except Exception as e:
         print(f"Error during export: {e}", file=sys.stderr)
         sys.exit(1)
 
 
-def _export_single_project(args, result, output_dir: Path, formats: list, source_path: Optional[Path] = None):
+def _export_single_project(
+    args,
+    result,
+    output_dir: Path,
+    formats: list,
+    requested_formats: Optional[list] = None,
+    source_path: Optional[Path] = None,
+):
     """Export single project results."""
+    if requested_formats is None:
+        requested_formats = formats
+
     _export_simple_formats(args, result, output_dir, formats)
 
     if 'mermaid' in formats:
@@ -51,8 +62,8 @@ def _export_single_project(args, result, output_dir: Path, formats: list, source
     _export_context_fallback(args, result, output_dir, formats)
 
     if source_path is not None:
-        _export_code2logic(args, source_path, output_dir, args.format.split(','))
-        _export_prompt_txt(args, output_dir, args.format.split(','), source_path)
+        _export_code2logic(args, source_path, output_dir, formats)
+        _export_prompt_txt(args, output_dir, requested_formats, source_path)
 
     if hasattr(args, 'refactor') and args.refactor:
         _export_refactor_prompts(args, result, output_dir)
@@ -63,8 +74,18 @@ def _export_single_project(args, result, output_dir: Path, formats: list, source
     _export_index_html(args, output_dir)
 
 
-def _export_chunked_results(args, result, output_dir: Path, source_path: Path, formats: list):
+def _export_chunked_results(
+    args,
+    result,
+    output_dir: Path,
+    source_path: Path,
+    formats: list,
+    requested_formats: Optional[list] = None,
+):
     """Export chunked analysis results to subproject directories."""
+    if requested_formats is None:
+        requested_formats = formats
+
     subprojects = _get_filtered_subprojects(args, source_path)
 
     for sp in subprojects:
@@ -75,8 +96,8 @@ def _export_chunked_results(args, result, output_dir: Path, source_path: Path, f
     _export_evolution(args, result, output_dir)
 
     if source_path is not None:
-        _export_code2logic(args, source_path, output_dir, args.format.split(','))
-        _export_chunked_prompt_txt(args, output_dir, args.format.split(','), source_path, subprojects)
+        _export_code2logic(args, source_path, output_dir, formats)
+        _export_chunked_prompt_txt(args, output_dir, requested_formats, source_path, subprojects)
 
     _export_readme(args, result, output_dir)
 

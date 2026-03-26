@@ -80,7 +80,7 @@ def _run_report(args, project_yaml_path: str, output_dir: Path) -> None:
         report_formats = ['toon', 'context', 'article', 'html']
 
     generator_map = {
-        'toon': ('analysis_view.toon', ToonViewGenerator(), 'TOON view'),
+        'toon': ('project.toon.yaml', ToonViewGenerator(), 'TOON view'),
         'context': ('context.md', ContextViewGenerator(), 'Context view'),
         'article': ('status.md', ArticleViewGenerator(), 'Article view'),
         'html': ('dashboard.html', HTMLDashboardGenerator(), 'HTML dashboard'),
@@ -121,7 +121,7 @@ def _export_simple_formats(args, result, output_dir: Path, formats):
         # Auto-generate all views from project.yaml
         data = load_project_yaml(str(yaml_path))
         view_map = {
-            'analysis_view.toon': ToonViewGenerator(),
+            'project.toon.yaml': ToonViewGenerator(),
             'context.md': ContextViewGenerator(),
             'dashboard.html': HTMLDashboardGenerator(),
         }

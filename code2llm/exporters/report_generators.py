@@ -1,7 +1,7 @@
 """Report generators — produce views from project.yaml (single source of truth).
 
 Thin re-export module. Actual generators live in separate files:
-  toon_view.py      → ToonViewGenerator     → analysis_view.toon.yaml.toon
+  toon_view.py      → ToonViewGenerator     → analysis_view.toon
   context_view.py   → ContextViewGenerator  → context.md
   article_view.py   → ArticleViewGenerator  → status.md
   html_dashboard.py → HTMLDashboardGenerator → dashboard.html

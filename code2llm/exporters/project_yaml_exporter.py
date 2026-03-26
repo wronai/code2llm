@@ -35,7 +35,7 @@ GOD_MODULE_LINES = 500
 class ProjectYAMLExporter(Exporter):
     """Export unified project.yaml — single source of truth for diagnostics.
 
-    Combines data from analysis.toon, analysis_view.toon.yaml.toon, context.md, and evolution.toon.yaml
+    Combines data from analysis.toon, analysis_view.toon, context.md, and evolution.toon.yaml
     into one machine-parseable YAML file.
     """
 
