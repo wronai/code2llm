@@ -1,7 +1,7 @@
-# code2llm | 113f 21472L | python:105,shell:2,php:1 | 2026-03-26
-# CC̄=4.6 | critical:10/933 | dups:0 | cycles:0
+# code2llm | 113f 21539L | python:105,shell:2,php:1 | 2026-03-26
+# CC̄=4.6 | critical:11/934 | dups:0 | cycles:0
 
-HEALTH[10]:
+HEALTH[11]:
   🟡 CC    main CC=17 (limit:15)
   🟡 CC    validate_chunked_output CC=15 (limit:15)
   🟡 CC    export_to_yaml CC=25 (limit:15)
@@ -9,23 +9,24 @@ HEALTH[10]:
   🟡 CC    export_flow_detailed CC=25 (limit:15)
   🟡 CC    export_flow_full CC=23 (limit:15)
   🟡 CC    _export_mermaid CC=16 (limit:15)
+  🟡 CC    _build_prompt_footer CC=16 (limit:15)
   🟡 CC    extract_calls_regex CC=16 (limit:15)
   🟡 CC    _process_functions CC=34 (limit:15)
   🟡 CC    analyze_ruby CC=17 (limit:15)
 
 REFACTOR[1]:
-  1. split 10 high-CC methods  (CC>15)
+  1. split 11 high-CC methods  (CC>15)
 
 PIPELINES[637]:
-  [1] Src [run_benchmark]: run_benchmark → load_previous
+  [1] Src [read_readme]: read_readme
       PURITY: 100% pure
-  [2] Src [save_report]: save_report
+  [2] Src [run_benchmark]: run_benchmark → load_previous
       PURITY: 100% pure
-  [3] Src [read_readme]: read_readme
+  [3] Src [save_report]: save_report
       PURITY: 100% pure
   [4] Src [main]: main → load_file → is_toon_file
       PURITY: 100% pure
-  [5] Src [__init__]: __init__
+  [5] Src [main]: main → create_html → get_shield_url
       PURITY: 100% pure
 
 LAYERS:
@@ -36,14 +37,14 @@ LAYERS:
   │ !! pipeline_detector          506L  3C   18m  CC=13     ←0
   │ !! html_dashboard             504L  1C   14m  CC=7      ←0
   │ !! metrics                    501L  1C   27m  CC=12     ←0
-  │ readme_exporter            495L  1C    7m  CC=13     ←0
+  │ readme_exporter            496L  1C    7m  CC=13     ←0
+  │ !! prompt                     492L  0C   18m  CC=16     ←1
   │ large_repo                 488L  2C   20m  CC=9      ←1
   │ mermaid                    485L  0C   16m  CC=13     ←1
   │ llm_flow                   472L  1C   24m  CC=14     ←0
   │ evolution_exporter         471L  1C   17m  CC=11     ←0
   │ renderer                   471L  1C   26m  CC=11     ←0
   │ !! map_exporter               435L  1C   21m  CC=25     ←4
-  │ prompt                     426L  0C   17m  CC=14     ←1
   │ file_analyzer              398L  1C   17m  CC=12     ←0
   │ flow_exporter              391L  1C   14m  CC=10     ←0
   │ pipeline                   388L  3C   20m  CC=10     ←0

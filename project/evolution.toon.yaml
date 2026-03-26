@@ -1,4 +1,4 @@
-# code2llm/evolution | 755 func | 83f | 2026-03-26
+# code2llm/evolution | 756 func | 83f | 2026-03-26
 
 NEXT[10] (ranked by impact):
   [1] !! SPLIT           code2llm/exporters/mermaid_exporter.py
@@ -51,7 +51,7 @@ METRICS-TARGET:
   CC̄:          4.8 → ≤3.4
   max-CC:      34 → ≤17
   god-modules: 6 → 0
-  high-CC(≥15): 10 → ≤5
+  high-CC(≥15): 11 → ≤5
   hub-types:   0 → ≤0
 
 PATTERNS (language parser shared logic):

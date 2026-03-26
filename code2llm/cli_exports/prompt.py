@@ -21,7 +21,10 @@ def _export_prompt_txt(args, output_dir: Path, formats: list[str], source_path: 
         lines.append("")
         lines.append("Missing files (not generated in this run):")
         for name in missing:
-            lines.append(f"- {output_rel_path}/{name}")
+            if output_rel_path:
+                lines.append(f"- {output_rel_path}/{name}")
+            else:
+                lines.append(f"- {name}")
 
     # Analyze generated files and build dynamic footer
     file_analysis = _analyze_generated_files(output_dir)
@@ -69,14 +72,16 @@ def _get_prompt_paths(source_path: Optional[Path], output_dir: Path) -> Tuple[st
         try:
             output_rel_path = str(output_dir.relative_to(source_path))
         except ValueError:
-            output_rel_path = str(output_dir)
+            # When output is not relative to source, use empty string for just filenames
+            output_rel_path = ""
     else:
         cwd = Path.cwd()
         project_path = cwd.name
         try:
             output_rel_path = str(output_dir.relative_to(cwd))
         except ValueError:
-            output_rel_path = str(output_dir)
+            # When output is not relative to cwd, use empty string for just filenames
+            output_rel_path = ""
     return project_path, output_rel_path
 
 
@@ -135,7 +140,10 @@ def _build_prompt_file_lines(output_dir: Path, output_rel_path: str, files: list
 
         file_path = output_dir / existing
         size_str = _format_size(file_path.stat().st_size)
-        lines.append(f"- {output_rel_path}/{existing}  ({desc}) [{size_str}]")
+        if output_rel_path:
+            lines.append(f"- {output_rel_path}/{existing}  ({desc}) [{size_str}]")
+        else:
+            lines.append(f"- {existing}  ({desc}) [{size_str}]")
 
     return lines
 
@@ -233,9 +241,15 @@ def _build_missing_files_section(output_dir: Path, output_rel_path: str) -> List
     for name in missing:
         # Special handling for validation and duplication files
         if name in ['validation.toon.yaml', 'duplication.toon.yaml']:
-            lines.append(f"- {output_rel_path}/project/{name}")
+            if output_rel_path:
+                lines.append(f"- {output_rel_path}/project/{name}")
+            else:
+                lines.append(f"- project/{name}")
         else:
-            lines.append(f"- {output_rel_path}/{name}")
+            if output_rel_path:
+                lines.append(f"- {output_rel_path}/{name}")
+            else:
+                lines.append(f"- {name}")
     return lines
 
 
