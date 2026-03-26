@@ -1,7 +1,7 @@
-# code2llm | 113f 21404L | python:108,shell:4,php:1 | 2026-03-26
-# CC̄=4.6 | critical:10/931 | dups:0 | cycles:0
+# code2llm | 113f 21502L | python:108,shell:4,php:1 | 2026-03-26
+# CC̄=4.6 | critical:11/934 | dups:0 | cycles:0
 
-HEALTH[10]:
+HEALTH[11]:
   🟡 CC    _process_functions CC=34 (limit:15)
   🟡 CC    export_to_yaml CC=25 (limit:15)
   🟡 CC    export_flow_detailed CC=25 (limit:15)
@@ -10,43 +10,44 @@ HEALTH[10]:
   🟡 CC    main CC=17 (limit:15)
   🟡 CC    analyze_ruby CC=17 (limit:15)
   🟡 CC    _export_mermaid CC=16 (limit:15)
+  🟡 CC    _build_prompt_footer CC=16 (limit:15)
   🟡 CC    extract_calls_regex CC=16 (limit:15)
   🟡 CC    validate_chunked_output CC=15 (limit:15)
 
 REFACTOR[1]:
-  1. split 10 high-CC methods  (CC>15)
+  1. split 11 high-CC methods  (CC>15)
 
-PIPELINES[637]:
+PIPELINES[638]:
   [1] Src [read_readme]: read_readme
       PURITY: 100% pure
-  [2] Src [save_report]: save_report
+  [2] Src [run_benchmark]: run_benchmark → load_previous
       PURITY: 100% pure
-  [3] Src [run_benchmark]: run_benchmark → load_previous
+  [3] Src [save_report]: save_report
       PURITY: 100% pure
   [4] Src [main]: main → load_file → is_toon_file
       PURITY: 100% pure
-  [5] Src [main]: main → create_html → get_shield_url
+  [5] Src [__init__]: __init__
       PURITY: 100% pure
 
 LAYERS:
   code2llm/                       CC̄=4.8    ←in:0  →out:5
   │ !! index_generator            790L  1C    7m  CC=5      ←0
-  │ !! mermaid_exporter           637L  1C   18m  CC=25     ←0
+  │ !! mermaid_exporter           628L  1C   19m  CC=25     ←0
   │ !! project_yaml_exporter      513L  1C   18m  CC=13     ←0
   │ !! pipeline_detector          506L  3C   18m  CC=13     ←0
   │ !! html_dashboard             504L  1C   14m  CC=7      ←0
   │ !! metrics                    501L  1C   27m  CC=12     ←0
-  │ readme_exporter            493L  1C    7m  CC=13     ←0
+  │ readme_exporter            496L  1C    7m  CC=13     ←0
   │ large_repo                 488L  2C   20m  CC=9      ←1
   │ mermaid                    485L  0C   16m  CC=13     ←1
   │ llm_flow                   472L  1C   24m  CC=14     ←0
   │ evolution_exporter         471L  1C   17m  CC=11     ←0
   │ renderer                   471L  1C   26m  CC=11     ←0
+  │ !! prompt                     464L  0C   17m  CC=16     ←1
   │ !! map_exporter               435L  1C   21m  CC=25     ←4
   │ file_analyzer              398L  1C   17m  CC=12     ←0
   │ flow_exporter              391L  1C   14m  CC=10     ←0
   │ pipeline                   388L  3C   20m  CC=10     ←0
-  │ prompt                     383L  0C   16m  CC=13     ←1
   │ !! base                       370L  0C    9m  CC=34     ←8
   │ analyzer                   333L  1C    9m  CC=14     ←0
   │ entity_resolution          326L  3C   16m  CC=13     ←0
@@ -55,10 +56,10 @@ LAYERS:
   │ type_inference             321L  1C   19m  CC=9      ←0
   │ intent_matching            297L  3C   15m  CC=7      ←0
   │ cfg                        293L  1C   17m  CC=5      ←0
+  │ !! formats                    287L  0C   12m  CC=16     ←3
   │ data_analysis              286L  1C   18m  CC=14     ←0
   │ llm_task                   284L  0C   15m  CC=14     ←0
   │ cli_parser                 277L  0C    1m  CC=1      ←1
-  │ !! formats                    271L  0C   11m  CC=16     ←3
   │ toon_size_manager          265L  0C    8m  CC=10     ←1
   │ context_exporter           248L  1C   15m  CC=10     ←0
   │ dfg                        224L  1C   12m  CC=7      ←0
@@ -79,8 +80,8 @@ LAYERS:
   │ module_detail              162L  1C    9m  CC=7      ←0
   │ toon_view                  157L  1C    9m  CC=6      ←0
   │ prompt_engine              150L  1C    7m  CC=12     ←0
+  │ orchestrator               149L  0C    5m  CC=11     ←1
   │ toon_parser                147L  0C   10m  CC=8      ←1
-  │ orchestrator               142L  0C    5m  CC=11     ←1
   │ context_view               140L  1C    8m  CC=11     ←0
   │ gitignore                  139L  1C    6m  CC=10     ←2
   │ !! ruby                       135L  0C    2m  CC=17     ←1

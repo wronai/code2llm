@@ -1,5 +1,20 @@
 ## [Unreleased]
 
+## [0.5.98] - 2026-03-26
+
+### Docs
+- Update context.md
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update analysis.toon.yaml
+- Update batch_1/analysis.toon.yaml
+- Update project/analysis.toon.yaml
+- Update project/batch_1/analysis.toon.yaml
+- Update project/root/analysis.toon.yaml
+- Update root/analysis.toon.yaml
+
 ## [0.5.97] - 2026-03-26
 
 ### Docs

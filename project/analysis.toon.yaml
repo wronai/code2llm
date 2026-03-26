@@ -1,23 +1,23 @@
-# code2llm | 113f 21511L | python:105,shell:2,php:1 | 2026-03-26
-# CC̄=4.6 | critical:11/933 | dups:0 | cycles:0
+# code2llm | 113f 21502L | python:108,shell:4,php:1 | 2026-03-26
+# CC̄=4.6 | critical:11/934 | dups:0 | cycles:0
 
 HEALTH[11]:
-  🟡 CC    main CC=17 (limit:15)
-  🟡 CC    validate_chunked_output CC=15 (limit:15)
+  🟡 CC    _process_functions CC=34 (limit:15)
   🟡 CC    export_to_yaml CC=25 (limit:15)
-  🟡 CC    export_flow_compact CC=23 (limit:15)
   🟡 CC    export_flow_detailed CC=25 (limit:15)
+  🟡 CC    export_flow_compact CC=23 (limit:15)
   🟡 CC    export_flow_full CC=23 (limit:15)
+  🟡 CC    main CC=17 (limit:15)
+  🟡 CC    analyze_ruby CC=17 (limit:15)
   🟡 CC    _export_mermaid CC=16 (limit:15)
   🟡 CC    _build_prompt_footer CC=16 (limit:15)
   🟡 CC    extract_calls_regex CC=16 (limit:15)
-  🟡 CC    _process_functions CC=34 (limit:15)
-  🟡 CC    analyze_ruby CC=17 (limit:15)
+  🟡 CC    validate_chunked_output CC=15 (limit:15)
 
 REFACTOR[1]:
   1. split 11 high-CC methods  (CC>15)
 
-PIPELINES[637]:
+PIPELINES[638]:
   [1] Src [read_readme]: read_readme
       PURITY: 100% pure
   [2] Src [save_report]: save_report
@@ -26,13 +26,13 @@ PIPELINES[637]:
       PURITY: 100% pure
   [4] Src [main]: main → load_file → is_toon_file
       PURITY: 100% pure
-  [5] Src [__init__]: __init__
+  [5] Src [main]: main → create_html → get_shield_url
       PURITY: 100% pure
 
 LAYERS:
   code2llm/                       CC̄=4.8    ←in:0  →out:5
   │ !! index_generator            790L  1C    7m  CC=5      ←0
-  │ !! mermaid_exporter           637L  1C   18m  CC=25     ←0
+  │ !! mermaid_exporter           628L  1C   19m  CC=25     ←0
   │ !! project_yaml_exporter      513L  1C   18m  CC=13     ←0
   │ !! pipeline_detector          506L  3C   18m  CC=13     ←0
   │ !! html_dashboard             504L  1C   14m  CC=7      ←0
