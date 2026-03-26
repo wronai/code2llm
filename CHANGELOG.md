@@ -1,5 +1,20 @@
 ## [Unreleased]
 
+## [0.5.91] - 2026-03-26
+
+### Docs
+- Update project/context.md
+
+### Other
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/compact_flow.mmd
+- Update project/flow.mmd
+- Update project/flow.png
+- Update project/index.html
+- Update project/map.toon.yaml
+
 ## [0.5.90] - 2026-03-26
 
 ### Docs

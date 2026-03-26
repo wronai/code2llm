@@ -19,9 +19,9 @@ REFACTOR[1]:
 PIPELINES[637]:
   [1] Src [read_readme]: read_readme
       PURITY: 100% pure
-  [2] Src [save_report]: save_report
+  [2] Src [run_benchmark]: run_benchmark → load_previous
       PURITY: 100% pure
-  [3] Src [run_benchmark]: run_benchmark → load_previous
+  [3] Src [save_report]: save_report
       PURITY: 100% pure
   [4] Src [main]: main → load_file → is_toon_file
       PURITY: 100% pure

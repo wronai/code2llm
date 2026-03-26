@@ -53,15 +53,15 @@
 - **Classes**: 1
 - **File**: `type_inference.py`
 
-### code2llm.analysis.pipeline_detector
-- **Functions**: 18
-- **Classes**: 3
-- **File**: `pipeline_detector.py`
-
 ### code2llm.analysis.data_analysis
 - **Functions**: 18
 - **Classes**: 1
 - **File**: `data_analysis.py`
+
+### code2llm.analysis.pipeline_detector
+- **Functions**: 18
+- **Classes**: 3
+- **File**: `pipeline_detector.py`
 
 ### code2llm.exporters.project_yaml_exporter
 - **Functions**: 18
@@ -473,10 +473,6 @@ Key functions that process and transform data:
 > Create CLI argument parser.
 - **Output to**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
 
-### benchmarks.benchmark_format_quality._generate_format_outputs
-> Generate all format outputs and evaluate them.
-- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
-
 ### demo_langs.valid.sample.UserService.process_users
 - **Output to**: print
 
@@ -490,6 +486,10 @@ Key functions that process and transform data:
 Checks:
 1. All chunks have required files (analysis.toon, contex
 - **Output to**: print, print, sorted, print, print
+
+### benchmarks.benchmark_format_quality._generate_format_outputs
+> Generate all format outputs and evaluate them.
+- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
 ### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
 - **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
@@ -506,6 +506,10 @@ Checks:
 > Load gitignore parser for project if available.
 - **Output to**: code2llm.core.gitignore.load_gitignore_patterns
 
+### code2llm.analysis.cfg.CFGExtractor._format_except
+> Format except handler.
+- **Output to**: self._expr_to_str
+
 ### code2llm.core.gitignore.GitIgnoreParser._parse_pattern
 > Parse a single gitignore pattern into regex.
 - **Output to**: pattern.startswith, pattern.endswith, pattern.startswith, self._wildcard_to_regex, re.compile
@@ -519,10 +523,6 @@ Returns list of (module_name, start_line, end_line).
 ### code2llm.core.file_filter.FastFileFilter.should_process
 > Check if file should be processed.
 - **Output to**: file_path.lower, Path, self._gitignore_parser.is_ignored, any, fnmatch.fnmatch
-
-### code2llm.analysis.cfg.CFGExtractor._format_except
-> Format except handler.
-- **Output to**: self._expr_to_str
 
 ### code2llm.core.file_analyzer.FileAnalyzer._process_class
 > Process class definition.
