@@ -8,8 +8,8 @@ HEALTH[11]:
   🟡 CC    export_flow_compact CC=23 (limit:15)
   🟡 CC    export_flow_detailed CC=25 (limit:15)
   🟡 CC    export_flow_full CC=23 (limit:15)
-  🟡 CC    _build_prompt_footer CC=16 (limit:15)
   🟡 CC    _export_mermaid CC=16 (limit:15)
+  🟡 CC    _build_prompt_footer CC=16 (limit:15)
   🟡 CC    extract_calls_regex CC=16 (limit:15)
   🟡 CC    _process_functions CC=34 (limit:15)
   🟡 CC    analyze_ruby CC=17 (limit:15)
@@ -22,11 +22,11 @@ PIPELINES[638]:
       PURITY: 100% pure
   [2] Src [run_benchmark]: run_benchmark → load_previous
       PURITY: 100% pure
-  [3] Src [save_report]: save_report
+  [3] Src [main]: main → load_file → is_toon_file
       PURITY: 100% pure
-  [4] Src [main]: main → load_file → is_toon_file
+  [4] Src [save_report]: save_report
       PURITY: 100% pure
-  [5] Src [__init__]: __init__
+  [5] Src [main]: main → create_html → get_shield_url
       PURITY: 100% pure
 
 LAYERS:

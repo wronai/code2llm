@@ -314,13 +314,13 @@ Checks:
 > Load gitignore parser for project if available.
 - **Output to**: code2llm.core.gitignore.load_gitignore_patterns
 
-### code2llm.core.gitignore.GitIgnoreParser._parse_pattern
-> Parse a single gitignore pattern into regex.
-- **Output to**: pattern.startswith, pattern.endswith, pattern.startswith, self._wildcard_to_regex, re.compile
-
 ### code2llm.analysis.cfg.CFGExtractor._format_except
 > Format except handler.
 - **Output to**: self._expr_to_str
+
+### code2llm.core.gitignore.GitIgnoreParser._parse_pattern
+> Parse a single gitignore pattern into regex.
+- **Output to**: pattern.startswith, pattern.endswith, pattern.startswith, self._wildcard_to_regex, re.compile
 
 ### code2llm.core.toon_size_manager._parse_modules
 > Parse module sections from TOON content.
@@ -373,8 +373,8 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.core.lang.rust.analyze_rust` - 31 calls
 - `benchmarks.benchmark_performance.create_test_project` - 29 calls
 - `code2llm.nlp.pipeline.NLPPipeline.process` - 29 calls
-- `code2llm.core.lang.ruby.analyze_ruby` - 28 calls
 - `code2llm.core.lang.go_lang.analyze_go` - 28 calls
+- `code2llm.core.lang.ruby.analyze_ruby` - 28 calls
 - `validate_toon.compare_modules` - 26 calls
 - `code2llm.core.streaming_analyzer.StreamingAnalyzer.analyze_streaming` - 26 calls
 - `code2llm.exporters.mermaid_exporter.MermaidExporter.export_compact` - 26 calls
