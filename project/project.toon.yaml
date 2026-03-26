@@ -1,4 +1,4 @@
-# code2llm | 830 func | 97f | 26529L | python | 2026-03-26
+# code2llm | 829 func | 97f | 26477L | python | 2026-03-26
 
 HEALTH:
   CC̄=4.6  critical=73 (limit:10)  dup=1  cycles=0
@@ -23,12 +23,12 @@ MODULES[113] (top by size):
   M[code2llm/exporters/html_dashboard.py] 504L C:1 F:14 CC↑7 D:0 (python)
   M[code2llm/exporters/toon/metrics.py] 501L C:1 F:27 CC↑12 D:0 (python)
   M[code2llm/exporters/readme_exporter.py] 496L C:1 F:7 CC↑13 D:0 (python)
-  M[code2llm/cli_exports/prompt.py] 492L C:0 F:18 CC↑16 D:1 (python)
   M[code2llm/core/large_repo.py] 488L C:2 F:20 CC↑9 D:1 (python)
   M[code2llm/generators/mermaid.py] 485L C:0 F:16 CC↑13 D:1 (python)
   M[code2llm/generators/llm_flow.py] 472L C:1 F:24 CC↑14 D:0 (python)
   M[code2llm/exporters/evolution_exporter.py] 471L C:1 F:17 CC↑11 D:0 (python)
   M[code2llm/exporters/toon/renderer.py] 471L C:1 F:26 CC↑11 D:0 (python)
+  M[code2llm/cli_exports/prompt.py] 464L C:0 F:17 CC↑16 D:1 (python)
   M[code2llm/exporters/map_exporter.py] 435L C:1 F:21 CC↑25 D:4 (python)
   M[code2llm/core/file_analyzer.py] 398L C:1 F:17 CC↑12 D:0 (python)
   LANGS: python:106/shell:2/go:1/java:1/php:1/rust:1/typescript:1
@@ -48,4 +48,4 @@ REFACTOR[15]:
   [5] H/H Split god module code2llm/analysis/pipeline_detector.py (506L, 3 classes)
 
 EVOLUTION:
-  2026-03-26 CC̄=4.6 crit=73 26529L // Automated analysis
+  2026-03-26 CC̄=4.6 crit=73 26477L // Automated analysis
