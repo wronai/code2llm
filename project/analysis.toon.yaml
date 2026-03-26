@@ -1,4 +1,4 @@
-# code2llm | 113f 21449L | python:105,shell:2,php:1 | 2026-03-26
+# code2llm | 113f 21472L | python:105,shell:2,php:1 | 2026-03-26
 # CC̄=4.6 | critical:10/933 | dups:0 | cycles:0
 
 HEALTH[10]:
@@ -16,7 +16,7 @@ HEALTH[10]:
 REFACTOR[1]:
   1. split 10 high-CC methods  (CC>15)
 
-PIPELINES[638]:
+PIPELINES[637]:
   [1] Src [read_readme]: read_readme
       PURITY: 100% pure
   [2] Src [save_report]: save_report
@@ -25,7 +25,7 @@ PIPELINES[638]:
       PURITY: 100% pure
   [4] Src [main]: main → load_file → is_toon_file
       PURITY: 100% pure
-  [5] Src [main]: main → create_html → get_shield_url
+  [5] Src [__init__]: __init__
       PURITY: 100% pure
 
 LAYERS:
@@ -43,7 +43,7 @@ LAYERS:
   │ evolution_exporter         471L  1C   17m  CC=11     ←0
   │ renderer                   471L  1C   26m  CC=11     ←0
   │ !! map_exporter               435L  1C   21m  CC=25     ←4
-  │ prompt                     411L  0C   17m  CC=13     ←1
+  │ prompt                     426L  0C   17m  CC=14     ←1
   │ file_analyzer              398L  1C   17m  CC=12     ←0
   │ flow_exporter              391L  1C   14m  CC=10     ←0
   │ pipeline                   388L  3C   20m  CC=10     ←0
@@ -55,8 +55,8 @@ LAYERS:
   │ type_inference             321L  1C   19m  CC=9      ←0
   │ intent_matching            297L  3C   15m  CC=7      ←0
   │ cfg                        293L  1C   17m  CC=5      ←0
+  │ !! formats                    287L  0C   12m  CC=16     ←3
   │ data_analysis              286L  1C   18m  CC=14     ←0
-  │ !! formats                    286L  0C   12m  CC=16     ←3
   │ llm_task                   284L  0C   15m  CC=14     ←0
   │ cli_parser                 277L  0C    1m  CC=1      ←1
   │ toon_size_manager          265L  0C    8m  CC=10     ←1
@@ -79,8 +79,8 @@ LAYERS:
   │ module_detail              162L  1C    9m  CC=7      ←0
   │ toon_view                  157L  1C    9m  CC=6      ←0
   │ prompt_engine              150L  1C    7m  CC=12     ←0
+  │ orchestrator               149L  0C    5m  CC=11     ←1
   │ toon_parser                147L  0C   10m  CC=8      ←1
-  │ orchestrator               142L  0C    5m  CC=11     ←1
   │ context_view               140L  1C    8m  CC=11     ←0
   │ gitignore                  139L  1C    6m  CC=10     ←2
   │ !! ruby                       135L  0C    2m  CC=17     ←1

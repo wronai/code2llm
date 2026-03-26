@@ -30,14 +30,14 @@ flowchart TD
         badges__server__get_badges["get_badges"]
         code2llm__api__analyze["analyze"]
         code2llm__api__analyze_file["analyze_file"]
-        code2llm__DataAnalyzer__analyze_data_flow["analyze_data_flow"]
-        code2llm__DataAnalyzer__analyze_data_structures["analyze_data_structures"]
-        code2llm__DataAnalyzer___find_data_pipelines["_find_data_pipelines"]
-        code2llm__DataAnalyzer___find_state_patterns["_find_state_patterns"]
-        code2llm__DataAnalyzer___find_data_dependencies["_find_data_dependencies"]
-        code2llm__DataAnalyzer___find_event_flows["_find_event_flows"]
-        code2llm__DataAnalyzer___detect_types_from_name["_detect_types_from_name"]
-        code2llm__DataAnalyzer___create_type_entry["_create_type_entry"]
+        code2llm__TypeInferenceEngine__enrich_function["enrich_function"]
+        code2llm__TypeInferenceEngine__get_arg_types["get_arg_types"]
+        code2llm__TypeInferenceEngine__get_return_type["get_return_type"]
+        code2llm__TypeInferenceEngine__get_typed_signature["get_typed_signature"]
+        code2llm__TypeInferenceEngine__extract_all_types["extract_all_types"]
+        code2llm__TypeInferenceEngine___get_ast["_get_ast"]
+        code2llm__TypeInferenceEngine___find_function_node["_find_function_node"]
+        code2llm__TypeInferenceEngine___extract_from_node["_extract_from_node"]
         ...["+291 more"]
     end
 
@@ -51,13 +51,13 @@ flowchart TD
         code2llm__READMEExporter___build_llm_files_section["_build_llm_files_section"]
         code2llm__READMEExporter___build_viz_files_section["_build_viz_files_section"]
         code2llm__exporters__json_exporter__JSONExporter__export["export"]
-        code2llm__ProjectYAMLExporter__export["export"]
-        code2llm__ProjectYAMLExporter___build_project_yaml["_build_project_yaml"]
-        code2llm__ProjectYAMLExporter___build_health["_build_health"]
-        code2llm__ProjectYAMLExporter___build_alerts["_build_alerts"]
-        code2llm__ProjectYAMLExporter___count_duplicates["_count_duplicates"]
-        code2llm__ProjectYAMLExporter___build_modules["_build_modules"]
+        code2llm__exporters__yaml_exporter__YAMLExporter__export["export"]
+        code2llm__YAMLExporter__export_grouped["export_grouped"]
+        code2llm__YAMLExporter__export_data_flow["export_data_flow"]
+        code2llm__YAMLExporter__export_data_structures["export_data_structures"]
+        code2llm__YAMLExporter__export_separated["export_separated"]
+        code2llm__YAMLExporter__export_split["export_split"]
         ...["+224 more"]
     end
 
-    class setup__read_readme,validate_toon__main,code2llm__cli__main,badges__server__index,badges__server__generate_badges,badges__server__get_badges,code2llm__api__analyze,code2llm__api__analyze_file,code2llm__cli_analysis___run_analysis,code2llm__cli_analysis___run_standard_analysis entry
+    class setup__read_readme,validate_toon__main,badges__server__index,badges__server__generate_badges,badges__server__get_badges,code2llm__cli__main,code2llm__api__analyze,code2llm__api__analyze_file,code2llm__cli_analysis___run_analysis,code2llm__cli_analysis___run_standard_analysis entry

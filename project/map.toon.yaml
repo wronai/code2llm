@@ -1,4 +1,4 @@
-# code2llm | 108f 21243L | python:105,php:1,shell:2 | 2026-03-26
+# code2llm | 108f 21266L | python:105,php:1,shell:2 | 2026-03-26
 # stats: 829 func | 0 cls | 108 mod | CC̄=4.6 | critical:10 | cycles:0
 # alerts[5]: CC _process_functions=34; CC MapExporter.export_to_yaml=25; CC MermaidExporter.export_flow_detailed=25; fan-out analyze_rust=24; fan-out MapExporter.export_to_yaml=23
 # hotspots[5]: analyze_rust fan=24; MapExporter.export_to_yaml fan=23; analyze_go fan=22; MermaidExporter.export_flow_detailed fan=21; _summarize_functions fan=21
@@ -31,9 +31,9 @@ M[108]:
   code2llm/cli_commands.py,220
   code2llm/cli_exports/__init__.py,48
   code2llm/cli_exports/code2logic.py,127
-  code2llm/cli_exports/formats.py,286
-  code2llm/cli_exports/orchestrator.py,142
-  code2llm/cli_exports/prompt.py,411
+  code2llm/cli_exports/formats.py,287
+  code2llm/cli_exports/orchestrator.py,149
+  code2llm/cli_exports/prompt.py,426
   code2llm/cli_parser.py,277
   code2llm/core/__init__.py,53
   code2llm/core/analyzer.py,333
@@ -248,6 +248,25 @@ S...
     dump_yaml(data)
     create_parser()
     main(argv)
+  code2llm/cli_exports/prompt.py:
+    e: _export_prompt_txt,_export_chunked_prompt_txt,_get_prompt_paths,_build_prompt_header,_find_existing_prompt_file,_build_prompt_file_lines,_build_main_files_section,_build_optional_files_section,_build_source_files_section,_format_size,_get_missing_files,_build_subprojects_section,_build_missing_files_section,_analyze_generated_files,_build_dynamic_focus_areas,_build_dynamic_tasks,_build_prompt_footer
+    _export_prompt_txt(args;output_dir;formats;source_path)
+    _export_chunked_prompt_txt(args;output_dir;formats;source_path;subprojects)
+    _get_prompt_paths(source_path;output_dir)
+    _build_prompt_header(project_path)
+    _find_existing_prompt_file(output_dir;candidates)
+    _build_prompt_file_lines(output_dir;output_rel_path;files)
+    _build_main_files_section(output_dir;output_rel_path)
+    _build_optional_files_section(output_dir;output_rel_path)
+    _build_source_files_section(source_path)
+    _format_size(size_bytes)
+    _get_missing_files(output_dir)
+    _build_subprojects_section(subprojects;output_dir;output_rel_path)
+    _build_missing_files_section(output_dir;output_rel_path)
+    _analyze_generated_files(output_dir;subprojects)
+    _build_dynamic_focus_areas(file_analysis)
+    _build_dynamic_tasks(file_analysis)
+    _build_prompt_footer(chunked;file_analysis)
   code2llm/core/streaming/scanner.py:
     e: StreamingScanner
     StreamingScanner: __init__(2),quick_scan_file(1),deep_analyze_file(1),build_call_graph_streaming(1),select_important_files(2),collect_files(1)  # Handles file scanning operations...
@@ -305,25 +324,6 @@ S...
     generate_pngs(input_dir;output_dir;timeout)
     generate_single_png(mmd_file;output_file;timeout)
     generate_with_puppeteer(mmd_file;output_file;timeout;max_text_size;max_edges)
-  code2llm/cli_exports/prompt.py:
-    e: _export_prompt_txt,_export_chunked_prompt_txt,_get_prompt_paths,_build_prompt_header,_find_existing_prompt_file,_build_prompt_file_lines,_build_main_files_section,_build_optional_files_section,_build_source_files_section,_format_size,_get_missing_files,_build_subprojects_section,_build_missing_files_section,_analyze_generated_files,_build_dynamic_focus_areas,_build_dynamic_tasks,_build_prompt_footer
-    _export_prompt_txt(args;output_dir;formats;source_path)
-    _export_chunked_prompt_txt(args;output_dir;formats;source_path;subprojects)
-    _get_prompt_paths(source_path;output_dir)
-    _build_prompt_header(project_path)
-    _find_existing_prompt_file(output_dir;candidates)
-    _build_prompt_file_lines(output_dir;output_rel_path;files)
-    _build_main_files_section(output_dir;output_rel_path)
-    _build_optional_files_section(output_dir;output_rel_path)
-    _build_source_files_section(source_path)
-    _format_size(size_bytes)
-    _get_missing_files(output_dir)
-    _build_subprojects_section(subprojects;output_dir;output_rel_path)
-    _build_missing_files_section(output_dir;output_rel_path)
-    _analyze_generated_files(output_dir;subprojects)
-    _build_dynamic_focus_areas(file_analysis)
-    _build_dynamic_tasks(file_analysis)
-    _build_prompt_footer(chunked;file_analysis)
   code2llm/core/streaming_analyzer.py:
     e: StreamingAnalyzer
     StreamingAnalyzer: __init__(2),set_progress_callback(1),cancel(0),analyze_streaming(2),_estimate_eta(3),_report_progress(4)  # Memory-efficient streaming analyzer with progress tracking...
@@ -555,6 +555,11 @@ Stra...
   code2llm/core/streaming/incremental.py:
     e: IncrementalAnalyzer
     IncrementalAnalyzer: __init__(1),_load_state(0),_save_state(1),get_changed_files(1),_get_module_name(2)  # Incremental analysis with change detection...
+  badges/server.py:
+    e: index,generate_badges,get_badges
+    index()
+    generate_badges()
+    get_badges()
   scripts/bump_version.py:
     e: get_current_version,parse_version,format_version,bump_version,update_pyproject_toml,update_version_file,main
     get_current_version()
@@ -564,11 +569,6 @@ Stra...
     update_pyproject_toml(new_version)
     update_version_file(new_version)
     main()
-  badges/server.py:
-    e: index,generate_badges,get_badges
-    index()
-    generate_badges()
-    get_badges()
   benchmarks/benchmark_format_quality.py:
     e: _print_benchmark_header,_print_ground_truth_info,_generate_format_outputs,_create_offline_scores,run_benchmark
     _print_benchmark_header()
@@ -656,10 +656,10 @@ Stra...
   code2llm/cli_exports/__init__.py:
   code2llm/refactor/__init__.py:
   code2llm/patterns/__init__.py:
+  code2llm/core/streaming/__init__.py:
   code2llm/core/streaming/strategies.py:
     e: ScanStrategy
     ScanStrategy:  # Scanning methodology configuration...
-  code2llm/core/streaming/__init__.py:
   code2llm/core/lang/__init__.py:
   orchestrator.sh:
   project.sh:
