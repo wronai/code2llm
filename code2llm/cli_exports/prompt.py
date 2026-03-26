@@ -14,6 +14,7 @@ def _export_prompt_txt(args, output_dir: Path, formats: list[str], source_path: 
     lines = _build_prompt_header(project_path)
     lines.extend(_build_main_files_section(output_dir, output_rel_path))
     lines.extend(_build_optional_files_section(output_dir, output_rel_path))
+    lines.extend(_build_source_files_section(source_path))
 
     missing = _get_missing_files(output_dir)
     if missing:
@@ -41,6 +42,7 @@ def _export_chunked_prompt_txt(args, output_dir: Path, formats: list[str], sourc
     lines = _build_prompt_header(project_path)
     lines.extend(_build_main_files_section(output_dir, output_rel_path))
     lines.extend(_build_optional_files_section(output_dir, output_rel_path))
+    lines.extend(_build_source_files_section(source_path))
 
     if subprojects:
         lines.extend(_build_subprojects_section(subprojects, output_dir, output_rel_path))
@@ -94,6 +96,11 @@ _OPTIONAL_FILES = [
 ]
 
 
+_SOURCE_FILES = [
+    ('code2llm/cli_exports/orchestrator.py', 'Export orchestration - coordinates single-project and chunked export flows, including prompt generation'),
+]
+
+
 def _build_prompt_header(project_path: str) -> List[str]:
     """Build header section of prompt."""
     return [
@@ -143,6 +150,27 @@ def _build_optional_files_section(output_dir: Path, output_rel_path: str) -> Lis
         return []
 
     return ["", "Optional files:", ""] + lines
+
+
+def _build_source_files_section(source_path: Optional[Path]) -> List[str]:
+    """Build source files section with size metrics."""
+    if source_path is None:
+        return []
+
+    source_root = source_path if source_path.is_dir() else source_path.parent
+    lines = []
+    for rel_path, desc in _SOURCE_FILES:
+        file_path = source_root / rel_path
+        if not file_path.exists():
+            continue
+
+        size_str = _format_size(file_path.stat().st_size)
+        lines.append(f"- {rel_path}  ({desc}) [{size_str}]")
+
+    if not lines:
+        return []
+
+    return ["", "Source files:", ""] + lines
 
 
 def _format_size(size_bytes: int) -> str:

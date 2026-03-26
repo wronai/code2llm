@@ -1,5 +1,5 @@
-# code2llm | 108f 21103L | python:105,php:1,shell:2 | 2026-03-26
-# stats: 824 func | 0 cls | 108 mod | CC̄=4.6 | critical:10 | cycles:0
+# code2llm | 108f 21198L | python:105,php:1,shell:2 | 2026-03-26
+# stats: 827 func | 0 cls | 108 mod | CC̄=4.6 | critical:10 | cycles:0
 # alerts[5]: CC _process_functions=34; CC MapExporter.export_to_yaml=25; CC MermaidExporter.export_flow_detailed=25; fan-out analyze_rust=24; fan-out MapExporter.export_to_yaml=23
 # hotspots[5]: analyze_rust fan=24; MapExporter.export_to_yaml fan=23; analyze_go fan=22; MermaidExporter.export_flow_detailed fan=21; _summarize_functions fan=21
 # evolution: CC̄ 4.8→4.6 (improved -0.2)
@@ -31,9 +31,9 @@ M[108]:
   code2llm/cli_commands.py,220
   code2llm/cli_exports/__init__.py,48
   code2llm/cli_exports/code2logic.py,127
-  code2llm/cli_exports/formats.py,270
-  code2llm/cli_exports/orchestrator.py,121
-  code2llm/cli_exports/prompt.py,310
+  code2llm/cli_exports/formats.py,271
+  code2llm/cli_exports/orchestrator.py,142
+  code2llm/cli_exports/prompt.py,383
   code2llm/cli_parser.py,277
   code2llm/core/__init__.py,53
   code2llm/core/analyzer.py,333
@@ -304,20 +304,16 @@ S...
     generate_pngs(input_dir;output_dir;timeout)
     generate_single_png(mmd_file;output_file;timeout)
     generate_with_puppeteer(mmd_file;output_file;timeout;max_text_size;max_edges)
-  code2llm/core/streaming_analyzer.py:
-    e: StreamingAnalyzer
-    StreamingAnalyzer: __init__(2),set_progress_callback(1),cancel(0),analyze_streaming(2),_estimate_eta(3),_report_progress(4)  # Memory-efficient streaming analyzer with progress tracking...
-  code2llm/core/file_analyzer.py:
-    e: FileAnalyzer,_analyze_single_file
-    FileAnalyzer: __init__(2),analyze_file(2),_analyze_python(3),_analyze_ast(4),_calculate_complexity(3),_perform_deep_analysis(4),_process_class(4),_process_function(5),_build_cfg(4),_process_cfg_block(8),_process_if_stmt(8),_process_loop_stmt(7),_process_return_stmt(6),_get_base_name(1),_get_decorator_name(1),_get_call_name(1)  # Analyzes a single file...
-    _analyze_single_file(args)
   code2llm/cli_exports/prompt.py:
-    e: _export_prompt_txt,_export_chunked_prompt_txt,_get_prompt_paths,_build_prompt_header,_build_main_files_section,_format_size,_get_missing_files,_build_subprojects_section,_build_missing_files_section,_analyze_generated_files,_build_dynamic_focus_areas,_build_dynamic_tasks,_build_prompt_footer
+    e: _export_prompt_txt,_export_chunked_prompt_txt,_get_prompt_paths,_build_prompt_header,_find_existing_prompt_file,_build_prompt_file_lines,_build_main_files_section,_build_optional_files_section,_format_size,_get_missing_files,_build_subprojects_section,_build_missing_files_section,_analyze_generated_files,_build_dynamic_focus_areas,_build_dynamic_tasks,_build_prompt_footer
     _export_prompt_txt(args;output_dir;formats;source_path)
     _export_chunked_prompt_txt(args;output_dir;formats;source_path;subprojects)
     _get_prompt_paths(source_path;output_dir)
     _build_prompt_header(project_path)
+    _find_existing_prompt_file(output_dir;candidates)
+    _build_prompt_file_lines(output_dir;output_rel_path;files)
     _build_main_files_section(output_dir;output_rel_path)
+    _build_optional_files_section(output_dir;output_rel_path)
     _format_size(size_bytes)
     _get_missing_files(output_dir)
     _build_subprojects_section(subprojects;output_dir;output_rel_path)
@@ -326,6 +322,13 @@ S...
     _build_dynamic_focus_areas(file_analysis)
     _build_dynamic_tasks(file_analysis)
     _build_prompt_footer(chunked;file_analysis)
+  code2llm/core/streaming_analyzer.py:
+    e: StreamingAnalyzer
+    StreamingAnalyzer: __init__(2),set_progress_callback(1),cancel(0),analyze_streaming(2),_estimate_eta(3),_report_progress(4)  # Memory-efficient streaming analyzer with progress tracking...
+  code2llm/core/file_analyzer.py:
+    e: FileAnalyzer,_analyze_single_file
+    FileAnalyzer: __init__(2),analyze_file(2),_analyze_python(3),_analyze_ast(4),_calculate_complexity(3),_perform_deep_analysis(4),_process_class(4),_process_function(5),_build_cfg(4),_process_cfg_block(8),_process_if_stmt(8),_process_loop_stmt(7),_process_return_stmt(6),_get_base_name(1),_get_decorator_name(1),_get_call_name(1)  # Analyzes a single file...
+    _analyze_single_file(args)
   code2llm/refactor/prompt_engine.py:
     e: PromptEngine
     PromptEngine: __init__(2),generate_prompts(0),_generate_prompt_for_smell(1),_get_template_for_type(1),_build_context_for_smell(1),_get_source_context(3),_get_instruction_for_smell(1)  # Generate refactoring prompts from analysis results and detec...
@@ -349,8 +352,8 @@ S...
   code2llm/cli_exports/orchestrator.py:
     e: _run_exports,_export_single_project,_export_chunked_results,_get_filtered_subprojects,_process_subproject_result
     _run_exports(args;result;output_dir;source_path)
-    _export_single_project(args;result;output_dir;formats;source_path)
-    _export_chunked_results(args;result;output_dir;source_path;formats)
+    _export_single_project(args;result;output_dir;formats;requested_formats;source_path)
+    _export_chunked_results(args;result;output_dir;source_path;formats;requested_formats)
     _get_filtered_subprojects(args;source_path)
     _process_subproject_result(args;sp;output_dir)
   code2llm/exporters/toon/renderer.py:
@@ -522,7 +525,7 @@ Stra...
     QueryNormalizer: __init__(1),normalize(2),_unicode_normalize(1),_lowercase(1),_remove_punctuation(1),_normalize_whitespace(1),_remove_stopwords(2),_tokenize(1),step_1a_lowercase(1),step_1b_remove_punctuation(1),step_1c_normalize_whitespace(1),step_1d_unicode_normalize(1),step_1e_remove_stopwords(2)  # Normalize queries for consistent processing...
   code2llm/exporters/toon_view.py:
     e: ToonViewGenerator
-    ToonViewGenerator: generate(2),_render(1),_render_header(0),_render_health(0),_render_alerts(0),_render_modules(0),_render_hotspots(0),_render_refactoring(0),_render_evolution(0)  # Generate analysis_view.toon.yaml.toon from project.yaml data...
+    ToonViewGenerator: generate(2),_render(1),_render_header(0),_render_health(0),_render_alerts(0),_render_modules(0),_render_hotspots(0),_render_refactoring(0),_render_evolution(0)  # Generate project.toon.yaml from project.yaml data...
   code2llm/cli_exports/code2logic.py:
     e: _export_code2logic,_should_run_code2logic,_check_code2logic_installed,_build_code2logic_cmd,_run_code2logic,_handle_code2logic_error,_find_code2logic_output,_normalize_code2logic_output
     _export_code2logic(args;source_path;output_dir;formats)
@@ -651,10 +654,10 @@ Stra...
   code2llm/cli_exports/__init__.py:
   code2llm/refactor/__init__.py:
   code2llm/patterns/__init__.py:
-  code2llm/core/streaming/__init__.py:
   code2llm/core/streaming/strategies.py:
     e: ScanStrategy
     ScanStrategy:  # Scanning methodology configuration...
+  code2llm/core/streaming/__init__.py:
   code2llm/core/lang/__init__.py:
   orchestrator.sh:
   project.sh:

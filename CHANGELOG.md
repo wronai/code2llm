@@ -1,5 +1,27 @@
 ## [Unreleased]
 
+## [0.5.84] - 2026-03-26
+
+### Docs
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_prompt_txt.py
+
+### Other
+- Update code2llm/cli_exports/prompt.py
+- Update code2llm/exporters/readme_exporter.py
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/compact_flow.mmd
+- Update project/compact_flow.png
+- Update project/evolution.toon.yaml
+- Update project/flow.mmd
+- Update project/flow.png
+- ... and 3 more files
+
 ## [0.5.83] - 2026-03-26
 
 ### Docs

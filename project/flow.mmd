@@ -19,7 +19,7 @@ flowchart TD
         code2llm__cli_commands__handle_special_commands["handle_special_commands"]
         code2llm__cli_commands__handle_report_command["handle_report_command"]
         code2llm__cli_commands__validate_and_setup["validate_and_setup"]
-        ...["+40 more"]
+        ...["+43 more"]
     end
 
     subgraph Core
@@ -51,13 +51,13 @@ flowchart TD
         code2llm__READMEExporter___build_llm_files_section["_build_llm_files_section"]
         code2llm__READMEExporter___build_viz_files_section["_build_viz_files_section"]
         code2llm__exporters__json_exporter__JSONExporter__export["export"]
-        code2llm__exporters__map_exporter__MapExporter__export["export"]
-        code2llm__MapExporter__export_to_yaml["export_to_yaml"]
-        code2llm__MapExporter___render_header["_render_header"]
-        code2llm__MapExporter___render_stats_line["_render_stats_line"]
-        code2llm__MapExporter___render_alerts_line["_render_alerts_line"]
-        code2llm__MapExporter___render_hotspots_line["_render_hotspots_line"]
+        code2llm__exporters__yaml_exporter__YAMLExporter__export["export"]
+        code2llm__YAMLExporter__export_grouped["export_grouped"]
+        code2llm__YAMLExporter__export_data_flow["export_data_flow"]
+        code2llm__YAMLExporter__export_data_structures["export_data_structures"]
+        code2llm__YAMLExporter__export_separated["export_separated"]
+        code2llm__YAMLExporter__export_split["export_split"]
         ...["+224 more"]
     end
 
-    class setup__read_readme,validate_toon__main,badges__server__index,badges__server__generate_badges,badges__server__get_badges,code2llm__cli__main,code2llm__api__analyze,code2llm__api__analyze_file,code2llm__cli_analysis___run_analysis,code2llm__cli_analysis___run_standard_analysis entry
+    class setup__read_readme,validate_toon__main,code2llm__cli__main,badges__server__index,badges__server__generate_badges,badges__server__get_badges,code2llm__api__analyze,code2llm__api__analyze_file,code2llm__cli_analysis___run_analysis,code2llm__cli_analysis___run_standard_analysis entry
