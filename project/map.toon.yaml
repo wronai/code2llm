@@ -1,5 +1,5 @@
-# code2llm | 108f 21198L | python:105,php:1,shell:2 | 2026-03-26
-# stats: 827 func | 0 cls | 108 mod | CC̄=4.6 | critical:10 | cycles:0
+# code2llm | 108f 21230L | python:105,java:1,shell:2 | 2026-03-26
+# stats: 828 func | 0 cls | 108 mod | CC̄=4.6 | critical:10 | cycles:0
 # alerts[5]: CC _process_functions=34; CC MapExporter.export_to_yaml=25; CC MermaidExporter.export_flow_detailed=25; fan-out analyze_rust=24; fan-out MapExporter.export_to_yaml=23
 # hotspots[5]: analyze_rust fan=24; MapExporter.export_to_yaml fan=23; analyze_go fan=22; MermaidExporter.export_flow_detailed fan=21; _summarize_functions fan=21
 # evolution: CC̄ 4.8→4.6 (improved -0.2)
@@ -33,7 +33,7 @@ M[108]:
   code2llm/cli_exports/code2logic.py,127
   code2llm/cli_exports/formats.py,271
   code2llm/cli_exports/orchestrator.py,142
-  code2llm/cli_exports/prompt.py,383
+  code2llm/cli_exports/prompt.py,411
   code2llm/cli_parser.py,277
   code2llm/core/__init__.py,53
   code2llm/core/analyzer.py,333
@@ -81,7 +81,7 @@ M[108]:
   code2llm/exporters/map_exporter.py,435
   code2llm/exporters/mermaid_exporter.py,637
   code2llm/exporters/project_yaml_exporter.py,513
-  code2llm/exporters/readme_exporter.py,493
+  code2llm/exporters/readme_exporter.py,494
   code2llm/exporters/report_generators.py,34
   code2llm/exporters/toon/__init__.py,196
   code2llm/exporters/toon/helpers.py,120
@@ -106,7 +106,7 @@ M[108]:
   code2llm/patterns/detector.py,168
   code2llm/refactor/__init__.py,0
   code2llm/refactor/prompt_engine.py,150
-  demo_langs/valid/sample.php,44
+  demo_langs/valid/sample.java,47
   orchestrator.sh,58
   project.sh,49
   scripts/benchmark_badges.py,392
@@ -305,7 +305,7 @@ S...
     generate_single_png(mmd_file;output_file;timeout)
     generate_with_puppeteer(mmd_file;output_file;timeout;max_text_size;max_edges)
   code2llm/cli_exports/prompt.py:
-    e: _export_prompt_txt,_export_chunked_prompt_txt,_get_prompt_paths,_build_prompt_header,_find_existing_prompt_file,_build_prompt_file_lines,_build_main_files_section,_build_optional_files_section,_format_size,_get_missing_files,_build_subprojects_section,_build_missing_files_section,_analyze_generated_files,_build_dynamic_focus_areas,_build_dynamic_tasks,_build_prompt_footer
+    e: _export_prompt_txt,_export_chunked_prompt_txt,_get_prompt_paths,_build_prompt_header,_find_existing_prompt_file,_build_prompt_file_lines,_build_main_files_section,_build_optional_files_section,_build_source_files_section,_format_size,_get_missing_files,_build_subprojects_section,_build_missing_files_section,_analyze_generated_files,_build_dynamic_focus_areas,_build_dynamic_tasks,_build_prompt_footer
     _export_prompt_txt(args;output_dir;formats;source_path)
     _export_chunked_prompt_txt(args;output_dir;formats;source_path;subprojects)
     _get_prompt_paths(source_path;output_dir)
@@ -314,6 +314,7 @@ S...
     _build_prompt_file_lines(output_dir;output_rel_path;files)
     _build_main_files_section(output_dir;output_rel_path)
     _build_optional_files_section(output_dir;output_rel_path)
+    _build_source_files_section(source_path)
     _format_size(size_bytes)
     _get_missing_files(output_dir)
     _build_subprojects_section(subprojects;output_dir;output_rel_path)
@@ -395,6 +396,12 @@ Sections: P...
   code2llm/analysis/type_inference.py:
     e: TypeInferenceEngine
     TypeInferenceEngine: __init__(0),enrich_function(1),get_arg_types(1),get_return_type(1),get_typed_signature(1),extract_all_types(1),_get_ast(1),_find_function_node(3),_extract_from_node(2),_extract_args(1),_annotation_to_str(1),_ann_constant(1),_ann_name(1),_ann_attribute(1),_ann_subscript(1),_ann_tuple(1),_ann_binop(1),_infer_from_name(1),_infer_arg_type(1)  # Extract and infer type information from Python source files...
+  code2llm/analysis/call_graph.py:
+    e: CallGraphExtractor
+    CallGraphExtractor(ast.NodeVisitor): __init__(1),extract(3),_calculate_metrics(0),visit_Import(1),visit_ImportFrom(1),visit_ClassDef(1),visit_FunctionDef(1),visit_AsyncFunctionDef(1),visit_Call(1),_qualified_name(1),_resolve_call(1),_resolve_with_astroid(1),_expr_to_str(1)  # Extract call graph from AST...
+  code2llm/core/refactoring.py:
+    e: RefactoringAnalyzer
+    RefactoringAnalyzer: __init__(2),perform_refactoring_analysis(1),_build_call_graph(1),_calculate_centrality(2),_detect_cycles(2),_detect_communities(2),_analyze_coupling(1),_detect_smells(1),_detect_dead_code(1),_map_dead_code_to_items(2),_mark_reachable_items(1)  # Performs refactoring analysis on code...
   code2llm/core/large_repo.py:
     e: SubProject,HierarchicalRepoSplitter,should_use_chunking,get_analysis_plan
     SubProject:  # Represents a sub-project within a larger repository...
@@ -403,12 +410,6 @@ Sections: P...
 Stra...
     should_use_chunking(project_path;size_threshold_kb)
     get_analysis_plan(project_path;size_limit_kb)
-  code2llm/core/refactoring.py:
-    e: RefactoringAnalyzer
-    RefactoringAnalyzer: __init__(2),perform_refactoring_analysis(1),_build_call_graph(1),_calculate_centrality(2),_detect_cycles(2),_detect_communities(2),_analyze_coupling(1),_detect_smells(1),_detect_dead_code(1),_map_dead_code_to_items(2),_mark_reachable_items(1)  # Performs refactoring analysis on code...
-  code2llm/analysis/call_graph.py:
-    e: CallGraphExtractor
-    CallGraphExtractor(ast.NodeVisitor): __init__(1),extract(3),_calculate_metrics(0),visit_Import(1),visit_ImportFrom(1),visit_ClassDef(1),visit_FunctionDef(1),visit_AsyncFunctionDef(1),visit_Call(1),_qualified_name(1),_resolve_call(1),_resolve_with_astroid(1),_expr_to_str(1)  # Extract call graph from AST...
   code2llm/exporters/toon/__init__.py:
     e: ToonExporter
     ToonExporter: __init__(0),export(2),export_to_yaml(2),_build_header_dict(1),_build_health_dict(1),_build_refactor_dict(1),_build_pipelines_dict(1),_build_layers_dict(1),_build_coupling_dict(1),_build_external_dict(1),_is_excluded(1)  # Export to toon v2 plain-text format — scannable, sorted by s...
@@ -583,6 +584,10 @@ Stra...
   code2llm/__init__.py:
     e: __getattr__
     __getattr__(name)
+  demo_langs/valid/sample.java:
+    e: User,UserService
+    User: User(-1),getId(-1),getName(-1)
+    UserService: addUser(-1),getUser(-1),processUsers(-1),main(-1)
   code2llm/exporters/json_exporter.py:
     e: JSONExporter
     JSONExporter(Exporter): export(4)  # Export to JSON format...
@@ -596,10 +601,6 @@ Stra...
     e: analyze,analyze_file
     analyze(project_path;config)
     analyze_file(file_path;config)
-  demo_langs/valid/sample.php:
-    e: User,UserService
-    User: __construct(-1)
-    UserService: addUser(-1),getUser(-1),processUsers(-1)
   code2llm/analysis/__init__.py:
     e: __getattr__
     __getattr__(name)

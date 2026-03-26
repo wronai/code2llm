@@ -4,12 +4,12 @@
 
 - **Project**: /home/tom/github/wronai/code2llm
 - **Primary Language**: python
-- **Languages**: python: 114, shell: 2, php: 1
+- **Languages**: python: 114, shell: 2, java: 1
 - **Analysis Mode**: static
-- **Total Functions**: 931
+- **Total Functions**: 932
 - **Total Classes**: 106
 - **Modules**: 117
-- **Entry Points**: 695
+- **Entry Points**: 694
 
 ## Architecture by Module
 
@@ -93,6 +93,10 @@
 - **Classes**: 1
 - **File**: `evolution_exporter.py`
 
+### code2llm.cli_exports.prompt
+- **Functions**: 17
+- **File**: `prompt.py`
+
 ### code2llm.nlp.entity_resolution
 - **Functions**: 16
 - **Classes**: 3
@@ -101,10 +105,6 @@
 ### code2llm.generators.mermaid
 - **Functions**: 16
 - **File**: `mermaid.py`
-
-### code2llm.cli_exports.prompt
-- **Functions**: 16
-- **File**: `prompt.py`
 
 ### validate_toon
 - **Functions**: 15
@@ -425,22 +425,22 @@ Sections: PIPELINES, TRANSFORMS, CONTRACTS, DATA_TY
 - **Key Methods**: code2llm.analysis.call_graph.CallGraphExtractor.__init__, code2llm.analysis.call_graph.CallGraphExtractor.extract, code2llm.analysis.call_graph.CallGraphExtractor._calculate_metrics, code2llm.analysis.call_graph.CallGraphExtractor.visit_Import, code2llm.analysis.call_graph.CallGraphExtractor.visit_ImportFrom, code2llm.analysis.call_graph.CallGraphExtractor.visit_ClassDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_FunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_AsyncFunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_Call, code2llm.analysis.call_graph.CallGraphExtractor._qualified_name
 - **Inherits**: ast.NodeVisitor
 
-### code2llm.nlp.normalization.QueryNormalizer
-> Normalize queries for consistent processing.
+### code2llm.nlp.intent_matching.IntentMatcher
+> Match queries to intents using fuzzy and keyword matching.
 - **Methods**: 13
-- **Key Methods**: code2llm.nlp.normalization.QueryNormalizer.__init__, code2llm.nlp.normalization.QueryNormalizer.normalize, code2llm.nlp.normalization.QueryNormalizer._unicode_normalize, code2llm.nlp.normalization.QueryNormalizer._lowercase, code2llm.nlp.normalization.QueryNormalizer._remove_punctuation, code2llm.nlp.normalization.QueryNormalizer._normalize_whitespace, code2llm.nlp.normalization.QueryNormalizer._remove_stopwords, code2llm.nlp.normalization.QueryNormalizer._tokenize, code2llm.nlp.normalization.QueryNormalizer.step_1a_lowercase, code2llm.nlp.normalization.QueryNormalizer.step_1b_remove_punctuation
+- **Key Methods**: code2llm.nlp.intent_matching.IntentMatcher.__init__, code2llm.nlp.intent_matching.IntentMatcher.match, code2llm.nlp.intent_matching.IntentMatcher._fuzzy_match, code2llm.nlp.intent_matching.IntentMatcher._keyword_match, code2llm.nlp.intent_matching.IntentMatcher._apply_context, code2llm.nlp.intent_matching.IntentMatcher._combine_matches, code2llm.nlp.intent_matching.IntentMatcher._resolve_multi_intent, code2llm.nlp.intent_matching.IntentMatcher._calculate_similarity, code2llm.nlp.intent_matching.IntentMatcher.step_2a_fuzzy_match, code2llm.nlp.intent_matching.IntentMatcher.step_2b_semantic_match
 
 ## Data Transformation Functions
 
 Key functions that process and transform data:
 
-### benchmarks.benchmark_evolution.parse_evolution_metrics
-> Extract metrics from evolution.toon content.
-- **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, int
-
 ### validate_toon.validate_toon_completeness
 > Validate toon format structure.
 - **Output to**: print, print, bool, bool, bool
+
+### benchmarks.benchmark_evolution.parse_evolution_metrics
+> Extract metrics from evolution.toon content.
+- **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, int
 
 ### benchmarks.format_evaluator.evaluate_format
 > Oceń pojedynczy format względem ground truth.
@@ -494,14 +494,6 @@ Checks:
 > Generate all format outputs and evaluate them.
 - **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
-### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
-> Process large directories with file-level chunking.
-- **Output to**: self._chunk_by_files, chunks.extend
-
-### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
-> Process Python files directly in level1 directory.
-- **Output to**: code2llm.core.repo_files._get_gitignore_parser, len, chunks.append, self._chunk_by_files, chunks.extend
-
 ### code2llm.core.repo_files._get_gitignore_parser
 > Load gitignore parser for project if available.
 - **Output to**: code2llm.core.gitignore.load_gitignore_patterns
@@ -515,6 +507,14 @@ Checks:
 
 Returns list of (module_name, start_line, end_line).
 - **Output to**: content.split, enumerate, modules.append, line.startswith, line.endswith
+
+### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
+> Process large directories with file-level chunking.
+- **Output to**: self._chunk_by_files, chunks.extend
+
+### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
+> Process Python files directly in level1 directory.
+- **Output to**: code2llm.core.repo_files._get_gitignore_parser, len, chunks.append, self._chunk_by_files, chunks.extend
 
 ### code2llm.core.file_filter.FastFileFilter.should_process
 > Check if file should be processed.
