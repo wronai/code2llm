@@ -82,15 +82,15 @@
 - **Classes**: 2
 - **File**: `side_effects.py`
 
-### code2llm.core.file_analyzer
-- **Functions**: 17
-- **Classes**: 1
-- **File**: `file_analyzer.py`
-
 ### code2llm.analysis.cfg
 - **Functions**: 17
 - **Classes**: 1
 - **File**: `cfg.py`
+
+### code2llm.core.file_analyzer
+- **Functions**: 17
+- **Classes**: 1
+- **File**: `file_analyzer.py`
 
 ### code2llm.exporters.evolution_exporter
 - **Functions**: 17
@@ -425,10 +425,10 @@ Sections: PIPELINES, TRANSFORMS, CONTRACTS, DATA_TY
 - **Key Methods**: code2llm.analysis.call_graph.CallGraphExtractor.__init__, code2llm.analysis.call_graph.CallGraphExtractor.extract, code2llm.analysis.call_graph.CallGraphExtractor._calculate_metrics, code2llm.analysis.call_graph.CallGraphExtractor.visit_Import, code2llm.analysis.call_graph.CallGraphExtractor.visit_ImportFrom, code2llm.analysis.call_graph.CallGraphExtractor.visit_ClassDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_FunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_AsyncFunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_Call, code2llm.analysis.call_graph.CallGraphExtractor._qualified_name
 - **Inherits**: ast.NodeVisitor
 
-### code2llm.nlp.normalization.QueryNormalizer
-> Normalize queries for consistent processing.
+### code2llm.nlp.intent_matching.IntentMatcher
+> Match queries to intents using fuzzy and keyword matching.
 - **Methods**: 13
-- **Key Methods**: code2llm.nlp.normalization.QueryNormalizer.__init__, code2llm.nlp.normalization.QueryNormalizer.normalize, code2llm.nlp.normalization.QueryNormalizer._unicode_normalize, code2llm.nlp.normalization.QueryNormalizer._lowercase, code2llm.nlp.normalization.QueryNormalizer._remove_punctuation, code2llm.nlp.normalization.QueryNormalizer._normalize_whitespace, code2llm.nlp.normalization.QueryNormalizer._remove_stopwords, code2llm.nlp.normalization.QueryNormalizer._tokenize, code2llm.nlp.normalization.QueryNormalizer.step_1a_lowercase, code2llm.nlp.normalization.QueryNormalizer.step_1b_remove_punctuation
+- **Key Methods**: code2llm.nlp.intent_matching.IntentMatcher.__init__, code2llm.nlp.intent_matching.IntentMatcher.match, code2llm.nlp.intent_matching.IntentMatcher._fuzzy_match, code2llm.nlp.intent_matching.IntentMatcher._keyword_match, code2llm.nlp.intent_matching.IntentMatcher._apply_context, code2llm.nlp.intent_matching.IntentMatcher._combine_matches, code2llm.nlp.intent_matching.IntentMatcher._resolve_multi_intent, code2llm.nlp.intent_matching.IntentMatcher._calculate_similarity, code2llm.nlp.intent_matching.IntentMatcher.step_2a_fuzzy_match, code2llm.nlp.intent_matching.IntentMatcher.step_2b_semantic_match
 
 ## Data Transformation Functions
 
@@ -494,6 +494,10 @@ Checks:
 > Generate all format outputs and evaluate them.
 - **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
+### code2llm.core.repo_files._get_gitignore_parser
+> Load gitignore parser for project if available.
+- **Output to**: code2llm.core.gitignore.load_gitignore_patterns
+
 ### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
 > Process large directories with file-level chunking.
 - **Output to**: self._chunk_by_files, chunks.extend
@@ -501,10 +505,6 @@ Checks:
 ### code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files
 > Process Python files directly in level1 directory.
 - **Output to**: code2llm.core.repo_files._get_gitignore_parser, len, chunks.append, self._chunk_by_files, chunks.extend
-
-### code2llm.core.repo_files._get_gitignore_parser
-> Load gitignore parser for project if available.
-- **Output to**: code2llm.core.gitignore.load_gitignore_patterns
 
 ### code2llm.core.gitignore.GitIgnoreParser._parse_pattern
 > Parse a single gitignore pattern into regex.
@@ -520,6 +520,10 @@ Returns list of (module_name, start_line, end_line).
 > Check if file should be processed.
 - **Output to**: file_path.lower, Path, self._gitignore_parser.is_ignored, any, fnmatch.fnmatch
 
+### code2llm.analysis.cfg.CFGExtractor._format_except
+> Format except handler.
+- **Output to**: self._expr_to_str
+
 ### code2llm.core.file_analyzer.FileAnalyzer._process_class
 > Process class definition.
 - **Output to**: ClassInfo, None.classes.append, isinstance, isinstance, methods.append
@@ -531,10 +535,6 @@ Returns list of (module_name, start_line, end_line).
 ### code2llm.core.file_analyzer.FileAnalyzer._process_cfg_block
 > Process a block of statements for CFG with depth limiting.
 - **Output to**: None.append, isinstance, None.append, FlowEdge, self._process_if_stmt
-
-### code2llm.core.file_analyzer.FileAnalyzer._process_if_stmt
-> Process if statement for CFG.
-- **Output to**: FlowNode, func_info.cfg_nodes.append, None.append, self._process_cfg_block, FlowNode
 
 ## Behavioral Patterns
 

@@ -1,5 +1,22 @@
 ## [Unreleased]
 
+## [0.5.95] - 2026-03-26
+
+### Docs
+- Update project/context.md
+
+### Test
+- Update tests/test_prompt_txt.py
+
+### Other
+- Update code2llm/cli_exports/prompt.py
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/flow.png
+- Update project/index.html
+- Update project/map.toon.yaml
+
 ## [0.5.94] - 2026-03-26
 
 ### Docs

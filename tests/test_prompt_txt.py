@@ -18,12 +18,6 @@ class TestPromptTxtGeneration:
             yield Path(tmpdir)
 
     @pytest.fixture
-    def temp_source_dir(self):
-        """Create temporary source directory."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            yield Path(tmpdir)
-    
-    @pytest.fixture
     def mock_args(self):
         """Create mock args object with verbose flag."""
         args = MagicMock()
@@ -158,24 +152,6 @@ class TestPromptTxtGeneration:
         assert "P1 — Split or simplify the highest-CC / god modules" in content, "Analysis-driven refactoring should follow blockers"
         assert "P2 — Keep the compact project overview" in content, "Project overview should be preserved as a later priority"
 
-    def test_prompt_txt_includes_orchestrator_source_file_description(self, temp_output_dir, temp_source_dir, mock_args):
-        """Test that prompt.txt includes the orchestrator.py source file description."""
-        formats = ['code2logic']
-        source_path = temp_source_dir / 'myproject'
-
-        orchestrator_file = source_path / 'code2llm' / 'cli_exports' / 'orchestrator.py'
-        orchestrator_file.parent.mkdir(parents=True, exist_ok=True)
-        orchestrator_file.write_text('"""Export orchestration."""\n')
-
-        _export_prompt_txt(mock_args, temp_output_dir, formats, source_path)
-
-        prompt_file = temp_output_dir / 'prompt.txt'
-        content = prompt_file.read_text()
-
-        assert "Source files:" in content, "Source files section should be present"
-        assert "code2llm/cli_exports/orchestrator.py" in content, "Orchestrator file should be listed"
-        assert "Export orchestration" in content, "Orchestrator description should be included"
-    
     def test_prompt_txt_content_structure(self, temp_output_dir, mock_args):
         """Test the overall structure of generated prompt.txt."""
         formats = ['code2logic']

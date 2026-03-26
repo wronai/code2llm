@@ -26,7 +26,7 @@ PIPELINES[637]:
       PURITY: 100% pure
   [4] Src [main]: main → load_file → is_toon_file
       PURITY: 100% pure
-  [5] Src [main]: main → create_html → get_shield_url
+  [5] Src [__init__]: __init__
       PURITY: 100% pure
 
 LAYERS:
