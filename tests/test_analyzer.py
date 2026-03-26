@@ -6,6 +6,7 @@ import shutil
 from pathlib import Path
 from code2llm import ProjectAnalyzer, Config
 from code2llm.core.config import FAST_CONFIG, FilterConfig
+from code2llm.core.models import AnalysisResult, FunctionInfo
 
 
 class TestProjectAnalyzer:
@@ -221,6 +222,39 @@ class TestExporters:
         assert output.exists()
         content = output.read_text()
         assert "flowchart TD" in content
+
+    def test_mermaid_export_sanitizes_unsafe_identifiers(self, tmp_path):
+        """Mermaid IDs should not leak unsafe path-like characters."""
+        from code2llm.exporters import MermaidExporter
+
+        result = AnalysisResult(
+            project_path="/test",
+            analysis_mode="static",
+        )
+        result.functions["~/github/src/hell.module.func_a"] = FunctionInfo(
+            name="func_a",
+            qualified_name="~/github/src/hell.module.func_a",
+            file="/test/file.py",
+            line=1,
+            calls=["func_b"],
+        )
+        result.functions["~/github/src/hell.module.func_b"] = FunctionInfo(
+            name="func_b",
+            qualified_name="~/github/src/hell.module.func_b",
+            file="/test/file.py",
+            line=5,
+        )
+
+        output = tmp_path / "unsafe.mmd"
+        exporter = MermaidExporter()
+        exporter.export(result, str(output))
+
+        content = output.read_text()
+        assert "~" not in content
+        assert "/" not in content
+        assert "subgraph" in content
+        assert "func_a" in content
+        assert "func_b" in content
 
 
 if __name__ == "__main__":

@@ -1,5 +1,25 @@
 ## [Unreleased]
 
+## [0.5.97] - 2026-03-26
+
+### Docs
+- Update project/context.md
+
+### Test
+- Update tests/test_analyzer.py
+
+### Other
+- Update code2llm/exporters/mermaid_exporter.py
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/compact_flow.mmd
+- Update project/compact_flow.png
+- Update project/flow.mmd
+- Update project/flow.png
+- Update project/index.html
+- Update project/map.toon.yaml
+
 ## [0.5.96] - 2026-03-26
 
 ### Docs

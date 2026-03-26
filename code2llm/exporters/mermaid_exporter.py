@@ -12,6 +12,7 @@ New 3-level flow diagrams (Plan R1):
 """
 
 from collections import defaultdict
+import re
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Optional
 from .base import Exporter
@@ -581,32 +582,22 @@ class MermaidExporter(Exporter):
           code2llm.core.analyze → code2llm__core__analyze
           code2llm.core.PipelineDetector.__init__ → code2llm__core__PipelineDetector____init__
         """
-        # Convert dots to double underscores to preserve hierarchy
-        safe = name.replace('.', '__')
-        # Replace other unsafe chars
-        safe = safe.replace('-', '_').replace(':', '_').replace(' ', '_')
-        # Keep reasonable length but preserve class+method uniqueness
-        if len(safe) > 60:
-            parts = name.split('.')
-            if len(parts) >= 3:
-                # module__Class__method or module__subpackage__Class__method
-                module = parts[0]
-                method = parts[-1]
-                # Include class name if present (parts[-2] is usually class or subpackage)
-                if len(parts) >= 4 and parts[-2][0].isupper():
-                    # Definitely a class: module.sub.Class.method
-                    class_name = parts[-2]
-                    safe = f"{module}__{class_name}__{method}"
-                else:
-                    # Might be module.subpackage.function
-                    middle = '__'.join(parts[1:-1])
-                    safe = f"{module}__{middle}__{method}"
-            safe = safe[:60]
-        return safe
+        return self._sanitize_identifier(name, prefix="N")
 
     def _safe_module(self, name: str) -> str:
         """Create safe subgraph name."""
-        return name.replace('.', '_').replace('-', '_').replace('/', '_').replace(' ', '_')
+        return self._sanitize_identifier(name, prefix="M")
+
+    @staticmethod
+    def _sanitize_identifier(name: str, prefix: str) -> str:
+        """Convert an arbitrary string into a Mermaid-safe identifier."""
+        safe = (name or "").replace('.', '__')
+        safe = re.sub(r'[^A-Za-z0-9_]+', '_', safe)
+        if not safe:
+            return prefix
+        if not safe[0].isalpha():
+            safe = f"{prefix}_{safe}"
+        return safe
 
     def _module_of(self, func_name: str) -> str:
         """Extract module from qualified name.

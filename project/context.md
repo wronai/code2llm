@@ -502,15 +502,15 @@ Checks:
 > Parse a single gitignore pattern into regex.
 - **Output to**: pattern.startswith, pattern.endswith, pattern.startswith, self._wildcard_to_regex, re.compile
 
+### code2llm.analysis.cfg.CFGExtractor._format_except
+> Format except handler.
+- **Output to**: self._expr_to_str
+
 ### code2llm.core.toon_size_manager._parse_modules
 > Parse module sections from TOON content.
 
 Returns list of (module_name, start_line, end_line).
 - **Output to**: content.split, enumerate, modules.append, line.startswith, line.endswith
-
-### code2llm.analysis.cfg.CFGExtractor._format_except
-> Format except handler.
-- **Output to**: self._expr_to_str
 
 ### code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs
 > Process large directories with file-level chunking.
