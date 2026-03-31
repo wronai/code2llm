@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+## [0.5.101] - 2026-03-31
+
+### Other
+- Update code2llm/core/export_pipeline.py
+- Update code2llm/core/incremental.py
+- Update code2llm/core/lang/base.py
+- Update code2llm/core/lang/csharp.py
+- Update code2llm/core/lang/java.py
+
 ## [0.5.100] - 2026-03-31
 
 ### Docs

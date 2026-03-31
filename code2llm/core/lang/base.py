@@ -410,3 +410,26 @@ def _clear_orphaned_decorators(line, pending_decorators, func_re, arrow_re, clas
         if not any(p and p.match(line) for p in all_patterns):
             pending_decorators.clear()
     return pending_decorators
+
+
+def analyze_c_family(
+    content: str,
+    file_path: str,
+    module_name: str,
+    stats: Dict,
+    patterns: Dict,
+    lang_config: Dict,
+    cc_lang: str = 'c_family',
+) -> Dict:
+    """Shared analyzer for C-family languages (Java, C#, C++, etc.).
+
+    Reduces boilerplate duplication across Java/C#/C++ analyzers.
+    """
+    result = _extract_declarations(
+        content, file_path, module_name,
+        patterns, stats, lang_config,
+    )
+    calculate_complexity_regex(content, result, lang=cc_lang)
+    extract_calls_regex(content, module_name, result)
+    stats['files_processed'] += 1
+    return result
