@@ -1,4 +1,4 @@
-# code2llm | 122f 22674L | python:118,shell:4 | 2026-04-09
+# code2llm | 122f 22674L | python:117,shell:4,java:1 | 2026-04-09
 # CC̄=4.4 | critical:2/1011 | dups:0 | cycles:0
 
 HEALTH[2]:
@@ -152,7 +152,7 @@ LAYERS:
   │ sample.rs                   47L  1C    4m  CC=2      ←0
   │ sample.go                   46L  0C    4m  CC=3      ←0
   │ sample.php                  44L  1C    1m  CC=1      ←0
-  │ sample                      40L  2C    5m  CC=3      ←0
+  │ sample                      40L  1C    5m  CC=3      ←0
   │ sample.ts                   26L  1C    1m  CC=1      ←0
   │
   ── zero ──

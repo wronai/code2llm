@@ -1,5 +1,23 @@
 ## [Unreleased]
 
+## [0.5.104] - 2026-04-09
+
+### Docs
+- Update README.md
+- Update context.md
+- Update project/context.md
+
+### Other
+- Update analysis.toon.yaml
+- Update batch_1/analysis.toon.yaml
+- Update code2llm/cli_commands.py
+- Update code2llm/core/refactoring.py
+- Update project.sh
+- Update project/analysis.toon.yaml
+- Update project/batch_1/analysis.toon.yaml
+- Update project/root/analysis.toon.yaml
+- Update root/analysis.toon.yaml
+
 ## [0.5.103] - 2026-03-31
 
 ### Docs

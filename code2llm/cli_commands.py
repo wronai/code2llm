@@ -128,7 +128,7 @@ def validate_chunked_output(output_dir: Path, args) -> bool:
         print(f"✗ No chunk directories found in: {output_dir}", file=sys.stderr)
         return False
     
-    required_files = ['analysis.toon', 'context.md', 'evolution.toon.yaml']
+    required_files = ['analysis.toon.yaml', 'context.md', 'evolution.toon.yaml']
     issues = []
     valid_chunks = []
     

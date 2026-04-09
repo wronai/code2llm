@@ -185,7 +185,7 @@ class RefactoringAnalyzer:
                     
             # Check classes
             for class_name, class_info in result.classes.items():
-                if Path(class_info.file).resolve() == Path(item.filename).resolve() and class_info.line == item.lineno:
+                if Path(class_info.file).resolve() == item_path and class_info.line == item_lineno:
                     class_info.reachability = "unreachable" # (if we add reachability to ClassInfo too)
 
     def _mark_reachable_items(self, result: AnalysisResult) -> None:
