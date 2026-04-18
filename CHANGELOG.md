@@ -1,5 +1,17 @@
 ## [Unreleased]
 
+## [0.5.107] - 2026-04-18
+
+### Docs
+- Update README.md
+- Update docs/README.md
+
+### Test
+- Update test_calls_output/README.md
+- Update test_calls_output/analysis.toon.yaml
+- Update test_calls_output/context.md
+- Update test_calls_output/index.html
+
 ## [0.5.106] - 2026-04-18
 
 ### Test

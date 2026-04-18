@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 import os
 
 # Read version
-version = "0.5.105"
+version = "0.5.106"
 
 # Read long description
 def read_readme():

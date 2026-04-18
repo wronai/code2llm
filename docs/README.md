@@ -45,6 +45,43 @@ code2llm check ./my-project
 code2llm sync ./my-project
 ```
 
+## Generating Individual Files
+
+```bash
+# Health diagnostics only
+code2llm ./ -f toon
+
+# Structural map only
+code2llm ./ -f map
+
+# Refactoring queue only
+code2llm ./ -f evolution
+
+# LLM narrative only
+code2llm ./ -f context
+
+# Call graph (mermaid diagrams + YAML)
+code2llm ./ -f mermaid
+
+# Call graph YAML only (no visualization files)
+code2llm ./ -f calls
+
+# Flow diagrams only
+code2llm ./ -f flow
+
+# Standard YAML export
+code2llm ./ -f yaml
+
+# JSON export
+code2llm ./ -f json
+
+# Combined formats
+code2llm ./ -f toon,map,evolution,context
+
+# All core formats
+code2llm ./ -f all
+```
+
 ### Python API
 
 ```python
