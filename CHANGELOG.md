@@ -1,5 +1,24 @@
 ## [Unreleased]
 
+## [0.5.109] - 2026-04-18
+
+### Docs
+- Update calls_output/README.md
+- Update calls_output/context.md
+- Update project_calls_test/README.md
+- Update project_calls_test/context.md
+
+### Test
+- Update tests/test_edge_cases.py
+
+### Other
+- Update calls_output/analysis.toon.yaml
+- Update calls_output/calls.yaml
+- Update calls_output/index.html
+- Update code2llm/exporters/yaml_exporter.py
+- Update project_calls_test/calls.yaml
+- Update project_calls_test/index.html
+
 ## [0.5.108] - 2026-04-18
 
 ### Test

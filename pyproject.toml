@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "code2llm"
-version = "0.5.108"
+version = "0.5.109"
 description = "High-performance Python code flow analysis with optimized TOON format - CFG, DFG, call graphs, and intelligent code queries"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -67,6 +67,7 @@ dependencies = [
 dev = [
     "pytest>=6.2",
     "pytest-cov>=2.12",
+    "pytest-xdist>=3.0",
     "black>=21.0",
     "flake8>=3.9",
     "mypy>=0.910",
@@ -94,6 +95,10 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
+addopts = "-n auto"  # Run tests in parallel using pytest-xdist
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')"
+]
 
 [tool.pfix]
 # Self-healing Python configuration

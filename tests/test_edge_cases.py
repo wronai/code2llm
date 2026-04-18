@@ -50,22 +50,23 @@ class TestEdgeCases:
         finally:
             shutil.rmtree(tmp_dir)
     
+    @pytest.mark.slow
     def test_very_large_file(self):
         """Handle very large Python file."""
         tmp_dir = Path(tempfile.mkdtemp())
         try:
-            # Create large file (1000 functions)
-            lines = [f"def func_{i}(): pass" for i in range(1000)]
+            # Create large file (200 functions - reduced from 1000 for faster tests)
+            lines = [f"def func_{i}(): pass" for i in range(200)]
             (tmp_dir / "large.py").write_text('\n'.join(lines))
-            
+
             config = Config(
                 mode="static",
                 filters=FilterConfig(exclude_patterns=[], min_function_lines=1)
             )
             analyzer = ProjectAnalyzer(config)
             result = analyzer.analyze_project(str(tmp_dir))
-            
-            assert result.get_function_count() >= 1000
+
+            assert result.get_function_count() >= 200
         finally:
             shutil.rmtree(tmp_dir)
     

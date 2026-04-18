@@ -132,23 +132,39 @@ class YAMLExporter(Exporter):
         connected: Set[str] = set()
         edges: List[Dict] = []
         seen_pairs: Set[Tuple[str, str]] = set()
-        
+
         for func_name, fi in result.functions.items():
-            for callee in fi.calls[:max_calls]:
-                resolved = self._resolve_callee(callee, result.functions)
-                if resolved and resolved != func_name:
-                    connected.add(func_name)
-                    connected.add(resolved)
-                    pair = (func_name, resolved)
-                    if pair not in seen_pairs:
-                        seen_pairs.add(pair)
-                        edges.append(self._create_edge(func_name, resolved, callee))
-                        if len(edges) >= max_edges:
-                            return connected, edges
             if len(edges) >= max_edges:
-                return connected, edges
-        
+                break
+            self._process_function_calls(
+                func_name, fi, result.functions, max_calls, max_edges,
+                connected, edges, seen_pairs
+            )
+
         return connected, edges
+
+    def _process_function_calls(
+        self, func_name: str, fi: FunctionInfo, functions: Dict[str, FunctionInfo],
+        max_calls: int, max_edges: int, connected: Set[str], edges: List[Dict],
+        seen_pairs: Set[Tuple[str, str]]
+    ) -> None:
+        """Process calls for a single function."""
+        for callee in fi.calls[:max_calls]:
+            if len(edges) >= max_edges:
+                break
+            resolved = self._resolve_callee(callee, functions)
+            if self._should_add_edge(func_name, resolved, seen_pairs):
+                connected.add(func_name)
+                connected.add(resolved)
+                seen_pairs.add((func_name, resolved))
+                edges.append(self._create_edge(func_name, resolved, callee))
+
+    @staticmethod
+    def _should_add_edge(func_name: str, resolved: Optional[str], seen_pairs: Set[Tuple[str, str]]) -> bool:
+        """Check if edge should be added (valid callee and not duplicate)."""
+        if not resolved or resolved == func_name:
+            return False
+        return (func_name, resolved) not in seen_pairs
 
     @staticmethod
     def _create_edge(caller: str, resolved: str, callee: str) -> Dict:
