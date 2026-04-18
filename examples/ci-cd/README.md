@@ -2,9 +2,6 @@
 
 Automatyczne sprawdzanie jakości kodu w CI/CD z `code2llm`.
 
-## GitHub Actions
-
-```yaml
 # .github/workflows/code-quality.yml
 name: Code Quality Check
 
@@ -52,10 +49,6 @@ jobs:
           path: /tmp/analysis/
 ```
 
-## Pre-commit Hook
-
-```bash
-#!/bin/sh
 # .git/hooks/pre-commit
 
 echo "Running code2llm quality check..."

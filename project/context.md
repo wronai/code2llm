@@ -4,9 +4,9 @@
 
 - **Project**: .
 - **Primary Language**: python
-- **Languages**: python: 126, shell: 4, php: 1
+- **Languages**: python: 126, shell: 4, java: 1
 - **Analysis Mode**: static
-- **Total Functions**: 1011
+- **Total Functions**: 1014
 - **Total Classes**: 111
 - **Modules**: 131
 - **Entry Points**: 0
@@ -254,10 +254,6 @@ Key functions that process and transform data:
 > Validate session and return user ID.
 - **Output to**: self.sessions.get
 
-### validate_toon.validate_toon_completeness
-> Validate toon format structure.
-- **Output to**: print, print, bool, bool, bool
-
 ### examples.streaming-analyzer.sample_project.api.APIHandler.process_request
 > Process API request.
 - **Output to**: self._check_rate_limit, self._get_stats, self._get_user_info, self._health_check
@@ -278,6 +274,10 @@ Key functions that process and transform data:
 > Transform data fields.
 - **Output to**: item.copy, transformations.items, transformed.append, None.upper, None.lower
 
+### validate_toon.validate_toon_completeness
+> Validate toon format structure.
+- **Output to**: print, print, bool, bool, bool
+
 ### benchmarks.benchmark_evolution.parse_evolution_metrics
 > Extract metrics from evolution.toon content.
 - **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, int
@@ -289,6 +289,13 @@ Key functions that process and transform data:
 ### benchmarks.format_evaluator.evaluate_format
 > Oceń pojedynczy format względem ground truth.
 - **Output to**: FormatScore, benchmarks.format_evaluator._detect_problems, sum, benchmarks.format_evaluator._detect_pipelines, sum
+
+### scripts.bump_version.parse_version
+> Parse version string into tuple of (major, minor, patch)
+- **Output to**: version_str.split, tuple, int
+
+### scripts.bump_version.format_version
+> Format version tuple as string
 
 ### scripts.benchmark_badges.parse_evolution_metrics
 > Extract metrics from evolution.toon content.
@@ -305,13 +312,6 @@ Key functions that process and transform data:
 ### scripts.benchmark_badges.generate_format_quality_badges
 > Generate badges from format quality scores.
 - **Output to**: enumerate, badges.append, sorted, badges.append, format_scores.items
-
-### scripts.bump_version.parse_version
-> Parse version string into tuple of (major, minor, patch)
-- **Output to**: version_str.split, tuple, int
-
-### scripts.bump_version.format_version
-> Format version tuple as string
 
 ### code2llm.cli_parser.create_parser
 > Create CLI argument parser.
@@ -365,6 +365,7 @@ Functions exposed as public API (no underscore prefix):
 - `benchmarks.benchmark_evolution.run_benchmark` - 34 calls
 - `code2llm.cli_commands.validate_chunked_output` - 34 calls
 - `code2llm.core.lang.rust.analyze_rust` - 31 calls
+- `code2llm.exporters.yaml_exporter.YAMLExporter.export_calls` - 31 calls
 - `benchmarks.benchmark_optimizations.benchmark_cold_vs_warm` - 30 calls
 - `benchmarks.benchmark_performance.create_test_project` - 29 calls
 - `code2llm.nlp.pipeline.NLPPipeline.process` - 29 calls
@@ -394,7 +395,6 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.core.lang.ruby.analyze_ruby` - 19 calls
 - `code2llm.exporters.map_exporter.MapExporter.export_to_yaml` - 19 calls
 - `code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped` - 19 calls
-- `benchmarks.benchmark_optimizations.print_summary` - 18 calls
 
 ## System Interactions
 

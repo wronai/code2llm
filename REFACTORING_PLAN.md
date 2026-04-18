@@ -1,5 +1,3 @@
-# Plan Refaktoryzacji code2llm (v0.4.0)
-
 ## Podsumowanie Zmian
 
 Refaktoryzacja monolitycznego `flow.py` (1145 linii) w modularną paczkę Python,
@@ -87,8 +85,6 @@ code2llm/
 - `core/streaming_analyzer_old.py` — 666L (v0.6.0)
 - `TODO/` — stare pliki migracji (v0.6.0)
 
-## Kluczowe Decyzje Architektoniczne
-
 ### 1. Separacja Odpowiedzialności
 - **core/**: Modele danych i główny analyzer
 - **analysis/**: Logika parsowania AST (CFG, DFG, Call Graph, pipelines, side effects)
@@ -122,8 +118,6 @@ code2llm /path/to/project -m hybrid -o ./output -f toon,map,flow,context,all
 | Wzorce | ✓ | ✗ | ✗ | ✗ | ✓ |
 | LLM Output | ✓ | ✗ | ✗ | ✗ | ✓ |
 | Modularność | ✓ | ✓ | ✓ | ✗ | ? |
-
-## Przyszłe Rozszerzenia
 
 ### Priorytet Wysoki
 1. [ ] CI/CD pipeline (GitHub Actions)

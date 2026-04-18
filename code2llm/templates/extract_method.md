@@ -2,21 +2,18 @@
 
 Dla funkcji: `{{ target_function }}` w pliku `{{ source_file }}`
 
-## Analiza Problemu
-{{ reason }}
-
 ## Kontekst Techniczny
 - **Metryki**: {{ metrics | dictsort | map('join', ': ') | join(', ') if metrics else 'N/A' }}
 - **Mutacje Danych**: {{ mutations_context }}
 - **Dostępność (Reachability)**: {{ reachability }}
 
-## Zadanie
-{{ instruction }}
-
 ## Kod do Refaktoryzacji (L{{ start_line }}-{{ end_line }})
 ```python
 {{ source_code }}
 ```
+
+## Instrukcja
+{{ instruction }}
 
 ## Wytyczne
 1. Nie zmieniaj funkcjonalności zewnętrznej.

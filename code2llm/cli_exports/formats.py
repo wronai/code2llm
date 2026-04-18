@@ -213,6 +213,18 @@ def _export_mermaid_pngs(args, output_dir: Path) -> None:
                 print(f"  - PNG: Skipped (install with: make install-mermaid)")
 
 
+def _export_calls(args, result, output_dir: Path):
+    """Export standalone calls.yaml (call graph as structured YAML).
+    
+    Generates calls.yaml without any Mermaid files — useful for programmatic
+    analysis of call graphs without visualization overhead.
+    """
+    yaml_exporter = YAMLExporter()
+    yaml_exporter.export_calls(result, str(output_dir / 'calls.yaml'))
+    if args.verbose:
+        print(f"  - CALLS (call graph YAML): {output_dir / 'calls.yaml'}")
+
+
 def _export_mermaid(args, result, output_dir: Path):
     """Export Mermaid diagrams + optional PNG generation.
     
@@ -233,13 +245,17 @@ def _export_mermaid(args, result, output_dir: Path):
     exporter.export_call_graph(result, str(output_dir / 'calls.mmd'))
     exporter.export_compact(result, str(output_dir / 'compact_flow.mmd'))
 
+    # Export calls.yaml (structured call graph data)
+    yaml_exporter = YAMLExporter()
+    yaml_exporter.export_calls(result, str(output_dir / 'calls.yaml'))
+
     if args.verbose:
         files = ['flow.mmd']
         if getattr(args, 'flow_detail', False):
             files.append('flow_detailed.mmd')
         if getattr(args, 'flow_full', False):
             files.append('flow_full.mmd')
-        files.extend(['calls.mmd', 'compact_flow.mmd'])
+        files.extend(['calls.mmd', 'compact_flow.mmd', 'calls.yaml'])
         print(f"  - Mermaid: {output_dir}/*.mmd ({', '.join(files)})")
 
     _export_mermaid_pngs(args, output_dir)

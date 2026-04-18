@@ -1,6 +1,45 @@
 ## [Unreleased]
 
-## [0.5.104] - 2026-04-09
+## [0.5.105] - 2026-04-18
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update REFACTORING_PLAN.md
+- Update ROADMAP.md
+- Update TODO.md
+- Update code2llm/templates/extract_method.md
+- Update code2llm/templates/move_method.md
+- Update context.md
+- Update docs/API.md
+- Update docs/COMPARISON_AND_OPTIMIZATION.md
+- ... and 13 more files
+
+### Test
+- Update test_dynamic/README.md
+- Update test_dynamic/batch_1/context.md
+- Update test_dynamic/context.md
+- Update test_dynamic/root/context.md
+- Update test_dynamic2/README.md
+- Update test_dynamic2/batch_1/context.md
+- Update test_dynamic2/context.md
+- Update test_dynamic2/root/context.md
+- Update test_metrics/README.md
+- Update test_metrics/batch_1/context.md
+- ... and 6 more files
+
+### Other
+- Update Taskfile.yml
+- Update analysis.toon.yaml
+- Update app.doql.css
+- Update batch_1/analysis.toon.yaml
+- Update code2llm/cli_exports/formats.py
+- Update code2llm/cli_exports/orchestrator.py
+- Update code2llm/cli_parser.py
+- Update code2llm/exporters/yaml_exporter.py
+- Update project/analysis.toon.yaml
+- Update project/batch_1/analysis.toon.yaml
+- ... and 2 more files
 
 ### Docs
 - Update README.md
@@ -17,8 +56,6 @@
 - Update project/batch_1/analysis.toon.yaml
 - Update project/root/analysis.toon.yaml
 - Update root/analysis.toon.yaml
-
-## [0.5.103] - 2026-03-31
 
 ### Docs
 - Update README.md
@@ -39,18 +76,12 @@
 - Update code2llm/core/lang/ts_extractors.py
 - ... and 5 more files
 
-## [0.5.102] - 2026-03-31
-
-## [0.5.101] - 2026-03-31
-
 ### Other
 - Update code2llm/core/export_pipeline.py
 - Update code2llm/core/incremental.py
 - Update code2llm/core/lang/base.py
 - Update code2llm/core/lang/csharp.py
 - Update code2llm/core/lang/java.py
-
-## [0.5.100] - 2026-03-31
 
 ### Docs
 - Update CHANGELOG.md
@@ -74,12 +105,8 @@
 - Update code2llm/cli_exports/prompt.py
 - ... and 30 more files
 
-## [0.1.10] - 2026-03-31
-
 ### Fixed
 - Fix magic-numbers issues (ticket-5b969e46)
-
-## [0.1.10] - 2026-03-30
 
 ### Fixed
 - Fix smart-return-type issues (ticket-73e5bbd1)
@@ -357,8 +384,6 @@
 - Fix magic-numbers issues (ticket-421095fe)
 - Fix ai-boilerplate issues (ticket-a484943d)
 
-## [0.5.99] - 2026-03-26
-
 ### Docs
 - Update context.md
 - Update project/context.md
@@ -370,8 +395,6 @@
 - Update project/batch_1/analysis.toon.yaml
 - Update project/root/analysis.toon.yaml
 - Update root/analysis.toon.yaml
-
-## [0.5.98] - 2026-03-26
 
 ### Docs
 - Update context.md
@@ -385,8 +408,6 @@
 - Update project/batch_1/analysis.toon.yaml
 - Update project/root/analysis.toon.yaml
 - Update root/analysis.toon.yaml
-
-## [0.5.97] - 2026-03-26
 
 ### Docs
 - Update project/context.md
@@ -406,8 +427,6 @@
 - Update project/index.html
 - Update project/map.toon.yaml
 
-## [0.5.96] - 2026-03-26
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
@@ -425,8 +444,6 @@
 - Update project/project.toon.yaml
 - ... and 1 more files
 
-## [0.5.95] - 2026-03-26
-
 ### Docs
 - Update project/context.md
 
@@ -441,8 +458,6 @@
 - Update project/flow.png
 - Update project/index.html
 - Update project/map.toon.yaml
-
-## [0.5.94] - 2026-03-26
 
 ### Docs
 - Update project/README.md
@@ -461,16 +476,12 @@
 - Update project/index.html
 - ... and 3 more files
 
-## [0.5.93] - 2026-03-26
-
 ### Test
 - Update tests/test_prompt_txt.py
 
 ### Other
 - Update code2llm/cli_exports/prompt.py
 - Update code2llm/exporters/readme_exporter.py
-
-## [0.5.92] - 2026-03-26
 
 ### Docs
 - Update project/context.md
@@ -486,8 +497,6 @@
 - Update project/index.html
 - Update project/map.toon.yaml
 
-## [0.5.91] - 2026-03-26
-
 ### Docs
 - Update project/context.md
 
@@ -500,31 +509,10 @@
 - Update project/flow.png
 - Update project/index.html
 - Update project/map.toon.yaml
-
-## [0.5.90] - 2026-03-26
 
 ### Docs
 - Update project/README.md
 - Update project/context.md
-
-### Other
-- Update project/analysis.toon.yaml
-- Update project/calls.mmd
-- Update project/calls.png
-- Update project/compact_flow.mmd
-- Update project/flow.mmd
-- Update project/flow.png
-- Update project/index.html
-- Update project/map.toon.yaml
-- Update project/project.toon.yaml
-- Update project/prompt.txt
-
-## [0.5.89] - 2026-03-26
-
-## [0.5.88] - 2026-03-26
-
-### Docs
-- Update README.md
 
 ### Test
 - Update tests/test_project_toon_export.py
@@ -535,8 +523,6 @@
 - Update code2llm/cli_exports/prompt.py
 - Update code2llm/cli_parser.py
 - Update code2llm/exporters/readme_exporter.py
-
-## [0.5.87] - 2026-03-26
 
 ### Docs
 - Update project/README.md
@@ -555,8 +541,6 @@
 - Update project/flow.png
 - ... and 3 more files
 
-## [0.5.86] - 2026-03-26
-
 ### Docs
 - Update README.md
 - Update project/README.md
@@ -572,26 +556,9 @@
 - Update project/index.html
 - Update project/map.toon.yaml
 
-## [0.5.85] - 2026-03-26
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
-
-### Other
-- Update project/analysis.toon.yaml
-- Update project/calls.mmd
-- Update project/calls.png
-- Update project/compact_flow.mmd
-- Update project/compact_flow.png
-- Update project/evolution.toon.yaml
-- Update project/flow.mmd
-- Update project/flow.png
-- Update project/index.html
-- Update project/map.toon.yaml
-- ... and 2 more files
-
-## [0.5.84] - 2026-03-26
 
 ### Docs
 - Update project/README.md
@@ -612,8 +579,6 @@
 - Update project/flow.mmd
 - Update project/flow.png
 - ... and 3 more files
-
-## [0.5.83] - 2026-03-26
 
 ### Docs
 - Update README.md
@@ -634,8 +599,6 @@
 - Update project/root/analysis.toon.yaml
 - ... and 1 more files
 
-## [0.5.82] - 2026-03-26
-
 ### Other
 - Update code2llm/cli_analysis.py
 - Update code2llm/cli_commands.py
@@ -648,8 +611,6 @@
 - Update code2llm/exporters/report_generators.py
 - Update code2llm/exporters/toon_view.py
 - ... and 1 more files
-
-## [0.5.81] - 2026-03-26
 
 ### Other
 - Update analysis.toon.yaml
@@ -664,12 +625,8 @@
 - Update project/prompt.txt
 - ... and 2 more files
 
-## [0.5.80] - 2026-03-25
-
 ### Other
 - Update project/validation.toon
-
-## [0.5.79] - 2026-03-25
 
 ### Docs
 - Update docs/README.md
@@ -689,8 +646,6 @@
 - Update project/flow.mmd
 - ... and 3 more files
 
-## [0.5.78] - 2026-03-25
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
@@ -708,13 +663,9 @@
 - Update project/evolution.toon.yaml
 - ... and 8 more files
 
-## [0.5.77] - 2026-03-25
-
 ### Other
 - Update code2llm/cli_exports/formats.py
 
-## [0.5.76] - 2026-03-25
-
 ### Docs
 - Update project/context.md
 
@@ -729,8 +680,6 @@
 - Update project/map.yaml
 - Update project/toon.yaml
 
-## [0.5.75] - 2026-03-25
-
 ### Docs
 - Update project/context.md
 
@@ -744,8 +693,6 @@
 - Update project/index.html
 - Update project/map.yaml
 - Update project/toon.yaml
-
-## [0.5.74] - 2026-03-25
 
 ### Docs
 - Update project/context.md
@@ -762,30 +709,11 @@
 - Update project/map.yaml
 - Update project/toon.yaml
 
-## [0.5.73] - 2026-03-25
-
 ### Docs
 - Update project/context.md
 
 ### Other
-- Update project/analysis.json
-- Update project/analysis.yaml
-- Update project/calls.mmd
-- Update project/calls.png
-- Update project/compact_flow.mmd
-- Update project/compact_flow.png
-- Update project/evolution.yaml
-- Update project/flow.mmd
-- Update project/flow.png
-- Update project/index.html
-- ... and 2 more files
-
-## [0.5.72] - 2026-03-25
-
-### Other
 - Update code2llm/cli_exports/formats.py
-
-## [0.5.71] - 2026-03-25
 
 ### Docs
 - Update project/README.md
@@ -801,8 +729,6 @@
 - Update project/flow.mmd
 - Update project/flow.png
 - Update project/index.html
-
-## [0.5.70] - 2026-03-25
 
 ### Docs
 - Update project/README.md
@@ -820,8 +746,6 @@
 - Update project/flow.png
 - Update project/index.html
 - ... and 1 more files
-
-## [0.5.69] - 2026-03-25
 
 ### Docs
 - Update project/README.md
@@ -843,8 +767,6 @@
 - Update project/calls.mmd
 - ... and 8 more files
 
-## [0.5.68] - 2026-03-25
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
@@ -862,8 +784,6 @@
 - Update code2llm/exporters/toon/module_detail.py
 - ... and 12 more files
 
-## [0.5.67] - 2026-03-25
-
 ### Other
 - Update code2llm/analysis/call_graph.py
 - Update code2llm/analysis/cfg.py
@@ -877,26 +797,9 @@
 - Update code2llm/cli_exports/formats.py
 - ... and 12 more files
 
-## [0.5.66] - 2026-03-25
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
-
-### Other
-- Update project/analysis.json
-- Update project/analysis.toon
-- Update project/analysis.yaml
-- Update project/calls.mmd
-- Update project/calls.png
-- Update project/compact_flow.mmd
-- Update project/compact_flow.png
-- Update project/evolution.toon
-- Update project/flow.mmd
-- Update project/flow.png
-- ... and 2 more files
-
-## [0.5.65] - 2026-03-25
 
 ### Docs
 - Update project/context.md
@@ -913,8 +816,6 @@
 - Update code2llm/core/lang/php.py
 - Update code2llm/core/lang/ruby.py
 - ... and 14 more files
-
-## [0.5.64] - 2026-03-25
 
 ### Docs
 - Update project/README.md
@@ -933,8 +834,6 @@
 - Update project/flow.mmd
 - ... and 3 more files
 
-## [0.5.63] - 2026-03-25
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
@@ -951,8 +850,6 @@
 - Update code2llm/core/refactoring.py
 - Update project/analysis.json
 - ... and 11 more files
-
-## [0.5.62] - 2026-03-25
 
 ### Docs
 - Update project/README.md
@@ -974,29 +871,12 @@
 - Update code2llm/core/lang/csharp.py
 - ... and 21 more files
 
-## [0.5.61] - 2026-03-25
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
 
 ### Test
 - Update tests/test_format_quality.py
-
-### Other
-- Update orchestrator.sh
-- Update project/analysis.json
-- Update project/analysis.toon
-- Update project/analysis.yaml
-- Update project/calls.mmd
-- Update project/calls.png
-- Update project/compact_flow.mmd
-- Update project/compact_flow.png
-- Update project/evolution.toon
-- Update project/flow.mmd
-- ... and 3 more files
-
-## [0.5.60] - 2026-03-25
 
 ### Docs
 - Update project/README.md
@@ -1018,8 +898,6 @@
 - Update project/compact_flow.png
 - ... and 5 more files
 
-## [0.5.59] - 2026-03-25
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
@@ -1037,8 +915,6 @@
 - Update project/compact_flow.png
 - ... and 11 more files
 
-## [0.5.58] - 2026-03-25
-
 ### Docs
 - Update context.md
 - Update project/README.md
@@ -1052,8 +928,6 @@
 - Update project/root/analysis.toon
 - Update root/analysis.toon
 
-## [0.5.57] - 2026-03-25
-
 ### Other
 - Update code2llm/cli_exports/formats.py
 - Update code2llm/cli_parser.py
@@ -1061,8 +935,6 @@
 - Update code2llm/exporters/readme_exporter.py
 - Update code2llm/exporters/report_generators.py
 - Update code2llm/exporters/toon/metrics.py
-
-## [0.5.56] - 2026-03-25
 
 ### Docs
 - Update README.md
@@ -1088,8 +960,6 @@
 - Update code2llm/exporters/readme_exporter.py
 - ... and 19 more files
 
-## [0.5.55] - 2026-03-21
-
 ### Docs
 - Update README.md
 - Update context.md
@@ -1105,13 +975,9 @@
 - Update project/root/analysis.toon
 - Update root/analysis.toon
 
-## [0.5.54] - 2026-03-20
-
 ### Other
 - Update code2llm/core/large_repo.py
 - Update code2llm/core/repo_files.py
-
-## [0.5.53] - 2026-03-20
 
 ### Other
 - Update code2llm/cli_analysis.py
@@ -1121,8 +987,6 @@
 - Update code2llm/core/core/file_filter.py
 - Update code2llm/core/core/lang/cpp.py
 - Update code2llm/core/gitignore.py
-
-## [0.5.52] - 2026-03-09
 
 ### Other
 - Update code2llm/analysis/data_analysis.py
@@ -1136,8 +1000,6 @@
 - Update code2llm/core/core/lang/cpp.py
 - Update code2llm/core/core/lang/csharp.py
 - ... and 11 more files
-
-## [0.5.51] - 2026-03-09
 
 ### Docs
 - Update README.md
@@ -1157,8 +1019,6 @@
 - Update project/root/analysis.toon
 - Update root/analysis.toon
 
-## [0.5.50] - 2026-03-09
-
 ### Docs
 - Update README.md
 - Update context.md
@@ -1173,8 +1033,6 @@
 - Update project/root/analysis.toon
 - Update root/analysis.toon
 
-## [0.5.49] - 2026-03-09
-
 ### Docs
 - Update README.md
 - Update context.md
@@ -1188,16 +1046,12 @@
 - Update project/batch_1/analysis.toon
 - Update project/root/analysis.toon
 - Update root/analysis.toon
-
-## [0.5.48] - 2026-03-09
 
 ### Other
 - Update code2llm/cli_exports/formats.py
 - Update code2llm/exporters/context_exporter.py
 - Update code2llm/exporters/html_dashboard.py
 - Update code2llm/exporters/toon_view.py
-
-## [0.5.47] - 2026-03-09
 
 ### Docs
 - Update README.md
@@ -1215,8 +1069,6 @@
 - Update project/root/analysis.toon
 - Update root/analysis.toon
 
-## [0.5.46] - 2026-03-09
-
 ### Test
 - Update tests/test_multilanguage_e2e.py
 
@@ -1227,8 +1079,6 @@
 - Update code2llm/exporters/map_exporter.py
 - Update code2llm/exporters/project_yaml_exporter.py
 - Update code2llm/exporters/toon/helpers.py
-
-## [0.5.45] - 2026-03-07
 
 ### Docs
 - Update README.md
@@ -1242,55 +1092,16 @@
 - Update project/batch_1/analysis.toon
 - Update project/root/analysis.toon
 
-## [0.5.44] - 2026-03-07
-
 ### Other
 - Update code2llm/api.py
 
-## [0.5.43] - 2026-03-07
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
 
-### Other
-- Update project/analysis.json
-- Update project/analysis.toon
-- Update project/analysis.yaml
-- Update project/calls.mmd
-- Update project/calls.png
-- Update project/compact_flow.mmd
-- Update project/dashboard.html
-- Update project/evolution.toon
-- Update project/flow.mmd
-- Update project/flow.png
-- ... and 4 more files
-
-## [0.5.42] - 2026-03-07
-
-### Docs
-- Update README.md
-
-## [0.5.41] - 2026-03-05
-
 ### Docs
 - Update project/README.md
 - Update project/context.md
-
-### Other
-- Update project/analysis.json
-- Update project/analysis.toon
-- Update project/analysis.yaml
-- Update project/calls.mmd
-- Update project/calls.png
-- Update project/compact_flow.mmd
-- Update project/compact_flow.png
-- Update project/dashboard.html
-- Update project/evolution.toon
-- Update project/flow.mmd
-- ... and 6 more files
-
-## [0.5.40] - 2026-03-05
 
 ### Test
 - Update test_dynamic/README.md
@@ -1307,8 +1118,6 @@
 
 ### Other
 - Update code2llm/cli_exports/prompt.py
-
-## [0.5.39] - 2026-03-05
 
 ### Docs
 - Update README.md
@@ -1342,8 +1151,6 @@
 - Update project/prompt.txt
 - ... and 1 more files
 
-## [0.5.38] - 2026-03-05
-
 ### Summary
 
 refactor(goal): code analysis engine
@@ -1374,8 +1181,6 @@ refactor(goal): code analysis engine
 - ... and 6 more
 
 
-## [0.5.37] - 2026-03-05
-
 ### Summary
 
 refactor(docs): code analysis engine
@@ -1404,8 +1209,6 @@ refactor(docs): code analysis engine
 - ... and 17 more
 
 
-## [0.5.36] - 2026-03-05
-
 ### Summary
 
 feat(docs): code analysis engine
@@ -1429,8 +1232,6 @@ feat(docs): code analysis engine
 - update project/prompt.txt
 
 
-## [0.5.35] - 2026-03-05
-
 ### Summary
 
 feat(goal): CLI interface improvements
@@ -1440,8 +1241,6 @@ feat(goal): CLI interface improvements
 - update code2llm/cli.py
 
 
-## [0.5.34] - 2026-03-05
-
 ### Summary
 
 refactor(goal): CLI interface improvements
@@ -1450,8 +1249,6 @@ refactor(goal): CLI interface improvements
 
 - update code2llm/cli_exports.py
 
-
-## [0.5.33] - 2026-03-05
 
 ### Summary
 
@@ -1479,8 +1276,6 @@ refactor(docs): code analysis engine
 - ... and 2 more
 
 
-## [0.5.32] - 2026-03-05
-
 ### Summary
 
 feat(docs): code analysis engine
@@ -1502,8 +1297,6 @@ feat(docs): code analysis engine
 - update root/analysis.toon
 
 
-## [0.5.31] - 2026-03-04
-
 ### Summary
 
 refactor(docs): code analysis engine
@@ -1518,8 +1311,6 @@ refactor(docs): code analysis engine
 - update project/batch_1/analysis.toon
 - update project/root/analysis.toon
 
-
-## [0.5.30] - 2026-03-04
 
 ### Summary
 
@@ -1544,8 +1335,6 @@ refactor(docs): code analysis engine
 - update project/batch_1/evolution.toon
 - ... and 4 more
 
-
-## [0.5.29] - 2026-03-04
 
 ### Summary
 
@@ -1573,8 +1362,6 @@ feat(docs): code analysis engine
 - ... and 2 more
 
 
-## [0.5.28] - 2026-03-04
-
 ### Summary
 
 feat(None): deep code analysis engine with 2 supporting modules
@@ -1583,8 +1370,6 @@ feat(None): deep code analysis engine with 2 supporting modules
 
 - update requirements.txt
 
-
-## [0.5.27] - 2026-03-04
 
 ### Summary
 
@@ -1597,8 +1382,6 @@ refactor(goal): code analysis engine
 - update code2llm/cli.py
 - update code2llm/core/core/file_analyzer.py
 
-
-## [0.5.26] - 2026-03-04
 
 ### Summary
 
@@ -1615,8 +1398,6 @@ refactor(docs): code analysis engine
 - update root/analysis.toon
 
 
-## [0.5.25] - 2026-03-04
-
 ### Summary
 
 refactor(goal): code analysis engine
@@ -1628,8 +1409,6 @@ refactor(goal): code analysis engine
 - update code2llm/core/core/file_analyzer.py
 
 
-## [0.5.24] - 2026-03-03
-
 ### Summary
 
 feat(goal): CLI interface improvements
@@ -1638,8 +1417,6 @@ feat(goal): CLI interface improvements
 
 - update code2llm/cli.py
 
-
-## [0.5.23] - 2026-03-03
 
 ### Summary
 
@@ -1650,8 +1427,6 @@ refactor(code2llm): code analysis engine
 - update code2llm/core/analyzer.py
 
 
-## [0.5.22] - 2026-03-03
-
 ### Summary
 
 feat(goal): CLI interface improvements
@@ -1661,8 +1436,6 @@ feat(goal): CLI interface improvements
 - update code2llm/cli.py
 - update code2llm/core/large_repo.py
 
-
-## [0.5.21] - 2026-03-03
 
 ### Summary
 
@@ -1686,8 +1459,6 @@ feat(docs): code analysis engine
 - update project_single/prompt.txt
 
 
-## [0.5.20] - 2026-03-03
-
 ### Summary
 
 feat(goal): CLI interface improvements
@@ -1696,8 +1467,6 @@ feat(goal): CLI interface improvements
 
 - update code2llm/cli_exports.py
 
-
-## [0.5.19] - 2026-03-03
 
 ### Summary
 
@@ -1715,8 +1484,6 @@ feat(goal): CLI interface improvements
 - update code2llm/core/toon_size_manager.py
 
 
-## [0.5.18] - 2026-03-03
-
 ### Summary
 
 docs(docs): configuration management system
@@ -1725,8 +1492,6 @@ docs(docs): configuration management system
 
 - docs: update README
 
-
-## [0.5.17] - 2026-03-03
 
 ### Summary
 
@@ -1740,8 +1505,6 @@ refactor(goal): CLI interface improvements
 - update code2llm/parsers/toon_parser.py
 - update validate_toon.py
 
-
-## [0.5.16] - 2026-03-03
 
 ### Summary
 
@@ -1758,8 +1521,6 @@ refactor(docs): code analysis engine
 - update code2llm/core/analyzer.py
 
 
-## [0.5.15] - 2026-03-03
-
 ### Summary
 
 refactor(code2llm): code analysis engine
@@ -1769,8 +1530,6 @@ refactor(code2llm): code analysis engine
 - update code2llm/core/analyzer.py
 - update code2llm/core/core/refactoring.py
 
-
-## [0.5.13] - 2026-03-02
 
 ### Summary
 
@@ -1787,8 +1546,6 @@ feat(goal): code analysis engine
 - update project/evolution.toon
 - update project/project.toon
 
-
-## [0.5.12] - 2026-03-02
 
 ### Summary
 
@@ -1811,8 +1568,6 @@ feat(docs): code analysis engine
 - update project/evolution.toon
 
 
-## [0.5.11] - 2026-03-02
-
 ### Summary
 
 refactor(benchmarks): configuration management system
@@ -1822,8 +1577,6 @@ refactor(benchmarks): configuration management system
 - update benchmarks/project_generator.py
 
 
-## [0.5.10] - 2026-03-02
-
 ### Summary
 
 refactor(benchmarks): configuration management system
@@ -1832,8 +1585,6 @@ refactor(benchmarks): configuration management system
 
 - update benchmarks/project_generator.py
 
-
-## [0.5.9] - 2026-03-02
 
 ### Summary
 
@@ -1858,8 +1609,6 @@ feat(config): CLI interface improvements
 - update requirements.txt
 
 
-## [0.5.7] - 2026-03-01
-
 ### Summary
 
 refactor(goal): code analysis engine
@@ -1883,8 +1632,6 @@ refactor(goal): code analysis engine
 - update project/evolution.toon
 - update project/project.toon
 
-
-## [0.5.1] - 2026-03-01
 
 ### Summary
 
@@ -1913,8 +1660,6 @@ refactor(quality): structural refactoring — 9 god-functions split, CC̄ 5.1→
 - `benchmarks/benchmark_evolution.py` — auto before/after CC benchmark
 
 ---
-
-## [0.5.0] - 2026-03-01
 
 ### Summary
 
@@ -1945,8 +1690,6 @@ fix(exporters): 3 bug fixes + improvement + new EvolutionExporter for ranked ref
 
 ---
 
-## [0.4.0] - 2026-03-01
-
 ### Summary
 
 refactor(rename): code2flow → code2llm rename + structural cleanup + dead code removal
@@ -1976,8 +1719,6 @@ refactor(rename): code2flow → code2llm rename + structural cleanup + dead code
 
 ---
 
-## [0.3.8] - 2026-03-01
-
 ### Summary
 
 feat(rebrand): rename project from code2flow-toon to code2llm with LLM integration focus
@@ -1989,8 +1730,6 @@ feat(rebrand): rename project from code2flow-toon to code2llm with LLM integrati
 - **Commands**: All CLI commands now use `code2llm`
 - **Setup**: Updated setup.py and pyproject.toml with new name
 - **Makefile**: All targets updated to use `code2llm` commands
-
-## [0.3.3] - 2026-03-01
 
 ### Summary
 
@@ -2020,8 +1759,6 @@ feat(quality): format quality benchmark + rename llm_exporter → context_export
 - **Version bump** to 0.3.3
 
 ---
-
-## [0.3.2] - 2026-03-01
 
 ### Summary
 
@@ -2055,8 +1792,6 @@ feat(pipelines): networkx-based pipeline detection with domain grouping and entr
 - **Version bump** to 0.3.2
 
 ---
-
-## [0.3.1] - 2026-03-01
 
 ### Summary
 
@@ -2100,8 +1835,6 @@ feat(flow): AST-based type inference + side-effect detection for enhanced CONTRA
 - **Version bump** to 0.3.1
 
 ---
-
-## [0.3.0] - 2026-03-01
 
 ### Summary
 
@@ -2150,8 +1883,6 @@ refactor(exporters): format taxonomy — 4 files, 4 purposes (map, toon, flow, c
 
 ---
 
-## [0.2.5] - 2026-03-01
-
 ### Summary
 
 feat(toon): implement TOON v2 format with health-first design
@@ -2191,8 +1922,6 @@ feat(toon): implement TOON v2 format with health-first design
 - update README.md with TOON v2 format documentation
 
 
-## [0.2.4] - 2026-02-28
-
 ### Summary
 
 docs(docs): deep code analysis engine with 5 supporting modules
@@ -2201,8 +1930,6 @@ docs(docs): deep code analysis engine with 5 supporting modules
 
 - docs: update README
 
-
-## [0.2.3] - 2026-02-28
 
 ### Summary
 
@@ -2245,8 +1972,6 @@ refactor(docs): intelligent code analysis pipeline
 - ... and 5 more
 
 
-## [0.2.2] - 2026-02-28
-
 ### Summary
 
 feat(goal): deep code analysis engine with 7 supporting modules
@@ -2263,8 +1988,6 @@ feat(goal): deep code analysis engine with 7 supporting modules
 
 - scripts: update project.sh
 
-
-## [0.2.1] - 2026-02-28
 
 ### Summary
 
@@ -2303,10 +2026,6 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [0.2.0] - 2025-02-28
-
-### Added
 
 #### Core Analysis Engine
 - **Optimized ProjectAnalyzer** with caching and parallel processing
@@ -2407,8 +2126,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parallel processing pickle compatibility issues
 - FlowEdge attribute access (condition -> conditions)
 
-## [0.1.0] - 2025-02-20
-
 ### Added
 - Initial project structure
 - Basic AST-based code analysis
@@ -2420,8 +2137,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial test suite
 
 ---
-
-## Future Roadmap
 
 ### Planned for 0.3.0
 - [ ] Semantic code search using embeddings

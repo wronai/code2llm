@@ -1,5 +1,3 @@
-# code2llm Documentation
-
 ## Overview
 
 code2llm is a high-performance Python code analysis tool with integrated NLP processing and LLM integration for intelligent code queries.
@@ -9,8 +7,6 @@ code2llm is a high-performance Python code analysis tool with integrated NLP pro
 ```bash
 pip install code2llm
 ```
-
-## Quick Start
 
 ### Code Analysis
 
@@ -39,8 +35,6 @@ print(f"Intent: {result.get_intent()}")
 print(f"Confidence: {result.overall_confidence}")
 print(f"Action: {result.action_recommendation}")
 ```
-
-## Core Components
 
 ### 1. ProjectAnalyzer
 
@@ -99,8 +93,6 @@ pipeline = NLPPipeline(config)
 3. **Entity Resolution** (3a-3e): Type extraction, disambiguation, alias resolution
 4. **Integration** (4a-4e): Orchestration, confidence scoring, fallback handling
 
-### 3. Configuration
-
 #### Analysis Configuration
 
 ```python
@@ -157,10 +149,6 @@ config = NLPConfig(
 )
 ```
 
-## API Reference
-
-### Core Module
-
 #### `ProjectAnalyzer`
 
 ```python
@@ -185,8 +173,6 @@ class AnalysisResult:
     def get_class_count(self) -> int
     def to_dict(self, compact: bool = True) -> dict
 ```
-
-### NLP Module
 
 #### `NLPPipeline`
 
@@ -236,9 +222,6 @@ class EntityResolver:
     def load_from_analysis(self, analysis_result: AnalysisResult) -> None
 ```
 
-## CLI Usage
-
-```bash
 # Basic analysis
 code2llm /path/to/project
 
@@ -277,11 +260,6 @@ pipeline.process("pokaż graf wywołań", language="pl")
 - `find_dependencies` - Find dependencies
 - `explain_code` - Explain code functionality
 
-## Performance Tips
-
-### For Large Projects (>1000 functions)
-
-```python
 # Use fast config
 from code2llm import FAST_CONFIG
 
@@ -290,25 +268,17 @@ FAST_CONFIG.filters.skip_private = True
 FAST_CONFIG.depth.max_cfg_depth = 2
 ```
 
-### Caching
-
-```python
 # Enable caching for repeated analysis
 config = Config()
 config.performance.enable_cache = True
 config.performance.cache_dir = '.code2llm_cache'
 ```
 
-### Parallel Processing
-
-```python
 # Use multiple workers
 config = Config()
 config.performance.parallel_enabled = True
 config.performance.parallel_workers = 8
 ```
-
-## Output Formats
 
 ### YAML
 
@@ -381,7 +351,6 @@ code2llm -f toon /path/to/project
 
 **Example Output:**
 ```
-# code2llm | 39f 9191L | py:39 | 2026-03-01
 # CC̄=5.0 | critical:36/332 | dups:0 | cycles:0
 
 HEALTH[20]:
@@ -406,12 +375,6 @@ D:
 - `×DUP` - Duplicate class
 - `←N` - Fan-in count
 - `→N` - Fan-out count
-
-## Testing
-
-```bash
-# Run all tests
-pytest tests/
 
 # Run specific test file
 pytest tests/test_analyzer.py -v

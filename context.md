@@ -6,7 +6,7 @@
 - **Primary Language**: python
 - **Languages**: python: 126, shell: 4, java: 1
 - **Analysis Mode**: static
-- **Total Functions**: 1011
+- **Total Functions**: 1014
 - **Total Classes**: 111
 - **Modules**: 131
 - **Entry Points**: 0
@@ -317,6 +317,10 @@ Key functions that process and transform data:
 > Create CLI argument parser.
 - **Output to**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
 
+### benchmarks.benchmark_format_quality._generate_format_outputs
+> Generate all format outputs and evaluate them.
+- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
+
 ### code2llm.cli_commands.validate_and_setup
 > Validate source path and setup output directory.
 - **Output to**: Path, Path, output_dir.mkdir, print, print
@@ -327,10 +331,6 @@ Key functions that process and transform data:
 Checks:
 1. All chunks have required files (analysis.toon, contex
 - **Output to**: print, print, sorted, print, print
-
-### benchmarks.benchmark_format_quality._generate_format_outputs
-> Generate all format outputs and evaluate them.
-- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
 ### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
 - **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
@@ -365,6 +365,7 @@ Functions exposed as public API (no underscore prefix):
 - `benchmarks.benchmark_evolution.run_benchmark` - 34 calls
 - `code2llm.cli_commands.validate_chunked_output` - 34 calls
 - `code2llm.core.lang.rust.analyze_rust` - 31 calls
+- `code2llm.exporters.yaml_exporter.YAMLExporter.export_calls` - 31 calls
 - `benchmarks.benchmark_optimizations.benchmark_cold_vs_warm` - 30 calls
 - `benchmarks.benchmark_performance.create_test_project` - 29 calls
 - `code2llm.nlp.pipeline.NLPPipeline.process` - 29 calls
@@ -394,7 +395,6 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.core.lang.ruby.analyze_ruby` - 19 calls
 - `code2llm.exporters.map_exporter.MapExporter.export_to_yaml` - 19 calls
 - `code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped` - 19 calls
-- `benchmarks.benchmark_optimizations.print_summary` - 18 calls
 
 ## System Interactions
 

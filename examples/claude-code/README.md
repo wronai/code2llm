@@ -9,11 +9,6 @@ pip install code2llm
 npm install -g @anthropic-ai/claude-code
 ```
 
-## Workflow
-
-### 1. Generate evolution analysis
-
-```bash
 # Analyze your project
 code2llm /path/to/project -f evolution -o output/
 
@@ -21,9 +16,6 @@ code2llm /path/to/project -f evolution -o output/
 cat output/evolution.toon
 ```
 
-### 2. Feed to Claude Code for automated refactoring
-
-```bash
 # Let Claude Code refactor the highest-impact function
 claude -p "Read the following evolution analysis and refactor the #1 priority function. 
 Split it into smaller helpers while keeping all tests passing.
@@ -31,10 +23,6 @@ Split it into smaller helpers while keeping all tests passing.
 $(cat output/evolution.toon)"
 ```
 
-### 3. Iterative improvement loop
-
-```bash
-#!/bin/bash
 # refactor_loop.sh — automated refactoring with before/after tracking
 
 for i in {1..5}; do
@@ -69,9 +57,6 @@ for i in {1..5}; do
 done
 ```
 
-### 4. Full analysis for code review
-
-```bash
 # Generate comprehensive analysis
 code2llm /path/to/project -f all -o output/
 

@@ -14,9 +14,6 @@ pip install shell-gpt      # sgpt
 pip install fabric-ai      # fabric
 ```
 
-## Generate Analysis
-
-```bash
 # Generate all formats
 code2llm /path/to/project -f all -o output/ --no-png
 
@@ -34,14 +31,6 @@ Aider can read code2llm output as context:
 # Add analysis as read-only context
 aider --read output/analysis.toon --read output/evolution.toon
 
-# Inside aider session:
-# > /read output/context.md
-# > Refactor the #1 function from evolution.toon
-```
-
-### Automated refactoring with aider:
-
-```bash
 # Split a specific function using evolution.toon guidance
 aider --message "Read output/evolution.toon and split the #1 SPLIT-FUNC target 
 into smaller helpers with CC≤10. Keep all tests passing." \
@@ -50,9 +39,6 @@ into smaller helpers with CC≤10. Keep all tests passing." \
 
 ---
 
-## llm — Simon Willison's CLI
-
-```bash
 # Summarize architecture
 cat output/context.md | llm "Summarize this codebase architecture in 5 bullet points"
 
@@ -66,9 +52,6 @@ cat output/analysis.toon | llm "Explain the health issues in this codebase"
 diff <(cat output/analysis.toon) <(cat output/flow.toon) | llm "What does each format reveal?"
 ```
 
-### With different models:
-
-```bash
 # Use Claude
 cat output/evolution.toon | llm -m claude-3.5-sonnet "Prioritize these refactoring tasks"
 
@@ -81,9 +64,6 @@ cat output/analysis.toon | llm -m ollama/llama3 "Summarize health issues"
 
 ---
 
-## sgpt — Shell GPT
-
-```bash
 # Code review from analysis
 sgpt --code "Refactor based on this analysis: $(cat output/evolution.toon)"
 
@@ -96,9 +76,6 @@ sgpt --code "Write tests for the highest-CC functions: $(grep 'CC=' output/analy
 
 ---
 
-## fabric — AI Framework
-
-```bash
 # Summarize with fabric pattern
 cat output/context.md | fabric -p summarize
 
@@ -111,10 +88,6 @@ cat output/analysis.toon | fabric -p improve_code
 
 ---
 
-## Workflow: Before/After Benchmark
-
-```bash
-#!/bin/bash
 # benchmark_and_refactor.sh
 
 PROJECT="/path/to/project"
@@ -122,12 +95,6 @@ PROJECT="/path/to/project"
 # Step 1: Benchmark BEFORE
 echo "=== BEFORE ==="
 python benchmarks/benchmark_evolution.py "$PROJECT"
-
-# Step 2: Refactor with your preferred tool
-# (pick one):
-# aider --message "Split top SPLIT-FUNC target" --read output/evolution.toon
-# cat output/evolution.toon | llm "Generate refactoring code" > /tmp/patch.py
-# sgpt --code "Refactor: $(cat output/evolution.toon)"
 
 # Step 3: Run tests
 python -m pytest tests/ -q

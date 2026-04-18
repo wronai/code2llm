@@ -13,12 +13,6 @@ Set your API key:
 export OPENAI_API_KEY="sk-..."
 # or
 export ANTHROPIC_API_KEY="sk-ant-..."
-# or use local Ollama — no key needed
-```
-
-## Quick Start
-
-```bash
 # Analyze + get AI advice in one command
 python examples/litellm/run.py /path/to/project
 ```

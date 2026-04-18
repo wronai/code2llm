@@ -597,5 +597,3 @@
 - [ ] validate_toon.py:393 - module execution block
 
 ---
-
-*To execute all tasks, run: `prefact -a --execute-todos`*

@@ -1,4 +1,4 @@
-# code2llm | 122f 22674L | python:114,shell:2,java:1 | 2026-04-09
+# code2llm | 122f 22675L | python:114,shell:2,java:1 | 2026-04-18
 # CC̄=4.4 | critical:2/1011 | dups:0 | cycles:0
 
 HEALTH[2]:
@@ -86,7 +86,7 @@ LAYERS:
   │ normalization              122L  2C   13m  CC=6      ←0
   │ helpers                    120L  0C    8m  CC=8      ←3
   │ validate_project           118L  0C    3m  CC=11     ←1
-  │ yaml_exporter              108L  1C    7m  CC=8      ←0
+  │ yaml_exporter              109L  1C    7m  CC=8      ←0
   │ file_cache                 103L  1C    9m  CC=5      ←0
   │ ast_registry               102L  1C    9m  CC=5      ←4
   │ go_lang                    102L  0C    2m  CC=10     ←1

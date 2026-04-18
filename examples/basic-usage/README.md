@@ -26,21 +26,12 @@ pip install code2llm
 
 ---
 
-## Podstawowe komendy
-
 ### 1. Szybka analiza zdrowia kodu (domyślne)
 ```bash
 code2llm /path/to/project
-# Output: output/analysis.toon
-```
-
 ### 2. Generowanie wszystkich formatów
 ```bash
 code2llm /path/to/project -f all -o output/
-# Output: output/analysis.toon, flow.toon, project.map, context.md, 
-#         evolution.toon, analysis.yaml, analysis.json, flow.mmd, etc.
-```
-
 ### 3. Metryki ewolucji (co refaktoryzować najpierw?)
 ```bash
 code2llm /path/to/project -f evolution -o output/ --no-png
@@ -80,13 +71,6 @@ cat output/context.md | xclip    # Linux
 ```bash
 code2llm . -f flow -o output/
 cat output/flow.toon
-# Sekcje: PIPELINES, TRANSFORMS, CONTRACTS, DATA_TYPES, SIDE_EFFECTS
-```
-
----
-
-## Tryby zaawansowane
-
 ### Fast mode (5-10x szybciej)
 ```bash
 code2llm /path/to/project --fast
@@ -109,13 +93,8 @@ code2llm /path/to/project -f all --no-png
 
 ---
 
-## Auto-benchmark — przed i po refaktoryzacji
-
-```bash
 # 1. Benchmark BEFORE
 python benchmarks/benchmark_evolution.py /path/to/project
-
-# 2. Refaktoryzuj kod...
 
 # 3. Benchmark AFTER (porównanie automatyczne)
 python benchmarks/benchmark_evolution.py /path/to/project
@@ -136,10 +115,6 @@ Wynik:
 
 ---
 
-## Integracja z CI/CD
-
-```bash
-#!/bin/bash
 # ci_quality_check.sh
 
 code2llm ./src -f evolution -o /tmp/analysis --no-png

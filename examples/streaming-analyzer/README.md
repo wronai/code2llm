@@ -20,11 +20,6 @@ The sample project contains:
 - **Complex control flow** with conditionals and loops
 - **Cross-module dependencies** for call graph analysis
 
-## 🚀 Usage Examples
-
-### 1. Quick Strategy (Fastest)
-
-```bash
 # Quick overview - functions and classes only
 code2llm examples/streaming-analyzer/sample_project --strategy quick -v
 ```
@@ -42,9 +37,6 @@ Analysis complete:
   - CFG edges: 0
 ```
 
-### 2. Standard Strategy (Balanced)
-
-```bash
 # Standard analysis with selective CFG
 code2llm examples/streaming-analyzer/sample_project --strategy standard -v
 ```
@@ -66,9 +58,6 @@ Analysis complete:
   - CFG edges: 67
 ```
 
-### 3. Deep Strategy (Complete)
-
-```bash
 # Complete analysis with full CFG
 code2llm examples/streaming-analyzer/sample_project --strategy deep -v
 ```
@@ -89,16 +78,10 @@ Analysis complete:
   - CFG edges: 134
 ```
 
-### 4. Memory-Limited Analysis
-
-```bash
 # Limit memory usage to 256MB
 code2llm examples/streaming-analyzer/sample_project --strategy quick --max-memory 256 -v
 ```
 
-### 5. Streaming Mode Only
-
-```bash
 # Use streaming without specific strategy
 code2llm examples/streaming-analyzer/sample_project --streaming -v
 ```
@@ -110,8 +93,6 @@ code2llm examples/streaming-analyzer/sample_project --streaming -v
 | Quick | 25 | 4 | 0 | 0.1s | Low |
 | Standard | 25 | 4 | 45 | 0.3s | Medium |
 | Deep | 25 | 4 | 89 | 0.5s | High |
-
-## 🔄 Python API Examples
 
 ### Basic Streaming Analysis
 
@@ -213,10 +194,6 @@ The streaming analyzer will identify:
    - API handler dependencies
    - Utility function usage patterns
 
-## 🎯 Best Practices
-
-### For Large Projects
-```bash
 # Use quick strategy for initial exploration
 code2llm /large/project --strategy quick
 
@@ -224,8 +201,6 @@ code2llm /large/project --strategy quick
 code2llm /large/project --strategy standard
 ```
 
-### For CI/CD
-```python
 # Use incremental analysis for fast CI
 incremental = IncrementalAnalyzer()
 changed, _ = incremental.get_changed_files(".")
@@ -234,8 +209,6 @@ if changed:
     # Analyze only changed files
 ```
 
-### For Memory-Constrained Environments
-```bash
 # Limit memory usage
 code2llm /project --strategy quick --max-memory 256
 ```

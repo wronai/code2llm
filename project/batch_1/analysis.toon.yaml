@@ -1,14 +1,15 @@
-# code2llm | 122f 22674L | python:114,shell:2,php:1 | 2026-04-09
-# CC̄=4.4 | critical:2/1011 | dups:0 | cycles:0
+# code2llm | 122f 22773L | python:114,shell:2,java:1 | 2026-04-18
+# CC̄=4.4 | critical:3/1014 | dups:0 | cycles:0
 
-HEALTH[2]:
+HEALTH[3]:
   🟡 CC    main CC=17 (limit:15)
   🟡 CC    validate_chunked_output CC=15 (limit:15)
+  🟡 CC    export_calls CC=18 (limit:15)
 
 REFACTOR[1]:
-  1. split 2 high-CC methods  (CC>15)
+  1. split 3 high-CC methods  (CC>15)
 
-PIPELINES[672]:
+PIPELINES[673]:
   [1] Src [read_readme]: read_readme
       PURITY: 100% pure
   [2] Src [main]: main → run_analysis
@@ -47,8 +48,8 @@ LAYERS:
   │ side_effects               294L  2C   15m  CC=14     ←0
   │ cfg                        293L  1C   17m  CC=5      ←0
   │ type_inference             290L  1C   17m  CC=9      ←0
+  │ formats                    289L  0C   13m  CC=13     ←3
   │ data_analysis              286L  1C   18m  CC=14     ←0
-  │ formats                    285L  0C   13m  CC=13     ←3
   │ llm_task                   284L  0C   15m  CC=14     ←0
   │ cli_parser                 277L  0C    1m  CC=1      ←1
   │ toon_size_manager          265L  0C    8m  CC=10     ←1
@@ -58,6 +59,7 @@ LAYERS:
   │ !! cli_commands               220L  0C    6m  CC=15     ←1
   │ call_graph                 211L  1C   13m  CC=9      ←0
   │ config                     210L  6C    0m  CC=0.0    ←0
+  │ !! yaml_exporter              203L  1C   10m  CC=18     ←0
   │ scanner                    201L  1C    6m  CC=14     ←0
   │ refactoring                196L  1C   11m  CC=9      ←0
   │ __init__                   196L  1C   11m  CC=9      ←0
@@ -86,7 +88,6 @@ LAYERS:
   │ normalization              122L  2C   13m  CC=6      ←0
   │ helpers                    120L  0C    8m  CC=8      ←3
   │ validate_project           118L  0C    3m  CC=11     ←1
-  │ yaml_exporter              108L  1C    7m  CC=8      ←0
   │ file_cache                 103L  1C    9m  CC=5      ←0
   │ ast_registry               102L  1C    9m  CC=5      ←4
   │ go_lang                    102L  0C    2m  CC=10     ←1
@@ -148,11 +149,11 @@ LAYERS:
   │ server                     110L  0C    3m  CC=4      ←0
   │
   demo_langs/                     CC̄=1.5    ←in:0  →out:0
-  │ sample.rs                   47L  1C    4m  CC=2      ←0
-  │ sample.java                 47L  2C    4m  CC=2      ←1
+  │ sample.rs                   47L  1C    5m  CC=2      ←0
+  │ sample.java                 47L  2C    7m  CC=3      ←1
   │ sample.go                   46L  0C    4m  CC=3      ←0
-  │ sample.php                  44L  2C    4m  CC=2      ←2
-  │ sample                      40L  1C    5m  CC=3      ←0
+  │ sample.php                  44L  1C    1m  CC=1      ←0
+  │ sample                      40L  1C    4m  CC=3      ←0
   │ sample.ts                   26L  1C    1m  CC=1      ←0
   │
   ── zero ──

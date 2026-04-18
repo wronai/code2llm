@@ -75,7 +75,7 @@ Strategy Options (--strategy):
     parser.add_argument(
         '-f', '--format',
         default='toon',
-        help='Output formats: toon,map,flow,context,code2logic,yaml,json,mermaid,evolution,png,project-yaml,all (default: toon)'
+        help='Output formats: toon,map,flow,context,code2logic,yaml,json,mermaid,evolution,calls,png,project-yaml,all (default: toon)'
     )
     
     parser.add_argument(

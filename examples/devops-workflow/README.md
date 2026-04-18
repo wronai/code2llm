@@ -2,9 +2,6 @@
 
 Praktyczne skrypty bash do codziennej pracy z kodem: generowanie raportów, metryki w commitach, automatyczne aktualizacje README.
 
-## Szybki start
-
-```bash
 # Jednolinijkowa analiza — od razu widać zdrowie projektu
 code2llm . -f evolution -o /tmp/q --no-png && head -20 /tmp/q/evolution.toon
 ```
@@ -17,7 +14,6 @@ Automatyczne generowanie sekcji metryk do README:
 
 ```bash
 #!/bin/bash
-# scripts/update_readme_metrics.sh
 # Generuje metryki i wstawia do README.md
 
 set -e
@@ -78,7 +74,6 @@ Automatyczne dodawanie metryk do commit message:
 
 ```bash
 #!/bin/bash
-# scripts/commit_with_metrics.sh
 # Commituje zmiany z metrykami code2llm w wiadomości
 
 set -e
@@ -117,9 +112,6 @@ code2llm metrics:
 
 ---
 
-## 3. Codzienny workflow dewelopera
-
-```bash
 # Przed pracą — szybki przegląd co polepszać
 code2llm . -f evolution -o /tmp/q --no-png
 grep "NEXT\[" /tmp/q/evolution.toon -A 3
@@ -172,11 +164,6 @@ make commit-metrics MSG="refactor: split god modules"
 
 ---
 
-## 5. Git hook — automatyczne metryki
-
-```bash
-#!/bin/sh
-# .git/hooks/prepare-commit-msg
 # Automatycznie dopisuje metryki do KAŻDEGO commita
 
 OUTPUT="/tmp/code2llm_hook"
@@ -198,11 +185,6 @@ chmod +x .git/hooks/prepare-commit-msg
 
 ---
 
-## 6. Porównanie branchy
-
-```bash
-#!/bin/bash
-# scripts/compare_branches.sh
 # Porównaj metryki między dwoma branchami
 
 BRANCH1="${1:-main}"

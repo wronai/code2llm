@@ -2,16 +2,10 @@
 
 Dla metody: `{{ target_function }}` z modułu `{{ source_module }}` do `{{ target_module }}`
 
-## Analiza Problemu
-{{ reason }}
-
 ## Kontekst Couplingu
 - {{ foreign_mutations_context }}
 - **Zależności Obce**: {{ foreign_mutations }}
 - **Zależności Mutowane**: {{ dependencies }}
-
-## Zadanie
-{{ instruction }}
 
 ## Kod do Przeniesienia
 ```python

@@ -9,8 +9,6 @@
 **License:** Apache-2.0[(LICENSE)](./LICENSE)  
 **Repository:** [https://github.com/wronai/code2flow](https://github.com/wronai/code2flow)
 
-## Installation
-
 ### From PyPI
 
 ```bash
@@ -31,11 +29,6 @@ pip install -e .
 pip install code2llm[dev]    # development tools
 ```
 
-## Quick Start
-
-### CLI Usage
-
-```bash
 # Generate full documentation for your project
 code2llm ./my-project
 
@@ -147,8 +140,6 @@ Content outside the markers is preserved when regenerating. Enable this with `sy
 ```
 code2llm/
     ├── benchmark_evolution├── setup    ├── reporting├── validate_toon    ├── format_evaluator    ├── project_generator    ├── benchmark_constants    ├── functional_refactoring_example    ├── benchmark_badges    ├── server    ├── cli    ├── bump_version├── code2llm/    ├── __main__    ├── api    ├── cli_parser    ├── cli_commands        ├── sample    ├── cli_analysis        ├── data_analysis        ├── pipeline_detector    ├── analysis/        ├── type_inference    ├── benchmark_format_quality    ├── benchmark_performance        ├── coupling        ├── side_effects        ├── smells        ├── config        ├── file_cache        ├── analyzer        ├── large_repo        ├── repo_files    ├── core/        ├── streaming_analyzer        ├── gitignore        ├── cfg        ├── toon_size_manager        ├── refactoring        ├── dfg        ├── file_filter        ├── call_graph    ├── nlp/        ├── config        ├── file_analyzer        ├── intent_matching        ├── normalization        ├── models        ├── entity_resolution        ├── base        ├── pipeline        ├── readme_exporter        ├── toon/    ├── exporters/        ├── json_exporter        ├── report_generators        ├── yaml_exporter        ├── project_yaml_exporter        ├── map_exporter        ├── context_view        ├── mermaid_exporter        ├── llm_exporter        ├── article_view        ├── flow_constants        ├── validate_project        ├── context_exporter        ├── evolution_exporter        ├── flow_renderer        ├── html_dashboard    ├── generators/        ├── toon_view        ├── index_generator        ├── flow_exporter        ├── llm_task        ├── code2logic    ├── cli_exports/        ├── mermaid        ├── formats    ├── refactor/        ├── llm_flow        ├── orchestrator        ├── toon_parser    ├── patterns/        ├── prompt_engine        ├── detector            ├── helpers        ├── prompt            ├── module_detail            ├── incremental        ├── streaming/            ├── strategies            ├── prioritizer            ├── cache            ├── scanner            ├── rust            ├── metrics            ├── cpp        ├── lang/            ├── renderer            ├── csharp            ├── go_lang            ├── java            ├── base            ├── generic            ├── typescript        ├── run            ├── auth        ├── sample_project/        ├── demo            ├── api            ├── utils            ├── database├── orchestrator├── project            ├── main            ├── ruby            ├── php```
-
-## API Overview
 
 ### Classes
 
@@ -529,21 +520,14 @@ code2llm/
 - Tom Softreck <tom@sapletta.com>
 - Tom Sapletta <tom-sapletta-com@users.noreply.github.com>
 
-We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](https://github.com/wronai/code2llm/blob/main/CONTRIBUTING.md) for guidelines.
 
-### Development Setup
-
-```bash
 # Clone the repository
 git clone https://github.com/wronai/code2flow
 cd code2llm
 
 # Install in development mode
 pip install -e ".[dev]"
-
-# Run tests
-pytest
-```
 
 ## Documentation
 
@@ -558,15 +542,15 @@ pytest
 | Output | Description | Link |
 |--------|-------------|------|
 | `README.md` | Project overview (this file) | — |
-| `docs/api.md` | Consolidated API reference | [View](./docs/api.md) |
-| `docs/modules.md` | Module reference with metrics | [View](./docs/modules.md) |
-| `docs/architecture.md` | Architecture with diagrams | [View](./docs/architecture.md) |
-| `docs/dependency-graph.md` | Dependency graphs | [View](./docs/dependency-graph.md) |
-| `docs/coverage.md` | Docstring coverage report | [View](./docs/coverage.md) |
-| `docs/getting-started.md` | Getting started guide | [View](./docs/getting-started.md) |
-| `docs/configuration.md` | Configuration reference | [View](./docs/configuration.md) |
-| `docs/api-changelog.md` | API change tracking | [View](./docs/api-changelog.md) |
-| `CONTRIBUTING.md` | Contribution guidelines | [View](./CONTRIBUTING.md) |
+| `docs/api.md` | Consolidated API reference | [View](https://github.com/wronai/code2llm/blob/main/docs/api.md) |
+| `docs/modules.md` | Module reference with metrics | [View](https://github.com/wronai/code2llm/blob/main/docs/modules.md) |
+| `docs/architecture.md` | Architecture with diagrams | [View](https://github.com/wronai/code2llm/blob/main/docs/architecture.md) |
+| `docs/dependency-graph.md` | Dependency graphs | [View](https://github.com/wronai/code2llm/blob/main/docs/dependency-graph.md) |
+| `docs/coverage.md` | Docstring coverage report | [View](https://github.com/wronai/code2llm/blob/main/docs/coverage.md) |
+| `docs/getting-started.md` | Getting started guide | [View](https://github.com/wronai/code2llm/blob/main/docs/getting-started.md) |
+| `docs/configuration.md` | Configuration reference | [View](https://github.com/wronai/code2llm/blob/main/docs/configuration.md) |
+| `docs/api-changelog.md` | API change tracking | [View](https://github.com/wronai/code2llm/blob/main/docs/api-changelog.md) |
+| `CONTRIBUTING.md` | Contribution guidelines | [View](https://github.com/wronai/code2llm/blob/main/CONTRIBUTING.md) |
 | `examples/` | Usage examples | [Browse](./examples) |
 | `mkdocs.yml` | MkDocs configuration | — |
 
