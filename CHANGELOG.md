@@ -1,5 +1,18 @@
 ## [Unreleased]
 
+## [0.5.113] - 2026-04-18
+
+### Docs
+- Update project/README.md
+
+### Test
+- Update tests/test_calls_toon_export.py
+
+### Other
+- Update calls.yaml
+- Update project/calls.toon.yaml
+- Update project/index.html
+
 ## [0.5.112] - 2026-04-18
 
 ### Docs
