@@ -5,7 +5,8 @@ import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from code2llm.cli import _export_prompt_txt, _export_code2logic
+from code2llm.cli_exports.prompt import _export_prompt_txt
+from code2llm.cli_exports.code2logic import _export_code2logic
 
 
 class TestPromptTxtGeneration:

@@ -4,11 +4,11 @@
 
 - **Project**: .
 - **Primary Language**: python
-- **Languages**: python: 126, shell: 4, java: 1
+- **Languages**: python: 130, shell: 4, java: 1
 - **Analysis Mode**: static
-- **Total Functions**: 1014
+- **Total Functions**: 1041
 - **Total Classes**: 111
-- **Modules**: 131
+- **Modules**: 135
 - **Entry Points**: 0
 
 ## Architecture by Module
@@ -33,6 +33,11 @@
 - **Classes**: 1
 - **File**: `map_exporter.py`
 
+### code2llm.exporters.yaml_exporter
+- **Functions**: 24
+- **Classes**: 1
+- **File**: `yaml_exporter.py`
+
 ### code2llm.generators.llm_flow
 - **Functions**: 24
 - **Classes**: 1
@@ -48,10 +53,18 @@
 - **Classes**: 3
 - **File**: `pipeline.py`
 
+### root.validate_toon
+- **Functions**: 19
+- **File**: `validate_toon.py`
+
 ### code2llm.exporters.mermaid_exporter
 - **Functions**: 19
 - **Classes**: 1
 - **File**: `mermaid_exporter.py`
+
+### batch_1.validate_toon
+- **Functions**: 19
+- **File**: `validate_toon.py`
 
 ### code2llm.analysis.data_analysis
 - **Functions**: 18
@@ -97,19 +110,6 @@
 - **Classes**: 3
 - **File**: `entity_resolution.py`
 
-### code2llm.generators.mermaid
-- **Functions**: 16
-- **File**: `mermaid.py`
-
-### root.validate_toon
-- **Functions**: 15
-- **File**: `validate_toon.py`
-
-### code2llm.analysis.side_effects
-- **Functions**: 15
-- **Classes**: 2
-- **File**: `side_effects.py`
-
 ## Key Entry Points
 
 Main execution flows into the system:
@@ -136,6 +136,12 @@ Key execution flows identified:
 Keys: M=modules, D=details,
 - **Methods**: 25
 - **Key Methods**: code2llm.exporters.map_exporter.MapExporter.export, code2llm.exporters.map_exporter.MapExporter.export_to_yaml, code2llm.exporters.map_exporter.MapExporter._build_module_entry, code2llm.exporters.map_exporter.MapExporter._build_module_exports, code2llm.exporters.map_exporter.MapExporter._build_module_classes_data, code2llm.exporters.map_exporter.MapExporter._build_module_functions_data, code2llm.exporters.map_exporter.MapExporter._render_header, code2llm.exporters.map_exporter.MapExporter._render_stats_line, code2llm.exporters.map_exporter.MapExporter._render_alerts_line, code2llm.exporters.map_exporter.MapExporter._render_hotspots_line
+- **Inherits**: Exporter
+
+### code2llm.exporters.yaml_exporter.YAMLExporter
+> Export to YAML format.
+- **Methods**: 24
+- **Key Methods**: code2llm.exporters.yaml_exporter.YAMLExporter.__init__, code2llm.exporters.yaml_exporter.YAMLExporter.export, code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped, code2llm.exporters.yaml_exporter.YAMLExporter.export_data_flow, code2llm.exporters.yaml_exporter.YAMLExporter.export_data_structures, code2llm.exporters.yaml_exporter.YAMLExporter.export_separated, code2llm.exporters.yaml_exporter.YAMLExporter.export_split, code2llm.exporters.yaml_exporter.YAMLExporter.export_calls, code2llm.exporters.yaml_exporter.YAMLExporter._collect_edges, code2llm.exporters.yaml_exporter.YAMLExporter._process_function_calls
 - **Inherits**: Exporter
 
 ### code2llm.exporters.mermaid_exporter.MermaidExporter
@@ -240,12 +246,6 @@ Scans function bodies for IO operations,
 - **Methods**: 13
 - **Key Methods**: code2llm.analysis.side_effects.SideEffectDetector.__init__, code2llm.analysis.side_effects.SideEffectDetector.analyze_function, code2llm.analysis.side_effects.SideEffectDetector.analyze_all, code2llm.analysis.side_effects.SideEffectDetector.get_purity_score, code2llm.analysis.side_effects.SideEffectDetector._scan_node, code2llm.analysis.side_effects.SideEffectDetector._check_calls, code2llm.analysis.side_effects.SideEffectDetector._check_assignments, code2llm.analysis.side_effects.SideEffectDetector._check_globals, code2llm.analysis.side_effects.SideEffectDetector._check_yield, code2llm.analysis.side_effects.SideEffectDetector._check_delete
 
-### code2llm.analysis.call_graph.CallGraphExtractor
-> Extract call graph from AST.
-- **Methods**: 13
-- **Key Methods**: code2llm.analysis.call_graph.CallGraphExtractor.__init__, code2llm.analysis.call_graph.CallGraphExtractor.extract, code2llm.analysis.call_graph.CallGraphExtractor._calculate_metrics, code2llm.analysis.call_graph.CallGraphExtractor.visit_Import, code2llm.analysis.call_graph.CallGraphExtractor.visit_ImportFrom, code2llm.analysis.call_graph.CallGraphExtractor.visit_ClassDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_FunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_AsyncFunctionDef, code2llm.analysis.call_graph.CallGraphExtractor.visit_Call, code2llm.analysis.call_graph.CallGraphExtractor._qualified_name
-- **Inherits**: ast.NodeVisitor
-
 ## Data Transformation Functions
 
 Key functions that process and transform data:
@@ -290,6 +290,13 @@ Key functions that process and transform data:
 > Oceń pojedynczy format względem ground truth.
 - **Output to**: FormatScore, benchmarks.format_evaluator._detect_problems, sum, benchmarks.format_evaluator._detect_pipelines, sum
 
+### scripts.bump_version.parse_version
+> Parse version string into tuple of (major, minor, patch)
+- **Output to**: version_str.split, tuple, int
+
+### scripts.bump_version.format_version
+> Format version tuple as string
+
 ### scripts.benchmark_badges.parse_evolution_metrics
 > Extract metrics from evolution.toon content.
 - **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, m.group
@@ -306,20 +313,9 @@ Key functions that process and transform data:
 > Generate badges from format quality scores.
 - **Output to**: enumerate, badges.append, sorted, badges.append, format_scores.items
 
-### scripts.bump_version.parse_version
-> Parse version string into tuple of (major, minor, patch)
-- **Output to**: version_str.split, tuple, int
-
-### scripts.bump_version.format_version
-> Format version tuple as string
-
 ### code2llm.cli_parser.create_parser
 > Create CLI argument parser.
 - **Output to**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
-
-### benchmarks.benchmark_format_quality._generate_format_outputs
-> Generate all format outputs and evaluate them.
-- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
 ### code2llm.cli_commands.validate_and_setup
 > Validate source path and setup output directory.
@@ -330,10 +326,22 @@ Key functions that process and transform data:
 
 Checks:
 1. All chunks have required files (analysis.toon, contex
-- **Output to**: print, print, sorted, print, print
+- **Output to**: code2llm.cli_commands._get_chunk_dirs, code2llm.cli_commands._validate_chunks, code2llm.cli_commands._print_validation_summary, output_dir.exists, print
+
+### code2llm.cli_commands._validate_chunks
+> Validate all chunks and return issues and valid chunks.
+- **Output to**: print, print, sorted, print, code2llm.cli_commands._validate_single_chunk
+
+### code2llm.cli_commands._validate_single_chunk
+> Validate a single chunk directory. Returns list of issues.
+- **Output to**: file_path.exists, chunk_issues.append, chunk_issues.append, file_path.stat
 
 ### code2llm.analysis.data_analysis.DataAnalyzer._identify_process_patterns
 - **Output to**: result.functions.items, patterns.items, sorted, func.name.lower, indicators.items
+
+### benchmarks.benchmark_format_quality._generate_format_outputs
+> Generate all format outputs and evaluate them.
+- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
 
 ### code2llm.core.ast_registry.ASTRegistry.invalidate
 > Remove cached AST and source for *filepath* (e.g. after file write).
@@ -343,29 +351,18 @@ Checks:
 > Remove cached state for a file (e.g. after deletion).
 - **Output to**: self._normalize_key
 
-### code2llm.core.repo_files._get_gitignore_parser
-> Load gitignore parser for project if available (cached per path).
-- **Output to**: lru_cache, code2llm.core.gitignore.load_gitignore_patterns
-
-### code2llm.core.gitignore.GitIgnoreParser._parse_pattern
-> Parse a single gitignore pattern into regex.
-- **Output to**: pattern.startswith, pattern.endswith, pattern.startswith, self._wildcard_to_regex, re.compile
-
 ## Public API Surface
 
 Functions exposed as public API (no underscore prefix):
 
-- `validate_toon.main` - 45 calls
 - `code2llm.generators.llm_task.normalize_llm_task` - 43 calls
 - `code2llm.generators.llm_flow.render_llm_flow_md` - 42 calls
 - `benchmarks.benchmark_performance.main` - 41 calls
+- `code2llm.cli_parser.create_parser` - 40 calls
 - `validate_toon.analyze_class_differences` - 39 calls
 - `code2llm.core.analyzer.ProjectAnalyzer.analyze_project` - 39 calls
-- `code2llm.cli_parser.create_parser` - 38 calls
 - `benchmarks.benchmark_evolution.run_benchmark` - 34 calls
-- `code2llm.cli_commands.validate_chunked_output` - 34 calls
 - `code2llm.core.lang.rust.analyze_rust` - 31 calls
-- `code2llm.exporters.yaml_exporter.YAMLExporter.export_calls` - 31 calls
 - `benchmarks.benchmark_optimizations.benchmark_cold_vs_warm` - 30 calls
 - `benchmarks.benchmark_performance.create_test_project` - 29 calls
 - `code2llm.nlp.pipeline.NLPPipeline.process` - 29 calls
@@ -395,6 +392,9 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.core.lang.ruby.analyze_ruby` - 19 calls
 - `code2llm.exporters.map_exporter.MapExporter.export_to_yaml` - 19 calls
 - `code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped` - 19 calls
+- `code2llm.exporters.yaml_exporter.YAMLExporter.export_calls_toon` - 19 calls
+- `benchmarks.benchmark_optimizations.print_summary` - 18 calls
+- `code2llm.exporters.flow_renderer.FlowRenderer.render_pipelines` - 18 calls
 
 ## System Interactions
 

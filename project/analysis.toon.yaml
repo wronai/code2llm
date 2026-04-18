@@ -1,20 +1,20 @@
-# code2llm | 122f 22887L | python:117,shell:4,java:1 | 2026-04-18
-# CC̄=4.3 | critical:0/1035 | dups:0 | cycles:0
+# code2llm | 129f 23513L | python:127,shell:6,java:1 | 2026-04-18
+# CC̄=4.3 | critical:0/1058 | dups:0 | cycles:0
 
 HEALTH[0]: ok
 
 REFACTOR[0]: none needed
 
-PIPELINES[683]:
+PIPELINES[691]:
   [1] Src [read_readme]: read_readme
       PURITY: 100% pure
   [2] Src [main]: main → run_analysis
       PURITY: 100% pure
-  [3] Src [__init__]: __init__
+  [3] Src [demo_quick_strategy]: demo_quick_strategy
       PURITY: 100% pure
-  [4] Src [_hash]: _hash
+  [4] Src [demo_standard_strategy]: demo_standard_strategy
       PURITY: 100% pure
-  [5] Src [authenticate]: authenticate
+  [5] Src [demo_deep_strategy]: demo_deep_strategy
       PURITY: 100% pure
 
 LAYERS:
@@ -33,12 +33,13 @@ LAYERS:
   │ evolution_exporter         471L  1C   17m  CC=11     ←0
   │ renderer                   471L  1C   26m  CC=11     ←0
   │ base                       454L  0C   14m  CC=14     ←8
-  │ map_exporter               439L  1C   25m  CC=13     ←4
+  │ map_exporter               439L  1C   25m  CC=13     ←8
   │ file_analyzer              396L  1C   18m  CC=12     ←0
   │ flow_exporter              391L  1C   14m  CC=10     ←0
   │ pipeline                   388L  3C   20m  CC=10     ←0
   │ analyzer                   355L  1C    9m  CC=14     ←0
   │ entity_resolution          326L  3C   16m  CC=13     ←1
+  │ yaml_exporter              326L  1C   24m  CC=8      ←0
   │ cli_analysis               323L  0C   11m  CC=14     ←1
   │ formats                    301L  0C   14m  CC=13     ←3
   │ intent_matching            297L  3C   15m  CC=7      ←0
@@ -50,7 +51,6 @@ LAYERS:
   │ llm_task                   284L  0C   15m  CC=14     ←0
   │ toon_size_manager          265L  0C    8m  CC=10     ←1
   │ mermaid_flow_helpers       262L  0C   12m  CC=10     ←1
-  │ yaml_exporter              254L  1C   19m  CC=8      ←0
   │ cli_commands               250L  0C   12m  CC=7      ←1
   │ context_exporter           248L  1C   15m  CC=10     ←0
   │ dfg                        224L  1C   12m  CC=7      ←0
@@ -73,6 +73,7 @@ LAYERS:
   │ toon_view                  157L  1C    9m  CC=6      ←0
   │ orchestrator               156L  0C    5m  CC=11     ←1
   │ export_pipeline            153L  2C    5m  CC=4      ←0
+  │ modules                    151L  0C    7m  CC=11     ←1
   │ incremental                150L  1C   10m  CC=4      ←0
   │ prompt_engine              150L  1C    7m  CC=12     ←0
   │ toon_parser                147L  0C   10m  CC=8      ←1
@@ -82,9 +83,12 @@ LAYERS:
   │ prioritizer                131L  2C    4m  CC=9      ←0
   │ code2logic                 127L  0C    8m  CC=6      ←1
   │ normalization              122L  2C   13m  CC=6      ←0
-  │ helpers                    120L  0C    8m  CC=8      ←3
+  │ helpers                    120L  0C    8m  CC=8      ←4
   │ validate_project           118L  0C    3m  CC=11     ←1
+  │ core                       118L  1C    3m  CC=12     ←0
+  │ hotspots                   106L  0C    3m  CC=13     ←1
   │ file_cache                 103L  1C    9m  CC=5      ←0
+  │ health                     103L  0C    3m  CC=13     ←1
   │ ast_registry               102L  1C    9m  CC=5      ←4
   │ go_lang                    102L  0C    2m  CC=10     ←1
   │ file_filter                 98L  1C    4m  CC=13     ←0
@@ -103,6 +107,7 @@ LAYERS:
   │ __init__                    52L  0C    1m  CC=3      ←0
   │ cache                       51L  1C    5m  CC=4      ←0
   │ __init__                    48L  0C    0m  CC=0.0    ←0
+  │ evolution                   46L  0C    2m  CC=6      ←1
   │ java                        43L  0C    1m  CC=1      ←1
   │ csharp                      42L  0C    1m  CC=1      ←1
   │ cpp                         35L  0C    1m  CC=1      ←1
@@ -111,6 +116,8 @@ LAYERS:
   │ flow_constants              29L  0C    0m  CC=0.0    ←0
   │ __init__                    23L  0C    0m  CC=0.0    ←0
   │ json_exporter               17L  1C    1m  CC=3      ←0
+  │ __init__                    15L  0C    0m  CC=0.0    ←0
+  │ constants                   15L  0C    0m  CC=0.0    ←0
   │ base                        13L  1C    1m  CC=1      ←0
   │ llm_exporter                12L  0C    0m  CC=0.0    ←0
   │ __init__                    12L  0C    0m  CC=0.0    ←0

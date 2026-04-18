@@ -1,15 +1,11 @@
-# code2llm | 122f 22773L | python:117,shell:4,java:1 | 2026-04-18
-# CC̄=4.4 | critical:3/1014 | dups:0 | cycles:0
+# code2llm | 125f 23019L | python:121,shell:4,java:1 | 2026-04-18
+# CC̄=4.3 | critical:0/1041 | dups:0 | cycles:0
 
-HEALTH[3]:
-  🟡 CC    export_calls CC=18 (limit:15)
-  🟡 CC    main CC=17 (limit:15)
-  🟡 CC    validate_chunked_output CC=15 (limit:15)
+HEALTH[0]: ok
 
-REFACTOR[1]:
-  1. split 3 high-CC methods  (CC>15)
+REFACTOR[0]: none needed
 
-PIPELINES[675]:
+PIPELINES[688]:
   [1] Src [read_readme]: read_readme
       PURITY: 100% pure
   [2] Src [main]: main → run_analysis
@@ -43,23 +39,23 @@ LAYERS:
   │ pipeline                   388L  3C   20m  CC=10     ←0
   │ analyzer                   355L  1C    9m  CC=14     ←0
   │ entity_resolution          326L  3C   16m  CC=13     ←1
+  │ yaml_exporter              326L  1C   24m  CC=8      ←0
   │ cli_analysis               323L  0C   11m  CC=14     ←1
+  │ formats                    312L  0C   15m  CC=13     ←3
   │ intent_matching            297L  3C   15m  CC=7      ←0
+  │ cli_parser                 295L  0C    2m  CC=2      ←1
   │ side_effects               294L  2C   15m  CC=14     ←0
   │ cfg                        293L  1C   17m  CC=5      ←0
   │ type_inference             290L  1C   17m  CC=9      ←0
-  │ formats                    289L  0C   13m  CC=13     ←3
   │ data_analysis              286L  1C   18m  CC=14     ←0
   │ llm_task                   284L  0C   15m  CC=14     ←0
-  │ cli_parser                 277L  0C    1m  CC=1      ←1
   │ toon_size_manager          265L  0C    8m  CC=10     ←1
   │ mermaid_flow_helpers       262L  0C   12m  CC=10     ←1
+  │ cli_commands               250L  0C   12m  CC=7      ←1
   │ context_exporter           248L  1C   15m  CC=10     ←0
   │ dfg                        224L  1C   12m  CC=7      ←0
-  │ !! cli_commands               220L  0C    6m  CC=15     ←1
   │ call_graph                 211L  1C   13m  CC=9      ←0
   │ config                     210L  6C    0m  CC=0.0    ←0
-  │ !! yaml_exporter              203L  1C   10m  CC=18     ←0
   │ scanner                    201L  1C    6m  CC=14     ←0
   │ refactoring                196L  1C   11m  CC=9      ←0
   │ __init__                   196L  1C   11m  CC=9      ←0
@@ -73,12 +69,12 @@ LAYERS:
   │ detector                   168L  1C    8m  CC=9      ←0
   │ article_view               163L  1C    9m  CC=7      ←0
   │ module_detail              162L  1C    9m  CC=7      ←0
+  │ orchestrator               160L  0C    5m  CC=11     ←1
   │ ts_parser                  158L  1C    9m  CC=7      ←2
   │ toon_view                  157L  1C    9m  CC=6      ←0
   │ export_pipeline            153L  2C    5m  CC=4      ←0
   │ incremental                150L  1C   10m  CC=4      ←0
   │ prompt_engine              150L  1C    7m  CC=12     ←0
-  │ orchestrator               149L  0C    5m  CC=11     ←1
   │ toon_parser                147L  0C   10m  CC=8      ←1
   │ ruby                       143L  0C    3m  CC=14     ←1
   │ context_view               140L  1C    8m  CC=11     ←0
@@ -115,6 +111,8 @@ LAYERS:
   │ flow_constants              29L  0C    0m  CC=0.0    ←0
   │ __init__                    23L  0C    0m  CC=0.0    ←0
   │ json_exporter               17L  1C    1m  CC=3      ←0
+  │ __init__                    15L  0C    0m  CC=0.0    ←0
+  │ constants                   15L  0C    0m  CC=0.0    ←0
   │ base                        13L  1C    1m  CC=1      ←0
   │ llm_exporter                12L  0C    0m  CC=0.0    ←0
   │ __init__                    12L  0C    0m  CC=0.0    ←0
@@ -125,15 +123,16 @@ LAYERS:
   │ __init__                     0L  0C    0m  CC=0.0    ←0
   │ __init__                     0L  0C    0m  CC=0.0    ←0
   │
-  ./                              CC̄=4.2    ←in:0  →out:0
-  │ !! validate_toon              394L  0C   15m  CC=17     ←0
-  │ setup                       67L  0C    1m  CC=2      ←0
-  │ orchestrator.sh             58L  0C    0m  CC=0.0    ←0
-  │ project.sh                  49L  0C    0m  CC=0.0    ←0
-  │
   scripts/                        CC̄=3.9    ←in:0  →out:0
   │ benchmark_badges           392L  0C    9m  CC=13     ←0
   │ bump_version                96L  0C    7m  CC=4      ←0
+  │
+  ./                              CC̄=3.6    ←in:0  →out:0
+  │ validate_toon              390L  0C   19m  CC=7      ←0
+  │ setup                       67L  0C    1m  CC=2      ←0
+  │ orchestrator.sh             58L  0C    0m  CC=0.0    ←0
+  │ project.sh                  49L  0C    0m  CC=0.0    ←0
+  │ generate_calls_toon         15L  0C    0m  CC=0.0    ←0
   │
   benchmarks/                     CC̄=3.0    ←in:0  →out:1
   │ benchmark_performance      306L  0C    7m  CC=6      ←0
@@ -149,8 +148,8 @@ LAYERS:
   │ server                     110L  0C    3m  CC=4      ←0
   │
   demo_langs/                     CC̄=1.5    ←in:0  →out:0
-  │ sample.java                 47L  2C    7m  CC=3      ←2
   │ sample.rs                   47L  1C    4m  CC=2      ←0
+  │ sample.java                 47L  2C    7m  CC=3      ←2
   │ sample.go                   46L  0C    4m  CC=3      ←0
   │ sample.php                  44L  1C    1m  CC=1      ←0
   │ sample                      40L  1C    5m  CC=3      ←0

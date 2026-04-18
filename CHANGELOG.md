@@ -1,5 +1,30 @@
 ## [Unreleased]
 
+## [0.5.112] - 2026-04-18
+
+### Docs
+- Update README.md
+- Update context.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_project_toon_export.py
+- Update tests/test_prompt_txt.py
+
+### Other
+- Update analysis.toon.yaml
+- Update calls.mmd
+- Update calls.yaml
+- Update code2llm/cli_exports/formats.py
+- Update code2llm/exporters/project_yaml/__init__.py
+- Update code2llm/exporters/project_yaml/constants.py
+- Update code2llm/exporters/project_yaml/core.py
+- Update code2llm/exporters/project_yaml/evolution.py
+- Update code2llm/exporters/project_yaml/health.py
+- Update code2llm/exporters/project_yaml/hotspots.py
+- ... and 7 more files
+
 ## [0.5.111] - 2026-04-18
 
 ### Docs

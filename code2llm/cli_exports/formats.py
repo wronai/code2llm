@@ -71,8 +71,10 @@ def _export_project_yaml(args, result, output_dir: Path):
 
 def _export_project_toon(args, result, output_dir: Path):
     """Export project.toon.yaml directly from the current analysis result."""
+    from ..exporters.project_yaml.evolution import load_previous_evolution
+
     project_yaml_exporter = ProjectYAMLExporter()
-    prev_evolution = project_yaml_exporter._load_previous_evolution(output_dir / 'project.yaml')
+    prev_evolution = load_previous_evolution(output_dir / 'project.yaml')
     data = project_yaml_exporter._build_project_yaml(result, prev_evolution)
 
     exporter = ToonViewGenerator()
@@ -214,21 +216,10 @@ def _export_mermaid_pngs(args, output_dir: Path) -> None:
 
 
 def _export_calls(args, result, output_dir: Path):
-    """Export standalone calls.yaml (call graph as structured YAML).
+    """Export standalone calls.toon.yaml (call graph in toon format).
     
-    Generates calls.yaml without any Mermaid files — useful for programmatic
-    analysis of call graphs without visualization overhead.
-    """
-    yaml_exporter = YAMLExporter()
-    yaml_exporter.export_calls(result, str(output_dir / 'calls.yaml'))
-    if args.verbose:
-        print(f"  - CALLS (call graph YAML): {output_dir / 'calls.yaml'}")
-
-
-def _export_calls_toon(args, result, output_dir: Path):
-    """Export calls.toon.yaml (call graph in human-readable toon format).
-    
-    Generates calls.toon.yaml with hubs, modules, and edges sections.
+    Generates calls.toon.yaml in human-readable toon format with hubs, modules,
+    and edges sections — useful for programmatic analysis of call graphs.
     """
     yaml_exporter = YAMLExporter()
     yaml_exporter.export_calls_toon(result, str(output_dir / 'calls.toon.yaml'))
@@ -256,9 +247,9 @@ def _export_mermaid(args, result, output_dir: Path):
     exporter.export_call_graph(result, str(output_dir / 'calls.mmd'))
     exporter.export_compact(result, str(output_dir / 'compact_flow.mmd'))
 
-    # Export calls.yaml (structured call graph data)
+    # Export calls.toon.yaml (structured call graph data in toon format)
     yaml_exporter = YAMLExporter()
-    yaml_exporter.export_calls(result, str(output_dir / 'calls.yaml'))
+    yaml_exporter.export_calls_toon(result, str(output_dir / 'calls.toon.yaml'))
 
     if args.verbose:
         files = ['flow.mmd']
@@ -266,7 +257,7 @@ def _export_mermaid(args, result, output_dir: Path):
             files.append('flow_detailed.mmd')
         if getattr(args, 'flow_full', False):
             files.append('flow_full.mmd')
-        files.extend(['calls.mmd', 'compact_flow.mmd', 'calls.yaml'])
+        files.extend(['calls.mmd', 'compact_flow.mmd', 'calls.toon.yaml'])
         print(f"  - Mermaid: {output_dir}/*.mmd ({', '.join(files)})")
 
     _export_mermaid_pngs(args, output_dir)

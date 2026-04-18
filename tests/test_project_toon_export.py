@@ -35,7 +35,7 @@ def test_export_project_toon_writes_file(tmp_path):
         "evolution": [],
     }
 
-    with patch("code2llm.cli_exports.formats.ProjectYAMLExporter._load_previous_evolution", return_value=[]), \
+    with patch("code2llm.exporters.project_yaml.evolution.load_previous_evolution", return_value=[]), \
          patch("code2llm.cli_exports.formats.ProjectYAMLExporter._build_project_yaml", return_value=fake_data):
         output_path = _export_project_toon(args, result, tmp_path)
 

@@ -4,11 +4,11 @@
 
 - **Project**: .
 - **Primary Language**: python
-- **Languages**: python: 126, shell: 4, java: 1
+- **Languages**: python: 136, shell: 6, java: 1
 - **Analysis Mode**: static
-- **Total Functions**: 1035
-- **Total Classes**: 111
-- **Modules**: 131
+- **Total Functions**: 1058
+- **Total Classes**: 112
+- **Modules**: 143
 - **Entry Points**: 0
 
 ## Architecture by Module
@@ -33,6 +33,11 @@
 - **Classes**: 1
 - **File**: `map_exporter.py`
 
+### code2llm.exporters.yaml_exporter
+- **Functions**: 24
+- **Classes**: 1
+- **File**: `yaml_exporter.py`
+
 ### code2llm.generators.llm_flow
 - **Functions**: 24
 - **Classes**: 1
@@ -52,17 +57,16 @@
 - **Functions**: 19
 - **File**: `validate_toon.py`
 
-### code2llm.exporters.yaml_exporter
-- **Functions**: 19
-- **Classes**: 1
-- **File**: `yaml_exporter.py`
-
 ### code2llm.exporters.mermaid_exporter
 - **Functions**: 19
 - **Classes**: 1
 - **File**: `mermaid_exporter.py`
 
 ### batch_1.validate_toon
+- **Functions**: 19
+- **File**: `validate_toon.py`
+
+### examples.validate_toon
 - **Functions**: 19
 - **File**: `validate_toon.py`
 
@@ -105,11 +109,6 @@
 - **Classes**: 1
 - **File**: `evolution_exporter.py`
 
-### code2llm.nlp.entity_resolution
-- **Functions**: 16
-- **Classes**: 3
-- **File**: `entity_resolution.py`
-
 ## Key Entry Points
 
 Main execution flows into the system:
@@ -140,7 +139,7 @@ Keys: M=modules, D=details,
 
 ### code2llm.exporters.yaml_exporter.YAMLExporter
 > Export to YAML format.
-- **Methods**: 19
+- **Methods**: 24
 - **Key Methods**: code2llm.exporters.yaml_exporter.YAMLExporter.__init__, code2llm.exporters.yaml_exporter.YAMLExporter.export, code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped, code2llm.exporters.yaml_exporter.YAMLExporter.export_data_flow, code2llm.exporters.yaml_exporter.YAMLExporter.export_data_structures, code2llm.exporters.yaml_exporter.YAMLExporter.export_separated, code2llm.exporters.yaml_exporter.YAMLExporter.export_split, code2llm.exporters.yaml_exporter.YAMLExporter.export_calls, code2llm.exporters.yaml_exporter.YAMLExporter._collect_edges, code2llm.exporters.yaml_exporter.YAMLExporter._process_function_calls
 - **Inherits**: Exporter
 
@@ -262,10 +261,6 @@ Key functions that process and transform data:
 > Format API response.
 - **Output to**: json.dumps
 
-### validate_toon.validate_toon_completeness
-> Validate toon format structure.
-- **Output to**: print, print, bool, bool, bool
-
 ### examples.streaming-analyzer.sample_project.utils.validate_input
 > Validate input data.
 - **Output to**: isinstance, isinstance
@@ -277,6 +272,10 @@ Key functions that process and transform data:
 ### examples.streaming-analyzer.sample_project.utils.transform_data
 > Transform data fields.
 - **Output to**: item.copy, transformations.items, transformed.append, None.upper, None.lower
+
+### validate_toon.validate_toon_completeness
+> Validate toon format structure.
+- **Output to**: print, print, bool, bool, bool
 
 ### benchmarks.benchmark_evolution.parse_evolution_metrics
 > Extract metrics from evolution.toon content.
@@ -384,6 +383,7 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.cli_commands.generate_llm_context` - 21 calls
 - `code2llm.core.analyzer.ProjectAnalyzer.analyze_files` - 20 calls
 - `code2llm.core.lang.generic.analyze_generic` - 20 calls
+- `code2llm.exporters.project_yaml.hotspots.build_refactoring` - 20 calls
 - `examples.streaming-analyzer.demo.demo_incremental_analysis` - 19 calls
 - `validate_toon.compare_classes` - 19 calls
 - `scripts.benchmark_badges.parse_evolution_metrics` - 19 calls
@@ -392,9 +392,8 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.core.lang.ruby.analyze_ruby` - 19 calls
 - `code2llm.exporters.map_exporter.MapExporter.export_to_yaml` - 19 calls
 - `code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped` - 19 calls
+- `code2llm.exporters.yaml_exporter.YAMLExporter.export_calls_toon` - 19 calls
 - `benchmarks.benchmark_optimizations.print_summary` - 18 calls
-- `code2llm.exporters.flow_renderer.FlowRenderer.render_pipelines` - 18 calls
-- `code2llm.generators.llm_flow.main` - 18 calls
 
 ## System Interactions
 
