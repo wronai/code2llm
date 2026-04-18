@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.5.110] - 2026-04-18
+
+### Other
+- Update validate_toon.py
+
 ## [0.5.109] - 2026-04-18
 
 ### Docs

@@ -294,101 +294,97 @@ def validate_toon_completeness(toon_data):
     
     return all_present
 
+def _run_single_file_mode(file_path: Path) -> int:
+    """Single file mode - validate TOON format structure only."""
+    if not file_path.exists():
+        print(f"Error: {file_path} not found")
+        return 1
+
+    print(f"🔍 Validating TOON format: {file_path.name}")
+    print("=" * 60)
+
+    data = load_file(file_path)
+    if not data:
+        print("Error: Could not load file")
+        return 1
+
+    is_valid = validate_toon_completeness(data)
+
+    print("\n" + "=" * 60)
+    print("📋 TOON FORMAT VALIDATION SUMMARY:")
+    print("=" * 60)
+
+    status = "✅ PASS" if is_valid else "❌ FAIL"
+    print(f"{status} TOON Structure")
+    print("\n" + ("🎉 TOON FORMAT VALID!" if is_valid else "⚠️  TOON FORMAT ISSUES!"))
+
+    return 0 if is_valid else 1
+
+
+def _run_comparison_mode(yaml_path: Path, toon_path: Path) -> int:
+    """Comparison mode - compare YAML vs TOON."""
+    if not yaml_path.exists():
+        print(f"Error: {yaml_path} not found")
+        return 1
+
+    if not toon_path.exists():
+        print(f"Error: {toon_path} not found")
+        return 1
+
+    print(f"🔍 Validating: {yaml_path.name} vs {toon_path.name}")
+    print("=" * 60)
+
+    yaml_data = load_yaml(yaml_path)
+    toon_data = load_file(toon_path)
+
+    if not yaml_data or not toon_data:
+        print("Error: Could not load one or both files")
+        return 1
+
+    results = _compare_all_aspects(yaml_data, toon_data)
+    _print_comparison_summary(results)
+
+    return 0 if all(passed for _, passed in results) else 1
+
+
+def _compare_all_aspects(yaml_data, toon_data) -> list:
+    """Compare all aspects of YAML vs TOON data."""
+    return [
+        ("Basic Statistics", compare_basic_stats(yaml_data, toon_data)),
+        ("Functions", compare_functions(yaml_data, toon_data)),
+        ("Classes", compare_classes(yaml_data, toon_data)),
+        ("Modules", compare_modules(yaml_data, toon_data)),
+        ("TOON Structure", validate_toon_completeness(toon_data))
+    ]
+
+
+def _print_comparison_summary(results: list) -> None:
+    """Print comparison summary report."""
+    print("\n" + "=" * 60)
+    print("📋 FINAL VALIDATION SUMMARY:")
+    print("=" * 60)
+
+    all_passed = True
+    for test_name, passed in results:
+        status = "✅ PASS" if passed else "❌ FAIL"
+        print(f"{status} {test_name}")
+        if not passed:
+            all_passed = False
+
+    print("\n" + ("🎉 ALL TESTS PASSED!" if all_passed else "⚠️  SOME TESTS FAILED!"))
+
+
 def main():
     """Main validation function."""
     if len(sys.argv) == 2:
-        # Single file mode - validate TOON format structure only
-        file_path = Path(sys.argv[1])
-        
-        if not file_path.exists():
-            print(f"Error: {file_path} not found")
-            sys.exit(1)
-        
-        print(f"🔍 Validating TOON format: {file_path.name}")
-        print("=" * 60)
-        
-        # Load file (auto-detect format)
-        data = load_file(file_path)
-        
-        if not data:
-            print("Error: Could not load file")
-            sys.exit(1)
-        
-        # Validate structure
-        is_valid = validate_toon_completeness(data)
-        
-        # Final summary
-        print("\n" + "=" * 60)
-        print("📋 TOON FORMAT VALIDATION SUMMARY:")
-        print("=" * 60)
-        
-        status = "✅ PASS" if is_valid else "❌ FAIL"
-        print(f"{status} TOON Structure")
-        
-        print("\n" + ("🎉 TOON FORMAT VALID!" if is_valid else "⚠️  TOON FORMAT ISSUES!"))
-        
-        return 0 if is_valid else 1
-    
+        return _run_single_file_mode(Path(sys.argv[1]))
     elif len(sys.argv) == 3:
-        # Comparison mode - compare YAML vs TOON
-        yaml_path = Path(sys.argv[1])
-        toon_path = Path(sys.argv[2])
-        
-        if not yaml_path.exists():
-            print(f"Error: {yaml_path} not found")
-            sys.exit(1)
-        
-        if not toon_path.exists():
-            print(f"Error: {toon_path} not found")
-            sys.exit(1)
-        
-        print(f"🔍 Validating: {yaml_path.name} vs {toon_path.name}")
-        print("=" * 60)
-        
-        # Load both files
-        yaml_data = load_yaml(yaml_path)
-        toon_data = load_file(toon_path)  # Auto-detect TOON format
-        
-        if not yaml_data or not toon_data:
-            print("Error: Could not load one or both files")
-            sys.exit(1)
-        
-        # Compare all aspects
-        stats_match = compare_basic_stats(yaml_data, toon_data)
-        functions_match = compare_functions(yaml_data, toon_data)
-        classes_match = compare_classes(yaml_data, toon_data)
-        modules_match = compare_modules(yaml_data, toon_data)
-        toon_valid = validate_toon_completeness(toon_data)
-        
-        # Final summary
-        print("\n" + "=" * 60)
-        print("📋 FINAL VALIDATION SUMMARY:")
-        print("=" * 60)
-        
-        results = [
-            ("Basic Statistics", stats_match),
-            ("Functions", functions_match),
-            ("Classes", classes_match),
-            ("Modules", modules_match),
-            ("TOON Structure", toon_valid)
-        ]
-        
-        all_passed = True
-        for test_name, passed in results:
-            status = "✅ PASS" if passed else "❌ FAIL"
-            print(f"{status} {test_name}")
-            if not passed:
-                all_passed = False
-        
-        print("\n" + ("🎉 ALL TESTS PASSED!" if all_passed else "⚠️  SOME TESTS FAILED!"))
-        
-        return 0 if all_passed else 1
-    
+        return _run_comparison_mode(Path(sys.argv[1]), Path(sys.argv[2]))
     else:
         print("Usage:")
         print("  python validate_toon.py <analysis.toon>                      # Validate TOON only")
         print("  python validate_toon.py <analysis.yaml> <analysis.toon>      # Compare both formats")
-        sys.exit(1)
+        return 1
 
 if __name__ == '__main__':
     sys.exit(main())
