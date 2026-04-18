@@ -1,5 +1,18 @@
 ## [Unreleased]
 
+## [0.5.111] - 2026-04-18
+
+### Docs
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update code2llm/cli_exports/formats.py
+- Update code2llm/exporters/yaml_exporter.py
+- Update project/analysis.toon.yaml
+- Update project/calls.yaml
+- Update project/index.html
+
 ## [0.5.110] - 2026-04-18
 
 ### Other

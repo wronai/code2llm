@@ -252,3 +252,75 @@ class YAMLExporter(Exporter):
         if isinstance(fi.complexity, dict):
             return fi.complexity.get('cyclomatic_complexity', 0)
         return fi.complexity or 0
+
+    def export_calls_toon(self, result: AnalysisResult, output_path: str, max_calls_per_func: int = 10, max_edges: int = 500) -> None:
+        """Export call graph as toon.yaml format (human-readable).
+
+        Generates a human-readable toon format with:
+        - Header with project stats
+        - HUBS: high-degree functions (many calls in/out)
+        - CHAINS: call chains/paths
+        - MODULES: functions grouped by module with call relationships
+        """
+        connected, edges = self._collect_edges(result, max_calls_per_func, max_edges)
+        nodes = self._build_nodes(result, connected)
+        modules = self._group_by_module(result, connected)
+
+        # Build toon format sections
+        lines = []
+        lines.extend(self._render_calls_header(result, nodes, edges, modules))
+        lines.append("")
+        lines.extend(self._render_hubs(nodes))
+        lines.append("")
+        lines.extend(self._render_modules(modules, nodes, edges))
+        lines.append("")
+        lines.extend(self._render_edges(edges))
+
+        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(lines) + '\n')
+
+    def _render_calls_header(self, result: AnalysisResult, nodes: Dict, edges: List, modules: Dict) -> List[str]:
+        """Render header section for calls.toon.yaml."""
+        nfuncs = len(result.functions)
+        all_cc = [self._get_cc(fi) for fi in result.functions.values()]
+        avg_cc = round(sum(all_cc) / len(all_cc), 1) if all_cc else 0.0
+
+        return [
+            f"# code2llm call graph | {result.project_path}",
+            f"# nodes: {len(nodes)} | edges: {len(edges)} | modules: {len(modules)}",
+            f"# CC̄={avg_cc}",
+        ]
+
+    def _render_hubs(self, nodes: Dict) -> List[str]:
+        """Render high-degree hub functions (sorted by total calls)."""
+        hubs = sorted(
+            [(name, data) for name, data in nodes.items()],
+            key=lambda x: x[1]['calls_in'] + x[1]['calls_out'],
+            reverse=True
+        )[:20]
+
+        lines = ['HUBS[20]:']
+        for name, data in hubs:
+            total_calls = data['calls_in'] + data['calls_out']
+            lines.append(f"  {name}")
+            lines.append(f"    CC={data['cyclomatic_complexity']}  in:{data['calls_in']}  out:{data['calls_out']}  total:{total_calls}")
+        return lines
+
+    def _render_modules(self, modules: Dict, nodes: Dict, edges: List) -> List[str]:
+        """Render modules section with functions and call relationships."""
+        lines = ['MODULES:']
+        for module, funcs in sorted(modules.items()):
+            lines.append(f"  {module}  [{len(funcs)} funcs]")
+            for func in funcs[:10]:  # Show up to 10 funcs per module
+                if func in nodes:
+                    data = nodes[func]
+                    lines.append(f"    {data['name']}  CC={data['cyclomatic_complexity']}  out:{data['calls_out']}")
+        return lines
+
+    def _render_edges(self, edges: List) -> List[str]:
+        """Render call edges section."""
+        lines = ['EDGES:']
+        for edge in edges[:50]:  # Show up to 50 edges
+            lines.append(f"  {edge['caller']} → {edge['callee']}")
+        return lines

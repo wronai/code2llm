@@ -225,6 +225,17 @@ def _export_calls(args, result, output_dir: Path):
         print(f"  - CALLS (call graph YAML): {output_dir / 'calls.yaml'}")
 
 
+def _export_calls_toon(args, result, output_dir: Path):
+    """Export calls.toon.yaml (call graph in human-readable toon format).
+    
+    Generates calls.toon.yaml with hubs, modules, and edges sections.
+    """
+    yaml_exporter = YAMLExporter()
+    yaml_exporter.export_calls_toon(result, str(output_dir / 'calls.toon.yaml'))
+    if args.verbose:
+        print(f"  - CALLS (toon format): {output_dir / 'calls.toon.yaml'}")
+
+
 def _export_mermaid(args, result, output_dir: Path):
     """Export Mermaid diagrams + optional PNG generation.
     
