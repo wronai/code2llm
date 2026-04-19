@@ -38,6 +38,25 @@ def find_function_node(
     return None
 
 
+def ast_unparse(node: Optional[ast.AST], default_none: str = "None") -> str:
+    """Convert an AST node to its source string via ast.unparse (Python 3.9+).
+
+    Used as a shared replacement for the duplicated *_expr_to_str* methods
+    in ``cfg.py``, ``dfg.py``, and ``call_graph.py``.
+
+    Args:
+        node: AST node to convert, or None.
+        default_none: value returned when *node* is None (``"None"`` for most
+            callers; ``""`` for call_graph which uses empty-string sentinel).
+    """
+    if node is None:
+        return default_none
+    try:
+        return ast.unparse(node) if hasattr(ast, "unparse") else str(node)
+    except Exception:
+        return str(node)
+
+
 def expr_to_str(node: ast.expr) -> Optional[str]:
     """Convert an AST expression to a dotted string (for call-name extraction).
 

@@ -73,7 +73,7 @@ def _build_config(args, output_dir: Path):
     if hasattr(args, 'no_gitignore') and args.no_gitignore:
         filter_config.gitignore_enabled = False
     
-    return Config(
+    config = Config(
         mode=args.mode,
         max_depth_enumeration=args.max_depth,
         detect_state_machines=not args.no_patterns,
@@ -81,6 +81,10 @@ def _build_config(args, output_dir: Path):
         output_dir=str(output_dir),
         filters=filter_config
     )
+    # Persistent cache flags (read via getattr with defaults in analyzer.py)
+    no_cache = getattr(args, 'no_cache', False) or getattr(args, 'force', False)
+    config.no_cache = no_cache
+    return config
 
 
 def _print_analysis_summary(result) -> None:

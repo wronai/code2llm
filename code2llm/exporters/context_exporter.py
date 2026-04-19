@@ -6,20 +6,21 @@ Produces LLM-ready architecture summary with flows, patterns, and API surface.
 
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
-from .base import Exporter
+from typing import Any, Dict, List, Tuple, Optional
+from .base import BaseExporter, export_format
 from code2llm.core.models import AnalysisResult, FunctionInfo
 from code2llm.core.config import LANGUAGE_EXTENSIONS
 
 
-class ContextExporter(Exporter):
+@export_format("context", description="Context markdown for LLM consumption", extension=".md")
+class ContextExporter(BaseExporter):
     """Export LLM-ready analysis summary with architecture and flows.
 
     Output: context.md — architecture narrative for LLM consumption.
     Formerly LLMPromptExporter in llm_exporter.py.
     """
-    
-    def export(self, result: AnalysisResult, output_path: str) -> None:
+
+    def export(self, result: AnalysisResult, output_path: str, **kwargs: Any) -> Optional[Path]:
         """Generate comprehensive LLM prompt with architecture description."""
         lines = ["# System Architecture Analysis", ""]
         
@@ -51,9 +52,10 @@ class ContextExporter(Exporter):
             "Maintain the identified architectural patterns and public API surface when suggesting changes.",
         ])
         
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, 'w', encoding='utf-8') as f:
+        path = self._ensure_dir(output_path)
+        with open(path, 'w', encoding='utf-8') as f:
             f.write('\n'.join(lines))
+        return path
 
     def _get_overview(self, result: AnalysisResult) -> List[str]:
         lang_info = self._detect_languages(result)

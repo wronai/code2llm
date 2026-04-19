@@ -53,14 +53,10 @@ def test_export_single_project_all_triggers_project_toon(tmp_path):
     result = MagicMock()
     source_path = Path("/tmp/source")
 
-    with patch("code2llm.cli_exports.orchestrator._export_simple_formats"), \
+    with patch("code2llm.cli_exports.orchestrator._export_registry_formats"), \
          patch("code2llm.cli_exports.orchestrator._export_mermaid"), \
-         patch("code2llm.cli_exports.orchestrator._export_evolution"), \
-         patch("code2llm.cli_exports.orchestrator._export_data_structures"), \
          patch("code2llm.cli_exports.orchestrator._export_context_fallback"), \
          patch("code2llm.cli_exports.orchestrator._export_project_toon") as project_toon_mock, \
-         patch("code2llm.cli_exports.orchestrator._export_code2logic"), \
-         patch("code2llm.cli_exports.orchestrator._export_prompt_txt"), \
          patch("code2llm.cli_exports.orchestrator._export_readme"), \
          patch("code2llm.cli_exports.orchestrator._export_index_html"):
         _export_single_project(

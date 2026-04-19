@@ -5,6 +5,7 @@ flowchart TD
 
     subgraph CLI
         code2llm__cli__main["main"]
+        code2llm__cli_parser__get_version["get_version"]
         code2llm__cli_analysis___run_analysis["_run_analysis"]
         code2llm__cli_analysis___run_standard_analysis["_run_standard_analysis"]
         code2llm__cli_analysis___build_config["_build_config"]
@@ -18,30 +19,32 @@ flowchart TD
         code2llm__cli_analysis___run_streaming_analysis["_run_streaming_analysis"]
         code2llm__cli_commands__handle_special_commands["handle_special_commands"]
         code2llm__cli_commands__handle_report_command["handle_report_command"]
-        code2llm__cli_commands__validate_and_setup["validate_and_setup"]
-        ...["+45 more"]
+        ...["+56 more"]
     end
 
     subgraph Core
-        setup__read_readme["read_readme"]
         validate_toon__main["main"]
+        setup__read_readme["read_readme"]
         badges__server__index["index"]
         badges__server__generate_badges["generate_badges"]
         badges__server__get_badges["get_badges"]
         code2llm__api__analyze["analyze"]
         code2llm__api__analyze_file["analyze_file"]
-        code2llm__analysis__data_analysis__DataAnalyzer__analyze_data_flow["analyze_data_flow"]
-        code2llm__analysis__data_analysis__DataAnalyzer__analyze_data_structures["analyze_data_structures"]
-        code2llm__analysis__data_analysis__DataAnalyzer___find_data_pipelines["_find_data_pipelines"]
-        code2llm__analysis__data_analysis__DataAnalyzer___find_state_patterns["_find_state_patterns"]
-        code2llm__analysis__data_analysis__DataAnalyzer___find_data_dependencies["_find_data_dependencies"]
-        code2llm__analysis__data_analysis__DataAnalyzer___find_event_flows["_find_event_flows"]
-        code2llm__analysis__data_analysis__DataAnalyzer___detect_types_from_name["_detect_types_from_name"]
-        code2llm__analysis__data_analysis__DataAnalyzer___create_type_entry["_create_type_entry"]
-        ...["+291 more"]
+        code2llm__analysis__pipeline_detector__Pipeline__to_dict["to_dict"]
+        code2llm__analysis__pipeline_detector__PipelineDetector__detect["detect"]
+        code2llm__analysis__pipeline_detector__PipelineDetector___build_graph["_build_graph"]
+        code2llm__analysis__pipeline_detector__PipelineDetector___find_pipeline_paths["_find_pipeline_paths"]
+        code2llm__analysis__pipeline_detector__PipelineDetector___longest_path_from["_longest_path_from"]
+        code2llm__analysis__pipeline_detector__PipelineDetector___longest_path_in_dag["_longest_path_in_dag"]
+        code2llm__analysis__pipeline_detector__PipelineDetector___build_pipelines["_build_pipelines"]
+        code2llm__analysis__pipeline_detector__PipelineDetector___build_stages["_build_stages"]
+        ...["+308 more"]
     end
 
     subgraph Exporters
+        code2llm__core__export_pipeline__SharedExportContext___compute_metrics_summary["_compute_metrics_summary"]
+        code2llm__core__export_pipeline__SharedExportContext___compute_cc_distribution["_compute_cc_distribution"]
+        code2llm__core__export_pipeline__ExportPipeline__run["run"]
         code2llm__exporters__base__Exporter__export["export"]
         code2llm__exporters__readme_exporter__READMEExporter__export["export"]
         code2llm__exporters__readme_exporter__READMEExporter___extract_insights["_extract_insights"]
@@ -51,13 +54,10 @@ flowchart TD
         code2llm__exporters__readme_exporter__READMEExporter___build_llm_files_section["_build_llm_files_section"]
         code2llm__exporters__readme_exporter__READMEExporter___build_viz_files_section["_build_viz_files_section"]
         code2llm__exporters__json_exporter__JSONExporter__export["export"]
-        code2llm__exporters__yaml_exporter__YAMLExporter__export["export"]
-        code2llm__exporters__yaml_exporter__YAMLExporter__export_grouped["export_grouped"]
-        code2llm__exporters__yaml_exporter__YAMLExporter__export_data_flow["export_data_flow"]
-        code2llm__exporters__yaml_exporter__YAMLExporter__export_data_structures["export_data_structures"]
-        code2llm__exporters__yaml_exporter__YAMLExporter__export_separated["export_separated"]
-        code2llm__exporters__yaml_exporter__YAMLExporter__export_split["export_split"]
-        ...["+225 more"]
+        code2llm__exporters__context_view__ContextViewGenerator__generate["generate"]
+        code2llm__exporters__context_view__ContextViewGenerator___render["_render"]
+        code2llm__exporters__context_view__ContextViewGenerator___render_overview["_render_overview"]
+        ...["+234 more"]
     end
 
-    class setup__read_readme,validate_toon__main,badges__server__index,badges__server__generate_badges,badges__server__get_badges,code2llm__cli__main,code2llm__api__analyze,code2llm__api__analyze_file,code2llm__cli_analysis___run_analysis,code2llm__cli_analysis___run_standard_analysis entry
+    class validate_toon__main,setup__read_readme,badges__server__index,badges__server__generate_badges,badges__server__get_badges,code2llm__cli__main,code2llm__api__analyze,code2llm__api__analyze_file,code2llm__cli_parser__get_version,code2llm__cli_analysis___run_analysis entry

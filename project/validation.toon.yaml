@@ -1,27 +1,26 @@
-# vallm batch | 224f | 105✓ 5⚠ 65✗ | 2026-03-31
+# vallm batch | 263f | 163✓ 5⚠ 29✗ | 2026-04-19
 
 SUMMARY:
-  scanned: 224  passed: 105 (46.9%)  warnings: 5  errors: 65  unsupported: 54
+  scanned: 263  passed: 163 (62.0%)  warnings: 5  errors: 29  unsupported: 71
 
 WARNINGS[5]{path,score}:
+  code2llm/cli_parser.py,0.97
+    issues[1]{rule,severity,message,line}:
+      complexity.lizard_length,warning,create_parser: 237 lines exceeds limit 100,19
   code2llm/generators/mermaid.py,0.97
     issues[1]{rule,severity,message,line}:
       complexity.lizard_length,warning,generate_single_png: 102 lines exceeds limit 100,287
-  tests/test_format_quality.py,0.97
-    issues[1]{rule,severity,message,line}:
-      complexity.lizard_length,warning,ground_truth_project: 116 lines exceeds limit 100,25
-  validate_toon.py,0.97
-    issues[2]{rule,severity,message,line}:
-      complexity.cyclomatic,warning,main has cyclomatic complexity 17 (max: 15),297
-      complexity.lizard_cc,warning,main: CC=17 exceeds limit 15,297
   code2llm/analysis/data_analysis.py,0.98
     issues[1]{rule,severity,message,line}:
       complexity.maintainability,warning,Low maintainability index: 7.1 (threshold: 20),
+  code2llm/exporters/toon/renderer.py,0.98
+    issues[1]{rule,severity,message,line}:
+      complexity.maintainability,warning,Low maintainability index: 10.0 (threshold: 20),
   code2llm/generators/llm_flow.py,0.98
     issues[1]{rule,severity,message,line}:
       complexity.maintainability,warning,Low maintainability index: 15.9 (threshold: 20),
 
-ERRORS[65]{path,score}:
+ERRORS[29]{path,score}:
   demo_langs/invalid/sample_bad.go,0.00
     issues[1]{rule,severity,message,line}:
       syntax.tree_sitter,error,tree-sitter found 3 parse error(s) in go,
@@ -61,272 +60,65 @@ ERRORS[65]{path,score}:
   test_python_only/invalid/sample_bad.py,0.00
     issues[1]{rule,severity,message,line}:
       syntax.parse,error,SyntaxError: invalid syntax,3
-  code2llm/__init__.py,0.57
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'core.config' not found,15
-      python.import.resolvable,error,Module 'core.models' not found,16
-      python.import.resolvable,error,Module 'core.analyzer' not found,41
-  code2llm/core/lang/__init__.py,0.57
-    issues[9]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'typescript' not found,3
-      python.import.resolvable,error,Module 'go_lang' not found,4
-      python.import.resolvable,error,Module 'rust' not found,5
-      python.import.resolvable,error,Module 'java' not found,6
-      python.import.resolvable,error,Module 'cpp' not found,7
-      python.import.resolvable,error,Module 'csharp' not found,8
-      python.import.resolvable,error,Module 'php' not found,9
-      python.import.resolvable,error,Module 'ruby' not found,10
-      python.import.resolvable,error,Module 'generic' not found,11
-  code2llm/core/streaming/__init__.py,0.57
-    issues[5]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'strategies' not found,3
-      python.import.resolvable,error,Module 'cache' not found,4
-      python.import.resolvable,error,Module 'prioritizer' not found,5
-      python.import.resolvable,error,Module 'scanner' not found,6
-      python.import.resolvable,error,Module 'incremental' not found,7
-  code2llm/exporters/__init__.py,0.57
-    issues[14]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,17
-      python.import.resolvable,error,Module 'json_exporter' not found,18
-      python.import.resolvable,error,Module 'yaml_exporter' not found,19
-      python.import.resolvable,error,Module 'mermaid_exporter' not found,20
-      python.import.resolvable,error,Module 'context_exporter' not found,21
-      python.import.resolvable,error,Module 'llm_exporter' not found,22
-      python.import.resolvable,error,Module 'toon' not found,23
-      python.import.resolvable,error,Module 'map_exporter' not found,24
-      python.import.resolvable,error,Module 'flow_exporter' not found,25
-      python.import.resolvable,error,Module 'evolution_exporter' not found,26
-      python.import.resolvable,error,Module 'readme_exporter' not found,27
-      python.import.resolvable,error,Module 'project_yaml_exporter' not found,28
-      python.import.resolvable,error,Module 'report_generators' not found,29
-      python.import.resolvable,error,Module 'index_generator' not found,34
-  code2llm/exporters/llm_exporter.py,0.57
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'context_exporter' not found,7
-  code2llm/exporters/toon.py,0.57
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'toon' not found,8
-  code2llm/generators/__init__.py,0.57
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'llm_flow' not found,6
-      python.import.resolvable,error,Module 'mermaid' not found,7
-  code2llm/core/__init__.py,0.63
-    issues[6]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'models' not found,4
-      python.import.resolvable,error,Module 'analyzer' not found,32
-      python.import.resolvable,error,Module 'file_analyzer' not found,35
-      python.import.resolvable,error,Module 'refactoring' not found,38
-      python.import.resolvable,error,Module 'file_cache' not found,41
-      python.import.resolvable,error,Module 'file_filter' not found,42
-  code2llm/cli.py,0.66
-    issues[4]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'cli_parser' not found,10
-      python.import.resolvable,error,Module 'cli_commands' not found,11
-      python.import.resolvable,error,Module 'cli_exports' not found,18
-      python.import.resolvable,error,Module 'cli_analysis' not found,24
-  code2llm/cli_analysis.py,0.66
-    issues[11]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'core.large_repo' not found,17
-      python.import.resolvable,error,Module 'core.config' not found,36
-      python.import.resolvable,error,Module 'core.analyzer' not found,37
-      python.import.resolvable,error,Module 'core.config' not found,60
-      python.import.resolvable,error,Module 'core.large_repo' not found,106
-      python.import.resolvable,error,Module 'core.analyzer' not found,191
-      python.import.resolvable,error,Module 'core.config' not found,192
-      python.import.resolvable,error,Module 'cli_exports' not found,193
-      python.import.resolvable,error,Module 'core.models' not found,244
-      python.import.resolvable,error,Module 'core.analyzer' not found,277
-      python.import.resolvable,error,Module 'core.streaming_analyzer' not found,278
-  code2llm/nlp/__init__.py,0.66
-    issues[4]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'pipeline' not found,9
-      python.import.resolvable,error,Module 'normalization' not found,10
-      python.import.resolvable,error,Module 'intent_matching' not found,11
-      python.import.resolvable,error,Module 'entity_resolution' not found,12
-  code2llm/cli_exports/__init__.py,0.68
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'formats' not found,6
-      python.import.resolvable,error,Module 'prompt' not found,18
-      python.import.resolvable,error,Module 'orchestrator' not found,25
-  code2llm/exporters/report_generators.py,0.71
-    issues[4]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'toon_view' not found,13
-      python.import.resolvable,error,Module 'context_view' not found,14
-      python.import.resolvable,error,Module 'article_view' not found,15
-      python.import.resolvable,error,Module 'html_dashboard' not found,16
-  code2llm/api.py,0.74
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'core.config' not found,10
-      python.import.resolvable,error,Module 'core.models' not found,11
-      python.import.resolvable,error,Module 'core.analyzer' not found,37
-  code2llm/core/lang/base.py,0.76
-    issues[4]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'models' not found,146
-      python.import.resolvable,error,Module 'models' not found,254
-      python.import.resolvable,error,Module 'models' not found,305
-      python.import.resolvable,error,Module 'models' not found,363
-  examples/streaming-analyzer/sample_project/main.py,0.76
-    issues[4]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'auth' not found,7
-      python.import.resolvable,error,Module 'database' not found,8
-      python.import.resolvable,error,Module 'api' not found,9
-      python.import.resolvable,error,Module 'utils' not found,10
-  code2llm/core/analyzer.py,0.77
-    issues[8]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'models' not found,10
-      python.import.resolvable,error,Module 'file_cache' not found,13
-      python.import.resolvable,error,Module 'file_filter' not found,14
-      python.import.resolvable,error,Module 'file_analyzer' not found,15
-      python.import.resolvable,error,Module 'refactoring' not found,16
-      python.import.resolvable,error,Module 'file_cache' not found,353
-      python.import.resolvable,error,Module 'file_filter' not found,354
-      python.import.resolvable,error,Module 'file_analyzer' not found,355
-  code2llm/cli_parser.py,0.79
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'core.config' not found,5
-  code2llm/nlp/pipeline.py,0.81
-    issues[4]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'normalization' not found,15
-      python.import.resolvable,error,Module 'intent_matching' not found,16
-      python.import.resolvable,error,Module 'entity_resolution' not found,17
-      python.import.resolvable,error,Module 'intent_matching' not found,308
-  code2llm/cli_exports/orchestrator.py,0.82
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'formats' not found,7
-      python.import.resolvable,error,Module 'prompt' not found,19
-      python.import.resolvable,error,Module 'core.large_repo' not found,117
-  code2llm/core/streaming/scanner.py,0.82
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'cache' not found,9
-      python.import.resolvable,error,Module 'prioritizer' not found,10
-      python.import.resolvable,error,Module 'strategies' not found,11
-  code2llm/exporters/toon/__init__.py,0.82
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'metrics' not found,9
-      python.import.resolvable,error,Module 'renderer' not found,10
-      python.import.resolvable,error,Module 'helpers' not found,11
-  code2llm/exporters/toon/metrics.py,0.82
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'helpers' not found,9
-      python.import.resolvable,error,Module 'helpers' not found,480
-      python.import.resolvable,error,Module 'helpers' not found,198
-  code2llm/core/large_repo.py,0.83
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'repo_files' not found,14
-      python.import.resolvable,error,Module 'repo_files' not found,323
-  code2llm/exporters/flow_renderer.py,0.83
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'flow_constants' not found,9
-      python.import.resolvable,error,Module 'core.models' not found,19
-  benchmarks/benchmark_format_quality.py,0.84
+  benchmarks/benchmark_format_quality.py,0.83
     issues[4]{rule,severity,message,line}:
       python.import.resolvable,error,Module 'benchmarks.benchmark_constants' not found,24
       python.import.resolvable,error,Module 'benchmarks.format_evaluator' not found,25
       python.import.resolvable,error,Module 'benchmarks.project_generator' not found,26
       python.import.resolvable,error,Module 'benchmarks.reporting' not found,27
-  code2llm/core/refactoring.py,0.85
-    issues[5]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'models' not found,7
-      python.import.resolvable,error,Module 'file_filter' not found,8
-      python.import.resolvable,error,Module 'analysis.call_graph' not found,24
-      python.import.resolvable,error,Module 'analysis.coupling' not found,125
-      python.import.resolvable,error,Module 'analysis.smells' not found,131
-  benchmarks/reporting.py,0.86
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'benchmark_constants' not found,12
-      python.import.resolvable,error,Module 'format_evaluator' not found,13
-  code2llm/cli_exports/formats.py,0.86
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'refactor.prompt_engine' not found,250
-      python.import.resolvable,error,Module 'exporters.validate_project' not found,151
-      python.import.resolvable,error,Module 'generators.mermaid' not found,196
-  code2llm/core/streaming_analyzer.py,0.86
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'streaming' not found,16
-      python.import.resolvable,error,Module 'streaming' not found,178
-  code2llm/exporters/toon/module_detail.py,0.86
+  tests/test_prompt_engine.py,0.86
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'helpers' not found,7
-  examples/streaming-analyzer/sample_project/api.py,0.86
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'database' not found,5
-  code2llm/cli_commands.py,0.87
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'cli_exports' not found,8
-      python.import.resolvable,error,Module 'exporters' not found,195
-      python.import.resolvable,error,Module 'generators.llm_flow' not found,14
-  code2llm/exporters/mermaid_exporter.py,0.88
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,18
-      python.import.resolvable,error,Module 'mermaid_flow_helpers' not found,20
-  code2llm/exporters/toon/renderer.py,0.88
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'helpers' not found,10
-      python.import.resolvable,error,Module 'helpers' not found,49
-  code2llm/analysis/pipeline_detector.py,0.89
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'side_effects' not found,21
-      python.import.resolvable,error,Module 'type_inference' not found,22
-  code2llm/core/file_analyzer.py,0.89
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'models' not found,11
-      python.import.resolvable,error,Module 'file_filter' not found,17
-      python.import.resolvable,error,Module 'lang' not found,18
-  code2llm/core/repo_files.py,0.89
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'gitignore' not found,7
-  code2llm/exporters/flow_exporter.py,0.89
-    issues[3]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,19
-      python.import.resolvable,error,Module 'flow_constants' not found,20
-      python.import.resolvable,error,Module 'flow_renderer' not found,21
-  code2llm/exporters/json_exporter.py,0.89
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,5
-  code2llm/exporters/toon/helpers.py,0.89
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'core.config' not found,101
-  code2llm/exporters/project_yaml_exporter.py,0.90
-    issues[2]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,18
-      python.import.resolvable,error,Module 'toon.helpers' not found,20
-  benchmarks/format_evaluator.py,0.91
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'benchmark_constants' not found,12
-  code2llm/core/file_filter.py,0.91
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'gitignore' not found,7
-  code2llm/exporters/readme_exporter.py,0.91
-    issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,12
+      python.import.resolvable,error,Module 'pytest' not found,1
   examples/functional_refactoring_example.py,0.91
     issues[5]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'entities.preparer' not found,354
-      python.import.resolvable,error,Module 'templates.loader' not found,355
-      python.import.resolvable,error,Module 'templates.renderer' not found,356
+      python.import.relative.resolvable,error,Relative import 'entities.preparer' not found,354
+      python.import.relative.resolvable,error,Relative import 'templates.loader' not found,355
+      python.import.relative.resolvable,error,Relative import 'templates.renderer' not found,356
       python.import.resolvable,error,Module 'domain.command_generation.generator' not found,560
       python.import.resolvable,error,Module 'infrastructure.caching.evolutionary_cache' not found,561
-  code2llm/core/streaming/prioritizer.py,0.93
+  badges/server.py,0.93
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'strategies' not found,9
-  code2llm/exporters/context_exporter.py,0.93
+      python.import.resolvable,error,Module 'flask' not found,6
+  tests/test_prompt_txt.py,0.93
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,10
-  code2llm/cli_exports/code2logic.py,0.94
+      python.import.resolvable,error,Module 'pytest' not found,3
+  tests/test_toon_v2.py,0.93
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'core.toon_size_manager' not found,120
-  code2llm/exporters/evolution_exporter.py,0.94
+      python.import.resolvable,error,Module 'pytest' not found,2
+  tests/test_advanced_analysis.py,0.95
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,16
-  code2llm/exporters/yaml_exporter.py,0.94
+      python.import.resolvable,error,Module 'pytest' not found,1
+  tests/test_deep_analysis.py,0.95
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,6
-  code2llm/exporters/map_exporter.py,0.95
+      python.import.resolvable,error,Module 'pytest' not found,1
+  tests/test_flow_exporter.py,0.95
     issues[1]{rule,severity,message,line}:
-      python.import.resolvable,error,Module 'base' not found,18
+      python.import.resolvable,error,Module 'pytest' not found,12
+  tests/test_nlp_pipeline.py,0.95
+    issues[1]{rule,severity,message,line}:
+      python.import.resolvable,error,Module 'pytest' not found,3
+  tests/test_pipeline_detector.py,0.95
+    issues[1]{rule,severity,message,line}:
+      python.import.resolvable,error,Module 'pytest' not found,10
+  tests/test_refactoring_engine.py,0.95
+    issues[1]{rule,severity,message,line}:
+      python.import.resolvable,error,Module 'pytest' not found,1
+  benchmarks/test_performance.py,0.96
+    issues[1]{rule,severity,message,line}:
+      python.import.resolvable,error,Module 'pytest' not found,11
+  tests/test_analyzer.py,0.96
+    issues[1]{rule,severity,message,line}:
+      python.import.resolvable,error,Module 'pytest' not found,3
+  tests/test_format_quality.py,0.96
+    issues[1]{rule,severity,message,line}:
+      python.import.resolvable,error,Module 'pytest' not found,17
+  tests/test_edge_cases.py,0.97
+    issues[1]{rule,severity,message,line}:
+      python.import.resolvable,error,Module 'pytest' not found,3
 
-UNSUPPORTED[4]{bucket,count}:
-  *.md,39
+UNSUPPORTED[5]{bucket,count}:
+  *.md,47
   *.txt,5
+  *.yml,1
   *.example,1
-  other,9
+  other,17

@@ -11,10 +11,27 @@ Available exporters:
   - JSONExporter      → analysis.json
   - MermaidExporter   → *.mmd
 
-Backward-compat alias: LLMPromptExporter = ContextExporter
+Registry API:
+  - BaseExporter          → Abstract base class for all exporters
+  - export_format         → Decorator for auto-registration
+  - EXPORT_REGISTRY       → Dict mapping format names to exporter classes
+  - get_exporter(name)    → Get exporter by format name
+  - list_exporters()      → List all registered exporters
+
+Backward-compat alias: LLMPromptExporter = ContextExporter, Exporter = BaseExporter
 """
 
-from .base import Exporter
+# Base classes and registry (must be first for dependency order)
+from .base import (
+    BaseExporter,
+    Exporter,  # backward compat alias
+    export_format,
+    EXPORT_REGISTRY,
+    get_exporter,
+    list_exporters,
+)
+
+# Standard exporters (auto-registered via @export_format decorator)
 from .json_exporter import JSONExporter
 from .yaml_exporter import YAMLExporter
 from .mermaid_exporter import MermaidExporter
@@ -26,6 +43,8 @@ from .flow_exporter import FlowExporter
 from .evolution_exporter import EvolutionExporter
 from .readme_exporter import READMEExporter
 from .project_yaml_exporter import ProjectYAMLExporter
+
+# View generators (work from project.yaml data)
 from .report_generators import (
     ToonViewGenerator, ContextViewGenerator,
     ArticleViewGenerator, HTMLDashboardGenerator,
@@ -34,7 +53,14 @@ from .report_generators import (
 from .index_generator import IndexHTMLGenerator
 
 __all__ = [
+    # Base classes and registry
+    'BaseExporter',
     'Exporter',
+    'export_format',
+    'EXPORT_REGISTRY',
+    'get_exporter',
+    'list_exporters',
+    # Standard exporters
     'JSONExporter',
     'YAMLExporter',
     'MermaidExporter',
@@ -46,6 +72,7 @@ __all__ = [
     'EvolutionExporter',
     'READMEExporter',
     'ProjectYAMLExporter',
+    # View generators
     'ToonViewGenerator',
     'ContextViewGenerator',
     'ArticleViewGenerator',

@@ -1,5 +1,5 @@
-# code2llm call graph | .
-# nodes: 362 | edges: 391 | modules: 67
+# code2llm call graph | /home/tom/github/semcod/code2llm
+# nodes: 357 | edges: 383 | modules: 66
 # CC̄=4.1
 
 HUBS[20]:
@@ -25,24 +25,24 @@ HUBS[20]:
     CC=7  in:1  out:30  total:31
   benchmarks.benchmark_performance.create_test_project
     CC=5  in:1  out:29  total:30
-  code2llm.exporters.map_exporter.MapExporter._is_excluded
-    CC=6  in:26  out:4  total:30
   code2llm.core.toon_size_manager._split_by_modules
     CC=10  in:1  out:27  total:28
+  code2llm.cli_exports.formats._export_mermaid
+    CC=6  in:1  out:27  total:28
+  code2llm.cli_exports.formats._export_simple_formats
+    CC=13  in:3  out:24  total:27
   code2llm.core.lang.go_lang._analyze_go_regex
     CC=10  in:1  out:26  total:27
   validate_toon.compare_modules
     CC=5  in:1  out:26  total:27
-  code2llm.cli_exports.formats._export_simple_formats
-    CC=13  in:3  out:24  total:27
-  code2llm.cli_exports.formats._export_mermaid
-    CC=6  in:1  out:25  total:26
-  code2llm.generators.mermaid.generate_single_png
-    CC=13  in:1  out:24  total:25
   code2llm.exporters.toon.metrics.MetricsComputer._compute_file_metrics
     CC=12  in:0  out:25  total:25
+  validate_toon.compare_functions
+    CC=6  in:1  out:24  total:25
   code2llm.exporters.project_yaml.core.ProjectYAMLExporter._build_project_yaml
     CC=12  in:0  out:25  total:25
+  code2llm.generators.mermaid.generate_single_png
+    CC=13  in:1  out:24  total:25
 
 MODULES:
   benchmarks.benchmark_evolution  [3 funcs]
@@ -133,20 +133,20 @@ MODULES:
     _normalize_code2logic_output  CC=2  out:4
     _run_code2logic  CC=3  out:4
     _should_run_code2logic  CC=2  out:0
-  code2llm.cli_exports.formats  [13 funcs]
+  code2llm.cli_exports.formats  [14 funcs]
     _export_calls  CC=2  out:4
+    _export_calls_toon  CC=2  out:4
     _export_context_fallback  CC=4  out:4
     _export_data_structures  CC=3  out:4
     _export_evolution  CC=6  out:8
     _export_index_html  CC=5  out:4
-    _export_mermaid  CC=6  out:25
+    _export_mermaid  CC=6  out:27
     _export_mermaid_pngs  CC=11  out:11
     _export_project_toon  CC=2  out:8
     _export_project_yaml  CC=2  out:5
-    _export_readme  CC=4  out:5
   code2llm.cli_exports.orchestrator  [5 funcs]
     _export_chunked_results  CC=6  out:10
-    _export_single_project  CC=8  out:13
+    _export_single_project  CC=9  out:14
     _get_filtered_subprojects  CC=11  out:7
     _process_subproject_result  CC=5  out:5
     _run_exports  CC=7  out:7
@@ -299,16 +299,6 @@ MODULES:
     compute_inbound_deps  CC=5  out:3
     compute_module_entry  CC=4  out:12
     group_by_file  CC=5  out:8
-  code2llm.exporters.project_yaml_exporter  [9 funcs]
-    _build_alerts  CC=13  out:11
-    _build_health  CC=7  out:13
-    _build_hotspots  CC=5  out:7
-    _build_project_yaml  CC=12  out:25
-    _build_refactoring  CC=13  out:20
-    _compute_module_entry  CC=4  out:12
-    _count_duplicates  CC=5  out:8
-    _detect_primary_language  CC=9  out:11
-    _group_by_file  CC=5  out:8
   code2llm.exporters.report_generators  [1 funcs]
     load_project_yaml  CC=3  out:4
   code2llm.exporters.toon.helpers  [6 funcs]
@@ -379,7 +369,10 @@ MODULES:
     is_toon_file  CC=4  out:5
     load_toon  CC=2  out:4
     parse_toon_content  CC=8  out:9
-  demo_langs.valid.sample  [9 funcs]
+  demo_langs.valid.sample  [12 funcs]
+    AddUser  CC=1  out:2
+    GetUser  CC=3  out:1
+    NewUserService  CC=1  out:1
     User  CC=1  out:0
     getId  CC=1  out:0
     getName  CC=1  out:0
@@ -387,8 +380,6 @@ MODULES:
     getUser  CC=3  out:1
     main  CC=2  out:6
     processUsers  CC=2  out:2
-    service  CC=1  out:1
-    main  CC=2  out:5
   examples.litellm.run  [3 funcs]
     get_refactoring_advice  CC=2  out:5
     main  CC=1  out:17

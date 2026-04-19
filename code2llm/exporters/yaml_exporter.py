@@ -3,24 +3,33 @@
 import yaml
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional
-from .base import Exporter
+from typing import Dict, List, Set, Tuple, Optional, Any
+from .base import BaseExporter, export_format
 from code2llm.core.models import AnalysisResult, FunctionInfo
 from code2llm.analysis.data_analysis import DataAnalyzer
 
 
-class YAMLExporter(Exporter):
+@export_format("yaml", description="YAML format", extension=".yaml")
+class YAMLExporter(BaseExporter):
     """Export to YAML format."""
-    
+
     def __init__(self):
         self.analyzer = DataAnalyzer()
-    
-    def export(self, result: AnalysisResult, output_path: str, compact: bool = True, include_defaults: bool = False) -> None:
+
+    def export(
+        self,
+        result: AnalysisResult,
+        output_path: str,
+        compact: bool = True,
+        include_defaults: bool = False,
+        **kwargs: Any
+    ) -> Optional[Path]:
         """Export to YAML file."""
         data = result.to_dict(compact=compact and not include_defaults)
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, 'w', encoding='utf-8') as f:
+        path = self._ensure_dir(output_path)
+        with open(path, 'w', encoding='utf-8') as f:
             yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        return path
     
     def export_grouped(self, result: AnalysisResult, output_path: str) -> None:
         """Export with grouped CFG flows by function."""

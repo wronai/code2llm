@@ -56,7 +56,7 @@ Format Options (-f):
   flow         — Data-flow analysis (flow.toon) — legacy, explicit opt-in
   code2logic   — Generate project logic (legacy project.toon) via external code2logic
   project-yaml — Legacy project.yaml export (single source of truth) + generated views
-  all          — Generate core formats (analysis.toon, map.toon.yaml, evolution.toon.yaml, context, mermaid) plus project.toon.yaml and prompt.txt in single-project runs
+  all          — Generate core formats (analysis.toon, map.toon.yaml, evolution.toon.yaml, context) plus project.toon.yaml and prompt.txt; mermaid/PNG excluded unless -f mermaid or --png added
 
 Strategy Options (--strategy):
   quick     — Fast overview, fewer files analyzed
@@ -128,7 +128,25 @@ Strategy Options (--strategy):
         action='store_true',
         help='Skip automatic PNG generation from Mermaid files'
     )
+
+    parser.add_argument(
+        '--png',
+        action='store_true',
+        help='Generate PNG diagrams from Mermaid files (opt-in; also enabled by -f mermaid)'
+    )
     
+    parser.add_argument(
+        '--no-cache',
+        action='store_true',
+        help='Disable persistent cache (~/.code2llm/); always analyze all files'
+    )
+
+    parser.add_argument(
+        '--force',
+        action='store_true',
+        help='Force re-analysis and re-export even when cache is valid (alias for --no-cache)'
+    )
+
     parser.add_argument(
         '--strategy',
         choices=['quick', 'standard', 'deep'],

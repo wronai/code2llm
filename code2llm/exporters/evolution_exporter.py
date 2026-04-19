@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from .base import Exporter
+from .base import BaseExporter, export_format
 from code2llm.core.models import AnalysisResult, FunctionInfo
 
 
@@ -24,7 +24,8 @@ GOD_MODULE_LINES = 500
 HUB_TYPE_THRESHOLD = 10
 
 
-class EvolutionExporter(Exporter):
+@export_format("evolution", description="Evolution refactoring queue format", extension=".toon.yaml")
+class EvolutionExporter(BaseExporter):
     """Export evolution.toon.yaml — prioritized refactoring queue."""
 
     # Exclude patterns (mirrors ToonExporter)
@@ -45,7 +46,7 @@ class EvolutionExporter(Exporter):
                 return True
         return False
 
-    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
+    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> Optional[Path]:
         """Generate evolution.toon."""
         ctx = self._build_context(result)
 
@@ -62,9 +63,10 @@ class EvolutionExporter(Exporter):
         sections.append("")
         sections.extend(self._render_history(ctx, output_path))
 
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as f:
+        path = self._ensure_dir(output_path)
+        with open(path, "w", encoding="utf-8") as f:
             f.write("\n".join(sections) + "\n")
+        return path
 
     def export_to_yaml(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
         """Generate evolution.toon.yaml (structured YAML)."""

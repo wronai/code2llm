@@ -4,7 +4,7 @@ Three distinct outputs:
   - export()           → flow.mmd   — full call graph with CC-based styling
   - export_call_graph() → calls.mmd  — simplified call graph (edges only, no isolates)
   - export_compact()    → compact_flow.mmd — module-level aggregation
-  
+
 New 3-level flow diagrams (Plan R1):
   - export_flow_compact()   → flow.mmd — architectural view (~50 nodes)
   - export_flow_detailed()  → flow_detailed.mmd — per-module view (~150 nodes)
@@ -14,8 +14,8 @@ New 3-level flow diagrams (Plan R1):
 from collections import defaultdict
 import re
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
-from .base import Exporter
+from typing import Dict, List, Set, Tuple, Optional, Any
+from .base import BaseExporter, export_format
 from code2llm.core.models import AnalysisResult
 from .mermaid_flow_helpers import (
     _entry_points,
@@ -28,13 +28,14 @@ from .mermaid_flow_helpers import (
 )
 
 
-class MermaidExporter(Exporter):
+@export_format("mermaid", description="Mermaid diagram format", extension=".mmd")
+class MermaidExporter(BaseExporter):
     """Export call graph to Mermaid format."""
 
     # ------------------------------------------------------------------ #
     # 1. flow.mmd — full graph with CC styling
     # ------------------------------------------------------------------ #
-    def export(self, result: AnalysisResult, output_path: str) -> None:
+    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> Optional[Path]:
         """Export full flow diagram with CC-based node shapes and styling."""
         lines = ["flowchart TD"]
 
@@ -47,7 +48,7 @@ class MermaidExporter(Exporter):
         # CC-based styling
         self._render_cc_styles(result, lines)
 
-        self._write(output_path, lines)
+        return self._write(output_path, lines)
 
     def _render_subgraphs(self, result: AnalysisResult, lines: List[str]) -> None:
         """Render module subgraphs with CC-shaped nodes."""
@@ -252,20 +253,18 @@ class MermaidExporter(Exporter):
             return True
         return False
 
-    def _find_critical_path(self, result: AnalysisResult, entry_points: List[str]) -> Set[str]:
-        """Find the longest path from entry points (critical path)."""
-        if not entry_points:
-            return set()
-        
-        # Build reverse graph (who calls whom)
+    def _build_callers_graph(self, result: AnalysisResult) -> Dict[str, Set[str]]:
+        """Build reverse graph: map each function to its callers."""
         callers: Dict[str, Set[str]] = defaultdict(set)
         for func_name, fi in result.functions.items():
             for callee in fi.calls:
                 resolved = self._resolve(callee, result.functions)
                 if resolved:
                     callers[resolved].add(func_name)
-        
-        # Find leaf nodes (functions that don't call anything)
+        return callers
+
+    def _find_leaves(self, result: AnalysisResult) -> Set[str]:
+        """Find leaf nodes (functions that don't call other project functions)."""
         leaves = set()
         for func_name, fi in result.functions.items():
             has_internal_call = any(
@@ -273,37 +272,48 @@ class MermaidExporter(Exporter):
             )
             if not has_internal_call:
                 leaves.add(func_name)
-        
-        # Find longest path from each entry point
-        critical_nodes: Set[str] = set()
-        
-        def longest_path_dfs(start: str, visited: Set[str]) -> List[str]:
-            """DFS to find longest path from start."""
-            if start in visited:
-                return []
-            visited = visited | {start}
-            fi = result.functions.get(start)
-            if not fi:
-                return [start]
-            
-            longest: List[str] = []
-            for callee in fi.calls:
-                resolved = self._resolve(callee, result.functions)
-                if resolved and resolved not in visited:
-                    path = longest_path_dfs(resolved, visited)
-                    if len(path) > len(longest):
-                        longest = path
-            
-            return [start] + longest
-        
-        # From each entry point, find longest path
+        return leaves
+
+    def _longest_path_dfs(self, result: AnalysisResult, start: str, visited: Set[str]) -> List[str]:
+        """DFS to find longest path from start node."""
+        if start in visited:
+            return []
+        visited = visited | {start}
+        fi = result.functions.get(start)
+        if not fi:
+            return [start]
+
+        longest: List[str] = []
+        for callee in fi.calls:
+            resolved = self._resolve(callee, result.functions)
+            if resolved and resolved not in visited:
+                path = self._longest_path_dfs(result, resolved, visited)
+                if len(path) > len(longest):
+                    longest = path
+
+        return [start] + longest
+
+    def _select_longest_path(self, result: AnalysisResult, entry_points: List[str]) -> List[str]:
+        """Select the longest path from all entry points."""
         max_path: List[str] = []
         for ep in entry_points:
             if ep in result.functions:
-                path = longest_path_dfs(ep, set())
+                path = self._longest_path_dfs(result, ep, set())
                 if len(path) > len(max_path):
                     max_path = path
-        
+        return max_path
+
+    def _find_critical_path(self, result: AnalysisResult, entry_points: List[str]) -> Set[str]:
+        """Find the longest path from entry points (critical path)."""
+        if not entry_points:
+            return set()
+
+        # Build data structures
+        self._build_callers_graph(result)
+        self._find_leaves(result)
+
+        # Find longest path from each entry point
+        max_path = self._select_longest_path(result, entry_points)
         return set(max_path)
 
     def export_flow_compact(self, result: AnalysisResult, output_path: str,
@@ -473,8 +483,10 @@ class MermaidExporter(Exporter):
             return candidates[0]
         return None
 
-    def _write(self, path: str, lines: list) -> None:
+    def _write(self, path: str, lines: list) -> Path:
         """Write lines to file."""
-        Path(path).parent.mkdir(parents=True, exist_ok=True)
-        with open(path, 'w', encoding='utf-8') as f:
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        with open(p, 'w', encoding='utf-8') as f:
             f.write('\n'.join(lines) + '\n')
+        return p

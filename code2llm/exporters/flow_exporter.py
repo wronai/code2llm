@@ -16,7 +16,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from .base import Exporter
+from .base import BaseExporter, export_format
 from .flow_constants import CC_HIGH, FAN_OUT_THRESHOLD, EXCLUDE_PATTERNS, HUB_SPLIT_RECOMMENDATIONS, HUB_TYPE_THRESHOLD
 from .flow_renderer import FlowRenderer
 from code2llm.core.models import (
@@ -29,7 +29,8 @@ from code2llm.analysis.pipeline_detector import PipelineDetector, Pipeline
 # Thresholds - already imported from flow_constants
 
 
-class FlowExporter(Exporter):
+@export_format("flow", description="Flow data-flow format", extension=".toon")
+class FlowExporter(BaseExporter):
     """Export to flow.toon — data-flow focused format.
 
     Sections: PIPELINES, TRANSFORMS, CONTRACTS, DATA_TYPES, SIDE_EFFECTS
@@ -47,7 +48,7 @@ class FlowExporter(Exporter):
         )
         self._renderer = FlowRenderer()
 
-    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
+    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> Optional[Path]:
         """Export analysis result to flow.toon format."""
         ctx = self._build_context(result)
 
@@ -64,9 +65,10 @@ class FlowExporter(Exporter):
         sections.append("")
         sections.extend(self._renderer.render_side_effects(ctx))
 
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as f:
+        path = self._ensure_dir(output_path)
+        with open(path, "w", encoding="utf-8") as f:
             f.write("\n".join(sections) + "\n")
+        return path
 
     # ------------------------------------------------------------------
     # context builder

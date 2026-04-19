@@ -4,36 +4,36 @@ from typing import List, Optional
 
 
 @dataclass
-class User:
+class Product:
     id: int
     name: str
+    price: float = 0.0
 
 
-class UserService:
-    def __init__(self):
-        self.users: List[User] = []
+class ProductRepository:
+    def __init__(self) -> None:
+        self.products: List[Product] = []
 
-    def add_user(self, user: User) -> None:
-        self.users.append(user)
+    def add(self, product: Product) -> None:
+        self.products.append(product)
 
-    def get_user(self, user_id: int) -> Optional[User]:
-        for user in self.users:
-            if user.id == user_id:
-                return user
+    def find_by_id(self, product_id: int) -> Optional[Product]:
+        for product in self.products:
+            if product.id == product_id:
+                return product
         return None
 
-    def process_users(self) -> None:
-        for user in self.users:
-            print(f"User: {user.name}")
+    def list_all(self) -> List[Product]:
+        return list(self.products)
 
 
-def main():
-    service = UserService()
-    service.add_user(User(id=1, name="Alice"))
+def main() -> None:
+    repo = ProductRepository()
+    repo.add(Product(id=1, name="Widget", price=9.99))
 
-    user = service.get_user(1)
-    if user:
-        print(f"Found: {user.name}")
+    product = repo.find_by_id(1)
+    if product:
+        print(f"Found: {product.name} @ {product.price}")
 
 
 if __name__ == "__main__":

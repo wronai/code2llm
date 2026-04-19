@@ -8,6 +8,7 @@ import sys
 import subprocess
 import tempfile
 import json
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import List, Optional
 
@@ -253,34 +254,32 @@ def _fix_class_line(line: str):
     return None
 
 
-def generate_pngs(input_dir: Path, output_dir: Path, timeout: int = 60) -> int:
-    """Generate PNG files from all .mmd files in input_dir."""
-    mmd_files = list(input_dir.glob('*.mmd'))
-    
-    if not mmd_files:
-        return 0
-    
-    success_count = 0
-    
-    for mmd_file in mmd_files:
-        output_file = output_dir / f"{mmd_file.stem}.png"
-        
-        # Validate first
+def _prepare_and_render(mmd_file: Path, output_dir: Path, timeout: int) -> bool:
+    """Validate, optionally fix, then render a single .mmd file to PNG."""
+    output_file = output_dir / f"{mmd_file.stem}.png"
+    errors = validate_mermaid_file(mmd_file)
+    if errors:
+        print(f"  Fixing {mmd_file.name}: {len(errors)} issues")
+        fix_mermaid_file(mmd_file)
         errors = validate_mermaid_file(mmd_file)
         if errors:
-            print(f"  Fixing {mmd_file.name}: {len(errors)} issues")
-            fix_mermaid_file(mmd_file)
-            
-            # Re-validate
-            errors = validate_mermaid_file(mmd_file)
-            if errors:
-                print(f"    Still has errors: {errors[:3]}")  # Show first 3 errors
-                continue
-        
-        # Try to generate PNG
-        if generate_single_png(mmd_file, output_file, timeout):
-            success_count += 1
-    
+            print(f"    Still has errors: {errors[:3]}")
+            return False
+    return generate_single_png(mmd_file, output_file, timeout)
+
+
+def generate_pngs(input_dir: Path, output_dir: Path, timeout: int = 60, max_workers: int = 4) -> int:
+    """Generate PNG files from all .mmd files in input_dir (parallel)."""
+    mmd_files = list(input_dir.glob('*.mmd'))
+    if not mmd_files:
+        return 0
+
+    success_count = 0
+    with ThreadPoolExecutor(max_workers=min(max_workers, len(mmd_files))) as pool:
+        futures = {pool.submit(_prepare_and_render, f, output_dir, timeout): f for f in mmd_files}
+        for future in as_completed(futures):
+            if future.result():
+                success_count += 1
     return success_count
 
 

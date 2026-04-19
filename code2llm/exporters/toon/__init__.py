@@ -2,9 +2,10 @@
 
 import yaml
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from code2llm.core.models import AnalysisResult
+from ..base import BaseExporter, export_format
 
 from .metrics import MetricsComputer
 from .renderer import ToonRenderer
@@ -23,14 +24,15 @@ MAX_COUPLING_PACKAGES = 15
 MAX_FUNCTIONS_SHOWN = 50
 
 
-class ToonExporter:
+@export_format("toon", description="TOON diagnostic format", extension=".toon.yaml")
+class ToonExporter(BaseExporter):
     """Export to toon v2 plain-text format — scannable, sorted by severity."""
 
     def __init__(self):
         self.metrics_computer = MetricsComputer()
         self.renderer = ToonRenderer()
 
-    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
+    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> Optional[Path]:
         """Export analysis result to toon v2 format."""
         ctx = self.metrics_computer.compute_all_metrics(result)
 
@@ -49,9 +51,10 @@ class ToonExporter:
         sections.append("")
         sections.extend(self.renderer.render_external(ctx))
 
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as f:
+        path = self._ensure_dir(output_path)
+        with open(path, "w", encoding="utf-8") as f:
             f.write("\n".join(sections) + "\n")
+        return path
 
     def export_to_yaml(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
         """Export analysis result to toon.yaml format (structured YAML)."""

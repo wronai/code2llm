@@ -1,0 +1,169 @@
+# code2llm — Refactoring Prompt
+
+## Project Overview
+
+code2llm v0.5.114 — static analysis tool that produces TOON/YAML/Mermaid/HTML
+artifacts from Python (and partially multi-language) codebases.
+
+Public API: `code2llm.api.analyze(project_path, config) -> AnalysisResult`
+CLI entry: `code2llm/cli.py:main()` → dispatches to `cli_commands`, `cli_exports`, `cli_analysis`
+
+Current test baseline: **206 passing, 1 failing** (`test_vulture_dead_code` — known flake).
+
+---
+
+## Architecture Problems
+
+### 1. CLI layer is scattered across 6 files (2 067 lines total)
+
+```
+cli.py             69L   — entry point (thin, OK)
+cli_parser.py     297L   — argument definitions
+cli_commands.py   250L   — setup/validation helpers
+cli_analysis.py   323L   — analysis orchestration
+cli_exports/
+  __init__.py      48L   — re-exports
+  orchestrator.py 160L   — _run_exports router
+  formats.py      318L   — _export_simple_formats (CC=13)
+  prompt.py       475L   — _analyze_generated_files (CC=14)
+  code2logic.py   127L
+```
+
+Problem: `_run_exports` in `orchestrator.py` is a long if-chain dispatching to
+functions spread across 4 files. Adding a new export format requires editing
+multiple files. No single responsibility.
+
+Target: introduce a **registry** pattern — each exporter registers itself with
+a `@export_format("name")` decorator; `_run_exports` becomes a one-liner loop.
+
+### 2. `exporters/` directory has god-file pattern
+
+Largest exporters:
+
+| File | Lines | Top CC hotspot |
+|------|------:|----------------|
+| `exporters/index_generator.py` | 790 | not measured |
+| `exporters/toon/renderer.py` | 471 | — |
+| `exporters/toon/metrics.py` | 501 | `_compute_file_metrics` CC=12 |
+| `exporters/mermaid_exporter.py` | 480 | `_find_critical_path` CC=17 |
+| `exporters/map_exporter.py` | 439 | `_render_map_module` CC=13 |
+| `exporters/readme_exporter.py` | 496 | `_extract_insights` CC=13 |
+| `exporters/evolution_exporter.py` | 471 | — |
+| `exporters/html_dashboard.py` | 504 | — |
+
+Each exporter mixes data collection, formatting, and I/O in the same class.
+None implements a common interface.
+
+Target: define `class BaseExporter` with `def export(self, result, output_dir,
+args) -> Path | None` abstract method. Each exporter class has exactly one
+responsibility.
+
+### 3. Top CC hotspots — specific refactoring actions
+
+| CC | Function | File | Line | Action |
+|----|----------|------|-----:|--------|
+| 17 | `_find_critical_path` | `exporters/mermaid_exporter.py` | 200 | Extract `_collect_path_candidates()` + `_score_path()` |
+| 14 | `should_process` | `core/file_filter.py` | 60 | Split into `_passes_include()`, `_passes_exclude()`, `_passes_limits()` |
+| 14 | `render_data_types` | `exporters/flow_renderer.py` | 113 | Split data-collection from rendering |
+| 14 | `quick_scan_file` | `core/streaming/scanner.py` | 21 | Extract per-language scan helpers |
+| 14 | `normalize_llm_task` | `generators/llm_task.py` | 30 | Use dispatch table `{type: handler}` |
+| 14 | `analyze_ruby` | `core/lang/ruby.py` | 77 | Move Ruby-specific branches to `RubyLang` subclass |
+| 14 | `_summarize_functions` | `generators/llm_flow.py` | 232 | Extract `_group_by_module()` + `_format_group()` |
+| 14 | `_match_method_name` | `core/lang/base.py` | 335 | Replace if-chain with regex dispatch table |
+| 14 | `_heuristic_classify` | `analysis/side_effects.py` | 251 | Split into per-category classifiers |
+| 14 | `_build_call_graph` | `core/analyzer.py` | 233 | Extract `_collect_edges()`, `_resolve_cross_module_imports()` |
+| 14 | `_analyze_subproject` | `cli_analysis.py` | 189 | Extract path-setup and result-merge steps |
+| 14 | `_analyze_generated_files` | `cli_exports/prompt.py` | 228 | Split file-discovery from quality-checks |
+
+### 4. `core/lang/` — language parsers share no interface
+
+9 language files: `base.py`, `ruby.py`, `javascript.py`, `typescript.py`,
+`go.py`, `rust.py`, `java.py`, `c_cpp.py`, `php.py`.
+
+`base.py` is 454L with CC spike at `_match_method_name` (CC=14) and
+`_build_class_methods` (CC=10, line unknown).
+
+Problems:
+- Language-specific logic in `base.py` instead of per-language subclass
+- No `LanguageParser` ABC enforcing `analyze(path) -> FileResult`
+- `quick_scan_file` (scanner.py, CC=14) has per-language if-chains
+
+Target: extract `class LanguageParser(ABC)` with:
+```python
+def analyze(self, path: Path, source: str) -> FileResult: ...
+def supported_extensions(self) -> list[str]: ...
+```
+Register parsers via `LANGUAGE_REGISTRY: dict[str, LanguageParser]`.
+Move `analyze_ruby` logic into `RubyParser.analyze()`.
+
+### 5. `analysis/` — detector and formatter mixed
+
+`pipeline_detector.py` (506L) — `_find_pipeline_paths` CC=13.
+`data_analysis.py` has three CC=14 functions: `_get_function_data_types`,
+`_find_event_flows`, `_analyze_optimization_opportunities`.
+
+Target:
+- `pipeline_detector.py` → split `PipelineDetector` (finds patterns) from
+  `PipelineFormatter` (renders TOON output)
+- `data_analysis.py` → group event-flow logic into `EventFlowAnalyzer`,
+  optimization into `OptimizationAdvisor`
+
+### 6. `exporters/index_generator.py` (790L) is the largest file
+
+No coverage data visible. Likely handles HTML index + TOC + cross-links all in one.
+Target: split into `IndexBuilder` (data), `IndexRenderer` (HTML), `TocGenerator`.
+
+---
+
+## Concrete Refactoring Steps (ordered by risk/value)
+
+### Step 1 — Introduce `BaseExporter` (low risk, high payoff)
+- Define `code2llm/exporters/base.py` with `BaseExporter` ABC
+- Make all exporters inherit it
+- Does NOT change any external behaviour
+- Testable: existing exporter tests continue to pass
+
+### Step 2 — Export registry in `cli_exports/` (medium risk)
+- Add `EXPORT_REGISTRY: dict[str, type[BaseExporter]]`
+- Replace if-chain in `orchestrator.py:_run_exports` with registry lookup
+- All existing `--format` values must remain supported (backward-compat test)
+
+### Step 3 — Extract CC=14+ hotspots (mechanical, one at a time)
+- Start with `should_process` (CC=14, `core/file_filter.py:60`) — pure function, easy to test
+- Then `_find_critical_path` (CC=17, `mermaid_exporter.py:200`)
+- Then `_build_call_graph` (CC=14, `core/analyzer.py:233`)
+- Each extraction: new private function + unit test covering the extracted path
+
+### Step 4 — `LanguageParser` ABC (medium risk, requires coordination)
+- Define in `core/lang/__init__.py`
+- Migrate one parser at a time (start with `ruby.py` — it has the most CC spikes)
+- Update `quick_scan_file` to use registry
+
+### Step 5 — Split `pipeline_detector.py` and `data_analysis.py`
+- Low test coverage risk: `test_pipeline_detector.py` already exists
+- Ensure `test_advanced_analysis.py` and `test_deep_analysis.py` still pass
+
+### Step 6 — Split `index_generator.py` (790L)
+- Riskiest change: touch last. Requires understanding full rendering pipeline.
+
+---
+
+## Constraints
+
+- **Public API must be stable**: `code2llm.api.analyze()` signature unchanged
+- **CLI flags must be stable**: no removed or renamed `--` options
+- **Test baseline**: 206 passing tests must remain green throughout
+- **No new dependencies** without justification in commit message
+- **One logical change per commit** — makes bisect easy
+
+---
+
+## Definition of Done
+
+- [ ] `BaseExporter` ABC exists, all 10+ exporters inherit it
+- [ ] `_run_exports` is ≤ 20 lines
+- [ ] No function has CC > 10 (radon `cc -n B code2llm/` returns empty)
+- [ ] No file exceeds 300 lines (index_generator.py split)
+- [ ] `LanguageParser` ABC registered, all 9 parsers satisfy it
+- [ ] All 206 existing tests still pass
+- [ ] `test_refactoring_engine.py` extended to cover new abstractions

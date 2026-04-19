@@ -9,7 +9,7 @@ from .cli_exports import _run_report
 
 
 def handle_special_commands() -> Optional[int]:
-    """Handle special sub-commands (llm-flow, llm-context, report)."""
+    """Handle special sub-commands (llm-flow, llm-context, report, cache)."""
     if len(sys.argv) > 1 and sys.argv[1] == 'llm-flow':
         from .generators.llm_flow import main as llm_flow_main
         return llm_flow_main(sys.argv[2:])
@@ -17,7 +17,73 @@ def handle_special_commands() -> Optional[int]:
         return generate_llm_context(sys.argv[2:])
     if len(sys.argv) > 1 and sys.argv[1] == 'report':
         return handle_report_command(sys.argv[2:])
+    if len(sys.argv) > 1 and sys.argv[1] == 'cache':
+        return handle_cache_command(sys.argv[2:])
     return None
+
+
+def handle_cache_command(args_list) -> int:
+    """Manage persistent cache (~/.code2llm/).
+
+    Usage:
+        code2llm cache status          # show size, projects, last used
+        code2llm cache clear           # clear cache for current directory
+        code2llm cache clear --all     # clear entire ~/.code2llm/
+        code2llm cache gc              # manual garbage collection
+    """
+    import os
+    import time
+    from .core.persistent_cache import PersistentCache, get_all_projects, clear_all, _DEFAULT_ROOT
+
+    parser = argparse.ArgumentParser(prog='code2llm cache')
+    parser.add_argument('action', choices=['status', 'clear', 'gc'], help='Cache action')
+    parser.add_argument('--all', action='store_true', dest='all_projects',
+                        help='Apply to all cached projects (clear only)')
+    parser.add_argument('--max-age', type=int, default=30, metavar='DAYS',
+                        help='Max age in days for gc (default: 30)')
+    args = parser.parse_args(args_list)
+
+    if args.action == 'status':
+        projects = get_all_projects()
+        root = _DEFAULT_ROOT
+        total_mb = sum(p.get('cache_size_bytes', 0) for p in projects) / (1024 * 1024)
+        print(f"Cache: {root}")
+        print(f"  Projects: {len(projects)}   Total: {total_mb:.1f} MB")
+        for p in projects:
+            size_mb = p.get('cache_size_bytes', 0) / (1024 * 1024)
+            updated = p.get('updated_at', 0)
+            age_min = int((time.time() - updated) / 60) if updated else 0
+            age_str = f"{age_min}m ago" if age_min < 120 else f"{age_min//60}h ago"
+            exports = p.get('exports', 0)
+            files = p.get('files_cached', 0)
+            print(f"\n  {p.get('project', '?')}")
+            print(f"    Files: {files}   Exports: {exports}   Size: {size_mb:.1f} MB   Last: {age_str}")
+        return 0
+
+    if args.action == 'clear':
+        if args.all_projects:
+            clear_all()
+            print("Cleared entire cache.")
+        else:
+            project_dir = os.path.realpath('.')
+            c = PersistentCache(project_dir)
+            c.clear()
+            print(f"Cleared cache for {project_dir}")
+        return 0
+
+    if args.action == 'gc':
+        projects = get_all_projects()
+        total_removed = 0
+        for p in projects:
+            project_dir = p.get('project')
+            if project_dir and Path(project_dir).exists():
+                c = PersistentCache(project_dir)
+                removed = c.gc(max_age_days=args.max_age)
+                total_removed += removed
+        print(f"GC complete: {total_removed} stale entries removed.")
+        return 0
+
+    return 0
 
 
 def handle_report_command(args_list) -> int:

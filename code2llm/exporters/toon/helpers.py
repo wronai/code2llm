@@ -1,5 +1,6 @@
 """Helper utilities for TOON exporter."""
 
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Set
 
@@ -96,18 +97,22 @@ def _hotspot_description(fi: FunctionInfo, fan_out: int) -> str:
     return f"calls {fan_out} functions"
 
 
+@lru_cache(maxsize=8)
 def _scan_line_counts(project_path) -> Dict[str, int]:
-    """Scan project directory for all source file line counts."""
+    """Scan project directory for all source file line counts.
+
+    Cached per project_path — callers within the same process reuse the result
+    instead of repeating the rglob + read_text I/O.
+    """
     from ...core.config import ALL_EXTENSIONS
-    
+
     line_counts: Dict[str, int] = {}
     if not project_path:
         return line_counts
     pp = Path(project_path)
     if not pp.is_dir():
         return line_counts
-    
-    # Scan all supported language extensions
+
     for ext in ALL_EXTENSIONS:
         for src_file in pp.rglob(f"*{ext}"):
             try:

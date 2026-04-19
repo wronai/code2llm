@@ -3,13 +3,13 @@
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import yaml
 
 from code2llm.core.models import AnalysisResult
 from code2llm.core.config import LANGUAGE_EXTENSIONS
-from code2llm.exporters.base import Exporter
+from code2llm.exporters.base import BaseExporter, export_format
 
 from code2llm.exporters.toon.helpers import _is_excluded, _scan_line_counts, _rel_path
 from .constants import GOD_MODULE_LINES
@@ -19,14 +19,15 @@ from .hotspots import build_hotspots, build_refactoring
 from .evolution import build_evolution, load_previous_evolution
 
 
-class ProjectYAMLExporter(Exporter):
+@export_format("project-yaml", description="Unified project.yaml format", extension=".yaml")
+class ProjectYAMLExporter(BaseExporter):
     """Export unified project.yaml — single source of truth for diagnostics.
 
     Combines data from analysis.toon, project.toon.yaml, context.md, and evolution.toon.yaml
     into one machine-parseable YAML file.
     """
 
-    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
+    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> Optional[Path]:
         """Generate project.yaml from AnalysisResult.
 
         If the file already exists, the evolution section is appended (not replaced).
@@ -41,6 +42,7 @@ class ProjectYAMLExporter(Exporter):
 
         with open(output, "w", encoding="utf-8") as f:
             yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        return output
 
     def _build_project_yaml(
         self, result: AnalysisResult, prev_evolution: List[Dict]

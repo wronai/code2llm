@@ -1,47 +1,47 @@
-// Java - valid code
+// Java - valid code (demo)
 
-public class User {
+public class Order {
     private int id;
-    private String name;
+    private String item;
 
-    public User(int id, String name) {
+    public Order(int id, String item) {
         this.id = id;
-        this.name = name;
+        this.item = item;
     }
 
     public int getId() { return id; }
-    public String getName() { return name; }
+    public String getItem() { return item; }
 }
 
-class UserService {
-    private java.util.List<User> users = new java.util.ArrayList<>();
+class OrderService {
+    private java.util.List<Order> orders = new java.util.ArrayList<>();
 
-    public void addUser(User user) {
-        users.add(user);
+    public void addOrder(Order order) {
+        orders.add(order);
     }
 
-    public User getUser(int id) {
-        for (User user : users) {
-            if (user.getId() == id) {
-                return user;
+    public Order getOrder(int id) {
+        for (Order order : orders) {
+            if (order.getId() == id) {
+                return order;
             }
         }
         return null;
     }
 
-    public void processUsers() {
-        for (User user : users) {
-            System.out.println("User: " + user.getName());
+    public void processOrders() {
+        for (Order order : orders) {
+            System.out.println("Order: " + order.getItem());
         }
     }
 
     public static void main(String[] args) {
-        UserService service = new UserService();
-        service.addUser(new User(1, "Alice"));
+        OrderService service = new OrderService();
+        service.addOrder(new Order(1, "Widget"));
 
-        User user = service.getUser(1);
-        if (user != null) {
-            System.out.println("Found: " + user.getName());
+        Order order = service.getOrder(1);
+        if (order != null) {
+            System.out.println("Found: " + order.getItem());
         }
     }
 }

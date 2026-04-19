@@ -1,23 +1,22 @@
-# code2llm | 857 func | 98f | 26783L | python | 2026-03-31
+# code2llm | 938 func | 109f | 28320L | python | 2026-04-19
 
 HEALTH:
-  CC̄=4.5  critical=70 (limit:10)  dup=1  cycles=0
+  CC̄=4.3  critical=66 (limit:10)  dup=2  cycles=0
 
 ALERTS[20]:
   !!! high_fan_out     analyze_rust = 24 (limit:10)
-  !!! high_fan_out     analyze_go = 22 (limit:10)
-  !!! high_fan_out     analyze_php = 21 (limit:10)
   !!! high_fan_out     _summarize_functions = 21 (limit:10)
+  !!! high_fan_out     _analyze_go_regex = 20 (limit:10)
   !!  high_fan_out     ProjectAnalyzer.analyze_project = 19 (limit:10)
   !!  high_fan_out     run_benchmark = 18 (limit:10)
   !!  high_fan_out     ProjectYAMLExporter._build_project_yaml = 18 (limit:10)
   !!  high_fan_out     NLPPipeline.process = 17 (limit:10)
   !!  high_fan_out     MermaidExporter.export_call_graph = 17 (limit:10)
   !!  high_fan_out     run_benchmark = 16 (limit:10)
+  !!  high_fan_out     evaluate_format = 16 (limit:10)
 
-MODULES[113] (top by size):
+MODULES[130] (top by size):
   M[code2llm/exporters/index_generator.py] 790L C:1 F:7 CC↑5 D:0 (python)
-  M[code2llm/exporters/project_yaml_exporter.py] 513L C:1 F:18 CC↑13 D:0 (python)
   M[code2llm/analysis/pipeline_detector.py] 506L C:3 F:18 CC↑13 D:0 (python)
   M[code2llm/exporters/html_dashboard.py] 504L C:1 F:14 CC↑7 D:0 (python)
   M[code2llm/exporters/toon/metrics.py] 501L C:1 F:27 CC↑12 D:0 (python)
@@ -29,26 +28,24 @@ MODULES[113] (top by size):
   M[code2llm/generators/llm_flow.py] 472L C:1 F:24 CC↑14 D:0 (python)
   M[code2llm/exporters/evolution_exporter.py] 471L C:1 F:17 CC↑11 D:0 (python)
   M[code2llm/exporters/toon/renderer.py] 471L C:1 F:26 CC↑11 D:0 (python)
-  M[code2llm/exporters/map_exporter.py] 439L C:1 F:25 CC↑13 D:4 (python)
-  M[code2llm/core/lang/base.py] 412L C:0 F:13 CC↑14 D:8 (python)
-  LANGS: python:106/shell:2/go:1/java:1/php:1/rust:1/typescript:1
+  M[code2llm/core/lang/base.py] 454L C:0 F:14 CC↑14 D:8 (python)
+  M[code2llm/exporters/map_exporter.py] 439L C:1 F:25 CC↑13 D:7 (python)
+  M[code2llm/core/file_analyzer.py] 396L C:1 F:18 CC↑12 D:0 (python)
+  LANGS: python:122/shell:3/go:1/java:1/rust:1/php:1/typescript:1
 
 HOTSPOTS[10]:
   ★ analyze_rust fan=24  // Analysis pipeline, 24 stages
-  ★ MapExporter.export_to_yaml fan=23  // Export with 23 outputs
-  ★ analyze_go fan=22  // Analysis pipeline, 22 stages
-  ★ MermaidExporter.export_flow_detailed fan=21  // Export with 21 outputs
   ★ _summarize_functions fan=21  // Orchestrates 21 calls
+  ★ _analyze_go_regex fan=20  // Analysis pipeline, 20 stages
+  ★ ProjectAnalyzer.analyze_project fan=19  // Analysis pipeline, 19 stages
+  ★ run_benchmark fan=18  // Run the full format quality benchmark.
 
-REFACTOR[15]:
-  [1] H/L Split MapExporter.export_to_yaml (CC=25 → target CC<10)
-  [2] H/L Split MermaidExporter.export_flow_detailed (CC=25 → target CC<10)
-  [3] H/L Split _process_functions (CC=34 → target CC<10)
+REFACTOR[7]:
   [1] H/H Split god module code2llm/analysis/pipeline_detector.py (506L, 3 classes)
-  [2] H/H Split god module code2llm/exporters/project_yaml_exporter.py (513L, 1 classes)
-  [3] H/H Split god module code2llm/exporters/toon/metrics.py (501L, 1 classes)
-  [4] H/H Split god module code2llm/exporters/html_dashboard.py (504L, 1 classes)
-  [5] H/H Split god module code2llm/exporters/index_generator.py (790L, 1 classes)
+  [2] H/H Split god module code2llm/exporters/toon/metrics.py (501L, 1 classes)
+  [3] H/H Split god module code2llm/exporters/html_dashboard.py (504L, 1 classes)
+  [4] H/H Split god module code2llm/exporters/index_generator.py (790L, 1 classes)
+  [5] M/M Reduce analyze_rust fan-out (currently 24)
 
 EVOLUTION:
-  2026-03-31 CC̄=4.5 crit=70 26783L // Automated analysis
+  2026-04-19 CC̄=4.3 crit=66 28320L // Automated analysis

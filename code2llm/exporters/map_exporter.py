@@ -15,9 +15,10 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from .base import Exporter
+from .base import BaseExporter, export_format
 from code2llm.core.models import AnalysisResult, FunctionInfo, ClassInfo, ModuleInfo
 from code2llm.core.config import LANGUAGE_EXTENSIONS
+from typing import Optional
 
 # Patterns to exclude (venv, site-packages, etc.)
 EXCLUDE_PATTERNS = {
@@ -28,23 +29,25 @@ EXCLUDE_PATTERNS = {
 }
 
 
-class MapExporter(Exporter):
+@export_format("map", description="Structural map format", extension=".toon.yaml")
+class MapExporter(BaseExporter):
     """Export to map.toon.yaml — structural map with a compact project header.
 
     Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions,
     m=methods
     """
 
-    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
+    def export(self, result: AnalysisResult, output_path: str, **kwargs) -> Optional[Path]:
         """Export analysis result to .map format."""
         lines: List[str] = []
         lines.extend(self._render_header(result, output_path))
         lines.extend(self._render_module_list(result))
         lines.extend(self._render_details(result))
 
-        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as f:
+        path = self._ensure_dir(output_path)
+        with open(path, "w", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n")
+        return path
 
     def export_to_yaml(self, result: AnalysisResult, output_path: str, **kwargs) -> None:
         """Export analysis result to map.toon.yaml format (structured YAML)."""

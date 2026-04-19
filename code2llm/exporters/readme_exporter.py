@@ -7,27 +7,28 @@ Generates comprehensive README.md documentation for analysis output files.
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
-from .base import Exporter as BaseExporter
+from .base import BaseExporter, export_format
 
 
+@export_format("readme", description="README documentation format", extension=".md")
 class READMEExporter(BaseExporter):
     """Export README.md with documentation of all generated files."""
     
-    def export(self, analysis_result: Any, output_path: str) -> None:
+    def export(self, analysis_result: Any, output_path: str, **kwargs) -> Optional[Path]:
         """Generate README.md documentation."""
         output_dir = Path(output_path).parent
         project_path = analysis_result.project_path if hasattr(analysis_result, 'project_path') else './'
-        
+
         # Collect statistics
         total_functions = len(analysis_result.functions) if hasattr(analysis_result, 'functions') else 0
         total_classes = len(analysis_result.classes) if hasattr(analysis_result, 'classes') else 0
         total_modules = len(analysis_result.modules) if hasattr(analysis_result, 'modules') else 0
-        
+
         # Read existing files to extract insights
         insights = self._extract_insights(output_dir, analysis_result)
-        
+
         readme_content = self._generate_readme_content(
             project_path=project_path,
             output_dir=output_dir,
@@ -36,9 +37,11 @@ class READMEExporter(BaseExporter):
             total_modules=total_modules,
             insights=insights
         )
-        
-        with open(output_path, 'w', encoding='utf-8') as f:
+
+        path = self._ensure_dir(output_path)
+        with open(path, 'w', encoding='utf-8') as f:
             f.write(readme_content)
+        return path
     
     def _extract_insights(self, output_dir: Path, analysis_result: Any) -> Dict[str, Any]:
         """Extract insights from existing analysis files."""
