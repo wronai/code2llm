@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+## [0.5.117] - 2026-04-19
+
+### Other
+- Update code2llm/cli_exports/formats.py
+- Update code2llm/core/lang/__init__.py
+- Update validate_toon.py
+
 ## [0.5.116] - 2026-04-19
 
 ### Docs

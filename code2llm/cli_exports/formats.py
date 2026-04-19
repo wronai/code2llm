@@ -215,30 +215,27 @@ def _export_mermaid_pngs(args, output_dir: Path) -> None:
                 print(f"  - PNG: Skipped (install with: make install-mermaid)")
 
 
-def _export_calls(args, result, output_dir: Path):
-    """Export standalone calls.yaml (structured call graph YAML).
-
-    Generates calls.yaml with structured call graph data:
-    - nodes: functions with metadata (CC, calls_in/out)
-    - edges: caller -> callee relationships
-    - modules: grouping by module
-    - stats: summary statistics
-    """
+def _export_calls_format(args, result, output_dir: Path, toon: bool = False) -> None:
+    """Shared helper: export call graph in YAML or toon format."""
     yaml_exporter = YAMLExporter()
-    yaml_exporter.export_calls(result, str(output_dir / 'calls.yaml'))
-    if args.verbose:
-        print(f"  - CALLS (call graph YAML): {output_dir / 'calls.yaml'}")
+    if toon:
+        yaml_exporter.export_calls_toon(result, str(output_dir / 'calls.toon.yaml'))
+        if args.verbose:
+            print(f"  - CALLS (toon format): {output_dir / 'calls.toon.yaml'}")
+    else:
+        yaml_exporter.export_calls(result, str(output_dir / 'calls.yaml'))
+        if args.verbose:
+            print(f"  - CALLS (call graph YAML): {output_dir / 'calls.yaml'}")
+
+
+def _export_calls(args, result, output_dir: Path):
+    """Export standalone calls.yaml (structured call graph YAML)."""
+    _export_calls_format(args, result, output_dir, toon=False)
 
 
 def _export_calls_toon(args, result, output_dir: Path):
-    """Export calls.toon.yaml (call graph in human-readable toon format).
-
-    Generates calls.toon.yaml with hubs, modules, and edges sections.
-    """
-    yaml_exporter = YAMLExporter()
-    yaml_exporter.export_calls_toon(result, str(output_dir / 'calls.toon.yaml'))
-    if args.verbose:
-        print(f"  - CALLS (toon format): {output_dir / 'calls.toon.yaml'}")
+    """Export calls.toon.yaml (call graph in human-readable toon format)."""
+    _export_calls_format(args, result, output_dir, toon=True)
 
 
 def _export_mermaid(args, result, output_dir: Path):

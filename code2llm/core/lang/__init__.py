@@ -158,6 +158,8 @@ __all__ = [
     'LANGUAGE_REGISTRY',
     'get_parser',
     'list_parsers',
+    # New class-based parsers
+    'RubyParser',
     # Legacy exports
     'analyze_typescript_js',
     'analyze_go',

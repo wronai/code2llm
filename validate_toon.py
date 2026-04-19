@@ -39,39 +39,32 @@ def extract_functions_from_yaml(yaml_data):
     
     return functions
 
+def _extract_names_from_toon(toon_data, key: str) -> set:
+    """Shared helper: extract a set of names from a toon data list by key."""
+    names = set()
+    for item in toon_data.get(key, []):
+        name = item.get('name', '')
+        if name:
+            names.add(name)
+    return names
+
+
 def extract_functions_from_toon(toon_data):
     """Extract function list from parsed TOON data."""
-    functions = set()
-    
-    # Extract from functions array
-    for func_data in toon_data.get('functions', []):
-        name = func_data.get('name', '')
-        if name:
-            functions.add(name)
-    
-    return functions
+    return _extract_names_from_toon(toon_data, 'functions')
+
 
 def extract_classes_from_yaml(yaml_data):
     """Extract class list from standard YAML format."""
     classes = set()
-    
-    # Extract from classes section (direct class analysis)
     for class_name in yaml_data.get('classes', {}):
         classes.add(class_name)
-    
     return classes
+
 
 def extract_classes_from_toon(toon_data):
     """Extract class list from parsed TOON data."""
-    classes = set()
-    
-    # Extract from classes array
-    for cls_data in toon_data.get('classes', []):
-        name = cls_data.get('name', '')
-        if name:
-            classes.add(name)
-    
-    return classes
+    return _extract_names_from_toon(toon_data, 'classes')
 
 def analyze_class_differences(yaml_data, toon_data):
     """Analyze why classes differ between formats."""
