@@ -4,7 +4,12 @@ from setuptools import setup, find_packages
 import os
 
 # Read version
-version = "0.5.123"
+def read_version():
+    version_path = os.path.join(os.path.dirname(__file__), 'VERSION')
+    with open(version_path, 'r') as f:
+        return f.read().strip()
+
+version = read_version()
 
 # Read long description
 def read_readme():
