@@ -10,7 +10,7 @@ import tempfile
 import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 
 def validate_mermaid_file(mmd_path: Path) -> List[str]:
@@ -283,15 +283,8 @@ def generate_pngs(input_dir: Path, output_dir: Path, timeout: int = 60, max_work
     return success_count
 
 
-def generate_single_png(mmd_file: Path, output_file: Path, timeout: int = 60) -> bool:
-    """Generate PNG from single Mermaid file using available renderers."""
-    
-    # Create output directory
-    output_file.parent.mkdir(parents=True, exist_ok=True)
-    
-    # Mermaid's default maxTextSize is often too low for large projects,
-    # resulting in placeholder PNGs that say "Maximum text size in diagram exceeded".
-    # Provide a temporary config with a higher limit.
+def _setup_puppeteer_config() -> tuple[int, int, Optional[str]]:
+    """Setup puppeteer config file and return (max_text_size, max_edges, cfg_path)."""
     try:
         max_text_size = int(os.getenv('CODE2FLOW_MERMAID_MAX_TEXT_SIZE', '2000000'))
     except Exception:
@@ -312,92 +305,97 @@ def generate_single_png(mmd_file: Path, output_file: Path, timeout: int = 60) ->
         with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp_cfg:
             tmp_cfg.write(json.dumps(cfg))
             cfg_path = tmp_cfg.name
+    except Exception:
+        pass  # cfg_path remains None, renderers will use defaults
 
-        # Try different renderers in order of preference
-        renderers = [
+    return max_text_size, max_edges, cfg_path
+
+
+def _build_renderers(
+    mmd_file: Path,
+    output_file: Path,
+    cfg_path: Optional[str],
+) -> List[tuple]:
+    """Build renderer command list based on config availability."""
+    if cfg_path:
+        return [
             (
                 'mmdc',
                 [
-                    'mmdc',
-                    '-i',
-                    str(mmd_file),
-                    '-o',
-                    str(output_file),
-                    '-t',
-                    'default',
-                    '-b',
-                    'white',
-                    '-c',
-                    cfg_path,
-                    '-w',
-                    '2400',
-                    '-H',
-                    '1800',
+                    'mmdc', '-i', str(mmd_file), '-o', str(output_file),
+                    '-t', 'default', '-b', 'white', '-c', cfg_path,
+                    '-w', '2400', '-H', '1800',
                 ],
             ),
             (
                 'npx',
                 [
-                    'npx',
-                    '-y',
-                    '@mermaid-js/mermaid-cli',
-                    '-i',
-                    str(mmd_file),
-                    '-o',
-                    str(output_file),
-                    '-t',
-                    'default',
-                    '-b',
-                    'white',
-                    '-c',
-                    cfg_path,
-                    '-w',
-                    '2400',
-                    '-H',
-                    '1800',
+                    'npx', '-y', '@mermaid-js/mermaid-cli',
+                    '-i', str(mmd_file), '-o', str(output_file),
+                    '-t', 'default', '-b', 'white', '-c', cfg_path,
+                    '-w', '2400', '-H', '1800',
                 ],
             ),
-            ('puppeteer', None),  # Special handling
+            ('puppeteer', None),
         ]
-    except Exception:
-        # If creating config fails for any reason, fall back to renderer defaults.
-        renderers = [
+    else:
+        # Fallback without config
+        return [
             ('mmdc', ['mmdc', '-i', str(mmd_file), '-o', str(output_file), '-t', 'default', '-b', 'white', '-w', '2400', '-H', '1800']),
             ('npx', ['npx', '-y', '@mermaid-js/mermaid-cli', '-i', str(mmd_file), '-o', str(output_file), '-w', '2400', '-H', '1800']),
             ('puppeteer', None),
         ]
-    
-    try:
-        for renderer_name, cmd in renderers:
-            try:
-                if renderer_name == 'puppeteer':
-                    # Special puppeteer handling
-                    if generate_with_puppeteer(
-                        mmd_file,
-                        output_file,
-                        timeout,
-                        max_text_size=max_text_size,
-                        max_edges=max_edges,
-                    ):
-                        return True
-                    continue
-                
-                # Run command
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
-                
-                if result.returncode == 0:
+
+
+def _run_mmdc_subprocess(
+    renderers: List[tuple],
+    mmd_file: Path,
+    output_file: Path,
+    timeout: int,
+    max_text_size: int,
+    max_edges: int,
+) -> bool:
+    """Run mmdc/npx/puppeteer renderers and return success status."""
+    for renderer_name, cmd in renderers:
+        try:
+            if renderer_name == 'puppeteer':
+                if generate_with_puppeteer(
+                    mmd_file, output_file, timeout,
+                    max_text_size=max_text_size, max_edges=max_edges,
+                ):
                     return True
-                else:
-                    print(f"    {renderer_name} failed: {result.stderr.strip()}")
-                    
-            except subprocess.TimeoutExpired:
-                print(f"    {renderer_name} timed out")
-            except FileNotFoundError:
-                print(f"    {renderer_name} not available")
-            except Exception as e:
-                print(f"    {renderer_name} error: {e}")
-        
-        return False
+                continue
+
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+            if result.returncode == 0:
+                return True
+            else:
+                print(f"    {renderer_name} failed: {result.stderr.strip()}")
+
+        except subprocess.TimeoutExpired:
+            print(f"    {renderer_name} timed out")
+        except FileNotFoundError:
+            print(f"    {renderer_name} not available")
+        except Exception as e:
+            print(f"    {renderer_name} error: {e}")
+
+    return False
+
+
+def generate_single_png(mmd_file: Path, output_file: Path, timeout: int = 60) -> bool:
+    """Generate PNG from single Mermaid file using available renderers."""
+    # Create output directory
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+
+    # Setup config and renderers
+    max_text_size, max_edges, cfg_path = _setup_puppeteer_config()
+    renderers = _build_renderers(mmd_file, output_file, cfg_path)
+
+    # Run renderers
+    try:
+        return _run_mmdc_subprocess(
+            renderers, mmd_file, output_file, timeout, max_text_size, max_edges
+        )
     finally:
         if cfg_path:
             try:

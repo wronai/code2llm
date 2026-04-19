@@ -6,22 +6,8 @@ from typing import Any, Dict, Set
 
 from code2llm.core.models import AnalysisResult, FunctionInfo
 
-
-def _is_excluded(path: str) -> bool:
-    """Check if path should be excluded (venv, site-packages, etc.)."""
-    EXCLUDE_PATTERNS = {
-        'venv', '.venv', 'env', '.env', 'publish-env', 'test-env',
-        'site-packages', 'node_modules', '__pycache__', '.git',
-        'dist', 'build', 'egg-info', '.tox', '.mypy_cache',
-        'TODO', 'examples',
-    }
-    path_lower = path.lower().replace('\\', '/')
-    for pattern in EXCLUDE_PATTERNS:
-        if f'/{pattern}/' in path_lower or path_lower.startswith(f'{pattern}/'):
-            return True
-        if pattern in path_lower.split('/'):
-            return True
-    return False
+# Re-export is_excluded_path from flow_constants to eliminate duplication
+from ..flow_constants import is_excluded_path as _is_excluded
 
 
 def _rel_path(fpath: str, project_path: str) -> str:

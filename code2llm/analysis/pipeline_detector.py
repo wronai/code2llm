@@ -8,18 +8,20 @@ Uses call graph analysis with networkx to:
 - Aggregate purity per pipeline using SideEffectDetector
 
 Sprint 3 (v0.3.2): Replaces the custom DFS chain-tracing in FlowExporter.
+Refactored v0.5.x: Extracted resolver and classifier into separate modules.
 """
 
 import logging
-from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set
 
 import networkx as nx
 
-from code2llm.core.models import AnalysisResult, FunctionInfo
+from code2llm.core.models import FunctionInfo
 from .side_effects import SideEffectDetector, SideEffectInfo
 from .type_inference import TypeInferenceEngine
+from .pipeline_resolver import PipelineResolver
+from .pipeline_classifier import PipelineClassifier, DOMAIN_KEYWORDS
 
 logger = logging.getLogger(__name__)
 
@@ -27,28 +29,6 @@ logger = logging.getLogger(__name__)
 MIN_PIPELINE_LENGTH = 3
 MAX_PIPELINES = 12
 CC_HIGH = 15
-
-# Patterns to exclude from analysis
-EXCLUDE_PATTERNS = frozenset({
-    'venv', '.venv', 'env', '.env', 'publish-env', 'test-env',
-    'site-packages', 'node_modules', '__pycache__', '.git',
-    'dist', 'build', 'egg-info', '.tox', '.mypy_cache',
-})
-
-# Module-to-domain mapping heuristics
-DOMAIN_KEYWORDS: Dict[str, List[str]] = {
-    "NLP": ["nlp", "natural", "language", "intent", "entity",
-            "query", "normalize", "tokenize", "match"],
-    "Analysis": ["analysis", "analyzer", "analyse", "analyze",
-                 "metric", "complexity", "cfg", "dfg", "call_graph"],
-    "Export": ["export", "exporter", "render", "format", "output",
-               "toon", "mermaid", "json_export", "yaml_export"],
-    "Refactor": ["refactor", "smell", "suggest", "fix", "patch",
-                 "template", "prompt", "engine"],
-    "Core": ["core", "config", "model", "base", "util", "helper"],
-    "IO": ["io", "file", "path", "read", "write", "load", "save",
-           "cache", "storage"],
-}
 
 
 @dataclass
@@ -112,11 +92,28 @@ class Pipeline:
         }
 
 
+# Re-export for backward compatibility
+__all__ = [
+    'PipelineDetector',
+    'Pipeline',
+    'PipelineStage',
+    'PipelineResolver',
+    'PipelineClassifier',
+    'DOMAIN_KEYWORDS',
+    'MIN_PIPELINE_LENGTH',
+    'MAX_PIPELINES',
+    'CC_HIGH',
+]
+
+
 class PipelineDetector:
     """Detect pipelines in a codebase using networkx graph analysis.
 
     Builds a call graph as a DiGraph, finds longest paths as pipeline
     candidates, groups by module domain, and labels entry/exit points.
+
+    Refactored to delegate resolution and classification to specialized
+    helper classes: PipelineResolver and PipelineClassifier.
     """
 
     def __init__(
@@ -126,6 +123,8 @@ class PipelineDetector:
     ):
         self._type_engine = type_engine or TypeInferenceEngine()
         self._se_detector = side_effect_detector or SideEffectDetector()
+        self._resolver = PipelineResolver()
+        self._classifier = PipelineClassifier(self._type_engine)
 
     def detect(
         self,
@@ -177,7 +176,7 @@ class PipelineDetector:
 
         for qname, fi in funcs.items():
             for callee in fi.calls:
-                resolved = self._resolve_callee(callee, funcs, caller=fi)
+                resolved = self._resolver.resolve(callee, funcs, caller=fi)
                 if resolved and resolved != qname:  # no self-loops
                     G.add_edge(qname, resolved)
 
@@ -303,8 +302,8 @@ class PipelineDetector:
             if not stages:
                 continue
 
-            domain = self._classify_domain(path, funcs)
-            name = self._derive_pipeline_name(path, funcs, domain)
+            domain = self._classifier.classify_domain(path, funcs)
+            name = self._classifier.derive_pipeline_name(path, funcs, domain)
 
             # Entry/exit labeling
             stages[0].is_entry = True
@@ -315,8 +314,8 @@ class PipelineDetector:
             bottleneck = max(stages, key=lambda s: s.cc) if stages else None
 
             # Entry/exit types
-            entry_type = self._get_entry_type(funcs.get(path[0]))
-            exit_type = self._get_exit_type(funcs.get(path[-1]))
+            entry_type = self._classifier.get_entry_type(funcs.get(path[0]))
+            exit_type = self._classifier.get_exit_type(funcs.get(path[-1]))
 
             pipeline = Pipeline(
                 name=name,
@@ -361,146 +360,3 @@ class PipelineDetector:
                 side_effect_summary=se_summary,
             ))
         return stages
-
-    # ------------------------------------------------------------------
-    # domain classification
-    # ------------------------------------------------------------------
-    def _classify_domain(
-        self, path: List[str], funcs: Dict[str, FunctionInfo]
-    ) -> str:
-        """Classify pipeline domain by analyzing module names and function names."""
-        scores: Dict[str, int] = defaultdict(int)
-
-        for qname in path:
-            fi = funcs.get(qname)
-            if not fi:
-                continue
-            text = f"{fi.module} {fi.name}".lower()
-            for domain, keywords in DOMAIN_KEYWORDS.items():
-                for kw in keywords:
-                    if kw in text:
-                        scores[domain] += 1
-
-        if scores:
-            return max(scores, key=scores.get)
-        return "Unknown"
-
-    def _derive_pipeline_name(
-        self, path: List[str],
-        funcs: Dict[str, FunctionInfo],
-        domain: str,
-    ) -> str:
-        """Derive a human-readable pipeline name."""
-        # Use the dominant sub-module name
-        module_counts: Dict[str, int] = defaultdict(int)
-        for qname in path:
-            fi = funcs.get(qname)
-            if fi:
-                parts = fi.module.split(".")
-                # Use most specific module component
-                for part in parts:
-                    if part and part not in ("code2llm", "__init__"):
-                        module_counts[part] += 1
-
-        if module_counts:
-            dominant = max(module_counts, key=module_counts.get)
-            # Capitalize and use domain if module name is generic
-            if dominant in ("core", "base", "utils", "helpers"):
-                return domain
-            return dominant.capitalize()
-
-        return domain
-
-    # ------------------------------------------------------------------
-    # type helpers
-    # ------------------------------------------------------------------
-    def _get_entry_type(self, fi: Optional[FunctionInfo]) -> str:
-        """Get the input type of a pipeline's entry point."""
-        if not fi:
-            return "?"
-        args = self._type_engine.get_arg_types(fi)
-        for arg in args:
-            if arg["name"] == "self":
-                continue
-            if arg.get("type"):
-                return arg["type"]
-            return arg["name"]
-        return "?"
-
-    def _get_exit_type(self, fi: Optional[FunctionInfo]) -> str:
-        """Get the output type of a pipeline's exit point."""
-        if not fi:
-            return "?"
-        ret = self._type_engine.get_return_type(fi)
-        return ret if ret else "?"
-
-    # ------------------------------------------------------------------
-    # callee resolution
-    # ------------------------------------------------------------------
-    def _resolve_callee(
-        self, callee: str, funcs: Dict[str, FunctionInfo],
-        caller: Optional[FunctionInfo] = None,
-    ) -> Optional[str]:
-        """Resolve callee name to qualified name.
-
-        Handles:
-        - Direct qualified matches
-        - self.method → same-class method resolution
-        - Unqualified names with same-class preference
-
-        Returns None for ambiguous matches (multiple candidates)
-        to avoid creating phantom pipeline edges.
-        """
-        # Direct match
-        if callee in funcs:
-            return callee
-
-        bare, is_self_call = self._strip_self_prefix(callee)
-
-        # Try same-class resolution first
-        if result := self._try_same_class_resolution(bare, caller, funcs):
-            return result
-
-        # Suffix match
-        candidates = self._get_suffix_candidates(bare, funcs)
-        if len(candidates) == 1:
-            return candidates[0]
-
-        # Prefer same-class candidates for method calls
-        return self._select_same_class_candidate(candidates, caller, is_self_call)
-
-    def _strip_self_prefix(self, callee: str) -> Tuple[str, bool]:
-        """Strip self. prefix and return bare name + flag."""
-        if callee.startswith("self."):
-            return callee[5:], True
-        return callee, False
-
-    def _try_same_class_resolution(
-        self, bare: str, caller: Optional[FunctionInfo], funcs: Dict[str, FunctionInfo]
-    ) -> Optional[str]:
-        """Try to resolve method in the same class as caller."""
-        if caller and caller.class_name:
-            class_prefix = f"{caller.module}.{caller.class_name}."
-            class_candidate = class_prefix + bare
-            if class_candidate in funcs:
-                return class_candidate
-        return None
-
-    def _get_suffix_candidates(self, bare: str, funcs: Dict[str, FunctionInfo]) -> List[str]:
-        """Find candidates matching by suffix."""
-        return [qn for qn in funcs if qn.endswith(f".{bare}")]
-
-    def _select_same_class_candidate(
-        self, candidates: List[str], caller: Optional[FunctionInfo], is_self_call: bool
-    ) -> Optional[str]:
-        """Select candidate from same class if applicable."""
-        if not candidates or not (is_self_call or (caller and caller.class_name)):
-            return None
-
-        same_class = [
-            qn for qn in candidates
-            if caller and caller.class_name and f".{caller.class_name}." in qn
-        ]
-        if len(same_class) == 1:
-            return same_class[0]
-        return None

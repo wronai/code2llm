@@ -54,12 +54,14 @@ def extract_functions_from_toon(toon_data):
     return _extract_names_from_toon(toon_data, 'functions')
 
 
+def _extract_keys_from_yaml(yaml_data, key: str) -> set:
+    """Shared helper: extract top-level keys from a YAML dict section."""
+    return set(yaml_data.get(key, {}))
+
+
 def extract_classes_from_yaml(yaml_data):
     """Extract class list from standard YAML format."""
-    classes = set()
-    for class_name in yaml_data.get('classes', {}):
-        classes.add(class_name)
-    return classes
+    return _extract_keys_from_yaml(yaml_data, 'classes')
 
 
 def extract_classes_from_toon(toon_data):
@@ -112,13 +114,7 @@ def analyze_class_differences(yaml_data, toon_data):
 
 def extract_modules_from_yaml(yaml_data):
     """Extract module list from standard YAML format."""
-    modules = set()
-    
-    # Extract from modules section
-    for module_name in yaml_data.get('modules', {}):
-        modules.add(module_name)
-    
-    return modules
+    return _extract_keys_from_yaml(yaml_data, 'modules')
 
 def extract_modules_from_toon(toon_data):
     """Extract module list from parsed TOON data."""

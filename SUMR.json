@@ -1,0 +1,9 @@
+{
+  "project_name": "code2llm",
+  "report_type": "SUMR",
+  "generated_at": "2026-04-19T12:31:11.183534",
+  "metrics": {
+    "python_files": 170,
+    "has_pyqual_config": true
+  }
+}

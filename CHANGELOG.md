@@ -1,5 +1,24 @@
 ## [Unreleased]
 
+## [0.5.121] - 2026-04-19
+
+### Docs
+- Update SUMD.md
+- Update SUMR.md
+
+### Other
+- Update SUMR.json
+- Update code2llm/analysis/__init__.py
+- Update code2llm/analysis/call_graph.py
+- Update code2llm/analysis/cfg.py
+- Update code2llm/analysis/data_analysis.py
+- Update code2llm/analysis/pipeline_classifier.py
+- Update code2llm/analysis/pipeline_detector.py
+- Update code2llm/analysis/pipeline_resolver.py
+- Update code2llm/exporters/dashboard_data.py
+- Update code2llm/exporters/dashboard_renderer.py
+- ... and 11 more files
+
 ## [0.5.120] - 2026-04-19
 
 ## [0.5.119] - 2026-04-19

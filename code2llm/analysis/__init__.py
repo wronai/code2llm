@@ -10,6 +10,8 @@ __all__ = [
     'TypeInferenceEngine',
     'SideEffectDetector',
     'PipelineDetector',
+    'PipelineResolver',
+    'PipelineClassifier',
 ]
 
 
@@ -25,6 +27,8 @@ def __getattr__(name):
         'TypeInferenceEngine': '.type_inference',
         'SideEffectDetector': '.side_effects',
         'PipelineDetector': '.pipeline_detector',
+        'PipelineResolver': '.pipeline_resolver',
+        'PipelineClassifier': '.pipeline_classifier',
     }
     if name in _imports:
         import importlib

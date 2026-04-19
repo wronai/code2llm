@@ -55,14 +55,14 @@ class MapExporter(BaseExporter):
         project_name = Path(result.project_path).name if result.project_path else "project"
         langs = self._detect_languages(result)
 
-        included_funcs = [fi for fi in result.functions.values() if not self._is_excluded(fi.file)]
-        included_files = [mi for mi in result.modules.values() if not self._is_excluded(mi.file)]
+        included_funcs = [fi for fi in result.functions.values() if not is_excluded_path(fi.file)]
+        included_files = [mi for mi in result.modules.values() if not is_excluded_path(mi.file)]
         total_lines = self._count_total_lines(result)
 
         modules_data = [
             self._build_module_entry(mi, result)
             for _mname, mi in sorted(result.modules.items())
-            if not self._is_excluded(mi.file)
+            if not is_excluded_path(mi.file)
         ]
 
         data = {
@@ -146,8 +146,8 @@ class MapExporter(BaseExporter):
         langs = self._detect_languages(result)
         lang_str = ",".join(f"{lang}:{count}" for lang, count in langs.items()) or "unknown"
 
-        included_funcs = [fi for fi in result.functions.values() if not self._is_excluded(fi.file)]
-        included_files = [mi for mi in result.modules.values() if not self._is_excluded(mi.file)]
+        included_funcs = [fi for fi in result.functions.values() if not is_excluded_path(fi.file)]
+        included_files = [mi for mi in result.modules.values() if not is_excluded_path(mi.file)]
         total_lines = self._count_total_lines(result)
 
         stats_line = self._render_stats_line(included_funcs, included_files, total_lines, lang_str)
@@ -199,7 +199,7 @@ class MapExporter(BaseExporter):
     def _render_module_list(self, result: AnalysisResult) -> List[str]:
         modules = []
         for mname, mi in sorted(result.modules.items()):
-            if self._is_excluded(mi.file):
+            if is_excluded_path(mi.file):
                 continue
             rel = self._rel_path(mi.file, result.project_path)
             lc = self._file_line_count(mi.file)
@@ -224,7 +224,7 @@ class MapExporter(BaseExporter):
         """Sort modules by max CC desc, excluding excluded paths."""
         mod_items = []
         for mname, mi in result.modules.items():
-            if self._is_excluded(mi.file):
+            if is_excluded_path(mi.file):
                 continue
             max_cc = 0.0
             for fq in mi.functions:
@@ -315,9 +315,6 @@ class MapExporter(BaseExporter):
             ret = f"->{fi.returns}"
         return f"{fi.name}({args_str}){ret}"
 
-    def _is_excluded(self, path: str) -> bool:
-        return is_excluded_path(path)
-
     def _rel_path(self, fpath: str, project_path: str) -> str:
         if not project_path or not fpath:
             return fpath or ""
@@ -339,7 +336,7 @@ class MapExporter(BaseExporter):
         total = 0
         seen = set()
         for mi in result.modules.values():
-            if mi.file and mi.file not in seen and not self._is_excluded(mi.file):
+            if mi.file and mi.file not in seen and not is_excluded_path(mi.file):
                 seen.add(mi.file)
                 total += self._file_line_count(mi.file)
         return total
@@ -348,7 +345,7 @@ class MapExporter(BaseExporter):
         """Detect all supported programming languages in the project."""
         langs: Dict[str, int] = defaultdict(int)
         for mi in result.modules.values():
-            if self._is_excluded(mi.file):
+            if is_excluded_path(mi.file):
                 continue
             # Check all supported language extensions
             detected = False

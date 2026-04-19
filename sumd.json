@@ -1,138 +1,406 @@
 {
   "project_name": "code2llm",
-  "description": "Generated Analysis Files",
-  "sections": [
+  "description": "SUMD - Structured Unified Markdown Descriptor for AI-aware project refactorization",
+  "files": [
     {
-      "name": "contents",
-      "type": "unknown",
-      "content": "- [Metadata](#metadata)\n- [Architecture](#architecture)\n- [Quality Pipeline (`pyqual.yaml`)](#quality-pipeline-pyqualyaml)\n- [Dependencies](#dependencies)\n- [Source Map](#source-map)\n- [Refactoring Analysis](#refactoring-analysis)\n- [Intent](#intent)",
-      "level": 2
+      "path": "setup.py",
+      "type": "python"
     },
     {
-      "name": "metadata",
-      "type": "metadata",
-      "content": "- **name**: `code2llm`\n- **version**: `0.5.114`\n- **python_requires**: `>=3.8`\n- **license**: Apache-2.0\n- **ai_model**: `openrouter/qwen/qwen3-coder-next`\n- **ecosystem**: SUMD + DOQL + testql + taskfile\n- **generated_from**: pyproject.toml, requirements.txt, Taskfile.yml, Makefile, app.doql.css, pyqual.yaml, goal.yaml, .env.example, src(5 mod), project/(6 analysis files)",
-      "level": 2
+      "path": "validate_toon.py",
+      "type": "python"
     },
     {
-      "name": "architecture",
-      "type": "architecture",
-      "content": "```\nSUMD (description) → DOQL/source (code) → taskfile (automation) → testql (verification)\n```",
-      "level": 2
+      "path": "examples/functional_refactoring_example.py",
+      "type": "python"
     },
     {
-      "name": "# doql application declaration (`app.doql.css`)",
-      "type": "unknown",
-      "content": "```css markpact:doql path=app.doql.css\napp {\n  name: \"code2llm\";\n  version: \"0.5.104\";\n}\n\nentity[name=\"FlowNode\"] {\n\n}\n\nentity[name=\"FlowEdge\"] {\n\n}\n\nentity[name=\"FunctionInfo\"] {\n\n}\n\nentity[name=\"ClassInfo\"] {\n\n}\n\nentity[name=\"ModuleInfo\"] {\n\n}\n\nentity[name=\"Pattern\"] {\n\n}\n\nentity[name=\"CodeSmell\"] {\n\n}\n\nentity[name=\"Mutation\"] {\n\n}\n\nentity[name=\"DataFlow\"] {\n\n}\n\ninterface[type=\"cli\"] {\n  framework: argparse;\n}\ninterface[type=\"cli\"] page[name=\"code2llm\"] {\n\n}\n\nworkflow[name=\"install\"] {\n  trigger: \"manual\";\n  step-1: run cmd=$(PYTHON) -m pip install -e .;\n  step-2: run cmd=echo \"✓ code2llm installed with TOON format support\";\n}\n\nworkflow[name=\"dev-install\"] {\n  trigger: \"manual\";\n  step-1: run cmd=$(PYTHON) -m pip install -e \".[dev]\";\n  step-2: run cmd=echo \"✓ code2llm installed with dev dependencies\";\n}\n\nworkflow[name=\"test\"] {\n  trigger: \"manual\";\n  step-1: run cmd=$(PYTHON) -m pytest tests/ -v --tb=short 2>/dev/null || echo \"No tests yet - create tests/ directory\";\n}\n\nworkflow[name=\"test-cov\"] {\n  trigger: \"manual\";\n  step-1: run cmd=$(PYTHON) -m pytest tests/ --cov=code2llm --cov-report=html --cov-report=term 2>/dev/null || echo \"No tests yet\";\n}\n\nworkflow[name=\"test-toon\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🎯 Testing TOON format...\";\n  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./test_toon -m hybrid -f toon;\n  step-3: run cmd=$(PYTHON) validate_toon.py test_toon/analysis.toon;\n  step-4: run cmd=echo \"✓ TOON format test complete\";\n}\n\nworkflow[name=\"validate-toon\"] {\n  trigger: \"manual\";\n  step-1: depend target=test-toon;\n}\n\nworkflow[name=\"test-all-formats\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"📊 Testing all output formats...\";\n  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./test_all -m hybrid -f all;\n  step-3: run cmd=$(PYTHON) validate_toon.py test_all/analysis.toon;\n  step-4: run cmd=echo \"✓ All formats test complete\";\n}\n\nworkflow[name=\"test-comprehensive\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🚀 Running comprehensive test suite...\";\n  step-2: run cmd=bash project.sh;\n  step-3: run cmd=echo \"✓ Comprehensive tests complete\";\n}\n\nworkflow[name=\"lint\"] {\n  trigger: \"manual\";\n  step-1: run cmd=$(PYTHON) -m flake8 code2llm/ --max-line-length=100 --ignore=E203,W503 2>/dev/null || echo \"flake8 not installed\";\n  step-2: run cmd=$(PYTHON) -m black --check code2llm/ 2>/dev/null || echo \"black not installed\";\n  step-3: run cmd=echo \"✓ Linting complete\";\n}\n\nworkflow[name=\"format\"] {\n  trigger: \"manual\";\n  step-1: run cmd=$(PYTHON) -m black code2llm/ --line-length=100 2>/dev/null || echo \"black not installed, run: pip install black\";\n  step-2: run cmd=echo \"✓ Code formatted\";\n}\n\nworkflow[name=\"typecheck\"] {\n  trigger: \"manual\";\n  step-1: run cmd=$(PYTHON) -m mypy code2llm/ --ignore-missing-imports 2>/dev/null || echo \"mypy not installed\";\n}\n\nworkflow[name=\"check\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"✓ All checks passed\";\n}\n\nworkflow[name=\"run\"] {\n  trigger: \"manual\";\n  step-1: run cmd=$(PYTHON) -m code2llm ../python/stts_core -v -o ./output;\n}\n\nworkflow[name=\"analyze\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🎯 Running TOON format analysis on current project...\";\n  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./analysis -m hybrid -f toon;\n  step-3: run cmd=$(PYTHON) validate_toon.py analysis/analysis.toon;\n  step-4: run cmd=echo \"✓ TOON analysis complete - check analysis/analysis.toon\";\n}\n\nworkflow[name=\"analyze-all\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"📊 Running analysis with all formats...\";\n  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./analysis_all -m hybrid -f all;\n  step-3: run cmd=$(PYTHON) validate_toon.py analysis_all/analysis.toon;\n  step-4: run cmd=echo \"✓ All formats analysis complete - check analysis_all/\";\n}\n\nworkflow[name=\"toon-demo\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🎯 Quick TOON format demo...\";\n  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./demo -m hybrid -f toon;\n  step-3: run cmd=echo \"📁 Generated: demo/analysis.toon\";\n  step-4: run cmd=echo \"📊 Size: $$(du -h demo/analysis.toon | cut -f1)\";\n  step-5: run cmd=echo \"🔍 Preview:\";\n  step-6: run cmd=head -20 demo/analysis.toon;\n}\n\nworkflow[name=\"toon-compare\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"📊 Comparing TOON vs YAML formats...\";\n  step-2: run cmd=$(PYTHON) -m code2llm ./ -v -o ./compare -m hybrid -f toon,yaml;\n  step-3: run cmd=echo \"📁 Files generated:\";\n  step-4: run cmd=echo \"  - TOON:  compare/analysis.toon  ($$(du -h compare/analysis.toon | cut -f1))\";\n  step-5: run cmd=echo \"  - YAML:  compare/analysis.yaml  ($$(du -h compare/analysis.yaml | cut -f1))\";\n  step-6: run cmd=echo \"  - Ratio: $$(echo \"scale=1; $$(du -k compare/analysis.yaml | cut -f1) / $$(du -k compare/analysis.toon | cut -f1)\" | bc)x smaller\";\n  step-7: run cmd=$(PYTHON) validate_toon.py compare/analysis.yaml compare/analysis.toon;\n}\n\nworkflow[name=\"toon-validate\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🔍 Validating TOON format structure...\";\n  step-2: run cmd=$(PYTHON) validate_toon.py analysis/analysis.toon 2>/dev/null || $(PYTHON) validate_toon.py test_toon/analysis.toon 2>/dev/null || echo \"Run 'make test-toon' first\";\n}\n\nworkflow[name=\"build\"] {\n  trigger: \"manual\";\n  step-1: run cmd=rm -rf build/ dist/ *.egg-info;\n  step-2: run cmd=$(PYTHON) -m build;\n  step-3: run cmd=echo \"✓ Build complete - check dist/\";\n}\n\nworkflow[name=\"publish-test\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🚀 Publishing to TestPyPI...\";\n  step-2: run cmd=$(PYTHON) -m venv publish-test-env;\n  step-3: run cmd=publish-test-env/bin/pip install twine;\n  step-4: run cmd=publish-test-env/bin/python -m twine upload --repository testpypi dist/*;\n  step-5: run cmd=rm -rf publish-test-env;\n  step-6: run cmd=echo \"✓ Published to TestPyPI\";\n}\n\nworkflow[name=\"bump-patch\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🔢 Bumping patch version...\";\n  step-2: run cmd=$(PYTHON) scripts/bump_version.py patch 2>/dev/null || echo \"Create scripts/bump_version.py or edit pyproject.toml manually\";\n}\n\nworkflow[name=\"bump-minor\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🔢 Bumping minor version...\";\n  step-2: run cmd=$(PYTHON) scripts/bump_version.py minor 2>/dev/null || echo \"Create scripts/bump_version.py or edit pyproject.toml manually\";\n}\n\nworkflow[name=\"bump-major\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🔢 Bumping major version...\";\n  step-2: run cmd=$(PYTHON) scripts/bump_version.py major 2>/dev/null || echo \"Create scripts/bump_version.py or edit pyproject.toml manually\";\n}\n\nworkflow[name=\"publish\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🚀 Publishing to PyPI...\";\n  step-2: run cmd=echo \"🔢 Bumping patch version...\";\n  step-3: run cmd=$(MAKE) bump-patch;\n  step-4: run cmd=echo \"🔨 Rebuilding package with new version...\";\n  step-5: run cmd=$(MAKE) build;\n  step-6: run cmd=echo \"📦 Publishing to PyPI...\";\n  step-7: run cmd=$(PYTHON) -m venv publish-env;\n  step-8: run cmd=publish-env/bin/pip install twine;\n  step-9: run cmd=publish-env/bin/python -m twine upload dist/*;\n  step-10: run cmd=rm -rf publish-env;\n  step-11: run cmd=echo \"✓ Published to PyPI\";\n}\n\nworkflow[name=\"mermaid-png\"] {\n  trigger: \"manual\";\n  step-1: run cmd=$(PYTHON) mermaid_to_png.py --batch output output;\n}\n\nworkflow[name=\"install-mermaid\"] {\n  trigger: \"manual\";\n  step-1: run cmd=npm install -g @mermaid-js/mermaid-cli;\n}\n\nworkflow[name=\"check-mermaid\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"Checking available Mermaid renderers...\";\n  step-2: run cmd=which mmdc > /dev/null && echo \"✓ mmdc (mermaid-cli)\" || echo \"✗ mmdc (run: npm install -g @mermaid-js/mermaid-cli)\";\n  step-3: run cmd=which npx > /dev/null && echo \"✓ npx (for @mermaid-js/mermaid-cli)\" || echo \"✗ npx (install Node.js)\";\n  step-4: run cmd=which puppeteer > /dev/null && echo \"✓ puppeteer\" || echo \"✗ puppeteer (run: npm install -g puppeteer)\";\n}\n\nworkflow[name=\"clean\"] {\n  trigger: \"manual\";\n  step-1: run cmd=rm -rf build/ dist/ *.egg-info;\n  step-2: run cmd=rm -rf .pytest_cache .coverage htmlcov/;\n  step-3: run cmd=rm -rf code2llm/__pycache__ code2llm/*/__pycache__;\n  step-4: run cmd=rm -rf test_* demo compare analysis analysis_all output_* 2>/dev/null || true;\n  step-5: run cmd=find . -name \"*.pyc\" -delete 2>/dev/null || true;\n  step-6: run cmd=find . -name \"__pycache__\" -type d -exec rm -rf {} + 2>/dev/null || true;\n  step-7: run cmd=echo \"✓ Cleaned build artifacts and test outputs\";\n}\n\nworkflow[name=\"clean-png\"] {\n  trigger: \"manual\";\n  step-1: run cmd=rm -f output/*.png;\n  step-2: run cmd=echo \"✓ Cleaned PNG files\";\n}\n\nworkflow[name=\"quickstart\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"🚀 Quick Start with code2llm TOON format:\";\n  step-2: run cmd=echo \"\";\n  step-3: run cmd=echo \"1. Install:        make install\";\n  step-4: run cmd=echo \"2. Test TOON:      make test-toon\";\n  step-5: run cmd=echo \"3. Analyze:        make analyze\";\n  step-6: run cmd=echo \"4. Compare:        make toon-compare\";\n  step-7: run cmd=echo \"5. All formats:    make test-all-formats\";\n  step-8: run cmd=echo \"\";\n  step-9: run cmd=echo \"📖 For more: make help\";\n}\n\nworkflow[name=\"health\"] {\n  trigger: \"manual\";\n  step-1: run cmd=docker compose ps;\n  step-2: run cmd=docker compose exec app echo \"Health check passed\";\n}\n\nworkflow[name=\"import-makefile-hint\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo 'Run: taskfile import Makefile to import existing targets.';\n}\n\nworkflow[name=\"help\"] {\n  trigger: \"manual\";\n  step-1: run cmd=echo \"code2llm - Python Code Flow Analysis Tool with LLM Integration and TOON;\n  step-2: run cmd=echo \"\";\n  step-3: run cmd=echo \\\"\\U0001F680 Installation:\\; \n  step-4: run cmd=echo \"  make install       - Install package\";\n  step-5: run cmd=echo \"  make dev-install   - Install with development dependencies\";\n  step-6: run cmd=echo \"\";\n  step-7: run cmd=echo \\\"\\U0001F9EA Testing:\\; \n  step-8: run cmd=echo \"  make test          - Run test suite\";\n  step-9: run cmd=echo \"  make test-toon     - Test TOON format only\";\n  step-10: run cmd=echo \"  make validate-toon - Validate TOON format output\";\n  step-11: run cmd=echo \"  make test-all-formats - Test all output formats\";\n  step-12: run cmd=echo \"\";\n  step-13: run cmd=echo \\\"\\U0001F527 Code Quality:\\; \n  step-14: run cmd=echo \"  make lint          - Run linters (flake8, black --check)\";\n  step-15: run cmd=echo \"  make format        - Format code with black\";\n  step-16: run cmd=echo \"  make typecheck     - Run mypy type checking\";\n  step-17: run cmd=echo \"  make check         - Run all quality checks\";\n  step-18: run cmd=echo \"\";\n  step-19: run cmd=echo \\\"\\U0001F4CA Analysis:\\; \n  step-20: run cmd=echo \"  make analyze       - Run analysis on current project (TOON format)\";\n  step-21: run cmd=echo \"  make run           - Run with example arguments\";\n  step-22: run cmd=echo \"  make analyze-all   - Run analysis with all formats\";\n  step-23: run cmd=echo \"\";\n  step-24: run cmd=echo \\\"\\U0001F3AF TOON Format:\\; \n  step-25: run cmd=echo \"  make toon-demo     - Quick TOON format demo\";\n  step-26: run cmd=echo \"  make toon-compare  - Compare TOON vs YAML formats\";\n  step-27: run cmd=echo \"  make toon-validate - Validate TOON format structure\";\n  step-28: run cmd=echo \"\";\n  step-29: run cmd=echo \\\"\\U0001F4E6 Building & Release:\\; \n  step-30: run cmd=echo \"  make build         - Build distribution packages\";\n  step-31: run cmd=echo \"  make publish       - Publish to PyPI (with version bump)\";\n  step-32: run cmd=echo \"  make publish-test  - Publish to TestPyPI\";\n  step-33: run cmd=echo \"  make bump-patch    - Bump patch version\";\n  step-34: run cmd=echo \"  make bump-minor    - Bump minor version\";\n  step-35: run cmd=echo \"  make bump-major    - Bump major version\";\n  step-36: run cmd=echo \"\";\n  step-37: run cmd=echo \\\"\\U0001F3A8 Visualization:\\; \n  step-38: run cmd=echo \"  make mermaid-png   - Generate PNG from all Mermaid files\";\n  step-39: run cmd=echo \"  make install-mermaid - Install Mermaid CLI renderer\";\n  step-40: run cmd=echo \"  make check-mermaid - Check available Mermaid renderers\";\n  step-41: run cmd=echo \"\";\n  step-42: run cmd=echo \\\"\\U0001F9F9 Maintenance:\\; \n  step-43: run cmd=echo \"  make clean         - Remove build artifacts\";\n  step-44: run cmd=echo \"  make clean-png     - Clean PNG files\";\n  step-45: run cmd=echo \"\";\n}\n\ndeploy {\n  target: makefile;\n}\n\nenvironment[name=\"local\"] {\n  runtime: makefile;\n  env_file: \".env\";\n}\n\nworkflow[name=\"all\"] {\n  trigger: \"manual\";\n  step-1: run cmd=taskfile run install;\n  step-2: run cmd=taskfile run lint;\n  step-3: run cmd=taskfile run test;\n}\n\nworkflow[name=\"fmt\"] {\n  trigger: \"manual\";\n  step-1: run cmd=ruff format .;\n}\n\n/* auto-added stub: define where entities are persisted */\ndatabase[name=\"default\"] {\n  engine: \"sqlite\";\n  path: \"data/app.db\";\n}\n```",
-      "level": 2
+      "path": "benchmarks/test_performance.py",
+      "type": "python"
     },
     {
-      "name": "# source modules",
-      "type": "unknown",
-      "content": "- `code2llm.api`\n- `code2llm.cli`\n- `code2llm.cli_analysis`\n- `code2llm.cli_commands`\n- `code2llm.cli_parser`",
-      "level": 2
+      "path": "benchmarks/benchmark_evolution.py",
+      "type": "python"
     },
     {
-      "name": "quality pipeline (`pyqual.yaml`)",
-      "type": "unknown",
-      "content": "```yaml markpact:pyqual path=pyqual.yaml\npipeline:\n  name: code2llm-quality\n\n  metrics:\n    cc_max: 15\n    critical_max: 0\n\n  custom_tools:\n    - name: code2llm_code2llm\n      binary: code2llm\n      command: >-\n        code2llm {workdir} -f toon -o ./project --no-chunk\n        --exclude .git .venv .venv_test build dist __pycache__ .pytest_cache .code2llm_cache .benchmarks .mypy_cache .ruff_cache node_modules\n      output: \"\"\n      allow_failure: false\n\n    - name: vallm_code2llm\n      binary: vallm\n      command: >-\n        vallm batch {workdir} --recursive --format toon --output ./project\n        --exclude .git,.venv,.venv_test,build,dist,__pycache__,.pytest_cache,.code2llm_cache,.benchmarks,.mypy_cache,.ruff_cache,node_modules\n      output: \"\"\n      allow_failure: false\n\n  stages:\n    - name: analyze\n      tool: code2llm_code2llm\n      optional: true\n      timeout: 0\n\n    - name: validate\n      tool: vallm_code2llm\n      optional: true\n      timeout: 0\n\n    - name: lint\n      tool: ruff\n      optional: true\n\n    - name: fix\n      tool: prefact\n      optional: true\n      when: metrics_fail\n      timeout: 900\n\n    - name: test\n      run: python3 -m pytest -q\n      when: always\n\n  loop:\n    max_iterations: 3\n    on_fail: report\n\n  env:\n    LLM_MODEL: openrouter/qwen/qwen3-coder-next\n```",
-      "level": 2
+      "path": "benchmarks/reporting.py",
+      "type": "python"
     },
     {
-      "name": "dependencies",
-      "type": "dependencies",
-      "content": "",
-      "level": 2
+      "path": "benchmarks/format_evaluator.py",
+      "type": "python"
     },
     {
-      "name": "# runtime",
-      "type": "unknown",
-      "content": "```text markpact:deps python\nnetworkx>=2.6\nmatplotlib>=3.4\npyyaml>=5.4\nnumpy>=1.20\njinja2>=3.0\nradon>=5.1\nastroid>=3.0\ncode2logic\nvulture>=2.10\ntiktoken>=0.5\ntree-sitter>=0.21\ntree-sitter-python>=0.21\ntree-sitter-javascript>=0.21\ntree-sitter-typescript>=0.21\ntree-sitter-go>=0.21\ntree-sitter-rust>=0.21\ntree-sitter-java>=0.21\ntree-sitter-c>=0.21\ntree-sitter-cpp>=0.22\ntree-sitter-c-sharp>=0.21\ntree-sitter-php>=0.22\ntree-sitter-ruby>=0.21\n```",
-      "level": 2
+      "path": "benchmarks/benchmark_format_quality.py",
+      "type": "python"
     },
     {
-      "name": "# development",
-      "type": "unknown",
-      "content": "```text markpact:deps python scope=dev\npytest>=6.2\npytest-cov>=2.12\npytest-xdist>=3.0\nblack>=21.0\nflake8>=3.9\nmypy>=0.910\ngoal>=2.1.0\ncosts>=0.1.20\npfix>=0.1.60\n```",
-      "level": 2
+      "path": "benchmarks/benchmark_performance.py",
+      "type": "python"
     },
     {
-      "name": "source map",
-      "type": "unknown",
-      "content": "*Top 5 modules by symbol density — signatures for LLM orientation.*",
-      "level": 2
+      "path": "benchmarks/project_generator.py",
+      "type": "python"
     },
     {
-      "name": "# `code2llm.cli_commands` (`code2llm/cli_commands.py`)",
-      "type": "unknown",
-      "content": "```python\ndef handle_special_commands()  # CC=7, fan=4\ndef handle_report_command(args_list)  # CC=4, fan=9\ndef validate_and_setup(args)  # CC=3, fan=5\ndef print_start_info(args, source_path, output_dir)  # CC=2, fan=1\ndef validate_chunked_output(output_dir, args)  # CC=3, fan=6\ndef _get_chunk_dirs(output_dir)  # CC=3, fan=2\ndef _validate_chunks(chunk_dirs, required_files)  # CC=3, fan=7\ndef _validate_single_chunk(chunk_dir, required_files)  # CC=4, fan=3\ndef _get_file_sizes(chunk_dir, required_files)  # CC=3, fan=3\ndef _print_chunk_errors(chunk_name, chunk_issues)  # CC=2, fan=1\ndef _print_validation_summary(chunk_dirs, valid_chunks, issues)  # CC=3, fan=2\ndef generate_llm_context(args_list)  # CC=3, fan=12\n```",
-      "level": 2
+      "path": "benchmarks/benchmark_optimizations.py",
+      "type": "python"
     },
     {
-      "name": "# `code2llm.cli_analysis` (`code2llm/cli_analysis.py`)",
-      "type": "unknown",
-      "content": "```python\ndef _run_analysis(args, source_path, output_dir)  # CC=5, fan=4\ndef _run_standard_analysis(args, source_path, output_dir)  # CC=5, fan=8\ndef _build_config(args, output_dir)  # CC=8, fan=8\ndef _print_analysis_summary(result)  # CC=1, fan=2\ndef _run_chunked_analysis(args, source_path, output_dir)  # CC=3, fan=8\ndef _print_chunked_plan(subprojects)  # CC=4, fan=5\ndef _filter_subprojects(args, subprojects)  # CC=10, fan=4 ⚠\ndef _analyze_all_subprojects(args, subprojects, output_dir)  # CC=4, fan=8\ndef _analyze_subproject(args, subproject, output_dir)  # CC=14, fan=16 ⚠\ndef _merge_chunked_results(all_results, source_path)  # CC=9, fan=5\ndef _run_streaming_analysis(args, config, source_path)  # CC=7, fan=9\n```",
-      "level": 2
+      "path": "benchmarks/benchmark_constants.py",
+      "type": "python"
     },
     {
-      "name": "# `code2llm.api` (`code2llm/api.py`)",
-      "type": "unknown",
-      "content": "```python\ndef analyze(project_path, config)  # CC=2, fan=2\ndef analyze_file(file_path, config)  # CC=1, fan=4\n```",
-      "level": 2
+      "path": "tests/test_multilanguage_e2e.py",
+      "type": "python"
     },
     {
-      "name": "# `code2llm.cli_parser` (`code2llm/cli_parser.py`)",
-      "type": "unknown",
-      "content": "```python\ndef get_version()  # CC=2, fan=5\ndef create_parser()  # CC=1, fan=5\n```",
-      "level": 2
+      "path": "tests/test_nonpython_cc_calls.py",
+      "type": "python"
     },
     {
-      "name": "# `code2llm.cli` (`code2llm/cli.py`)",
-      "type": "unknown",
-      "content": "```python\ndef main()  # CC=7, fan=9\n```",
-      "level": 2
+      "path": "tests/test_edge_cases.py",
+      "type": "python"
     },
     {
-      "name": "refactoring analysis",
-      "type": "unknown",
-      "content": "*Pre-refactoring snapshot — use this section to identify targets. Generated from `project/` toon files.*",
-      "level": 2
+      "path": "tests/test_flow_exporter.py",
+      "type": "python"
     },
     {
-      "name": "# call graph & complexity (`project/calls.toon.yaml`)",
-      "type": "unknown",
-      "content": "```toon markpact:analysis path=project/calls.toon.yaml\n# code2llm call graph | /home/tom/github/semcod/code2llm\n# nodes: 357 | edges: 383 | modules: 66\n# CC̄=4.1\n\nHUBS[20]:\n  code2llm.generators.llm_task.normalize_llm_task\n    CC=14  in:1  out:43  total:44\n  code2llm.generators.llm_flow.render_llm_flow_md\n    CC=10  in:1  out:42  total:43\n  code2llm.cli_parser.create_parser\n    CC=1  in:1  out:40  total:41\n  benchmarks.benchmark_performance.main\n    CC=1  in:0  out:41  total:41\n  validate_toon.analyze_class_differences\n    CC=6  in:1  out:39  total:40\n  code2llm.generators.llm_flow._summarize_functions\n    CC=14  in:1  out:35  total:36\n  benchmarks.benchmark_evolution.run_benchmark\n    CC=9  in:0  out:34  total:34\n  code2llm.core.lang.rust.analyze_rust\n    CC=9  in:1  out:31  total:32\n  code2llm.core.lang.base._extract_declarations\n    CC=9  in:4  out:28  total:32\n  benchmarks.benchmark_optimizations.benchmark_cold_vs_warm\n    CC=7  in:1  out:30  total:31\n  benchmarks.benchmark_performance.create_test_project\n    CC=5  in:1  out:29  total:30\n  code2llm.core.toon_size_manager._split_by_modules\n    CC=10  in:1  out:27  total:28\n  code2llm.cli_exports.formats._export_mermaid\n    CC=6  in:1  out:27  total:28\n  code2llm.cli_exports.formats._export_simple_formats\n    CC=13  in:3  out:24  total:27\n  code2llm.core.lang.go_lang._analyze_go_regex\n    CC=10  in:1  out:26  total:27\n  validate_toon.compare_modules\n    CC=5  in:1  out:26  total:27\n  code2llm.exporters.toon.metrics.MetricsComputer._compute_file_metrics\n    CC=12  in:0  out:25  total:25\n  validate_toon.compare_functions\n    CC=6  in:1  out:24  total:25\n  code2llm.exporters.project_yaml.core.ProjectYAMLExporter._build_project_yaml\n    CC=12  in:0  out:25  total:25\n  code2llm.generators.mermaid.generate_single_png\n    CC=13  in:1  out:24  total:25\n\nMODULES:\n  benchmarks.benchmark_evolution  [3 funcs]\n    load_previous  CC=3  out:3\n    run_benchmark  CC=9  out:34\n    save_current  CC=1  out:3\n  benchmarks.benchmark_format_quality  [3 funcs]\n    _print_benchmark_header  CC=1  out:4\n    _print_ground_truth_info  CC=1  out:7\n    run_benchmark  CC=2  out:22\n  benchmarks.benchmark_optimizations  [5 funcs]\n    benchmark_cold_vs_warm  CC=7  out:30\n    clear_caches  CC=3  out:7\n    main  CC=3  out:13\n    print_summary  CC=1  out:18\n    run_analysis  CC=1  out:7\n  benchmarks.benchmark_performance  [2 funcs]\n    create_test_project  CC=5  out:29\n    main  CC=1  out:41\n  benchmarks.format_evaluator  [5 funcs]\n    _check_structural_features  CC=1  out:16\n    _detect_hub_types  CC=2  out:2\n    _detect_pipelines  CC=5  out:5\n    _detect_problems  CC=1  out:16\n    evaluate_format  CC=4  out:22\n  benchmarks.project_generator  [6 funcs]\n    add_validator_to_core  CC=1  out:3\n    create_core_py  CC=1  out:2\n    create_etl_py  CC=1  out:2\n    create_ground_truth_project  CC=1  out:6\n    create_utils_py  CC=1  out:2\n    create_validation_py  CC=1  out:2\n  benchmarks.reporting  [8 funcs]\n    _print_gap_analysis  CC=6  out:9\n    _print_header  CC=1  out:3\n    _print_pipelines_detail  CC=5  out:11\n    _print_problems_detail  CC=5  out:13\n    _print_scores_table  CC=3  out:7\n    _print_structural_features  CC=5  out:11\n    build_report  CC=3  out:8\n    print_results  CC=1  out:6\n  code2llm.analysis.data_analysis  [3 funcs]\n    _find_data_pipelines  CC=7  out:7\n    _categorize_functions  CC=8  out:8\n    _make_stage  CC=2  out:0\n  code2llm.analysis.side_effects  [2 funcs]\n    __init__  CC=2  out:1\n    analyze_function  CC=3  out:6\n  code2llm.analysis.type_inference  [2 funcs]\n    __init__  CC=2  out:1\n    enrich_function  CC=3  out:4\n  code2llm.analysis.utils.ast_helpers  [2 funcs]\n    find_function_node  CC=8  out:4\n    get_ast  CC=2  out:2\n  code2llm.api  [2 funcs]\n    analyze  CC=2  out:2\n    analyze_file  CC=1  out:4\n  code2llm.cli  [1 funcs]\n    main  CC=7  out:11\n  code2llm.cli_analysis  [11 funcs]\n    _analyze_all_subprojects  CC=4  out:8\n    _analyze_subproject  CC=14  out:19\n    _build_config  CC=8  out:9\n    _filter_subprojects  CC=10  out:5\n    _merge_chunked_results  CC=9  out:7\n    _print_analysis_summary  CC=1  out:9\n    _print_chunked_plan  CC=4  out:9\n    _run_analysis  CC=5  out:4\n    _run_chunked_analysis  CC=3  out:13\n    _run_standard_analysis  CC=5  out:8\n  code2llm.cli_commands  [12 funcs]\n    _get_chunk_dirs  CC=3  out:2\n    _get_file_sizes  CC=3  out:3\n    _print_chunk_errors  CC=2  out:2\n    _print_validation_summary  CC=3  out:12\n    _validate_chunks  CC=3  out:11\n    _validate_single_chunk  CC=4  out:4\n    generate_llm_context  CC=3  out:21\n    handle_report_command  CC=4  out:17\n    handle_special_commands  CC=7  out:6\n    print_start_info  CC=2  out:3\n  code2llm.cli_exports.code2logic  [8 funcs]\n    _build_code2logic_cmd  CC=2  out:3\n    _check_code2logic_installed  CC=2  out:4\n    _export_code2logic  CC=6  out:13\n    _find_code2logic_output  CC=6  out:6\n    _handle_code2logic_error  CC=6  out:7\n    _normalize_code2logic_output  CC=2  out:4\n    _run_code2logic  CC=3  out:4\n    _should_run_code2logic  CC=2  out:0\n  code2llm.cli_exports.formats  [14 funcs]\n    _export_calls  CC=2  out:4\n    _export_calls_toon  CC=2  out:4\n    _export_context_fallback  CC=4  out:4\n    _export_data_structures  CC=3  out:4\n    _export_evolution  CC=6  out:8\n    _export_index_html  CC=5  out:4\n    _export_mermaid  CC=6  out:27\n    _export_mermaid_pngs  CC=11  out:11\n    _export_project_toon  CC=2  out:8\n    _export_project_yaml  CC=2  out:5\n  code2llm.cli_exports.orchestrator  [5 funcs]\n    _export_chunked_results  CC=6  out:10\n    _export_single_project  CC=9  out:14\n    _get_filtered_subprojects  CC=11  out:7\n    _process_subproject_result  CC=5  out:5\n    _run_exports  CC=7  out:7\n  code2llm.cli_exports.prompt  [18 funcs]\n    _analyze_generated_files  CC=14  out:11\n    _build_dynamic_focus_areas  CC=9  out:17\n    _build_dynamic_tasks  CC=8  out:16\n    _build_main_files_section  CC=1  out:1\n    _build_missing_files_section  CC=6  out:5\n    _build_optional_files_section  CC=2  out:1\n    _build_priority_order  CC=9  out:21\n    _build_prompt_file_lines  CC=4  out:5\n    _build_prompt_footer  CC=5  out:7\n    _build_prompt_header  CC=1  out:0\n  code2llm.cli_parser  [1 funcs]\n    create_parser  CC=1  out:40\n  code2llm.core.ast_registry  [1 funcs]\n    get_global  CC=2  out:1\n  code2llm.core.file_analyzer  [1 funcs]\n    _route_to_language_analyzer  CC=10  out:10\n  code2llm.core.file_filter  [1 funcs]\n    __init__  CC=9  out:13\n  code2llm.core.gitignore  [1 funcs]\n    load_gitignore_patterns  CC=3  out:4\n  code2llm.core.incremental  [3 funcs]\n    needs_analysis  CC=2  out:5\n    update  CC=1  out:2\n    _file_signature  CC=2  out:1\n  code2llm.core.lang.base  [10 funcs]\n    _extract_declarations  CC=9  out:28\n    _match_method_name  CC=14  out:9\n    _process_class_method  CC=2  out:7\n    _process_functions  CC=9  out:2\n    _process_standalone_function  CC=10  out:11\n    _resolve_call  CC=7  out:7\n    analyze_c_family  CC=5  out:6\n    calculate_complexity_regex  CC=6  out:5\n    extract_calls_regex  CC=9  out:11\n    extract_function_body  CC=10  out:4\n  code2llm.core.lang.cpp  [1 funcs]\n    analyze_cpp  CC=1  out:1\n  code2llm.core.lang.csharp  [1 funcs]\n    analyze_csharp  CC=1  out:1\n  code2llm.core.lang.generic  [1 funcs]\n    analyze_generic  CC=12  out:20\n  code2llm.core.lang.go_lang  [2 funcs]\n    _analyze_go_regex  CC=10  out:26\n    analyze_go  CC=4  out:6\n  code2llm.core.lang.java  [1 funcs]\n    analyze_java  CC=1  out:1\n  code2llm.core.lang.php  [4 funcs]\n    _adjust_qualified_names  CC=3  out:6\n    _extract_php_traits  CC=4  out:8\n    _parse_php_metadata  CC=8  out:9\n    analyze_php  CC=2  out:10\n  code2llm.core.lang.ruby  [2 funcs]\n    _adjust_ruby_module_qualnames  CC=4  out:10\n    analyze_ruby  CC=14  out:19\n  code2llm.core.lang.rust  [1 funcs]\n    analyze_rust  CC=9  out:31\n  code2llm.core.lang.ts_extractors  [5 funcs]\n    _extract_classes_ts  CC=1  out:6\n    _extract_functions_ts  CC=1  out:9\n    _find_name_node  CC=7  out:0\n    _get_node_text  CC=1  out:1\n    extract_declarations_ts  CC=1  out:5\n  code2llm.core.lang.ts_parser  [9 funcs]\n    __init__  CC=1  out:1\n    parse  CC=3  out:3\n    supports  CC=2  out:1\n    _get_language  CC=7  out:6\n    _get_parser  CC=4  out:3\n    _init_tree_sitter  CC=2  out:1\n    get_parser  CC=2  out:1\n    is_available  CC=1  out:1\n    parse_source  CC=1  out:3\n  code2llm.core.lang.typescript  [3 funcs]\n    analyze_typescript_js  CC=1  out:5\n    get_typescript_lang_config  CC=1  out:0\n    get_typescript_patterns  CC=1  out:8\n  code2llm.core.large_repo  [15 funcs]\n    _calculate_priority  CC=1  out:1\n    _categorize_subdirs  CC=7  out:10\n    _collect_files_in_dir  CC=1  out:1\n    _collect_files_recursive  CC=1  out:1\n    _collect_root_files  CC=1  out:1\n    _contains_python_files  CC=1  out:1\n    _count_py_files  CC=1  out:1\n    _get_level1_dirs  CC=1  out:1\n    _merge_small_l1_dirs  CC=7  out:19\n    _process_level1_files  CC=5  out:13\n  code2llm.core.repo_files  [8 funcs]\n    _get_gitignore_parser  CC=2  out:2\n    calculate_priority  CC=7  out:1\n    collect_files_in_dir  CC=6  out:10\n    collect_root_files  CC=3  out:5\n    contains_python_files  CC=3  out:4\n    count_py_files  CC=3  out:4\n    get_level1_dirs  CC=8  out:9\n    should_skip_file  CC=7  out:4\n  code2llm.core.toon_size_manager  [8 funcs]\n    _parse_modules  CC=6  out:7\n    _split_by_lines  CC=8  out:20\n    _split_by_modules  CC=10  out:27\n    _write_chunk  CC=2  out:1\n    get_file_size_kb  CC=1  out:1\n    manage_toon_size  CC=8  out:11\n    should_split_toon  CC=1  out:1\n    split_toon_file  CC=3  out:6\n  code2llm.exporters.map_exporter  [4 funcs]\n    _is_excluded  CC=6  out:4\n    _load_evolution_trend  CC=5  out:2\n    _read_previous_cc_avg  CC=6  out:6\n    _rel_path  CC=6  out:9\n  code2llm.exporters.mermaid_exporter  [3 funcs]\n    export_flow_compact  CC=1  out:9\n    export_flow_detailed  CC=1  out:13\n    export_flow_full  CC=1  out:13\n  code2llm.exporters.mermaid_flow_helpers  [12 funcs]\n    _append_entry_styles  CC=3  out:3\n    _append_flow_node  CC=4  out:6\n    _classify_architecture_module  CC=4  out:3\n    _entry_points  CC=3  out:2\n    _filtered_functions  CC=4  out:4\n    _group_architecture_functions  CC=2  out:3\n    _group_functions_by_module  CC=2  out:4\n    _render_architecture_view  CC=6  out:13\n    _render_flow_edges  CC=10  out:9\n    _render_flow_styles  CC=6  out:10\n  code2llm.exporters.project_yaml.core  [3 funcs]\n    _build_project_yaml  CC=12  out:25\n    _detect_primary_language  CC=9  out:11\n    export  CC=1  out:6\n  code2llm.exporters.project_yaml.evolution  [2 funcs]\n    build_evolution  CC=3  out:4\n    load_previous_evolution  CC=6  out:5\n  code2llm.exporters.project_yaml.health  [3 funcs]\n    build_alerts  CC=13  out:11\n    build_health  CC=7  out:13\n    count_duplicates  CC=5  out:8\n  code2llm.exporters.project_yaml.hotspots  [3 funcs]\n    build_hotspots  CC=5  out:7\n    build_refactoring  CC=13  out:20\n    hotspot_note  CC=7  out:5\n  code2llm.exporters.project_yaml.modules  [7 funcs]\n    build_class_export  CC=11  out:10\n    build_exports  CC=2  out:3\n    build_function_exports  CC=7  out:6\n    build_modules  CC=5  out:11\n    compute_inbound_deps  CC=5  out:3\n    compute_module_entry  CC=4  out:12\n    group_by_file  CC=5  out:8\n  code2llm.exporters.report_generators  [1 funcs]\n    load_project_yaml  CC=3  out:4\n  code2llm.exporters.toon.helpers  [6 funcs]\n    _dup_file_set  CC=2  out:3\n    _hotspot_description  CC=8  out:5\n    _package_of  CC=2  out:2\n    _package_of_module  CC=4  out:4\n    _scan_line_counts  CC=6  out:9\n    _traits_from_cfg  CC=7  out:7\n  code2llm.exporters.toon.metrics  [16 funcs]\n    _build_coupling_matrix  CC=8  out:6\n    _build_function_to_module_map  CC=3  out:2\n    _calculate_duplicate_info  CC=6  out:14\n    _compute_class_metrics  CC=7  out:14\n    _compute_fan_in  CC=3  out:6\n    _compute_file_metrics  CC=12  out:25\n    _compute_function_metrics  CC=8  out:14\n    _compute_hotspots  CC=5  out:7\n    _compute_package_metrics  CC=5  out:9\n    _detect_duplicates  CC=4  out:5\n  code2llm.exporters.toon.module_detail  [1 funcs]\n    _render_module_detail  CC=3  out:10\n  code2llm.exporters.toon.renderer  [2 funcs]\n    _detect_language_label  CC=10  out:12\n    render_layers  CC=2  out:8\n  code2llm.exporters.validate_project  [2 funcs]\n    _check_required_keys  CC=9  out:6\n    validate_project_yaml  CC=11  out:17\n  code2llm.generators.llm_flow  [19 funcs]\n    _as_dict  CC=2  out:1\n    _as_list  CC=2  out:1\n    _collect_entrypoints  CC=5  out:6\n    _collect_functions  CC=7  out:10\n    _collect_nodes  CC=5  out:5\n    _deduplicate_entrypoints  CC=5  out:4\n    _extract_entrypoint_info  CC=4  out:6\n    _group_nodes_by_file  CC=3  out:5\n    _is_entrypoint_file  CC=2  out:2\n    _node_counts_by_function  CC=4  out:4\n  code2llm.generators.llm_task  [12 funcs]\n    _apply_bullet_sections  CC=6  out:10\n    _apply_simple_sections  CC=5  out:4\n    _create_empty_task_data  CC=1  out:0\n    _ensure_list  CC=3  out:1\n    _parse_acceptance_tests  CC=3  out:4\n    _parse_bullets  CC=4  out:5\n    _parse_sections  CC=7  out:8\n    _strip_bom  CC=2  out:1\n    load_input  CC=6  out:11\n    main  CC=4  out:13\n  code2llm.generators.mermaid  [15 funcs]\n    _check_bracket_balance  CC=7  out:8\n    _check_node_ids  CC=12  out:12\n    _fix_class_line  CC=6  out:11\n    _fix_edge_label_pipes  CC=8  out:10\n    _fix_edge_line  CC=5  out:9\n    _fix_subgraph_line  CC=3  out:8\n    _is_balanced_node_line  CC=6  out:0\n    _sanitize_label_text  CC=1  out:9\n    _sanitize_node_id  CC=3  out:3\n    _scan_brackets  CC=10  out:6\n  code2llm.nlp.entity_resolution  [1 funcs]\n    resolve  CC=13  out:8\n  code2llm.parsers.toon_parser  [6 funcs]\n    _detect_section  CC=3  out:2\n    _parse_header_line  CC=2  out:2\n    _parse_stats_line  CC=5  out:5\n    is_toon_file  CC=4  out:5\n    load_toon  CC=2  out:4\n    parse_toon_content  CC=8  out:9\n  demo_langs.valid.sample  [12 funcs]\n    AddUser  CC=1  out:2\n    GetUser  CC=3  out:1\n    NewUserService  CC=1  out:1\n    User  CC=1  out:0\n    getId  CC=1  out:0\n    getName  CC=1  out:0\n    addUser  CC=1  out:1\n    getUser  CC=3  out:1\n    main  CC=2  out:6\n    processUsers  CC=2  out:2\n  examples.litellm.run  [3 funcs]\n    get_refactoring_advice  CC=2  out:5\n    main  CC=1  out:17\n    run_analysis  CC=4  out:8\n  examples.streaming-analyzer.sample_project.main  [2 funcs]\n    handle_get_request  CC=4  out:6\n    process_request  CC=6  out:11\n  examples.streaming-analyzer.sample_project.utils  [2 funcs]\n    format_output  CC=3  out:5\n    validate_input  CC=4  out:2\n  scripts.benchmark_badges  [3 funcs]\n    create_html  CC=4  out:3\n    get_shield_url  CC=1  out:3\n    main  CC=5  out:23\n  scripts.bump_version  [7 funcs]\n    bump_version  CC=4  out:5\n    format_version  CC=1  out:0\n    get_current_version  CC=3  out:9\n    main  CC=3  out:11\n    parse_version  CC=2  out:3\n    update_pyproject_toml  CC=1  out:5\n    update_version_file  CC=1  out:3\n  validate_toon  [19 funcs]\n    _compare_all_aspects  CC=1  out:5\n    _print_comparison_summary  CC=5  out:5\n    _run_comparison_mode  CC=7  out:12\n    _run_single_file_mode  CC=6  out:12\n    analyze_class_differences  CC=6  out:39\n    compare_basic_stats  CC=4  out:11\n    compare_classes  CC=1  out:19\n    compare_functions  CC=6  out:24\n    compare_modules  CC=5  out:26\n    extract_classes_from_toon  CC=3  out:4\n\nEDGES:\n  examples.litellm.run.main → examples.litellm.run.run_analysis\n  examples.litellm.run.main → examples.litellm.run.get_refactoring_advice\n  validate_toon.load_file → code2llm.parsers.toon_parser.is_toon_file\n  validate_toon.load_file → validate_toon.load_yaml\n  validate_toon.load_file → code2llm.parsers.toon_parser.load_toon\n  validate_toon.compare_functions → validate_toon.extract_functions_from_yaml\n  validate_toon.compare_functions → validate_toon.extract_functions_from_toon\n  validate_toon.compare_classes → validate_toon.extract_classes_from_yaml\n  validate_toon.compare_classes → validate_toon.extract_classes_from_toon\n  validate_toon.compare_classes → validate_toon.analyze_class_differences\n  validate_toon.compare_modules → validate_toon.extract_modules_from_yaml\n  validate_toon.compare_modules → validate_toon.extract_modules_from_toon\n  validate_toon._run_single_file_mode → validate_toon.load_file\n  validate_toon._run_single_file_mode → validate_toon.validate_toon_completeness\n  validate_toon._run_comparison_mode → validate_toon.load_yaml\n  validate_toon._run_comparison_mode → validate_toon.load_file\n  validate_toon._run_comparison_mode → validate_toon._compare_all_aspects\n  validate_toon._run_comparison_mode → validate_toon._print_comparison_summary\n  validate_toon._compare_all_aspects → validate_toon.compare_basic_stats\n  validate_toon._compare_all_aspects → validate_toon.compare_functions\n  validate_toon._compare_all_aspects → validate_toon.compare_classes\n  validate_toon._compare_all_aspects → validate_toon.compare_modules\n  validate_toon._compare_all_aspects → validate_toon.validate_toon_completeness\n  validate_toon.main → validate_toon._run_single_file_mode\n  validate_toon.main → validate_toon._run_comparison_mode\n  benchmarks.benchmark_evolution.run_benchmark → benchmarks.benchmark_evolution.load_previous\n  benchmarks.benchmark_evolution.run_benchmark → benchmarks.benchmark_evolution.save_current\n  benchmarks.reporting.print_results → benchmarks.reporting._print_header\n  benchmarks.reporting.print_results → benchmarks.reporting._print_scores_table\n  benchmarks.reporting.print_results → benchmarks.reporting._print_problems_detail\n  benchmarks.reporting.print_results → benchmarks.reporting._print_pipelines_detail\n  benchmarks.reporting.print_results → benchmarks.reporting._print_structural_features\n  benchmarks.reporting.print_results → benchmarks.reporting._print_gap_analysis\n  examples.streaming-analyzer.sample_project.main.Application.process_request → examples.streaming-analyzer.sample_project.utils.validate_input\n  examples.streaming-analyzer.sample_project.main.Application.handle_get_request → examples.streaming-analyzer.sample_project.utils.format_output\n  benchmarks.format_evaluator.evaluate_format → benchmarks.format_evaluator._detect_problems\n  benchmarks.format_evaluator.evaluate_format → benchmarks.format_evaluator._detect_pipelines\n  benchmarks.format_evaluator.evaluate_format → benchmarks.format_evaluator._detect_hub_types\n  benchmarks.format_evaluator.evaluate_format → benchmarks.format_evaluator._check_structural_features\n  benchmarks.project_generator.create_ground_truth_project → benchmarks.project_generator.create_core_py\n  benchmarks.project_generator.create_ground_truth_project → benchmarks.project_generator.create_etl_py\n  benchmarks.project_generator.create_ground_truth_project → benchmarks.project_generator.create_validation_py\n  benchmarks.project_generator.create_ground_truth_project → benchmarks.project_generator.create_utils_py\n  benchmarks.project_generator.create_ground_truth_project → benchmarks.project_generator.add_validator_to_core\n  benchmarks.benchmark_optimizations.clear_caches → code2llm.core.ast_registry.ASTRegistry.get_global\n  benchmarks.benchmark_optimizations.benchmark_cold_vs_warm → benchmarks.benchmark_optimizations.clear_caches\n  benchmarks.benchmark_optimizations.benchmark_cold_vs_warm → benchmarks.benchmark_optimizations.run_analysis\n  benchmarks.benchmark_optimizations.main → benchmarks.benchmark_optimizations.benchmark_cold_vs_warm\n  benchmarks.benchmark_optimizations.main → benchmarks.benchmark_optimizations.print_summary\n  scripts.bump_version.bump_version → scripts.bump_version.get_current_version\n```",
-      "level": 2
+      "path": "tests/test_pipeline_detector.py",
+      "type": "python"
     },
     {
-      "name": "# code analysis (`project/analysis.toon.yaml`)",
-      "type": "unknown",
-      "content": "```toon markpact:analysis path=project/analysis.toon.yaml\n# code2llm | 144f 23470L | python:131,shell:9,typescript:1,java:1 | 2026-04-19\n# CC̄=4.2 | critical:0/1078 | dups:2 | cycles:0\n\nHEALTH[1]:\n  🔴 DUP   2 classes duplicated\n\nREFACTOR[1]:\n  1. rm duplicates  (-2 dup classes)\n\nPIPELINES[693]:\n  [1] Src [NewUserService]: NewUserService\n      PURITY: 100% pure\n  [2] Src [AddUser]: AddUser\n      PURITY: 100% pure\n  [3] Src [GetUser]: GetUser\n      PURITY: 100% pure\n  [4] Src [ProcessUsers]: ProcessUsers\n      PURITY: 100% pure\n  [5] Src [main]: main\n      PURITY: 100% pure\n\nLAYERS:\n  code2llm/                       CC̄=4.4    ←in:0  →out:5\n  │ !! index_generator            790L  1C    7m  CC=5      ←0\n  │ !! pipeline_detector          506L  3C   18m  CC=13     ←0\n  │ !! html_dashboard             504L  1C   14m  CC=7      ←0\n  │ !! metrics                    501L  1C   27m  CC=12     ←0\n  │ readme_exporter            496L  1C    7m  CC=13     ←0\n  │ large_repo                 488L  2C   20m  CC=9      ←1\n  │ mermaid                    485L  0C   16m  CC=13     ←1\n  │ mermaid_exporter           480L  1C   19m  CC=13     ←0\n  │ prompt                     475L  0C   18m  CC=14     ←1\n  │ llm_flow                   472L  1C   24m  CC=14     ←0\n  │ evolution_exporter         471L  1C   17m  CC=11     ←0\n  │ renderer                   471L  1C   26m  CC=11     ←0\n  │ base                       454L  0C   14m  CC=14     ←8\n  │ map_exporter               439L  1C   25m  CC=13     ←7\n  │ file_analyzer              396L  1C   18m  CC=12     ←0\n  │ flow_exporter              391L  1C   14m  CC=10     ←0\n  │ pipeline                   388L  3C   20m  CC=10     ←0\n  │ analyzer                   355L  1C    9m  CC=14     ←0\n  │ entity_resolution          326L  3C   16m  CC=13     ←1\n  │ yaml_exporter              326L  1C   24m  CC=8      ←0\n  │ cli_analysis               323L  0C   11m  CC=14     ←1\n  │ formats                    318L  0C   15m  CC=13     ←3\n  │ cli_parser                 297L  0C    2m  CC=2      ←1\n  │ intent_matching            297L  3C   15m  CC=7      ←0\n  │ side_effects               294L  2C   15m  CC=14     ←0\n  │ cfg                        293L  1C   17m  CC=5      ←0\n  │ type_inference             290L  1C   17m  CC=9      ←0\n  │ data_analysis              286L  1C   18m  CC=14     ←0\n  │ llm_task                   284L  0C   15m  CC=14     ←0\n  │ toon_size_manager          265L  0C    8m  CC=10     ←1\n  │ mermaid_flow_helpers       262L  0C   12m  CC=10     ←1\n  │ cli_commands               250L  0C   12m  CC=7      ←1\n  │ context_exporter           248L  1C   15m  CC=10     ←0\n  │ dfg                        224L  1C   12m  CC=7      ←0\n  │ call_graph                 211L  1C   13m  CC=9      ←0\n  │ config                     211L  6C    0m  CC=0.0    ←0\n  │ scanner                    201L  1C    6m  CC=14     ←0\n  │ refactoring                196L  1C   11m  CC=9      ←0\n  │ __init__                   196L  1C   11m  CC=9      ←0\n  │ models                     194L  11C    6m  CC=8      ←0\n  │ smells                     192L  1C    9m  CC=7      ←0\n  │ flow_renderer              188L  1C    6m  CC=14     ←0\n  │ streaming_analyzer         181L  1C    6m  CC=12     ←0\n  │ ts_extractors              180L  0C    5m  CC=7      ←2\n  │ repo_files                 174L  0C    8m  CC=8      ←1\n  │ config                     174L  5C    2m  CC=1      ←0\n  │ detector                   168L  1C    8m  CC=9      ←0\n  │ article_view               163L  1C    9m  CC=7      ←0\n  │ module_detail              162L  1C    9m  CC=7      ←0\n  │ orchestrator               160L  0C    5m  CC=11     ←1\n  │ ts_parser                  158L  1C    9m  CC=7      ←2\n  │ toon_view                  157L  1C    9m  CC=6      ←0\n  │ export_pipeline            153L  2C    5m  CC=4      ←0\n  │ modules                    151L  0C    7m  CC=11     ←1\n  │ incremental                150L  1C   10m  CC=4      ←0\n  │ prompt_engine              150L  1C    7m  CC=12     ←0\n  │ toon_parser                147L  0C   10m  CC=8      ←1\n  │ ruby                       143L  0C    3m  CC=14     ←1\n  │ context_view               140L  1C    8m  CC=11     ←0\n  │ gitignore                  138L  2C    7m  CC=7      ←2\n  │ prioritizer                131L  2C    4m  CC=9      ←0\n  │ code2logic                 127L  0C    8m  CC=6      ←1\n  │ normalization              122L  2C   13m  CC=6      ←0\n  │ helpers                    120L  0C    8m  CC=8      ←3\n  │ validate_project           118L  0C    3m  CC=11     ←1\n  │ core                       118L  1C    3m  CC=12     ←0\n  │ hotspots                   106L  0C    3m  CC=13     ←1\n  │ file_cache                 103L  1C    9m  CC=5      ←0\n  │ health                     103L  0C    3m  CC=13     ←1\n  │ ast_registry               102L  1C    9m  CC=5      ←4\n  │ go_lang                    102L  0C    2m  CC=10     ←1\n  │ file_filter                100L  1C    4m  CC=14     ←0\n  │ rust                        94L  0C    1m  CC=9      ←1\n  │ coupling                    77L  1C    5m  CC=7      ←0\n  │ incremental                 75L  1C    5m  CC=5      ←0\n  │ api                         73L  0C    2m  CC=2      ←0\n  │ generic                     71L  0C    1m  CC=12     ←1\n  │ cli                         69L  0C    1m  CC=7      ←0\n  │ strategies                  68L  1C    0m  CC=0.0    ←0\n  │ php                         66L  0C    4m  CC=8      ←1\n  │ __init__                    55L  0C    0m  CC=0.0    ←0\n  │ ast_helpers                 54L  0C    3m  CC=8      ←2\n  │ __init__                    53L  0C    1m  CC=6      ←0\n  │ typescript                  53L  0C    3m  CC=1      ←1\n  │ __init__                    52L  0C    1m  CC=3      ←0\n  │ cache                       51L  1C    5m  CC=4      ←0\n  │ __init__                    48L  0C    0m  CC=0.0    ←0\n  │ evolution                   46L  0C    2m  CC=6      ←2\n  │ java                        43L  0C    1m  CC=1      ←1\n  │ csharp                      42L  0C    1m  CC=1      ←1\n  │ cpp                         35L  0C    1m  CC=1      ←1\n  │ report_generators           34L  0C    1m  CC=3      ←1\n  │ __init__                    33L  0C    1m  CC=2      ←0\n  │ flow_constants              29L  0C    0m  CC=0.0    ←0\n  │ __init__                    23L  0C    0m  CC=0.0    ←0\n  │ json_exporter               17L  1C    1m  CC=3      ←0\n  │ project_yaml_exporter       15L  0C    0m  CC=0.0    ←0\n  │ __init__                    15L  0C    0m  CC=0.0    ←0\n  │ constants                   15L  0C    0m  CC=0.0    ←0\n  │ base                        13L  1C    1m  CC=1      ←0\n  │ llm_exporter                12L  0C    0m  CC=0.0    ←0\n  │ __init__                    12L  0C    0m  CC=0.0    ←0\n  │ __init__                    11L  0C    0m  CC=0.0    ←0\n  │ __init__                     7L  0C    0m  CC=0.0    ←0\n  │ __main__                     6L  0C    0m  CC=0.0    ←0\n  │ __init__                     5L  0C    0m  CC=0.0    ←0\n  │ __init__                     0L  0C    0m  CC=0.0    ←0\n  │ __init__                     0L  0C    0m  CC=0.0    ←0\n  │\n  scripts/                        CC̄=3.9    ←in:0  →out:0\n  │ benchmark_badges           392L  0C    9m  CC=13     ←0\n  │ bump_version                96L  0C    7m  CC=4      ←0\n  │\n  ./                              CC̄=3.6    ←in:0  →out:0\n  │ validate_toon              390L  0C   19m  CC=7      ←0\n  │ setup                       67L  0C    1m  CC=2      ←0\n  │ orchestrator.sh             58L  0C    0m  CC=0.0    ←0\n  │ project.sh                  49L  0C    0m  CC=0.0    ←0\n  │ project2.sh                 35L  0C    0m  CC=0.0    ←0\n  │\n  benchmarks/                     CC̄=3.0    ←in:0  →out:1\n  │ benchmark_performance      306L  0C    7m  CC=6      ←0\n  │ project_generator          233L  0C    6m  CC=1      ←1\n  │ reporting                  179L  0C    9m  CC=6      ←1\n  │ benchmark_optimizations    157L  0C    5m  CC=7      ←0\n  │ benchmark_format_quality   143L  0C    5m  CC=4      ←0\n  │ format_evaluator           138L  1C    5m  CC=5      ←1\n  │ benchmark_evolution        137L  0C    4m  CC=13     ←0\n  │ benchmark_constants         29L  0C    0m  CC=0.0    ←0\n  │\n  badges/                         CC̄=2.7    ←in:0  →out:0\n  │ server                     110L  0C    3m  CC=4      ←0\n  │\n  test_python_only/               CC̄=1.8    ←in:0  →out:0\n  │ sample                      40L  2C    5m  CC=3      ←0\n  │ __init__                     1L  0C    0m  CC=0.0    ←0\n  │ __init__                     1L  0C    0m  CC=0.0    ←0\n  │\n  demo_langs/                     CC̄=1.5    ←in:0  →out:0  ×DUP\n  │ sample.java                 47L  2C    7m  CC=3      ←1  ×DUP\n  │ sample.rs                   47L  1C    4m  CC=2      ←0\n  │ sample.go                   46L  0C    4m  CC=3      ←0\n  │ sample.php                  44L  1C    1m  CC=1      ←0\n  │ sample                      40L  1C    5m  CC=3      ←0\n  │ sample.ts                   26L  1C    1m  CC=1      ←0\n  │\n  test_langs/                     CC̄=1.4    ←in:0  →out:0  ×DUP\n  │ sample.java                 47L  2C    7m  CC=3      ←3  ×DUP\n  │ sample.rs                   47L  1C    4m  CC=2      ←0\n  │ sample.go                   46L  0C    4m  CC=3      ←0\n  │ sample.php                  44L  1C    1m  CC=1      ←0\n  │ sample                      40L  2C    5m  CC=3      ←0\n  │ sample.ts                   26L  1C    1m  CC=1      ←0\n  │ sample_bad.go               24L  0C    2m  CC=1      ←0\n  │ sample_bad.php              22L  1C    1m  CC=1      ←0\n  │ sample_bad.ts               20L  2C    3m  CC=1      ←0\n  │ sample_bad.java             18L  1C    1m  CC=1      ←0\n  │ sample_bad.rs               18L  1C    2m  CC=1      ←0\n  │\n  ── zero ──\n     code2llm/patterns/__init__.py             0L\n     code2llm/refactor/__init__.py             0L\n\nCOUPLING:\n                            code2llm.cli_exports           code2llm.core                code2llm      code2llm.exporters       code2llm.analysis        code2llm.parsers        test_langs.valid           validate_toon              benchmarks     code2llm.generators            code2llm.nlp        demo_langs.valid  test_python_only.valid\n    code2llm.cli_exports                      ──                       1                      ←4                       4                                                                                                                                               1                                                                        \n           code2llm.core                      ←1                      ──                      ←1                                              ←3                                                                                              ←1                                                                                                  hub\n                code2llm                       4                       1                      ──                                                                                                                                                                                                                                                \n      code2llm.exporters                      ←4                                                                      ──                                                                                                                                                                       1                                                \n       code2llm.analysis                                               3                                                                      ──                                                                                                                                                                                                \n        code2llm.parsers                                                                                                                                              ──                                              ←2                                                                                                                        \n        test_langs.valid                                                                                                                                                                      ──                                                                                                                      ←1                      ←1\n           validate_toon                                                                                                                                               2                                              ──                                                                                                                        \n              benchmarks                                               1                                                                                                                                                                      ──                                                                                                \n     code2llm.generators                      ←1                                                                                                                                                                                                                      ──                                                                        \n            code2llm.nlp                                                                                              ←1                                                                                                                                                                      ──                                                \n        demo_langs.valid                                                                                                                                                                       1                                                                                                                      ──                        \n  test_python_only.valid                                                                                                                                                                       1                                                                                                                                              ──\n  CYCLES: none\n  HUB: code2llm.core/ (fan-in=6)\n\nEXTERNAL:\n  validation: run `vallm batch .` → validation.toon\n  duplication: run `redup scan .` → duplication.toon\n```",
-      "level": 2
+      "path": "tests/test_advanced_analysis.py",
+      "type": "python"
     },
     {
-      "name": "# duplication (`project/duplication.toon.yaml`)",
-      "type": "unknown",
-      "content": "```toon markpact:analysis path=project/duplication.toon.yaml\n# redup/duplication | 12 groups | 133f 24336L | 2026-04-19\n\nSUMMARY:\n  files_scanned: 133\n  total_lines:   24336\n  dup_groups:    12\n  dup_fragments: 29\n  saved_lines:   369\n  scan_ms:       5385\n\nHOTSPOTS[7] (files with most duplication):\n  benchmarks/project_generator.py  dup=187L  groups=1  frags=4  (0.8%)\n  validate_toon.py  dup=40L  groups=2  frags=4  (0.2%)\n  code2llm/cli_exports/formats.py  dup=22L  groups=1  frags=2  (0.1%)\n  code2llm/analysis/call_graph.py  dup=18L  groups=3  frags=3  (0.1%)\n  code2llm/analysis/cfg.py  dup=18L  groups=3  frags=3  (0.1%)\n  code2llm/exporters/flow_exporter.py  dup=10L  groups=1  frags=1  (0.0%)\n  code2llm/exporters/map_exporter.py  dup=10L  groups=1  frags=1  (0.0%)\n\nDUPLICATES[12] (ranked by impact):\n  [362da81ebf98419f] !! STRU  create_core_py  L=88 N=4 saved=264 sim=1.00\n      benchmarks/project_generator.py:11-98  (create_core_py)\n      benchmarks/project_generator.py:101-130  (create_etl_py)\n      benchmarks/project_generator.py:133-173  (create_validation_py)\n      benchmarks/project_generator.py:176-203  (create_utils_py)\n  [cda17a98c0c13954]   STRU  _expr_to_str  L=8 N=3 saved=16 sim=1.00\n      code2llm/analysis/call_graph.py:204-211  (_expr_to_str)\n      code2llm/analysis/cfg.py:277-284  (_expr_to_str)\n      code2llm/analysis/dfg.py:209-216  (_expr_to_str)\n  [710a483fb398e4ca]   STRU  analyze_cpp  L=7 N=3 saved=14 sim=1.00\n      code2llm/core/lang/cpp.py:29-35  (analyze_cpp)\n      code2llm/core/lang/csharp.py:36-42  (analyze_csharp)\n      code2llm/core/lang/java.py:37-43  (analyze_java)\n  [4910811602b5abf2]   STRU  _export_calls  L=13 N=2 saved=13 sim=1.00\n      code2llm/cli_exports/formats.py:218-230  (_export_calls)\n      code2llm/cli_exports/formats.py:233-241  (_export_calls_toon)\n  [702f10bd42911198]   STRU  extract_functions_from_toon  L=11 N=2 saved=11 sim=1.00\n      validate_toon.py:42-52  (extract_functions_from_toon)\n      validate_toon.py:64-74  (extract_classes_from_toon)\n  [422d78dbe06f5996]   EXAC  generate  L=5 N=3 saved=10 sim=1.00\n      code2llm/exporters/article_view.py:14-18  (generate)\n      code2llm/exporters/context_view.py:13-17  (generate)\n      code2llm/exporters/toon_view.py:27-31  (generate)\n  [bcb3f9f38c88d7ef]   EXAC  _is_excluded  L=10 N=2 saved=10 sim=1.00\n      code2llm/exporters/flow_exporter.py:382-391  (_is_excluded)\n      code2llm/exporters/map_exporter.py:314-323  (_is_excluded)\n  [e359910cdf520aea]   STRU  extract_classes_from_yaml  L=9 N=2 saved=9 sim=1.00\n      validate_toon.py:54-62  (extract_classes_from_yaml)\n      validate_toon.py:120-128  (extract_modules_from_yaml)\n  [9e673b6a7113c738]   EXAC  dump_yaml  L=8 N=2 saved=8 sim=1.00\n      code2llm/generators/llm_flow.py:405-412  (dump_yaml)\n      code2llm/generators/llm_task.py:233-240  (dump_yaml)\n  [8ce608e75583dc78]   EXAC  _qualified_name  L=7 N=2 saved=7 sim=1.00\n      code2llm/analysis/call_graph.py:141-147  (_qualified_name)\n      code2llm/analysis/cfg.py:262-268  (_qualified_name)\n  [54d9f117655e9665]   EXAC  _get_cache_key  L=4 N=2 saved=4 sim=1.00\n      code2llm/core/file_cache.py:28-31  (_get_cache_key)\n      code2llm/core/streaming/cache.py:19-22  (_get_cache_key)\n  [c427db29782c2b80]   EXAC  visit_AsyncFunctionDef  L=3 N=2 saved=3 sim=1.00\n      code2llm/analysis/call_graph.py:108-110  (visit_AsyncFunctionDef)\n      code2llm/analysis/cfg.py:106-108  (visit_AsyncFunctionDef)\n\nREFACTOR[12] (ranked by priority):\n  [1] ○ extract_module     → benchmarks/utils/create_core_py.py\n      WHY: 4 occurrences of 88-line block across 1 files — saves 264 lines\n      FILES: benchmarks/project_generator.py\n  [2] ○ extract_function   → code2llm/analysis/utils/_expr_to_str.py\n      WHY: 3 occurrences of 8-line block across 3 files — saves 16 lines\n      FILES: code2llm/analysis/call_graph.py, code2llm/analysis/cfg.py, code2llm/analysis/dfg.py\n  [3] ○ extract_function   → code2llm/core/lang/utils/analyze_cpp.py\n      WHY: 3 occurrences of 7-line block across 3 files — saves 14 lines\n      FILES: code2llm/core/lang/cpp.py, code2llm/core/lang/csharp.py, code2llm/core/lang/java.py\n  [4] ○ extract_function   → code2llm/cli_exports/utils/_export_calls.py\n      WHY: 2 occurrences of 13-line block across 1 files — saves 13 lines\n      FILES: code2llm/cli_exports/formats.py\n  [5] ○ extract_function   → utils/extract_functions_from_toon.py\n      WHY: 2 occurrences of 11-line block across 1 files — saves 11 lines\n      FILES: validate_toon.py\n  [6] ○ extract_function   → code2llm/exporters/utils/generate.py\n      WHY: 3 occurrences of 5-line block across 3 files — saves 10 lines\n      FILES: code2llm/exporters/article_view.py, code2llm/exporters/context_view.py, code2llm/exporters/toon_view.py\n  [7] ○ extract_function   → code2llm/exporters/utils/_is_excluded.py\n      WHY: 2 occurrences of 10-line block across 2 files — saves 10 lines\n      FILES: code2llm/exporters/flow_exporter.py, code2llm/exporters/map_exporter.py\n  [8] ○ extract_function   → utils/extract_classes_from_yaml.py\n      WHY: 2 occurrences of 9-line block across 1 files — saves 9 lines\n      FILES: validate_toon.py\n  [9] ○ extract_function   → code2llm/generators/utils/dump_yaml.py\n      WHY: 2 occurrences of 8-line block across 2 files — saves 8 lines\n      FILES: code2llm/generators/llm_flow.py, code2llm/generators/llm_task.py\n  [10] ○ extract_function   → code2llm/analysis/utils/_qualified_name.py\n      WHY: 2 occurrences of 7-line block across 2 files — saves 7 lines\n      FILES: code2llm/analysis/call_graph.py, code2llm/analysis/cfg.py\n  [11] ○ extract_function   → code2llm/core/utils/_get_cache_key.py\n      WHY: 2 occurrences of 4-line block across 2 files — saves 4 lines\n      FILES: code2llm/core/file_cache.py, code2llm/core/streaming/cache.py\n  [12] ○ extract_function   → code2llm/analysis/utils/visit_AsyncFunctionDef.py\n      WHY: 2 occurrences of 3-line block across 2 files — saves 3 lines\n      FILES: code2llm/analysis/call_graph.py, code2llm/analysis/cfg.py\n\nQUICK_WINS[10] (low risk, high savings — do first):\n  [1] extract_module     saved=264L  → benchmarks/utils/create_core_py.py\n      FILES: project_generator.py\n  [2] extract_function   saved=16L  → code2llm/analysis/utils/_expr_to_str.py\n      FILES: call_graph.py, cfg.py, dfg.py\n  [3] extract_function   saved=14L  → code2llm/core/lang/utils/analyze_cpp.py\n      FILES: cpp.py, csharp.py, java.py\n  [4] extract_function   saved=13L  → code2llm/cli_exports/utils/_export_calls.py\n      FILES: formats.py\n  [5] extract_function   saved=11L  → utils/extract_functions_from_toon.py\n      FILES: validate_toon.py\n  [6] extract_function   saved=10L  → code2llm/exporters/utils/generate.py\n      FILES: article_view.py, context_view.py, toon_view.py\n  [7] extract_function   saved=10L  → code2llm/exporters/utils/_is_excluded.py\n      FILES: flow_exporter.py, map_exporter.py\n  [8] extract_function   saved=9L  → utils/extract_classes_from_yaml.py\n      FILES: validate_toon.py\n  [9] extract_function   saved=8L  → code2llm/generators/utils/dump_yaml.py\n      FILES: llm_flow.py, llm_task.py\n  [10] extract_function   saved=7L  → code2llm/analysis/utils/_qualified_name.py\n      FILES: call_graph.py, cfg.py\n\nEFFORT_ESTIMATE (total ≈ 16.7h):\n  hard   create_core_py                      saved=264L  ~792min\n  medium _expr_to_str                        saved=16L  ~32min\n  easy   analyze_cpp                         saved=14L  ~28min\n  easy   _export_calls                       saved=13L  ~26min\n  easy   extract_functions_from_toon         saved=11L  ~22min\n  easy   generate                            saved=10L  ~20min\n  easy   _is_excluded                        saved=10L  ~20min\n  easy   extract_classes_from_yaml           saved=9L  ~18min\n  easy   dump_yaml                           saved=8L  ~16min\n  easy   _qualified_name                     saved=7L  ~14min\n  ... +2 more (~14min)\n\nMETRICS-TARGET:\n  dup_groups:  12 → 0\n  saved_lines: 369 lines recoverable\n```",
-      "level": 2
+      "path": "tests/test_refactoring_engine.py",
+      "type": "python"
     },
     {
-      "name": "# evolution / churn (`project/evolution.toon.yaml`)",
-      "type": "unknown",
-      "content": "```toon markpact:analysis path=project/evolution.toon.yaml\n# code2llm/evolution | 859 func | 94f | 2026-04-19\n\nNEXT[3] (ranked by impact):\n  [1] !! SPLIT           code2llm/analysis/pipeline_detector.py\n      WHY: 506L, 3 classes, max CC=13\n      EFFORT: ~4h  IMPACT: 6578\n\n  [2] !! SPLIT           code2llm/exporters/index_generator.py\n      WHY: 790L, 1 classes, max CC=5\n      EFFORT: ~4h  IMPACT: 3950\n\n  [3] !! SPLIT           code2llm/exporters/html_dashboard.py\n      WHY: 504L, 1 classes, max CC=7\n      EFFORT: ~4h  IMPACT: 3528\n\n\nRISKS[3]:\n  ⚠ Splitting code2llm/exporters/index_generator.py may break 7 import paths\n  ⚠ Splitting code2llm/analysis/pipeline_detector.py may break 18 import paths\n  ⚠ Splitting code2llm/exporters/html_dashboard.py may break 14 import paths\n\nMETRICS-TARGET:\n  CC̄:          4.4 → ≤3.1\n  max-CC:      14 → ≤7\n  god-modules: 4 → 0\n  high-CC(≥15): 0 → ≤0\n  hub-types:   0 → ≤0\n\nPATTERNS (language parser shared logic):\n  _extract_declarations() in base.py — unified extraction for:\n    - TypeScript: interfaces, types, classes, functions, arrow funcs\n    - PHP: namespaces, traits, classes, functions, includes\n    - Ruby: modules, classes, methods, requires\n    - C++: classes, structs, functions, #includes\n    - C#: classes, interfaces, methods, usings\n    - Java: classes, interfaces, methods, imports\n    - Go: packages, functions, structs\n    - Rust: modules, functions, traits, use statements\n\n  Shared regex patterns per language:\n    - import: language-specific import/require/using patterns\n    - class: class/struct/trait declarations with inheritance\n    - function: function/method signatures with visibility\n    - brace_tracking: for C-family languages ({ })\n    - end_keyword_tracking: for Ruby (module/class/def...end)\n\n  Benefits:\n    - Consistent extraction logic across all languages\n    - Reduced code duplication (~70% reduction in parser LOC)\n    - Easier maintenance: fix once, apply everywhere\n    - Standardized FunctionInfo/ClassInfo models\n\nHISTORY:\n  prev CC̄=4.3 → now CC̄=4.4\n```",
-      "level": 2
+      "path": "tests/test_nlp_pipeline.py",
+      "type": "python"
     },
     {
-      "name": "# validation (`project/validation.toon.yaml`)",
-      "type": "unknown",
-      "content": "```toon markpact:analysis path=project/validation.toon.yaml\n# vallm batch | 224f | 105✓ 5⚠ 65✗ | 2026-03-31\n\nSUMMARY:\n  scanned: 224  passed: 105 (46.9%)  warnings: 5  errors: 65  unsupported: 54\n\nWARNINGS[5]{path,score}:\n  code2llm/generators/mermaid.py,0.97\n    issues[1]{rule,severity,message,line}:\n      complexity.lizard_length,warning,generate_single_png: 102 lines exceeds limit 100,287\n  tests/test_format_quality.py,0.97\n    issues[1]{rule,severity,message,line}:\n      complexity.lizard_length,warning,ground_truth_project: 116 lines exceeds limit 100,25\n  validate_toon.py,0.97\n    issues[2]{rule,severity,message,line}:\n      complexity.cyclomatic,warning,main has cyclomatic complexity 17 (max: 15),297\n      complexity.lizard_cc,warning,main: CC=17 exceeds limit 15,297\n  code2llm/analysis/data_analysis.py,0.98\n    issues[1]{rule,severity,message,line}:\n      complexity.maintainability,warning,Low maintainability index: 7.1 (threshold: 20),\n  code2llm/generators/llm_flow.py,0.98\n    issues[1]{rule,severity,message,line}:\n      complexity.maintainability,warning,Low maintainability index: 15.9 (threshold: 20),\n\nERRORS[65]{path,score}:\n  demo_langs/invalid/sample_bad.go,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 3 parse error(s) in go,\n  demo_langs/invalid/sample_bad.java,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 7 parse error(s) in java,\n  demo_langs/invalid/sample_bad.php,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 10 parse error(s) in php,\n  demo_langs/invalid/sample_bad.py,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.parse,error,SyntaxError: expected ':',7\n  demo_langs/invalid/sample_bad.rs,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 7 parse error(s) in rust,\n  demo_langs/invalid/sample_bad.ts,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 3 parse error(s) in typescript,\n  test_langs/invalid/sample_bad.go,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 3 parse error(s) in go,\n  test_langs/invalid/sample_bad.java,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 7 parse error(s) in java,\n  test_langs/invalid/sample_bad.php,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 10 parse error(s) in php,\n  test_langs/invalid/sample_bad.py,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.parse,error,SyntaxError: invalid syntax,3\n  test_langs/invalid/sample_bad.rs,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 7 parse error(s) in rust,\n  test_langs/invalid/sample_bad.ts,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.tree_sitter,error,tree-sitter found 3 parse error(s) in typescript,\n  test_python_only/invalid/sample_bad.py,0.00\n    issues[1]{rule,severity,message,line}:\n      syntax.parse,error,SyntaxError: invalid syntax,3\n  code2llm/__init__.py,0.57\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'core.config' not found,15\n      python.import.resolvable,error,Module 'core.models' not found,16\n      python.import.resolvable,error,Module 'core.analyzer' not found,41\n  code2llm/core/lang/__init__.py,0.57\n    issues[9]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'typescript' not found,3\n      python.import.resolvable,error,Module 'go_lang' not found,4\n      python.import.resolvable,error,Module 'rust' not found,5\n      python.import.resolvable,error,Module 'java' not found,6\n      python.import.resolvable,error,Module 'cpp' not found,7\n      python.import.resolvable,error,Module 'csharp' not found,8\n      python.import.resolvable,error,Module 'php' not found,9\n      python.import.resolvable,error,Module 'ruby' not found,10\n      python.import.resolvable,error,Module 'generic' not found,11\n  code2llm/core/streaming/__init__.py,0.57\n    issues[5]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'strategies' not found,3\n      python.import.resolvable,error,Module 'cache' not found,4\n      python.import.resolvable,error,Module 'prioritizer' not found,5\n      python.import.resolvable,error,Module 'scanner' not found,6\n      python.import.resolvable,error,Module 'incremental' not found,7\n  code2llm/exporters/__init__.py,0.57\n    issues[14]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,17\n      python.import.resolvable,error,Module 'json_exporter' not found,18\n      python.import.resolvable,error,Module 'yaml_exporter' not found,19\n      python.import.resolvable,error,Module 'mermaid_exporter' not found,20\n      python.import.resolvable,error,Module 'context_exporter' not found,21\n      python.import.resolvable,error,Module 'llm_exporter' not found,22\n      python.import.resolvable,error,Module 'toon' not found,23\n      python.import.resolvable,error,Module 'map_exporter' not found,24\n      python.import.resolvable,error,Module 'flow_exporter' not found,25\n      python.import.resolvable,error,Module 'evolution_exporter' not found,26\n      python.import.resolvable,error,Module 'readme_exporter' not found,27\n      python.import.resolvable,error,Module 'project_yaml_exporter' not found,28\n      python.import.resolvable,error,Module 'report_generators' not found,29\n      python.import.resolvable,error,Module 'index_generator' not found,34\n  code2llm/exporters/llm_exporter.py,0.57\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'context_exporter' not found,7\n  code2llm/exporters/toon.py,0.57\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'toon' not found,8\n  code2llm/generators/__init__.py,0.57\n    issues[2]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'llm_flow' not found,6\n      python.import.resolvable,error,Module 'mermaid' not found,7\n  code2llm/core/__init__.py,0.63\n    issues[6]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'models' not found,4\n      python.import.resolvable,error,Module 'analyzer' not found,32\n      python.import.resolvable,error,Module 'file_analyzer' not found,35\n      python.import.resolvable,error,Module 'refactoring' not found,38\n      python.import.resolvable,error,Module 'file_cache' not found,41\n      python.import.resolvable,error,Module 'file_filter' not found,42\n  code2llm/cli.py,0.66\n    issues[4]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'cli_parser' not found,10\n      python.import.resolvable,error,Module 'cli_commands' not found,11\n      python.import.resolvable,error,Module 'cli_exports' not found,18\n      python.import.resolvable,error,Module 'cli_analysis' not found,24\n  code2llm/cli_analysis.py,0.66\n    issues[11]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'core.large_repo' not found,17\n      python.import.resolvable,error,Module 'core.config' not found,36\n      python.import.resolvable,error,Module 'core.analyzer' not found,37\n      python.import.resolvable,error,Module 'core.config' not found,60\n      python.import.resolvable,error,Module 'core.large_repo' not found,106\n      python.import.resolvable,error,Module 'core.analyzer' not found,191\n      python.import.resolvable,error,Module 'core.config' not found,192\n      python.import.resolvable,error,Module 'cli_exports' not found,193\n      python.import.resolvable,error,Module 'core.models' not found,244\n      python.import.resolvable,error,Module 'core.analyzer' not found,277\n      python.import.resolvable,error,Module 'core.streaming_analyzer' not found,278\n  code2llm/nlp/__init__.py,0.66\n    issues[4]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'pipeline' not found,9\n      python.import.resolvable,error,Module 'normalization' not found,10\n      python.import.resolvable,error,Module 'intent_matching' not found,11\n      python.import.resolvable,error,Module 'entity_resolution' not found,12\n  code2llm/cli_exports/__init__.py,0.68\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'formats' not found,6\n      python.import.resolvable,error,Module 'prompt' not found,18\n      python.import.resolvable,error,Module 'orchestrator' not found,25\n  code2llm/exporters/report_generators.py,0.71\n    issues[4]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'toon_view' not found,13\n      python.import.resolvable,error,Module 'context_view' not found,14\n      python.import.resolvable,error,Module 'article_view' not found,15\n      python.import.resolvable,error,Module 'html_dashboard' not found,16\n  code2llm/api.py,0.74\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'core.config' not found,10\n      python.import.resolvable,error,Module 'core.models' not found,11\n      python.import.resolvable,error,Module 'core.analyzer' not found,37\n  code2llm/core/lang/base.py,0.76\n    issues[4]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'models' not found,146\n      python.import.resolvable,error,Module 'models' not found,254\n      python.import.resolvable,error,Module 'models' not found,305\n      python.import.resolvable,error,Module 'models' not found,363\n  examples/streaming-analyzer/sample_project/main.py,0.76\n    issues[4]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'auth' not found,7\n      python.import.resolvable,error,Module 'database' not found,8\n      python.import.resolvable,error,Module 'api' not found,9\n      python.import.resolvable,error,Module 'utils' not found,10\n  code2llm/core/analyzer.py,0.77\n    issues[8]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'models' not found,10\n      python.import.resolvable,error,Module 'file_cache' not found,13\n      python.import.resolvable,error,Module 'file_filter' not found,14\n      python.import.resolvable,error,Module 'file_analyzer' not found,15\n      python.import.resolvable,error,Module 'refactoring' not found,16\n      python.import.resolvable,error,Module 'file_cache' not found,353\n      python.import.resolvable,error,Module 'file_filter' not found,354\n      python.import.resolvable,error,Module 'file_analyzer' not found,355\n  code2llm/cli_parser.py,0.79\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'core.config' not found,5\n  code2llm/nlp/pipeline.py,0.81\n    issues[4]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'normalization' not found,15\n      python.import.resolvable,error,Module 'intent_matching' not found,16\n      python.import.resolvable,error,Module 'entity_resolution' not found,17\n      python.import.resolvable,error,Module 'intent_matching' not found,308\n  code2llm/cli_exports/orchestrator.py,0.82\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'formats' not found,7\n      python.import.resolvable,error,Module 'prompt' not found,19\n      python.import.resolvable,error,Module 'core.large_repo' not found,117\n  code2llm/core/streaming/scanner.py,0.82\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'cache' not found,9\n      python.import.resolvable,error,Module 'prioritizer' not found,10\n      python.import.resolvable,error,Module 'strategies' not found,11\n  code2llm/exporters/toon/__init__.py,0.82\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'metrics' not found,9\n      python.import.resolvable,error,Module 'renderer' not found,10\n      python.import.resolvable,error,Module 'helpers' not found,11\n  code2llm/exporters/toon/metrics.py,0.82\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'helpers' not found,9\n      python.import.resolvable,error,Module 'helpers' not found,480\n      python.import.resolvable,error,Module 'helpers' not found,198\n  code2llm/core/large_repo.py,0.83\n    issues[2]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'repo_files' not found,14\n      python.import.resolvable,error,Module 'repo_files' not found,323\n  code2llm/exporters/flow_renderer.py,0.83\n    issues[2]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'flow_constants' not found,9\n      python.import.resolvable,error,Module 'core.models' not found,19\n  benchmarks/benchmark_format_quality.py,0.84\n    issues[4]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'benchmarks.benchmark_constants' not found,24\n      python.import.resolvable,error,Module 'benchmarks.format_evaluator' not found,25\n      python.import.resolvable,error,Module 'benchmarks.project_generator' not found,26\n      python.import.resolvable,error,Module 'benchmarks.reporting' not found,27\n  code2llm/core/refactoring.py,0.85\n    issues[5]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'models' not found,7\n      python.import.resolvable,error,Module 'file_filter' not found,8\n      python.import.resolvable,error,Module 'analysis.call_graph' not found,24\n      python.import.resolvable,error,Module 'analysis.coupling' not found,125\n      python.import.resolvable,error,Module 'analysis.smells' not found,131\n  benchmarks/reporting.py,0.86\n    issues[2]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'benchmark_constants' not found,12\n      python.import.resolvable,error,Module 'format_evaluator' not found,13\n  code2llm/cli_exports/formats.py,0.86\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'refactor.prompt_engine' not found,250\n      python.import.resolvable,error,Module 'exporters.validate_project' not found,151\n      python.import.resolvable,error,Module 'generators.mermaid' not found,196\n  code2llm/core/streaming_analyzer.py,0.86\n    issues[2]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'streaming' not found,16\n      python.import.resolvable,error,Module 'streaming' not found,178\n  code2llm/exporters/toon/module_detail.py,0.86\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'helpers' not found,7\n  examples/streaming-analyzer/sample_project/api.py,0.86\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'database' not found,5\n  code2llm/cli_commands.py,0.87\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'cli_exports' not found,8\n      python.import.resolvable,error,Module 'exporters' not found,195\n      python.import.resolvable,error,Module 'generators.llm_flow' not found,14\n  code2llm/exporters/mermaid_exporter.py,0.88\n    issues[2]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,18\n      python.import.resolvable,error,Module 'mermaid_flow_helpers' not found,20\n  code2llm/exporters/toon/renderer.py,0.88\n    issues[2]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'helpers' not found,10\n      python.import.resolvable,error,Module 'helpers' not found,49\n  code2llm/analysis/pipeline_detector.py,0.89\n    issues[2]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'side_effects' not found,21\n      python.import.resolvable,error,Module 'type_inference' not found,22\n  code2llm/core/file_analyzer.py,0.89\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'models' not found,11\n      python.import.resolvable,error,Module 'file_filter' not found,17\n      python.import.resolvable,error,Module 'lang' not found,18\n  code2llm/core/repo_files.py,0.89\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'gitignore' not found,7\n  code2llm/exporters/flow_exporter.py,0.89\n    issues[3]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,19\n      python.import.resolvable,error,Module 'flow_constants' not found,20\n      python.import.resolvable,error,Module 'flow_renderer' not found,21\n  code2llm/exporters/json_exporter.py,0.89\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,5\n  code2llm/exporters/toon/helpers.py,0.89\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'core.config' not found,101\n  code2llm/exporters/project_yaml_exporter.py,0.90\n    issues[2]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,18\n      python.import.resolvable,error,Module 'toon.helpers' not found,20\n  benchmarks/format_evaluator.py,0.91\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'benchmark_constants' not found,12\n  code2llm/core/file_filter.py,0.91\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'gitignore' not found,7\n  code2llm/exporters/readme_exporter.py,0.91\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,12\n  examples/functional_refactoring_example.py,0.91\n    issues[5]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'entities.preparer' not found,354\n      python.import.resolvable,error,Module 'templates.loader' not found,355\n      python.import.resolvable,error,Module 'templates.renderer' not found,356\n      python.import.resolvable,error,Module 'domain.command_generation.generator' not found,560\n      python.import.resolvable,error,Module 'infrastructure.caching.evolutionary_cache' not found,561\n  code2llm/core/streaming/prioritizer.py,0.93\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'strategies' not found,9\n  code2llm/exporters/context_exporter.py,0.93\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,10\n  code2llm/cli_exports/code2logic.py,0.94\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'core.toon_size_manager' not found,120\n  code2llm/exporters/evolution_exporter.py,0.94\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,16\n  code2llm/exporters/yaml_exporter.py,0.94\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,6\n  code2llm/exporters/map_exporter.py,0.95\n    issues[1]{rule,severity,message,line}:\n      python.import.resolvable,error,Module 'base' not found,18\n\nUNSUPPORTED[4]{bucket,count}:\n  *.md,39\n  *.txt,5\n  *.example,1\n  other,9\n```",
-      "level": 2
+      "path": "tests/test_calls_toon_export.py",
+      "type": "python"
     },
     {
-      "name": "intent",
-      "type": "intent",
-      "content": "High-performance Python code flow analysis with optimized TOON format - CFG, DFG, call graphs, and intelligent code queries",
-      "level": 2
+      "path": "tests/test_prompt_engine.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_prompt_txt.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_toon_v2.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_persistent_cache.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_format_quality.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_deep_analysis.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_project_toon_export.py",
+      "type": "python"
+    },
+    {
+      "path": "tests/test_analyzer.py",
+      "type": "python"
+    },
+    {
+      "path": "scripts/benchmark_badges.py",
+      "type": "python"
+    },
+    {
+      "path": "scripts/bump_version.py",
+      "type": "python"
+    },
+    {
+      "path": "badges/server.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/cli.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/cli_analysis.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/__init__.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/__main__.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/api.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/cli_parser.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/cli_commands.py",
+      "type": "python"
+    },
+    {
+      "path": "demo_langs/valid/sample.py",
+      "type": "python"
+    },
+    {
+      "path": "demo_langs/invalid/sample_bad.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/data_analysis.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/pipeline_detector.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/type_inference.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/__init__.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/pipeline_resolver.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/dfg.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/call_graph.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/pipeline_classifier.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/coupling.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/cfg.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/side_effects.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/analysis/smells.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/config.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/file_cache.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/ast_registry.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/incremental.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/analyzer.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/large_repo.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/repo_files.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/__init__.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/streaming_analyzer.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/gitignore.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/toon_size_manager.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/models.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/refactoring.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/file_analyzer.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/persistent_cache.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/file_filter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/core/export_pipeline.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/nlp/config.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/nlp/__init__.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/nlp/intent_matching.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/nlp/entity_resolution.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/nlp/pipeline.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/nlp/normalization.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/readme_exporter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/base.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/map_exporter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/project_yaml_exporter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/mermaid_flow_helpers.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/mermaid_exporter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/toon.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/dashboard_renderer.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/__init__.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/json_exporter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/report_generators.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/yaml_exporter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/context_view.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/article_view.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/dashboard_data.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/evolution_exporter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/context_exporter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/llm_exporter.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/validate_project.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/flow_constants.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/html_dashboard.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/flow_renderer.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/toon_view.py",
+      "type": "python"
+    },
+    {
+      "path": "code2llm/exporters/flow_exporter.py",
+      "type": "python"
     }
   ]
 }

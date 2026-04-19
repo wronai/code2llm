@@ -97,7 +97,7 @@ class CallGraphExtractor(ast.NodeVisitor):
         
     def visit_FunctionDef(self, node: ast.FunctionDef):
         """Visit function definition and track calls within it."""
-        func_name = self._qualified_name(node.name)
+        func_name = qualified_name(self.module_name, self.class_stack, node.name)
         self.function_stack.append(func_name)
         
         # Visit body to find calls
@@ -138,9 +138,6 @@ class CallGraphExtractor(ast.NodeVisitor):
             self.result.call_edges.append(edge)
             
         self.generic_visit(node)
-        
-    def _qualified_name(self, name: str) -> str:
-        return qualified_name(self.module_name, self.class_stack, name)
         
     def _resolve_call(self, node: ast.AST) -> Optional[str]:
         """Resolve a call to its full name."""

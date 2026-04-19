@@ -16,10 +16,12 @@ _CALL_LABEL_PREFIX = "CALL "
 
 
 def _strip_bom(text: str) -> str:
+    """Strip UTF-8 BOM from text if present."""
     return text[1:] if text.startswith("\ufeff") else text
 
 
 def _safe_read_yaml(path: Path) -> Dict[str, Any]:
+    """Read YAML file safely, handling BOM and type validation."""
     raw = _strip_bom(path.read_text(encoding="utf-8"))
     loaded = yaml.safe_load(raw) or {}
     if not isinstance(loaded, dict):
@@ -28,14 +30,17 @@ def _safe_read_yaml(path: Path) -> Dict[str, Any]:
 
 
 def _as_dict(d: Any) -> Dict[str, Any]:
+    """Coerce value to dict, returning empty dict if not a mapping."""
     return d if isinstance(d, dict) else {}
 
 
 def _as_list(v: Any) -> List[Any]:
+    """Coerce value to list, returning empty list if not a list."""
     return v if isinstance(v, list) else []
 
 
 def _shorten(s: str, max_len: int) -> str:
+    """Shorten string to max_len, adding ellipsis if truncated."""
     s = (s or "").strip()
     if len(s) <= max_len:
         return s
@@ -43,6 +48,7 @@ def _shorten(s: str, max_len: int) -> str:
 
 
 def _parse_call_label(label: str) -> Optional[str]:
+    """Parse a CALL label to extract function name."""
     label = (label or "").strip()
     if not label.startswith(_CALL_LABEL_PREFIX):
         return None
@@ -61,6 +67,7 @@ def _parse_call_label(label: str) -> Optional[str]:
 
 
 def _parse_func_label(label: str) -> Optional[str]:
+    """Parse a FUNC label to extract function name."""
     label = (label or "").strip()
     if not label.startswith(_FUNC_LABEL_PREFIX):
         return None
@@ -77,6 +84,7 @@ class FuncSummary:
 
 
 def _collect_nodes(analysis: Dict[str, Any]) -> Dict[int, Dict[str, Any]]:
+    """Collect and parse nodes from analysis dict, keyed by node ID."""
     nodes = analysis.get("nodes")
     if not isinstance(nodes, dict):
         return {}
@@ -146,6 +154,7 @@ def _collect_entrypoints(nodes: Dict[int, Dict[str, Any]]) -> List[Dict[str, Any
 
 
 def _collect_functions(nodes: Dict[int, Dict[str, Any]]) -> Set[str]:
+    """Collect all function names from nodes."""
     out: Set[str] = set()
     for n in nodes.values():
         if n.get("type") != "FUNC":
@@ -161,6 +170,7 @@ def _collect_functions(nodes: Dict[int, Dict[str, Any]]) -> Set[str]:
 
 
 def _node_counts_by_function(nodes: Dict[int, Dict[str, Any]]) -> Counter[str]:
+    """Count nodes per function for scoring relevance."""
     counts: Counter[str] = Counter()
     for n in nodes.values():
         fn = n.get("function")
@@ -232,6 +242,7 @@ def _pick_relevant_functions(
 
 
 def _summarize_functions(nodes: Dict[int, Dict[str, Any]], limit_decisions: int, limit_calls: int) -> Dict[str, FuncSummary]:
+    """Summarize functions with their decisions, calls, and location info."""
     decisions_by_func: Dict[str, List[str]] = defaultdict(list)
     calls_by_func: Dict[str, List[str]] = defaultdict(list)
     loc_by_func: Dict[str, Tuple[Optional[str], Optional[int]]] = {}

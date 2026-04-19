@@ -206,6 +206,7 @@ class DataAnalyzer:
         return sorted(data_types.values(), key=lambda x: x['usage_count'], reverse=True)
 
     def _infer_parameter_types(self, func) -> list:
+        """Infer parameter types from function name patterns."""
         params = []
         name = func.name.lower()
         if 'list' in name or 'items' in name: params.append('list')
@@ -215,6 +216,7 @@ class DataAnalyzer:
         return params
 
     def _infer_return_types(self, func) -> list:
+        """Infer return types from function name patterns."""
         returns = []
         name = func.name.lower()
         if name.startswith(('get_', 'find_')): returns.append('dict')
@@ -224,6 +226,7 @@ class DataAnalyzer:
         return returns
 
     def _build_data_flow_graph(self, result: AnalysisResult) -> dict:
+        """Build data flow graph from function relationships."""
         nodes = {}
         edges = []
         for func_name, func in result.functions.items():
@@ -255,6 +258,7 @@ class DataAnalyzer:
         return list(set(types))
 
     def _identify_process_patterns(self, result: AnalysisResult) -> list:
+        """Identify common data processing patterns (filter, map, reduce, etc.)."""
         patterns = {'filter': [], 'map': [], 'reduce': [], 'aggregate': [], 'transform': [], 'validate': []}
         indicators = {
             'filter': ['filter', 'select', 'where', 'find'], 'map': ['map', 'transform', 'process'],
@@ -274,6 +278,7 @@ class DataAnalyzer:
         return sorted(res, key=lambda x: x['count'], reverse=True)
 
     def _analyze_optimization_opportunities(self, result: AnalysisResult, data_types: list, dfg: dict) -> dict:
+        """Analyze optimization opportunities in data handling."""
         opt = {'potential_score': 0.0, 'type_consolidation': [], 'process_consolidation': [], 'hub_optimization': [], 'recommendations': []}
         similar = {}
         for dt in data_types:

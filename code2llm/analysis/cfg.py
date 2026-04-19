@@ -69,7 +69,7 @@ class CFGExtractor(ast.NodeVisitor):
             
     def visit_FunctionDef(self, node: ast.FunctionDef):
         """Visit function definition."""
-        func_name = self._qualified_name(node.name)
+        func_name = qualified_name(self.module_name, self.class_stack, node.name)
         self.function_stack.append(func_name)
         
         # Create entry node
@@ -260,9 +260,6 @@ class CFGExtractor(ast.NodeVisitor):
         else:
             self.generic_visit(node)
             
-    def _qualified_name(self, name: str) -> str:
-        return qualified_name(self.module_name, self.class_stack, name)
-        
     def _extract_condition(self, node: ast.AST) -> str:
         """Extract condition as string."""
         try:
