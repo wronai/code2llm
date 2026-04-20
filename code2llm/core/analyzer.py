@@ -212,6 +212,10 @@ class ProjectAnalyzer:
                 if not self.file_filter.should_process(file_str):
                     continue
 
+                # DEBUG
+                if 'vendor' in file_str.lower():
+                    print(f"DEBUG _collect_files: COLLECTED vendor file: {file_str}")
+
                 # Calculate module name from relative path
                 rel = os.path.relpath(file_str, project_str)
                 parts = rel.replace('\\', '/').split('/')

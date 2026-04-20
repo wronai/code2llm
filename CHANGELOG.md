@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.5.131] - 2026-04-20
+
+### Other
+- Update code2llm/core/analyzer.py
+
 ## [0.5.130] - 2026-04-20
 
 ### Other
