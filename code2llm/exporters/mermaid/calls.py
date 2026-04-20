@@ -5,19 +5,22 @@ from pathlib import Path
 
 from code2llm.core.models import AnalysisResult
 
-from .utils import readable_id, safe_module, resolve_callee, write_file
+from .utils import readable_id, safe_module, resolve_callee, write_file, build_name_index
 
 
 def export_calls(result: AnalysisResult, output_path: str) -> None:
     """Export simplified call graph — only connected nodes."""
     lines = ["flowchart LR"]
 
+    # Build name index for O(1) callee resolution
+    name_index = build_name_index(result.functions)
+
     # Collect connected nodes first
     connected: Set[str] = set()
     edges: List[Tuple[str, str]] = []
     for func_name, fi in result.functions.items():
         for callee in fi.calls[:10]:
-            resolved = resolve_callee(callee, result.functions)
+            resolved = resolve_callee(callee, result.functions, name_index)
             if resolved and resolved != func_name:
                 connected.add(func_name)
                 connected.add(resolved)

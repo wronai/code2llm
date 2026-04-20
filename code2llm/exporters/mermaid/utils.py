@@ -1,8 +1,9 @@
 """Mermaid exporter utilities — identifiers, module extraction, file writing."""
 
 import re
+from collections import defaultdict
 from pathlib import Path
-from typing import Optional
+from typing import Dict, List, Optional
 
 from code2llm.core.models import FunctionInfo
 
@@ -42,11 +43,30 @@ def module_of(func_name: str) -> str:
     return parts[0] if parts else 'unknown'
 
 
-def resolve_callee(callee: str, funcs: dict) -> Optional[str]:
-    """Resolve callee to a known qualified name."""
+def build_name_index(funcs: dict) -> Dict[str, List[str]]:
+    """Build index mapping simple names to qualified names for O(1) lookup."""
+    index: Dict[str, List[str]] = defaultdict(list)
+    for qn in funcs:
+        simple_name = qn.split('.')[-1]
+        index[simple_name].append(qn)
+    return index
+
+
+def resolve_callee(callee: str, funcs: dict, name_index: Optional[Dict[str, List[str]]] = None) -> Optional[str]:
+    """Resolve callee to a known qualified name.
+    
+    Args:
+        callee: The callee name to resolve
+        funcs: Dictionary of all functions
+        name_index: Optional pre-built index from build_name_index() for O(1) lookup
+    """
     if callee in funcs:
         return callee
-    candidates = [qn for qn in funcs if qn.endswith(f".{callee}")]
+    if name_index is not None:
+        candidates = name_index.get(callee, [])
+    else:
+        # Fallback to slow path if index not provided
+        candidates = [qn for qn in funcs if qn.endswith(f".{callee}")]
     if len(candidates) == 1:
         return candidates[0]
     return None
@@ -72,6 +92,7 @@ __all__ = [
     'readable_id',
     'safe_module',
     'module_of',
+    'build_name_index',
     'resolve_callee',
     'write_file',
     'get_cc',

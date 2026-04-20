@@ -4,7 +4,7 @@ from pathlib import Path
 
 from code2llm.core.models import AnalysisResult
 
-from .utils import readable_id, safe_module, resolve_callee, write_file, get_cc
+from .utils import readable_id, safe_module, resolve_callee, write_file, get_cc, build_name_index
 from ..mermaid_flow_helpers import (
     _entry_points,
     _filtered_functions,
@@ -25,6 +25,9 @@ def export_flow_full(result: AnalysisResult, output_path: str,
     from .utils import module_of
 
     lines = ["flowchart TD"]
+
+    # Build name index for O(1) callee resolution
+    name_index = build_name_index(result.functions)
     lines.append("")
     lines.append("    %% Styling definitions")
     lines.append("    classDef highCC fill:#ff6b6b,stroke:#c92a2a,color:#fff")
@@ -50,7 +53,7 @@ def export_flow_full(result: AnalysisResult, output_path: str,
         sort_funcs=False,
         max_funcs=None,
     )
-    _render_flow_edges(lines, filtered_funcs, readable_id, resolve_callee, calls_per_function=15, limit=None)
+    _render_flow_edges(lines, filtered_funcs, readable_id, resolve_callee, calls_per_function=15, limit=None, name_index=name_index)
     _render_flow_styles(
         lines,
         filtered_funcs,

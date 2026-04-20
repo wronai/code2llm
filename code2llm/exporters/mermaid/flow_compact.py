@@ -6,7 +6,7 @@ from pathlib import Path
 
 from code2llm.core.models import AnalysisResult
 
-from .utils import readable_id, safe_module, resolve_callee, write_file, get_cc
+from .utils import readable_id, safe_module, resolve_callee, write_file, get_cc, build_name_index
 
 
 # Default skip patterns for noise reduction
@@ -43,30 +43,30 @@ def is_entry_point(func_name: str, fi, result: AnalysisResult) -> bool:
     return False
 
 
-def build_callers_graph(result: AnalysisResult) -> Dict[str, Set[str]]:
+def build_callers_graph(result: AnalysisResult, name_index: Dict[str, List[str]]) -> Dict[str, Set[str]]:
     """Build reverse graph: map each function to its callers."""
     callers: Dict[str, Set[str]] = defaultdict(set)
     for func_name, fi in result.functions.items():
         for callee in fi.calls:
-            resolved = resolve_callee(callee, result.functions)
+            resolved = resolve_callee(callee, result.functions, name_index)
             if resolved:
                 callers[resolved].add(func_name)
     return callers
 
 
-def find_leaves(result: AnalysisResult) -> Set[str]:
+def find_leaves(result: AnalysisResult, name_index: Dict[str, List[str]]) -> Set[str]:
     """Find leaf nodes (functions that don't call other project functions)."""
     leaves = set()
     for func_name, fi in result.functions.items():
         has_internal_call = any(
-            resolve_callee(c, result.functions) for c in fi.calls
+            resolve_callee(c, result.functions, name_index) for c in fi.calls
         )
         if not has_internal_call:
             leaves.add(func_name)
     return leaves
 
 
-def _longest_path_dfs(result: AnalysisResult, start: str, visited: Set[str]) -> List[str]:
+def _longest_path_dfs(result: AnalysisResult, start: str, visited: Set[str], name_index: Dict[str, List[str]]) -> List[str]:
     """DFS to find longest path from start node."""
     if start in visited:
         return []
@@ -77,21 +77,21 @@ def _longest_path_dfs(result: AnalysisResult, start: str, visited: Set[str]) -> 
 
     longest: List[str] = []
     for callee in fi.calls:
-        resolved = resolve_callee(callee, result.functions)
+        resolved = resolve_callee(callee, result.functions, name_index)
         if resolved and resolved not in visited:
-            path = _longest_path_dfs(result, resolved, visited)
+            path = _longest_path_dfs(result, resolved, visited, name_index)
             if len(path) > len(longest):
                 longest = path
 
     return [start] + longest
 
 
-def _select_longest_path(result: AnalysisResult, entry_points: List[str]) -> List[str]:
+def _select_longest_path(result: AnalysisResult, entry_points: List[str], name_index: Dict[str, List[str]]) -> List[str]:
     """Select the longest path from all entry points."""
     max_path: List[str] = []
     for ep in entry_points:
         if ep in result.functions:
-            path = _longest_path_dfs(result, ep, set())
+            path = _longest_path_dfs(result, ep, set(), name_index)
             if len(path) > len(max_path):
                 max_path = path
     return max_path
@@ -101,11 +101,13 @@ def find_critical_path(result: AnalysisResult, entry_points: List[str]) -> Set[s
     """Find the longest path from entry points (critical path)."""
     if not entry_points:
         return set()
+    # Build name index for O(1) resolution
+    name_index = build_name_index(result.functions)
     # Build data structures
-    build_callers_graph(result)
-    find_leaves(result)
+    build_callers_graph(result, name_index)
+    find_leaves(result, name_index)
     # Find longest path from each entry point
-    max_path = _select_longest_path(result, entry_points)
+    max_path = _select_longest_path(result, entry_points, name_index)
     return set(max_path)
 
 

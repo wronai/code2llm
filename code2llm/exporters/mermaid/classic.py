@@ -5,18 +5,21 @@ from pathlib import Path
 
 from code2llm.core.models import AnalysisResult
 
-from .utils import readable_id, safe_module, resolve_callee, write_file, get_cc
+from .utils import readable_id, safe_module, resolve_callee, write_file, get_cc, build_name_index
 
 
 def export_classic(result: AnalysisResult, output_path: str) -> Optional[Path]:
     """Export full flow diagram with CC-based node shapes and styling."""
     lines = ["flowchart TD"]
 
+    # Build name index for O(1) callee resolution
+    name_index = build_name_index(result.functions)
+
     # Subgraphs per module
     _render_subgraphs(result, lines)
 
     # Edges — all cross-function calls
-    _render_edges(result, lines, limit=600)
+    _render_edges(result, lines, name_index, limit=600)
 
     # CC-based styling
     _render_cc_styles(result, lines)
@@ -48,13 +51,13 @@ def _render_subgraphs(result: AnalysisResult, lines: List[str]) -> None:
         lines.append("    end")
 
 
-def _render_edges(result: AnalysisResult, lines: List[str], limit: int = 600) -> None:
+def _render_edges(result: AnalysisResult, lines: List[str], name_index: Dict[str, List[str]], limit: int = 600) -> None:
     """Render cross-function call edges up to limit."""
     seen_edges: Set[Tuple[str, str]] = set()
     for func_name, fi in result.functions.items():
         src = readable_id(func_name)
         for callee in fi.calls[:15]:
-            resolved = resolve_callee(callee, result.functions)
+            resolved = resolve_callee(callee, result.functions, name_index)
             if resolved and resolved != func_name:
                 dst = readable_id(resolved)
                 edge = (src, dst)

@@ -6,7 +6,7 @@ from pathlib import Path
 
 from code2llm.core.models import AnalysisResult
 
-from .utils import safe_module, resolve_callee, write_file
+from .utils import safe_module, resolve_callee, write_file, build_name_index
 
 
 def export_compact(result: AnalysisResult, output_path: str) -> None:
@@ -14,6 +14,9 @@ def export_compact(result: AnalysisResult, output_path: str) -> None:
     lines = ["flowchart TD"]
 
     from .utils import module_of
+    # Build name index for O(1) callee resolution
+    name_index = build_name_index(result.functions)
+
     # Compute module stats
     mod_funcs: Dict[str, int] = defaultdict(int)
     mod_lines: Dict[str, int] = defaultdict(int)
@@ -27,7 +30,7 @@ def export_compact(result: AnalysisResult, output_path: str) -> None:
     for func_name, fi in result.functions.items():
         src_mod = module_of(func_name)
         for callee in fi.calls:
-            resolved = resolve_callee(callee, result.functions)
+            resolved = resolve_callee(callee, result.functions, name_index)
             if resolved:
                 dst_mod = module_of(resolved)
                 if dst_mod != src_mod:

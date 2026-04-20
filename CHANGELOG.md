@@ -1,5 +1,18 @@
 ## [Unreleased]
 
+## [0.5.135] - 2026-04-20
+
+### Other
+- Update code2llm/exporters/mermaid/calls.py
+- Update code2llm/exporters/mermaid/classic.py
+- Update code2llm/exporters/mermaid/compact.py
+- Update code2llm/exporters/mermaid/flow_compact.py
+- Update code2llm/exporters/mermaid/flow_detailed.py
+- Update code2llm/exporters/mermaid/flow_full.py
+- Update code2llm/exporters/mermaid/utils.py
+- Update code2llm/exporters/mermaid_flow_helpers.py
+- Update code2llm/exporters/yaml_exporter.py
+
 ## [0.5.134] - 2026-04-20
 
 ### Docs

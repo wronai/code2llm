@@ -159,16 +159,17 @@ def _render_flow_edges(
     lines: List[str],
     funcs: Dict[str, Any],
     readable_id: Callable[[str], str],
-    resolve: Callable[[str, Dict[str, Any]], Optional[str]],
+    resolve: Callable[..., Optional[str]],
     calls_per_function: int = 10,
     limit: Optional[int] = 200,
+    name_index: Optional[Dict[str, List[str]]] = None,
 ) -> None:
     """Render cross-function call edges with optional limits."""
     seen_edges: Set[Tuple[str, str]] = set()
     for func_name, fi in funcs.items():
         src = readable_id(func_name)
         for callee in fi.calls[:calls_per_function]:
-            resolved = resolve(callee, funcs)
+            resolved = resolve(callee, funcs, name_index) if name_index else resolve(callee, funcs)
             if resolved and resolved != func_name:
                 dst = readable_id(resolved)
                 edge = (src, dst)

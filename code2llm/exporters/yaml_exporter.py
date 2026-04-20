@@ -289,6 +289,7 @@ class YAMLExporter(BaseExporter):
         - CHAINS: call chains/paths
         - MODULES: functions grouped by module with call relationships
         """
+        self._name_index = None  # Reset cache for fresh analysis
         connected, edges = self._collect_edges(result, max_calls_per_func, max_edges)
         nodes = self._build_nodes(result, connected)
         modules = self._group_by_module(result, connected)
