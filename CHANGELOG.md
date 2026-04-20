@@ -1,5 +1,16 @@
 ## [Unreleased]
 
+## [0.5.129] - 2026-04-20
+
+### Docs
+- Update redsl_refactor_report.md
+
+### Other
+- Update code2llm/cli_commands.py
+- Update code2llm/core/analyzer.py
+- Update code2llm/core/gitignore.py
+- Update redsl_refactor_report.toon.yaml
+
 ## [0.5.128] - 2026-04-19
 
 ### Docs

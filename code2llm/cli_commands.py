@@ -156,7 +156,7 @@ def validate_and_setup(args) -> tuple[Path, Path]:
         print("   or: code2llm llm-flow [options]", file=sys.stderr)
         sys.exit(2)
 
-    source_path = Path(args.source)
+    source_path = Path(args.source).resolve()
     if not source_path.exists():
         print(f"Error: Source path not found: {source_path}", file=sys.stderr)
         sys.exit(1)

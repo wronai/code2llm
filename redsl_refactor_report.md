@@ -1,9 +1,9 @@
 # reDSL Refactor Report
 
-> Generated: **2026-04-19 20:43**  
+> Generated: **2026-04-19 21:00**  
 > Project: `/home/tom/github/semcod/code2llm`  
 > Mode: **executed**  
-> Log file: `/home/tom/github/semcod/code2llm/logs/redsl_20260419_204159.log`  
+> Log file: `/home/tom/github/semcod/code2llm/logs/redsl_20260419_210053.log`  
 > Cycle: **1**  
 
 ---
@@ -14,10 +14,10 @@
 - Files: **145** | Lines: **24326** | Avg CC: **17.0**
 - Critical: **1** | Alerts: **1**
 - Decisions selected: **1**
-- Proposals generated: **1**
-- Proposals applied: **1**
-- Proposals rejected: **0**
-- Errors: **0**
+- Proposals generated: **0**
+- Proposals applied: **0**
+- Proposals rejected: **1**
+- Errors: **1**
 
 ## Top Decisions
 
@@ -27,12 +27,15 @@
 
 ## Execution Results
 
-1. **extract_functions**
-   - Target: `code2llm/core/analyzer.py`
-   - Applied: `True`
-   - Validated: `True`
-   - Confidence: `0.88`
-   - Summary: Extracted helper functions from analyze_project to reduce cyclomatic complexity: _print_analysis_info, _handle_watch_mode, _perform_analysis, and _finalize_results. Each extracted function has a single responsibility, type hints, and preserves all behavior including error handling and logging.
+1. **direct_refactor**
+   - Target: `N/A`
+   - Applied: `False`
+   - Validated: `False`
+   - Errors: Duplicate proposal blocked (time-window): extract_functions on code2llm/core/analyzer.py was already proposed in the last 24h
+
+## Errors
+
+- Duplicate proposal blocked (time-window): extract_functions on code2llm/core/analyzer.py was already proposed in the last 24h
 
 ---
 

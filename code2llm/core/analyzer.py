@@ -43,7 +43,12 @@ class ProjectAnalyzer:
     def analyze_project(self, project_path: str) -> AnalysisResult:
         """Analyze entire project."""
         start_time = time.time()
+        print(f"DEBUG analyze_project: input project_path={project_path}")
+        print(f"DEBUG analyze_project: self.project_path before={self.project_path}")
         project_path = self._resolve_project_path(project_path)
+        print(f"DEBUG analyze_project: project_path after resolve={project_path}")
+        print(f"DEBUG analyze_project: self.project_path after={self.project_path}")
+        print(f"DEBUG analyze_project: file_filter.project_path={self.file_filter.project_path}")
         files = self._collect_files(project_path)
 
         if self.config.verbose:

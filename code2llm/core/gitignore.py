@@ -110,10 +110,21 @@ class GitIgnoreParser:
         except ValueError:
             return False
 
+        # DEBUG
+        if 'vendor' in path_str:
+            print(f"DEBUG is_ignored: path_str={path_str}, entries={len(self._entries)}")
+
         ignored = False
         for entry in self._entries:
             if entry.regex.search(path_str):
+                # DEBUG
+                if 'vendor' in path_str:
+                    print(f"DEBUG is_ignored: MATCHED pattern={entry.regex.pattern}, is_negated={entry.is_negated}")
                 ignored = not entry.is_negated
+
+        # DEBUG
+        if 'vendor' in path_str:
+            print(f"DEBUG is_ignored: result={ignored}")
 
         return ignored
 
