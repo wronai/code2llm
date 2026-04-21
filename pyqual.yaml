@@ -18,7 +18,7 @@ pipeline:
       binary: vallm
       command: >-
         vallm batch {workdir} --recursive --format toon --output ./project
-        --exclude .git,.venv,.venv_test,build,dist,__pycache__,.pytest_cache,.code2llm_cache,.benchmarks,.mypy_cache,.ruff_cache,node_modules
+        --exclude .git,.venv,.venv_test,build,dist,__pycache__,.pytest_cache,.code2llm_cache,.benchmarks,.mypy_cache,.ruff_cache,node_modules,CHANGELOG.md,*.md
       output: ""
       allow_failure: false
 

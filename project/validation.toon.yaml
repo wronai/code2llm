@@ -1,13 +1,17 @@
-# vallm batch | 331f | 0✓ 256⚠ 0✗ | 2026-04-20
+# vallm batch | 283f | 0✓ 258⚠ 0✗ | 2026-04-21
 
 SUMMARY:
-  scanned: 331  passed: 0 (0.0%)  warnings: 256  errors: 0  unsupported: 0
+  scanned: 283  passed: 0 (0.0%)  warnings: 258  errors: 0  unsupported: 0
 
-WARNINGS[256]{path,score}:
+WARNINGS[258]{path,score}:
   code2llm/cli_parser.py,0.74
     issues[2]{rule,severity,message,line}:
       syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
       complexity.lizard_length,warning,create_parser: 262 lines exceeds limit 100,19
+  pipeline.py,0.74
+    issues[2]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+      complexity.lizard_length,warning,run_pipeline: 107 lines exceeds limit 100,62
   tests/test_format_quality.py,0.74
     issues[2]{rule,severity,message,line}:
       syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
@@ -748,6 +752,9 @@ WARNINGS[256]{path,score}:
     issues[1]{rule,severity,message,line}:
       syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
   tests/test_nonpython_cc_calls.py,0.78
+    issues[1]{rule,severity,message,line}:
+      syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
+  tests/test_orchestrator_cache_mtime.py,0.78
     issues[1]{rule,severity,message,line}:
       syntax.unsupported,warning,"Could not parse PYTHON: Download error: Language 'PYTHON' not available for download. Available groups: [""all""]",
   tests/test_persistent_cache.py,0.78

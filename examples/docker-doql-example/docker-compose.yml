@@ -1,0 +1,407 @@
+version: '3.8'
+
+services:
+  # Hardware simulation: Load balancer
+  load-balancer:
+    image: nginx:alpine
+    container_name: hardware-lb-01
+    ports:
+      - "8880:80"
+      - "8443:443"
+    networks:
+      - frontend
+      - backend
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Application server 1
+  app-server-1:
+    image: python:3.12-slim
+    container_name: app-server-01
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    command: python -m http.server 8000
+    ports:
+      - "8001:8000"
+    networks:
+      - backend
+      - database
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - REDIS_HOST=cache
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    depends_on:
+      - database
+      - cache
+
+  # Application server 2
+  app-server-2:
+    image: python:3.12-slim
+    container_name: app-server-02
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    command: python -m http.server 8000
+    ports:
+      - "8002:8000"
+    networks:
+      - backend
+      - database
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - REDIS_HOST=cache
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    depends_on:
+      - database
+      - cache
+
+  # Database server
+  database:
+    image: postgres:15-alpine
+    container_name: db-server-01
+    ports:
+      - "5432:5432"
+    networks:
+      - database
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=appdb
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=secret
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis cache
+  cache:
+    image: redis:7-alpine
+    container_name: cache-server-01
+    ports:
+      - "6379:6379"
+    networks:
+      - database
+    command: redis-server --appendonly yes
+    volumes:
+      - cache-data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  # Message queue
+  message-queue:
+    image: rabbitmq:3-management-alpine
+    container_name: mq-server-01
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - backend
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # Worker service
+  worker:
+    image: python:3.12-slim
+    container_name: worker-01
+    working_dir: /app
+    volumes:
+      - ./worker:/app
+    command: python worker.py
+    networks:
+      - backend
+      - database
+    environment:
+      - QUEUE_URL=amqp://admin:admin@message-queue:5672
+      - DB_HOST=database
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    depends_on:
+      - message-queue
+      - database
+
+  # Monitoring service
+  monitoring:
+    image: prom/prometheus:latest
+    container_name: monitoring-01
+    ports:
+      - "9090:9090"
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  # Log aggregation
+  logging:
+    image: fluent/fluent-bit:latest
+    container_name: logging-01
+    ports:
+      - "24224:24224"
+    networks:
+      - backend
+    volumes:
+      - /var/log:/var/log:ro
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+  # Go service
+  go-service:
+    image: golang:1.21-alpine
+    container_name: go-service-01
+    working_dir: /app
+    volumes:
+      - ./go:/app
+    command: go run main.go
+    ports:
+      - "8081:8080"
+    networks:
+      - backend
+      - database
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - SERVICE_NAME=go-api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    depends_on:
+      - database
+
+  # Rust service
+  rust-service:
+    image: rust:1.75-slim
+    container_name: rust-service-01
+    working_dir: /app
+    volumes:
+      - ./rust:/app
+    command: cargo run --release
+    ports:
+      - "8082:8080"
+    networks:
+      - backend
+      - database
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - SERVICE_NAME=rust-api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    depends_on:
+      - database
+
+  # Java service
+  java-service:
+    image: openjdk:21-jdk-slim
+    container_name: java-service-01
+    working_dir: /app
+    volumes:
+      - ./java:/app
+    command: java Main.java
+    ports:
+      - "8083:8080"
+    networks:
+      - backend
+      - database
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - SERVICE_NAME=java-api
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    depends_on:
+      - database
+
+  # Node.js service
+  node-service:
+    image: node:20-alpine
+    container_name: node-service-01
+    working_dir: /app
+    volumes:
+      - ./node:/app
+    command: node index.js
+    ports:
+      - "8084:8080"
+    networks:
+      - backend
+      - database
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - SERVICE_NAME=node-api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    depends_on:
+      - database
+
+  # Ruby service
+  ruby-service:
+    image: ruby:3.2-alpine
+    container_name: ruby-service-01
+    working_dir: /app
+    volumes:
+      - ./ruby:/app
+    command: ruby app.rb
+    ports:
+      - "8085:8080"
+    networks:
+      - backend
+      - database
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - SERVICE_NAME=ruby-api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    depends_on:
+      - database
+
+  # PHP service
+  php-service:
+    image: php:8.2-apache
+    container_name: php-service-01
+    working_dir: /var/www/html
+    volumes:
+      - ./php:/var/www/html
+    ports:
+      - "8086:80"
+    networks:
+      - backend
+      - database
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - SERVICE_NAME=php-api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    depends_on:
+      - database
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+  database:
+    driver: bridge
+    internal: true
+
+volumes:
+  db-data:
+    driver: local
+  cache-data:
+    driver: local
+  prometheus-data:
+    driver: local

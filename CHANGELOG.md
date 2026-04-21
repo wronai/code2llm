@@ -1,5 +1,26 @@
 ## [Unreleased]
 
+## [0.5.142] - 2026-04-21
+
+### Docs
+- Update SUMD.md
+- Update SUMR.md
+- Update examples/docker-doql-example/ANALYSIS.md
+- Update examples/docker-doql-example/SUMMARY.md
+
+### Other
+- Update examples/docker-doql-example/app.doql.less
+- Update examples/docker-doql-example/app/main.py
+- Update examples/docker-doql-example/docker-compose.yml
+- Update examples/docker-doql-example/fluent-bit.conf
+- Update examples/docker-doql-example/go/main.go
+- Update examples/docker-doql-example/java/Main.java
+- Update examples/docker-doql-example/node/index.js
+- Update examples/docker-doql-example/php/index.php
+- Update examples/docker-doql-example/prometheus.yml
+- Update examples/docker-doql-example/ruby/app.rb
+- ... and 8 more files
+
 ## [0.5.141] - 2026-04-21
 
 ### Docs
