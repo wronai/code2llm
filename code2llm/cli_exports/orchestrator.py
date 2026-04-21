@@ -4,6 +4,7 @@ Refactored to use EXPORT_REGISTRY for core format dispatch.
 Maintains backward compatibility with all existing --format values.
 """
 
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -164,6 +165,23 @@ def _copy_cached_export(cached_dir: Path, output_dir: Path, verbose: bool = Fals
             shutil.copytree(item, dest, dirs_exist_ok=True)
         else:
             shutil.copy2(item, dest)
+        # Refresh mtime so the user can tell these files were produced by
+        # the current run, even though the contents came from cache.
+        _touch_recursive(dest)
+
+
+def _touch_recursive(path: Path) -> None:
+    """Update mtime/atime to now for `path` (and all contents if it is a dir)."""
+    try:
+        os.utime(path, None)
+    except OSError:
+        return
+    if path.is_dir():
+        for sub in path.rglob('*'):
+            try:
+                os.utime(sub, None)
+            except OSError:
+                continue
 
 
 def _copy_to_cache(output_dir: Path, cache_dir: Path, verbose: bool = False) -> None:

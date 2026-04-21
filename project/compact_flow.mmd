@@ -1,0 +1,37 @@
+flowchart TD
+    benchmarks__benchmark_format_quality["benchmarks.benchmark_format_quality<br/>5 funcs"]
+    benchmarks__format_evaluator["benchmarks.format_evaluator<br/>5 funcs"]
+    benchmarks__project_generator["benchmarks.project_generator<br/>6 funcs"]
+    benchmarks__reporting["benchmarks.reporting<br/>9 funcs"]
+    code2llm__analysis["code2llm.analysis<br/>139 funcs"]
+    code2llm__cli["code2llm.cli<br/>1 funcs"]
+    code2llm__cli_analysis["code2llm.cli_analysis<br/>11 funcs"]
+    code2llm__cli_commands["code2llm.cli_commands<br/>13 funcs"]
+    code2llm__cli_exports["code2llm.cli_exports<br/>64 funcs"]
+    code2llm__cli_parser["code2llm.cli_parser<br/>2 funcs"]
+    code2llm__core["code2llm.core<br/>239 funcs"]
+    code2llm__exporters["code2llm.exporters<br/>314 funcs"]
+    code2llm__generators["code2llm.generators<br/>60 funcs"]
+    code2llm__parsers["code2llm.parsers<br/>10 funcs"]
+    demo_langs__valid["demo_langs.valid<br/>28 funcs"]
+    test_langs__invalid["test_langs.invalid<br/>9 funcs"]
+    test_python_only__valid["test_python_only.valid<br/>5 funcs"]
+    validate_toon["validate_toon<br/>21 funcs"]
+    code2llm__cli_exports ==>|8| code2llm__exporters
+    code2llm__cli ==>|5| code2llm__cli_commands
+    code2llm__cli_commands -->|3| code2llm__core
+    validate_toon -->|2| code2llm__parsers
+    code2llm__cli_analysis -->|2| code2llm__cli_exports
+    benchmarks__benchmark_format_quality -->|2| benchmarks__reporting
+    code2llm__exporters -->|2| code2llm__analysis
+    code2llm__cli_exports -->|2| code2llm__generators
+    code2llm__cli -->|1| code2llm__cli_parser
+    code2llm__cli -->|1| code2llm__cli_analysis
+    code2llm__cli -->|1| code2llm__cli_exports
+    code2llm__cli_analysis -->|1| code2llm__core
+    test_python_only__valid -->|1| test_langs__invalid
+    code2llm__cli_commands -->|1| code2llm__cli_exports
+    benchmarks__benchmark_format_quality -->|1| benchmarks__format_evaluator
+    benchmarks__benchmark_format_quality -->|1| benchmarks__project_generator
+    code2llm__cli_exports -->|1| code2llm__core
+    demo_langs__valid -->|1| test_langs__invalid

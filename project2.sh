@@ -42,5 +42,5 @@ fi
 #$VENV/bin/redup scan . --functions-only -f toon --output ./project
 #$VENV/bin/vallm batch ./src --recursive --semantic --model qwen2.5-coder:7b
 #$VENV/bin/vallm batch --parallel .
-$VENV/bin/vallm batch . --recursive --format toon --output ./project
+$VENV/bin/vallm batch . --recursive --format toon --output ./project --exclude "CHANGELOG.md" --exclude "*.md"
 $VENV/bin/prefact -a -e "examples/**"

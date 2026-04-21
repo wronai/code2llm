@@ -1,0 +1,277 @@
+# code2llm | 210f 27941L | python:191,shell:3,java:1 | 2026-04-20
+# CC̄=3.9 | critical:1/1188 | dups:0 | cycles:0
+
+HEALTH[1]:
+  🟡 CC    load_input CC=15 (limit:15)
+
+REFACTOR[1]:
+  1. split 1 high-CC methods  (CC>15)
+
+PIPELINES[713]:
+  [1] Src [add_user]: add_user
+      PURITY: 100% pure
+  [2] Src [get_user]: get_user
+      PURITY: 100% pure
+  [3] Src [main]: main
+      PURITY: 100% pure
+  [4] Src [new]: new
+      PURITY: 100% pure
+  [5] Src [main]: main → NewUserService
+      PURITY: 100% pure
+
+LAYERS:
+  code2llm/                       CC̄=4.3    ←in:0  →out:8  !! split
+  │ !! renderer                   637L  1C    1m  CC=1      ←0
+  │ large_repo                 488L  2C   20m  CC=9      ←1
+  │ prompt                     475L  0C   18m  CC=14     ←2
+  │ renderer                   471L  1C   26m  CC=11     ←0
+  │ base                       464L  0C   14m  CC=14     ←8
+  │ analyzer                   442L  1C   20m  CC=11     ←0
+  │ file_analyzer              392L  1C   18m  CC=12     ←0
+  │ pipeline                   388L  3C   20m  CC=10     ←0
+  │ flow_exporter              385L  1C   14m  CC=10     ←0
+  │ data_analysis              375L  3C   28m  CC=14     ←0
+  │ pipeline_detector          362L  3C    9m  CC=13     ←0
+  │ yaml_exporter              354L  1C   25m  CC=8      ←0
+  │ content                    348L  0C    1m  CC=1      ←1
+  │ dashboard_renderer         342L  1C    4m  CC=6      ←0
+  │ cli_analysis               331L  0C   11m  CC=14     ←1
+  │ cli_parser                 327L  0C    2m  CC=2      ←1
+  │ entity_resolution          326L  3C   16m  CC=13     ←0
+  │ persistent_cache           322L  1C   18m  CC=10     ←1
+  │ cli_commands               317L  0C   13m  CC=12     ←1
+  │ formats                    315L  0C   16m  CC=13     ←3
+  │ !! llm_task                   309L  0C   14m  CC=15     ←0
+  │ metrics_core               305L  1C   16m  CC=12     ←0
+  │ intent_matching            297L  3C   15m  CC=7      ←0
+  │ side_effects               294L  2C   15m  CC=14     ←0
+  │ orchestrator               293L  0C   11m  CC=14     ←2
+  │ type_inference             290L  1C   17m  CC=9      ←0
+  │ cfg                        280L  1C   16m  CC=5      ←0
+  │ config                     269L  6C    2m  CC=3      ←0
+  │ toon_size_manager          265L  0C    8m  CC=10     ←1
+  │ png                        264L  0C    8m  CC=8      ←3
+  │ mermaid_flow_helpers       263L  0C   12m  CC=11     ←3
+  │ context_exporter           250L  1C   15m  CC=10     ←0
+  │ dfg                        219L  1C   12m  CC=7      ←0
+  │ scanner                    201L  1C    6m  CC=14     ←0
+  │ __init__                   199L  1C   11m  CC=9      ←0
+  │ call_graph                 198L  1C   12m  CC=9      ←0
+  │ refactoring                195L  1C   11m  CC=9      ←0
+  │ render                     195L  0C    6m  CC=10     ←1
+  │ models                     193L  11C    6m  CC=8      ←0
+  │ smells                     192L  1C    9m  CC=7      ←0
+  │ flow_renderer              188L  1C    6m  CC=14     ←2
+  │ streaming_analyzer         181L  1C    6m  CC=12     ←0
+  │ ts_extractors              180L  0C    5m  CC=7      ←2
+  │ repo_files                 174L  0C    8m  CC=8      ←1
+  │ base                       174L  2C    8m  CC=2      ←2
+  │ config                     174L  5C    2m  CC=1      ←0
+  │ analysis                   173L  1C    5m  CC=14     ←1
+  │ __init__                   171L  1C    5m  CC=1      ←0
+  │ detector                   168L  1C    8m  CC=9      ←0
+  │ computation                167L  0C    8m  CC=10     ←2
+  │ ruby                       164L  1C    4m  CC=14     ←1
+  │ dashboard_data             163L  1C    9m  CC=7      ←0
+  │ module_detail              162L  1C    9m  CC=7      ←1
+  │ article_view               159L  1C    8m  CC=7      ←0
+  │ ts_parser                  158L  1C    9m  CC=7      ←2
+  │ flow_compact               157L  0C    8m  CC=11     ←1
+  │ export_pipeline            153L  2C    5m  CC=4      ←0
+  │ toon_view                  153L  1C    8m  CC=6      ←0
+  │ modules                    151L  0C    7m  CC=11     ←1
+  │ incremental                150L  1C   10m  CC=4      ←0
+  │ prompt_engine              150L  1C    7m  CC=12     ←0
+  │ orchestrator_handlers      149L  0C    8m  CC=6      ←2
+  │ fix                        147L  0C    7m  CC=8      ←1
+  │ toon_parser                147L  0C   10m  CC=8      ←1
+  │ gitignore                  138L  2C    7m  CC=7      ←2
+  │ context_view               136L  1C    7m  CC=11     ←0
+  │ prioritizer                131L  2C    4m  CC=9      ←0
+  │ file_filter                127L  1C    9m  CC=9      ←0
+  │ code2logic                 127L  0C    8m  CC=6      ←2
+  │ normalization              122L  2C   13m  CC=6      ←0
+  │ core                       120L  1C    3m  CC=12     ←0
+  │ validation                 119L  0C    6m  CC=12     ←1
+  │ validate_project           118L  0C    3m  CC=11     ←1
+  │ generator                  118L  0C    2m  CC=10     ←1
+  │ scanner                    116L  1C    7m  CC=5      ←0
+  │ details                    115L  0C    5m  CC=13     ←0
+  │ helpers                    111L  0C    7m  CC=8      ←8
+  │ file_cache                 107L  1C   10m  CC=5      ←1
+  │ hotspots                   106L  0C    3m  CC=13     ←1
+  │ yaml_export                106L  0C    5m  CC=8      ←0
+  │ health                     103L  0C    3m  CC=13     ←2
+  │ yaml_export                103L  0C    1m  CC=11     ←0
+  │ nodes                      103L  0C    7m  CC=7      ←1
+  │ ast_registry               102L  1C    9m  CC=5      ←4
+  │ go_lang                    102L  0C    2m  CC=10     ←1
+  │ pipeline_classifier        100L  1C    5m  CC=8      ←0
+  │ utils                       99L  0C    8m  CC=6      ←7
+  │ metrics                     98L  1C    4m  CC=5      ←0
+  │ metrics_health              98L  1C    6m  CC=7      ←0
+  │ __init__                    98L  0C    0m  CC=0.0    ←0
+  │ rust                        94L  0C    1m  CC=9      ←1
+  │ classic                     93L  0C    4m  CC=8      ←0
+  │ pipeline_resolver           91L  1C    5m  CC=10     ←1
+  │ mermaid                     88L  0C    1m  CC=1      ←0
+  │ orchestrator_chunked        87L  0C    3m  CC=9      ←0
+  │ ast_helpers                 86L  0C    5m  CC=8      ←5
+  │ alerts                      84L  0C    4m  CC=8      ←2
+  │ utils                       84L  0C    5m  CC=12     ←3
+  │ __init__                    82L  0C    0m  CC=0.0    ←0
+  │ metrics_duplicates          78L  1C    4m  CC=8      ←0
+  │ __init__                    78L  0C    0m  CC=0.0    ←0
+  │ coupling                    77L  1C    5m  CC=7      ←0
+  │ report_generators           76L  0C    1m  CC=13     ←1
+  │ cli                         76L  0C    2m  CC=3      ←0
+  │ incremental                 75L  1C    5m  CC=5      ←0
+  │ evolution_exporter          74L  1C    3m  CC=1      ←8
+  │ mermaid_exporter            74L  1C    0m  CC=0.0    ←0
+  │ api                         73L  0C    2m  CC=2      ←0
+  │ __init__                    73L  1C    5m  CC=1      ←0
+  │ generic                     71L  0C    1m  CC=12     ←1
+  │ header                      71L  0C    4m  CC=8      ←0
+  │ flow_detailed               70L  0C    1m  CC=1      ←0
+  │ flow_full                   70L  0C    1m  CC=1      ←0
+  │ __init__                    70L  0C    0m  CC=0.0    ←0
+  │ cli                         69L  0C    1m  CC=7      ←0
+  │ utils                       69L  0C    4m  CC=8      ←4
+  │ html_dashboard              68L  1C    3m  CC=1      ←0
+  │ strategies                  68L  1C    0m  CC=0.0    ←0
+  │ sections                    67L  0C    3m  CC=7      ←1
+  │ compact                     67L  0C    1m  CC=13     ←0
+  │ php                         66L  0C    4m  CC=8      ←1
+  │ readme_exporter             66L  1C    1m  CC=5      ←0
+  │ __init__                    66L  0C    0m  CC=0.0    ←0
+  │ calls                       62L  0C    1m  CC=13     ←0
+  │ __init__                    60L  0C    0m  CC=0.0    ←0
+  │ __init__                    54L  0C    0m  CC=0.0    ←0
+  │ __init__                    53L  0C    1m  CC=6      ←0
+  │ typescript                  53L  0C    3m  CC=1      ←1
+  │ __init__                    52L  0C    1m  CC=3      ←0
+  │ insights                    52L  0C    1m  CC=13     ←1
+  │ orchestrator_constants      52L  0C    0m  CC=0.0    ←0
+  │ cache                       50L  1C    5m  CC=4      ←0
+  │ map_exporter                50L  1C    2m  CC=1      ←0
+  │ flow_constants              46L  0C    1m  CC=6      ←6
+  │ evolution                   46L  0C    2m  CC=6      ←3
+  │ java                        43L  0C    1m  CC=1      ←1
+  │ csharp                      42L  0C    1m  CC=1      ←1
+  │ __init__                    40L  0C    0m  CC=0.0    ←0
+  │ parsing                     39L  0C    2m  CC=5      ←2
+  │ __init__                    37L  0C    1m  CC=2      ←0
+  │ cpp                         35L  0C    1m  CC=1      ←1
+  │ json_exporter               27L  1C    1m  CC=3      ←0
+  │ files                       26L  0C    1m  CC=2      ←1
+  │ module_list                 26L  0C    1m  CC=4      ←1
+  │ constants                   25L  0C    0m  CC=0.0    ←0
+  │ __init__                    23L  0C    0m  CC=0.0    ←0
+  │ exclusion                   17L  0C    1m  CC=5      ←2
+  │ _utils                      15L  0C    1m  CC=1      ←2
+  │ project_yaml_exporter       15L  0C    0m  CC=0.0    ←0
+  │ __init__                    15L  0C    0m  CC=0.0    ←0
+  │ constants                   15L  0C    0m  CC=0.0    ←0
+  │ __init__                    15L  0C    0m  CC=0.0    ←0
+  │ llm_exporter                12L  0C    0m  CC=0.0    ←0
+  │ __init__                     7L  0C    0m  CC=0.0    ←0
+  │ __main__                     6L  0C    0m  CC=0.0    ←0
+  │ __init__                     5L  0C    0m  CC=0.0    ←0
+  │ __init__                     0L  0C    0m  CC=0.0    ←0
+  │ __init__                     0L  0C    0m  CC=0.0    ←0
+  │
+  scripts/                        CC̄=3.9    ←in:0  →out:0
+  │ benchmark_badges           392L  0C    9m  CC=13     ←0
+  │ bump_version                96L  0C    7m  CC=4      ←0
+  │
+  ./                              CC̄=3.1    ←in:0  →out:0
+  │ validate_toon              379L  0C   21m  CC=7      ←0
+  │ setup                       72L  0C    2m  CC=2      ←0
+  │ orchestrator.sh             58L  0C    0m  CC=0.0    ←0
+  │ project.sh                  49L  0C    0m  CC=0.0    ←0
+  │ project2.sh                 35L  0C    0m  CC=0.0    ←0
+  │
+  benchmarks/                     CC̄=3.0    ←in:0  →out:1
+  │ benchmark_performance      306L  0C    7m  CC=6      ←0
+  │ project_generator          233L  0C    6m  CC=1      ←1
+  │ reporting                  179L  0C    9m  CC=6      ←1
+  │ benchmark_optimizations    157L  0C    5m  CC=7      ←0
+  │ benchmark_format_quality   143L  0C    5m  CC=4      ←0
+  │ format_evaluator           138L  1C    5m  CC=5      ←1
+  │ benchmark_evolution        137L  0C    4m  CC=13     ←0
+  │ benchmark_constants         29L  0C    0m  CC=0.0    ←0
+  │
+  badges/                         CC̄=2.7    ←in:0  →out:0
+  │ server                     110L  0C    3m  CC=4      ←0
+  │
+  examples/                       CC̄=2.4    ←in:0  →out:0
+  │ demo                       251L  0C    7m  CC=5      ←0
+  │ main                       158L  2C    9m  CC=6      ←0
+  │ database                   157L  1C   13m  CC=5      ←0
+  │ entity_preparers           129L  6C   18m  CC=5      ←0
+  │ cache                      121L  2C   10m  CC=5      ←0
+  │ run                        120L  0C    3m  CC=4      ←0
+  │ template_engine            104L  3C   10m  CC=3      ←0
+  │ auth                        88L  1C   10m  CC=3      ←0
+  │ utils                       84L  0C    5m  CC=7      ←1
+  │ api                         76L  1C    7m  CC=5      ←0
+  │ generator                   61L  1C    2m  CC=4      ←0
+  │ functional_refactoring_example    61L  1C    9m  CC=4      ←0
+  │ cli                         45L  0C    1m  CC=6      ←0
+  │ models                      25L  2C    0m  CC=0.0    ←0
+  │ __init__                     6L  0C    0m  CC=0.0    ←0
+  │ __init__                     1L  0C    0m  CC=0.0    ←0
+  │
+  test_python_only/               CC̄=1.8    ←in:0  →out:0
+  │ sample                      40L  2C    5m  CC=3      ←0
+  │ __init__                     1L  0C    0m  CC=0.0    ←0
+  │ __init__                     1L  0C    0m  CC=0.0    ←0
+  │
+  demo_langs/                     CC̄=1.5    ←in:0  →out:0
+  │ sample                      53L  2C    8m  CC=3      ←0
+  │ sample.rs                   47L  1C    4m  CC=2      ←0
+  │ sample.java                 47L  2C    7m  CC=3      ←0
+  │ sample.go                   46L  0C    4m  CC=3      ←0
+  │ sample.php                  44L  1C    1m  CC=1      ←0
+  │ sample.ts                   26L  1C    4m  CC=2      ←0
+  │
+  test_langs/                     CC̄=1.4    ←in:0  →out:0
+  │ sample.rs                   47L  1C    4m  CC=2      ←0
+  │ sample.java                 47L  2C    7m  CC=3      ←1
+  │ sample.go                   46L  0C    4m  CC=3      ←0
+  │ sample.php                  44L  1C    1m  CC=1      ←0
+  │ sample                      40L  2C    5m  CC=3      ←0
+  │ sample.ts                   26L  1C    1m  CC=1      ←0
+  │ sample_bad.go               24L  0C    3m  CC=1      ←0
+  │ sample_bad.php              22L  1C    1m  CC=1      ←0
+  │ sample_bad.ts               20L  1C    2m  CC=1      ←0
+  │ sample_bad.rs               18L  1C    1m  CC=1      ←0
+  │ sample_bad.java             18L  2C    2m  CC=1      ←3
+  │
+  ── zero ──
+     code2llm/patterns/__init__.py             0L
+     code2llm/refactor/__init__.py             0L
+
+COUPLING:
+                            code2llm.cli_exports      code2llm.exporters           code2llm.core                code2llm       code2llm.analysis     code2llm.generators        code2llm.parsers      test_langs.invalid           validate_toon              benchmarks        demo_langs.valid  test_python_only.valid
+    code2llm.cli_exports                      ──                       8                       1                      ←4                                               2                                                                                                                                                  !! fan-out
+      code2llm.exporters                      ←8                      ──                                                                       2                                                                                                                                                                          hub
+           code2llm.core                      ←1                                              ──                      ←4                      ←3                                                                                                                      ←1                                                  hub
+                code2llm                       4                                               4                      ──                                                                                                                                                                                                  !! fan-out
+       code2llm.analysis                                              ←2                       3                                              ──                                                                                                                                                                        
+     code2llm.generators                      ←2                                                                                                                      ──                                                                                                                                                
+        code2llm.parsers                                                                                                                                                                      ──                                              ←2                                                                        
+      test_langs.invalid                                                                                                                                                                                              ──                                                                      ←1                      ←1
+           validate_toon                                                                                                                                                                       2                                              ──                                                                        
+              benchmarks                                                                       1                                                                                                                                                                      ──                                                
+        demo_langs.valid                                                                                                                                                                                               1                                                                      ──                        
+  test_python_only.valid                                                                                                                                                                                               1                                                                                              ──
+  CYCLES: none
+  HUB: code2llm.exporters/ (fan-in=8)
+  HUB: code2llm.core/ (fan-in=9)
+  SMELL: code2llm.cli_exports/ fan-out=11 → split needed
+  SMELL: code2llm/ fan-out=8 → split needed
+
+EXTERNAL:
+  validation: run `vallm batch .` → validation.toon
+  duplication: run `redup scan .` → duplication.toon

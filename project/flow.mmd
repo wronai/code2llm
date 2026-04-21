@@ -1,0 +1,63 @@
+flowchart TD
+
+    %% Entry points (blue)
+    classDef entry fill:#4dabf7,stroke:#1971c2,color:#fff
+
+    subgraph CLI
+        code2llm__cli__main["main"]
+        code2llm__cli_analysis___run_analysis["_run_analysis"]
+        code2llm__cli_analysis___run_standard_analysis["_run_standard_analysis"]
+        code2llm__cli_analysis___build_config["_build_config"]
+        code2llm__cli_analysis___print_analysis_summary["_print_analysis_summary"]
+        code2llm__cli_analysis___run_chunked_analysis["_run_chunked_analysis"]
+        code2llm__cli_analysis___print_chunked_plan["_print_chunked_plan"]
+        code2llm__cli_analysis___filter_subprojects["_filter_subprojects"]
+        code2llm__cli_analysis___analyze_all_subprojects["_analyze_all_subprojects"]
+        code2llm__cli_analysis___analyze_subproject["_analyze_subproject"]
+        code2llm__cli_analysis___merge_chunked_results["_merge_chunked_results"]
+        code2llm__cli_analysis___run_streaming_analysis["_run_streaming_analysis"]
+        code2llm__cli_parser__get_version["get_version"]
+        code2llm__cli_commands__handle_special_commands["handle_special_commands"]
+        code2llm__cli_commands__handle_cache_command["handle_cache_command"]
+        ...["+75 more"]
+    end
+
+    subgraph Core
+        test_langs__valid__sample__new["new"]
+        test_langs__valid__sample__add_user["add_user"]
+        test_langs__valid__sample__get_user["get_user"]
+        test_langs__valid__sample__process_users["process_users"]
+        test_langs__valid__sample__main["main"]
+        test_langs__invalid__sample_bad__new["new"]
+        test_langs__invalid__sample_bad__main["main"]
+        test_langs__valid__sample__User____construct["__construct"]
+        test_langs__valid__sample__UserService__processUsers["processUsers"]
+        test_langs__invalid__sample_bad__User____construct["__construct"]
+        test_langs__invalid__sample_bad__UserService__getUser["getUser"]
+        test_langs__invalid__sample_bad__UserService__service["service"]
+        test_langs__valid__sample__UserService__service["service"]
+        test_langs__valid__sample__NewUserService["NewUserService"]
+        test_langs__valid__sample__AddUser["AddUser"]
+        ...["+378 more"]
+    end
+
+    subgraph Exporters
+        code2llm__core__export_pipeline__SharedExportContext___compute_metrics_summary["_compute_metrics_summary"]
+        code2llm__core__export_pipeline__SharedExportContext___compute_cc_distribution["_compute_cc_distribution"]
+        code2llm__core__export_pipeline__ExportPipeline__run["run"]
+        code2llm__core__persistent_cache__PersistentCache__get_export_cache_dir["get_export_cache_dir"]
+        code2llm__core__persistent_cache__PersistentCache__create_export_cache_dir["create_export_cache_dir"]
+        code2llm__core__persistent_cache__PersistentCache__mark_export_complete["mark_export_complete"]
+        code2llm__exporters__readme_exporter__READMEExporter__export["export"]
+        code2llm__exporters__map_exporter__MapExporter__export["export"]
+        code2llm__exporters__base__BaseExporter__export["export"]
+        code2llm__exporters__base__BaseExporter__generate["generate"]
+        code2llm__exporters__base__BaseExporter___ensure_dir["_ensure_dir"]
+        code2llm__exporters__base__BaseExporter___write_text["_write_text"]
+        code2llm__exporters__base__ViewGeneratorMixin__generate["generate"]
+        code2llm__exporters__base__export_format["export_format"]
+        code2llm__exporters__base__list_exporters["list_exporters"]
+        ...["+194 more"]
+    end
+
+    class test_langs__valid__sample__new,test_langs__valid__sample__add_user,test_langs__valid__sample__get_user,test_langs__valid__sample__process_users,test_langs__valid__sample__main,test_langs__invalid__sample_bad__new,test_langs__invalid__sample_bad__main,test_langs__valid__sample__User____construct,test_langs__valid__sample__UserService__processUsers,test_langs__invalid__sample_bad__User____construct entry

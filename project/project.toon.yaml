@@ -1,0 +1,51 @@
+# code2llm | 1188 func | 178f | 33177L | python | 2026-04-20
+
+HEALTH:
+  CC̄=3.9  critical=69 (limit:10)  dup=4  cycles=0
+
+ALERTS[20]:
+  !!! high_fan_out     analyze_rust = 24 (limit:10)
+  !!! high_fan_out     _summarize_functions = 21 (limit:10)
+  !!! high_fan_out     _analyze_go_regex = 20 (limit:10)
+  !!  high_fan_out     run_benchmark = 18 (limit:10)
+  !!  high_fan_out     ProjectYAMLExporter._build_project_yaml = 18 (limit:10)
+  !!  high_fan_out     export_calls = 18 (limit:10)
+  !!  high_fan_out     _run_exports = 18 (limit:10)
+  !!  high_fan_out     handle_cache_command = 17 (limit:10)
+  !!  high_fan_out     NLPPipeline.process = 17 (limit:10)
+  !!  high_fan_out     run_benchmark = 16 (limit:10)
+
+MODULES[210] (top by size):
+  M[code2llm/exporters/index_generator/renderer.py] 637L C:1 F:1 CC↑1 D:0 (python)
+  M[code2llm/core/large_repo.py] 488L C:2 F:20 CC↑9 D:1 (python)
+  M[code2llm/cli_exports/prompt.py] 475L C:0 F:18 CC↑14 D:2 (python)
+  M[code2llm/exporters/toon/renderer.py] 471L C:1 F:26 CC↑11 D:0 (python)
+  M[code2llm/core/lang/base.py] 464L C:0 F:14 CC↑14 D:8 (python)
+  M[code2llm/core/analyzer.py] 442L C:1 F:20 CC↑11 D:0 (python)
+  M[scripts/benchmark_badges.py] 392L C:0 F:9 CC↑13 D:0 (python)
+  M[code2llm/core/file_analyzer.py] 392L C:1 F:18 CC↑12 D:0 (python)
+  M[code2llm/nlp/pipeline.py] 388L C:3 F:20 CC↑10 D:0 (python)
+  M[code2llm/exporters/flow_exporter.py] 385L C:1 F:14 CC↑10 D:0 (python)
+  M[validate_toon.py] 379L C:0 F:21 CC↑7 D:0 (python)
+  M[code2llm/analysis/data_analysis.py] 375L C:3 F:28 CC↑14 D:0 (python)
+  M[code2llm/analysis/pipeline_detector.py] 362L C:3 F:9 CC↑13 D:0 (python)
+  M[code2llm/exporters/yaml_exporter.py] 354L C:1 F:25 CC↑8 D:0 (python)
+  M[code2llm/exporters/readme/content.py] 348L C:0 F:1 CC↑1 D:1 (python)
+  LANGS: python:192/go:3/java:3/rust:3/typescript:3/php:3/shell:3
+
+HOTSPOTS[10]:
+  ★ analyze_rust fan=24  // Analysis pipeline, 24 stages
+  ★ _summarize_functions fan=21  // Summarize functions with their decisions, calls, and location info.
+  ★ _analyze_go_regex fan=20  // Analysis pipeline, 20 stages
+  ★ run_benchmark fan=18  // Run the full format quality benchmark.
+  ★ ProjectYAMLExporter._build_project_yaml fan=18  // Build complete project.yaml structure.
+
+REFACTOR[5]:
+  [1] H/H Split god module code2llm/exporters/index_generator/renderer.py (637L, 1 classes)
+  [2] M/L Split load_input (CC=15)
+  [3] M/M Reduce analyze_rust fan-out (currently 24)
+  [4] M/M Reduce _summarize_functions fan-out (currently 21)
+  [5] M/M Reduce _analyze_go_regex fan-out (currently 20)
+
+EVOLUTION:
+  2026-04-20 CC̄=3.9 crit=69 33177L // Automated analysis
