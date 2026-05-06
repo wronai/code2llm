@@ -1,4 +1,4 @@
-# code2llm | 2295 func | 185f | 154046L | python | 2026-05-06
+# code2llm | 2295 func | 185f | 178147L | python | 2026-05-06
 # generated in 0.00s
 
 HEALTH:
@@ -12,27 +12,27 @@ ALERTS[20]:
   !!  high_fan_out     run_benchmark = 18 (limit:10)
   !!  high_fan_out     ProjectYAMLExporter._build_project_yaml = 18 (limit:10)
   !!  high_fan_out     export_calls = 18 (limit:10)
-  !!  high_fan_out     _export_simple_formats = 18 (limit:10)
   !!  high_fan_out     _run_exports = 18 (limit:10)
+  !!  high_fan_out     _export_simple_formats = 18 (limit:10)
   !!  high_fan_out     handle_cache_command = 17 (limit:10)
 
-MODULES[267] (top by size):
-  M[project/map.toon.yaml] 73523L C:0 F:543 CC↑0 D:0 (yaml)
+MODULES[266] (top by size):
+  M[project/map.toon.yaml] 97576L C:0 F:543 CC↑0 D:0 (yaml)
   M[map.toon.yaml] 25199L C:0 F:542 CC↑0 D:71 (yaml)
-  M[project/calls.yaml] 7168L C:0 F:0 CC↑0 D:0 (yaml)
+  M[project/calls.yaml] 7159L C:0 F:0 CC↑0 D:0 (yaml)
   M[calls.yaml] 4778L C:0 F:0 CC↑0 D:0 (yaml)
   M[calls_output/calls.yaml] 3801L C:0 F:0 CC↑0 D:0 (yaml)
   M[planfile.yaml] 2077L C:0 F:0 CC↑0 D:0 (yaml)
   M[project/validation.toon.yaml] 821L C:0 F:0 CC↑0 D:0 (yaml)
   M[code2llm/exporters/index_generator/renderer.py] 637L C:1 F:1 CC↑1 D:0 (python)
   M[code2llm/.code2llm_incremental.json] 611L C:0 F:0 CC↑0 D:0 (json)
-  M[project/calls.toon.yaml] 531L C:0 F:0 CC↑0 D:0 (yaml)
-  M[code2llm/core/analyzer.py] 495L C:1 F:22 CC↑11 D:0 (python)
+  M[project/calls.toon.yaml] 540L C:0 F:0 CC↑0 D:0 (yaml)
+  M[code2llm/core/analyzer.py] 494L C:1 F:22 CC↑11 D:0 (python)
   M[code2llm/core/large_repo.py] 488L C:2 F:20 CC↑9 D:0 (python)
-  M[code2llm/cli_exports/prompt.py] 480L C:0 F:18 CC↑14 D:0 (python)
+  M[code2llm/cli_exports/prompt.py] 479L C:0 F:18 CC↑14 D:0 (python)
   M[code2llm/exporters/toon/renderer.py] 471L C:1 F:26 CC↑11 D:0 (python)
   M[code2llm/core/lang/base.py] 464L C:0 F:14 CC↑14 D:0 (python)
-  LANGS: python:193/yaml:38/txt:7/java:4/shell:4/go:3/php:3/rust:3/yml:3/typescript:2/toml:2/javascript:1/other:1/json:1/conf:1/ruby:1
+  LANGS: python:193/yaml:37/txt:7/java:4/shell:4/go:3/php:3/rust:3/yml:3/typescript:2/toml:2/javascript:1/other:1/json:1/conf:1/ruby:1
 
 HOTSPOTS[10]:
   ★ analyze_rust fan=24  // Analysis pipeline, 24 stages
@@ -49,4 +49,4 @@ REFACTOR[14]:
   [5] H/H Split god module map.toon.yaml (25199L, 0 classes)
 
 EVOLUTION:
-  2026-05-06 CC̄=2.1 crit=74 154046L // Automated analysis
+  2026-05-06 CC̄=2.1 crit=74 178147L // Automated analysis

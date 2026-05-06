@@ -1,25 +1,25 @@
 flowchart TD
-# generated in 0.03s
+# generated in 0.02s
 
     %% Entry points (blue)
     classDef entry fill:#4dabf7,stroke:#1971c2,color:#fff
 
     subgraph CLI
         code2llm__cli__main["main"]
-        code2llm__cli_analysis___run_analysis["_run_analysis"]
-        code2llm__cli_analysis___run_standard_analysis["_run_standard_analysis"]
-        code2llm__cli_analysis___build_config["_build_config"]
-        code2llm__cli_analysis___print_analysis_summary["_print_analysis_summary"]
-        code2llm__cli_analysis___run_chunked_analysis["_run_chunked_analysis"]
-        code2llm__cli_analysis___print_chunked_plan["_print_chunked_plan"]
-        code2llm__cli_analysis___filter_subprojects["_filter_subprojects"]
-        code2llm__cli_analysis___analyze_all_subprojects["_analyze_all_subprojects"]
-        code2llm__cli_analysis___analyze_subproject["_analyze_subproject"]
-        code2llm__cli_analysis___merge_chunked_results["_merge_chunked_results"]
-        code2llm__cli_analysis___run_streaming_analysis["_run_streaming_analysis"]
         code2llm__cli_parser__get_version["get_version"]
         code2llm__cli_parser__create_parser["create_parser"]
         code2llm__cli_commands__handle_special_commands["handle_special_commands"]
+        code2llm__cli_commands__handle_cache_command["handle_cache_command"]
+        code2llm__cli_commands__handle_report_command["handle_report_command"]
+        code2llm__cli_commands__validate_and_setup["validate_and_setup"]
+        code2llm__cli_commands__print_start_info["print_start_info"]
+        code2llm__cli_commands__validate_chunked_output["validate_chunked_output"]
+        code2llm__cli_commands___get_chunk_dirs["_get_chunk_dirs"]
+        code2llm__cli_commands___validate_chunks["_validate_chunks"]
+        code2llm__cli_commands___validate_single_chunk["_validate_single_chunk"]
+        code2llm__cli_commands___get_file_sizes["_get_file_sizes"]
+        code2llm__cli_commands___print_chunk_errors["_print_chunk_errors"]
+        code2llm__cli_commands___print_validation_summary["_print_validation_summary"]
         ...["+78 more"]
     end
 
