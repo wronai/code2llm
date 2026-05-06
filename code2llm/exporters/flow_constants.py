@@ -3,6 +3,8 @@
 Zawiera progi, wzorce wykluczeń i rekomendacje dotyczące podziału typów hub.
 """
 
+from functools import lru_cache
+
 # Progi dla wykrywania problemów
 CC_HIGH = 15
 FAN_OUT_THRESHOLD = 10
@@ -19,17 +21,13 @@ EXCLUDE_PATTERNS = {
     'virtualenv', '.virtualenv', 'envs', '.envs',
 }
 
+@lru_cache(maxsize=4096)
 def is_excluded_path(path: str) -> bool:
     """Return True if *path* matches any standard exclusion pattern (venv, cache, etc.)."""
     if not path:
         return False
-    path_lower = path.lower().replace('\\', '/')
-    for pattern in EXCLUDE_PATTERNS:
-        if f'/{pattern}/' in path_lower or path_lower.startswith(f'{pattern}/'):
-            return True
-        if pattern in path_lower.split('/'):
-            return True
-    return False
+    parts = set(path.lower().replace('\\', '/').split('/'))
+    return bool(parts & EXCLUDE_PATTERNS)
 
 
 # Rekomendacje podziału typów hub: typ -> sugerowane pod-interfejsy

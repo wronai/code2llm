@@ -19,7 +19,7 @@ flowchart TD
         code2llm__cli_parser__get_version["get_version"]
         code2llm__cli_parser__create_parser["create_parser"]
         code2llm__cli_commands__handle_special_commands["handle_special_commands"]
-        ...["+77 more"]
+        ...["+78 more"]
     end
 
     subgraph Core
@@ -38,7 +38,7 @@ flowchart TD
         map__toon___print_analysis_summary["_print_analysis_summary"]
         map__toon___run_chunked_analysis["_run_chunked_analysis"]
         map__toon___print_chunked_plan["_print_chunked_plan"]
-        ...["+1201 more"]
+        ...["+1295 more"]
     end
 
     subgraph Exporters
@@ -57,7 +57,7 @@ flowchart TD
         map__toon__build_class_export["build_class_export"]
         map__toon__build_function_exports["build_function_exports"]
         map__toon__export_to_yaml["export_to_yaml"]
-        ...["+312 more"]
+        ...["+327 more"]
     end
 
     class setup__read_version,setup__read_readme,validate_toon__main,pipeline___detect_primary_language,pipeline__run_pipeline,map__toon___run_standard_analysis,map__toon___build_config,map__toon___print_analysis_summary,map__toon___run_chunked_analysis,map__toon___print_chunked_plan entry

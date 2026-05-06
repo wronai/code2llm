@@ -1,0 +1,12 @@
+# SCENARIO: Auto-generated from Python Tests
+# TYPE: integration
+# GENERATED: true
+
+CONFIG[2]{key, value}:
+  base_url, ${api_url:-http://localhost:8101}
+  timeout_ms, 10000
+
+# Converted 2 assertions from pytest
+ASSERT[2]{field, operator, expected}:
+  nlp_result.get_intent(), ==, "find_function"
+  nlp_result.get_intent(), ==, "find_function"

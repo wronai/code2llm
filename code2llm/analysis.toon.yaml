@@ -1,28 +1,29 @@
-# code2llm | 162f 24614L | python:155,yaml:2,md:2,json:1 | 2026-05-06
-# CC̄=4.3 | critical:0/947 | dups:0 | cycles:0
+# code2llm | 162f 24564L | python:157,md:2,yaml:1,json:1 | 2026-05-06
+# generated in 0.18s
+# CC̄=4.3 | critical:0/946 | dups:0 | cycles:0
 
 HEALTH[0]: ok
 
 REFACTOR[0]: none needed
 
-PIPELINES[586]:
-  [1] Src [main]: main → handle_special_commands → generate_llm_context
+PIPELINES[582]:
+  [1] Src [__getattr__]: __getattr__
       PURITY: 100% pure
-  [2] Src [__getattr__]: __getattr__
+  [2] Src [__init__]: __init__
       PURITY: 100% pure
-  [3] Src [analyze_file]: analyze_file → analyze
+  [3] Src [classify_domain]: classify_domain
       PURITY: 100% pure
-  [4] Src [analyze_data_flow]: analyze_data_flow
+  [4] Src [derive_pipeline_name]: derive_pipeline_name
       PURITY: 100% pure
-  [5] Src [analyze_data_structures]: analyze_data_structures
+  [5] Src [get_entry_type]: get_entry_type
       PURITY: 100% pure
 
 LAYERS:
-  cli_exports/                    CC̄=5.1    ←in:4  →out:11  !! split
-  │ prompt                     475L  0C   18m  CC=14     ←2
-  │ formats                    315L  0C   16m  CC=13     ←4
-  │ orchestrator               311L  0C   12m  CC=14     ←2
-  │ orchestrator_handlers      149L  0C    8m  CC=6      ←0
+  cli_exports/                    CC̄=5.2    ←in:4  →out:11  !! split
+  │ prompt                     480L  0C   18m  CC=14     ←2
+  │ orchestrator               362L  0C   13m  CC=14     ←4
+  │ formats                    335L  0C   16m  CC=13     ←4
+  │ orchestrator_handlers      174L  0C    8m  CC=6      ←0
   │ code2logic                 127L  0C    8m  CC=6      ←2
   │ orchestrator_chunked        87L  0C    3m  CC=9      ←0
   │ __init__                    54L  0C    0m  CC=0.0    ←0
@@ -34,8 +35,8 @@ LAYERS:
   │
   ./                              CC̄=4.8    ←in:0  →out:0
   │ !! .code2llm_incremental.json   611L  0C    0m  CC=0.0    ←0
-  │ cli_analysis               345L  0C   11m  CC=14     ←1
-  │ cli_parser                 333L  0C    2m  CC=2      ←0
+  │ cli_analysis               345L  0C   11m  CC=14     ←0
+  │ cli_parser                 333L  0C    2m  CC=2      ←1
   │ cli_commands               317L  0C   13m  CC=12     ←1
   │ analysis.toon.yaml         246L  0C    0m  CC=0.0    ←0
   │ api                         73L  0C    2m  CC=2      ←0
@@ -43,8 +44,8 @@ LAYERS:
   │ __init__                    52L  0C    1m  CC=3      ←0
   │ __main__                     6L  0C    0m  CC=0.0    ←0
   │
-  generators/                     CC̄=4.8    ←in:2  →out:1
-  │ llm_task                   319L  0C   16m  CC=14     ←1
+  generators/                     CC̄=4.8    ←in:1  →out:1
+  │ llm_task                   319L  0C   16m  CC=14     ←0
   │ png                        264L  0C    8m  CC=8      ←3
   │ analysis                   173L  1C    5m  CC=14     ←1
   │ fix                        147L  0C    7m  CC=8      ←1
@@ -52,25 +53,26 @@ LAYERS:
   │ generator                  118L  0C    2m  CC=10     ←1
   │ nodes                      103L  0C    7m  CC=7      ←1
   │ __init__                    98L  0C    0m  CC=0.0    ←0
-  │ mermaid                     88L  0C    1m  CC=1      ←0
   │ utils                       84L  0C    5m  CC=12     ←3
   │ cli                         76L  0C    2m  CC=3      ←0
   │ __init__                    70L  0C    0m  CC=0.0    ←0
   │ parsing                     39L  0C    2m  CC=5      ←2
   │ _utils                      15L  0C    1m  CC=1      ←2
   │ __init__                    15L  0C    0m  CC=0.0    ←0
+  │ mermaid                      0L  0C    1m  CC=1      ←0
   │
   patterns/                       CC̄=4.6    ←in:0  →out:0
   │ detector                   168L  1C    8m  CC=9      ←0
+  │ __init__                     0L  0C    0m  CC=0.0    ←0
   │
-  exporters/                      CC̄=4.4    ←in:54  →out:32  !! split
+  exporters/                      CC̄=4.5    ←in:54  →out:32  !! split
   │ !! renderer                   637L  1C    1m  CC=1      ←0
   │ renderer                   471L  1C   26m  CC=11     ←0
   │ flow_exporter              385L  1C   14m  CC=10     ←0
   │ yaml_exporter              354L  1C   25m  CC=8      ←0
   │ content                    348L  0C    1m  CC=1      ←1
   │ dashboard_renderer         342L  1C    4m  CC=6      ←0
-  │ metrics_core               305L  1C   16m  CC=12     ←0
+  │ metrics_core               297L  1C   13m  CC=12     ←0
   │ mermaid_flow_helpers       263L  0C   12m  CC=11     ←3
   │ context_exporter           250L  1C   15m  CC=10     ←0
   │ __init__                   199L  1C   11m  CC=9      ←0
@@ -84,12 +86,12 @@ LAYERS:
   │ flow_compact               157L  0C    8m  CC=11     ←1
   │ toon_view                  153L  1C    8m  CC=6      ←0
   │ modules                    151L  0C    7m  CC=11     ←1
+  │ helpers                    142L  0C    8m  CC=14     ←8
   │ context_view               136L  1C    7m  CC=11     ←0
   │ core                       120L  1C    3m  CC=12     ←0
   │ validate_project           118L  0C    3m  CC=11     ←1
   │ scanner                    116L  1C    7m  CC=5      ←0
   │ details                    115L  0C    5m  CC=13     ←0
-  │ helpers                    111L  0C    7m  CC=8      ←8
   │ hotspots                   106L  0C    3m  CC=13     ←2
   │ yaml_export                106L  0C    5m  CC=8      ←0
   │ health                     103L  0C    3m  CC=13     ←2
@@ -132,7 +134,7 @@ LAYERS:
   │ constants                   15L  0C    0m  CC=0.0    ←0
   │ llm_exporter                12L  0C    0m  CC=0.0    ←0
   │
-  analysis/                       CC̄=4.2    ←in:2  →out:9  !! split
+  analysis/                       CC̄=4.2    ←in:2  →out:7
   │ data_analysis              375L  3C   28m  CC=14     ←0
   │ pipeline_detector          362L  3C    9m  CC=13     ←0
   │ side_effects               294L  2C   15m  CC=14     ←0
@@ -148,8 +150,8 @@ LAYERS:
   │ __init__                    37L  0C    1m  CC=2      ←0
   │ __init__                     5L  0C    0m  CC=0.0    ←0
   │
-  core/                           CC̄=4.1    ←in:9  →out:0
-  │ analyzer                   495L  1C   22m  CC=11     ←0
+  core/                           CC̄=4.1    ←in:7  →out:9  !! split
+  │ analyzer                   495L  1C   22m  CC=11     ←1
   │ large_repo                 488L  2C   20m  CC=9      ←1
   │ base                       464L  0C   14m  CC=14     ←8
   │ persistent_cache           453L  1C   22m  CC=10     ←1
@@ -171,7 +173,7 @@ LAYERS:
   │ prioritizer                131L  2C    4m  CC=9      ←0
   │ file_filter                127L  1C    9m  CC=9      ←0
   │ file_cache                 107L  1C   10m  CC=5      ←1
-  │ ast_registry               102L  1C    9m  CC=5      ←3
+  │ ast_registry               102L  1C    9m  CC=5      ←0
   │ go_lang                    102L  0C    2m  CC=10     ←1
   │ rust                        94L  0C    1m  CC=9      ←1
   │ incremental                 75L  1C    5m  CC=5      ←0
@@ -195,7 +197,6 @@ LAYERS:
   │ intent_matching            297L  3C   15m  CC=7      ←0
   │ config                     174L  5C    2m  CC=1      ←0
   │ normalization              122L  2C   13m  CC=6      ←0
-  │ config.yaml                 86L  0C    0m  CC=0.0    ←0
   │ __init__                    23L  0C    0m  CC=0.0    ←0
   │
   templates/                      CC̄=0.0    ←in:0  →out:0
@@ -203,43 +204,44 @@ LAYERS:
   │ move_method.md              19L  0C    0m  CC=0.0    ←0
   │
   ── zero ──
+     generators/mermaid.py                     0L
+     patterns/__init__.py                      0L
      refactor/__init__.py                      0L
 
 COUPLING:
-                                       exporters       exporters.mermaid  exporters.project_yaml             cli_exports          exporters.toon           exporters.map                analysis            cli_commands           code2llm.core                    core               core.lang          analysis.utils                     cli     exporters.evolution        exporters.readme
-               exporters                      ──                      15                     ←14                      ←6                       1                       1                       2                                                                                                                                                                       7                       6  hub
+                                       exporters       exporters.mermaid  exporters.project_yaml                    core             cli_exports          exporters.toon           exporters.map                analysis            cli_commands               core.lang                     cli          analysis.utils     exporters.evolution        exporters.readme            cli_analysis
+               exporters                      ──                      15                     ←14                                              ←6                       1                       1                       2                                                                                                                       7                       6                          hub
        exporters.mermaid                      15                      ──                                                                                                                                                                                                                                                                                                                          hub
-  exporters.project_yaml                      14                                              ──                      ←2                       3                      ←2                                                                                                                                                                                                                          !! fan-out
-             cli_exports                       6                                               2                      ──                                                                                              ←1                                               1                                                                      ←1                                                  !! fan-out
-          exporters.toon                      10                                              ←3                                              ──                                                                                                                                                                                                                                                  !! fan-out
-           exporters.map                       9                                               2                                                                      ──                                                                                                                                                                                                                          !! fan-out
-                analysis                      ←2                                                                                                                                              ──                                                                       2                                               7                                                                          !! fan-out
-            cli_commands                                                                                               1                                                                                              ──                                               3                                                                      ←5                                                  hub
-           code2llm.core                                                                                                                                                                                                                      ──                                               9                                                                                                  !! fan-out
-                    core                                                                                              ←1                                                                      ←2                      ←3                                              ──                                              ←1                                                                          hub
-               core.lang                                                                                                                                                                                                                      ←9                                              ──                                                                                                  hub
-          analysis.utils                                                                                                                                                                      ←7                                                                       1                                              ──                                                                          hub
-                     cli                                                                                               1                                                                                               5                                                                                                                      ──                                                  !! fan-out
-     exporters.evolution                      ←7                                                                                                                                                                                                                                                                                                                      ──                          hub
-        exporters.readme                      ←6                                                                                                                                                                                                                                                                                                                                              ──  hub
+  exporters.project_yaml                      14                                              ──                                              ←2                       3                      ←2                                                                                                                                                                                                  !! fan-out
+                    core                                                                                              ──                      ←1                                                                                              ←3                       9                      ←1                                                                                              ←1  hub
+             cli_exports                       6                                               2                       1                      ──                                                                                              ←1                                              ←1                                                                                              ←2  !! fan-out
+          exporters.toon                      10                                              ←3                                                                      ──                                                                                                                                                                                                                          !! fan-out
+           exporters.map                       9                                               2                                                                                              ──                                                                                                                                                                                                  !! fan-out
+                analysis                      ←2                                                                                                                                                                      ──                                                                                               7                                                                        
+            cli_commands                                                                                               3                       1                                                                                              ──                                              ←5                                                                                                  hub
+               core.lang                                                                                              ←9                                                                                                                                              ──                                                                                                                          hub
+                     cli                                                                                               1                       1                                                                                               5                                              ──                                                                                                  !! fan-out
+          analysis.utils                                                                                                                                                                                              ←7                                                                                              ──                                                                          hub
+     exporters.evolution                      ←7                                                                                                                                                                                                                                                                                              ──                                                  hub
+        exporters.readme                      ←6                                                                                                                                                                                                                                                                                                                      ──                          hub
+            cli_analysis                                                                                               1                       2                                                                                                                                                                                                                                              ──
   CYCLES: none
-  HUB: analysis.utils/ (fan-in=7)
-  HUB: exporters.evolution/ (fan-in=7)
-  HUB: exporters.readme/ (fan-in=6)
-  HUB: core/ (fan-in=9)
-  HUB: core.lang/ (fan-in=9)
   HUB: exporters.mermaid/ (fan-in=15)
+  HUB: core.lang/ (fan-in=9)
+  HUB: core/ (fan-in=7)
+  HUB: analysis.utils/ (fan-in=7)
   HUB: cli_commands/ (fan-in=5)
   HUB: exporters/ (fan-in=54)
-  SMELL: cli_exports/ fan-out=11 → split needed
-  SMELL: code2llm.core/ fan-out=9 → split needed
-  SMELL: exporters.toon/ fan-out=10 → split needed
+  HUB: exporters.readme/ (fan-in=6)
+  HUB: exporters.evolution/ (fan-in=7)
   SMELL: exporters.mermaid/ fan-out=15 → split needed
-  SMELL: exporters.project_yaml/ fan-out=17 → split needed
-  SMELL: exporters/ fan-out=32 → split needed
-  SMELL: analysis/ fan-out=9 → split needed
+  SMELL: core/ fan-out=9 → split needed
+  SMELL: exporters.toon/ fan-out=10 → split needed
   SMELL: cli/ fan-out=8 → split needed
   SMELL: exporters.map/ fan-out=11 → split needed
+  SMELL: exporters/ fan-out=32 → split needed
+  SMELL: exporters.project_yaml/ fan-out=17 → split needed
+  SMELL: cli_exports/ fan-out=11 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon

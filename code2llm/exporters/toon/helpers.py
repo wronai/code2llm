@@ -10,6 +10,7 @@ from code2llm.core.models import AnalysisResult, FunctionInfo
 from ..flow_constants import is_excluded_path as _is_excluded
 
 
+@lru_cache(maxsize=4096)
 def _rel_path(fpath: str, project_path: str) -> str:
     if not project_path or not fpath:
         return fpath or ""

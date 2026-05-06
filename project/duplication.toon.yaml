@@ -1,12 +1,12 @@
-# redup/duplication | 8 groups | 195f 27882L | 2026-05-06
+# redup/duplication | 8 groups | 195f 28067L | 2026-05-06
 
 SUMMARY:
   files_scanned: 195
-  total_lines:   27882
+  total_lines:   28067
   dup_groups:    8
   dup_fragments: 21
   saved_lines:   312
-  scan_ms:       5501
+  scan_ms:       5740
 
 HOTSPOTS[7] (files with most duplication):
   benchmarks/project_generator.py  dup=187L  groups=1  frags=4  (0.7%)
@@ -42,8 +42,8 @@ DUPLICATES[8] (ranked by impact):
       code2llm/analysis/call_graph.py:109-111  (visit_AsyncFunctionDef)
       code2llm/analysis/cfg.py:107-109  (visit_AsyncFunctionDef)
   [f55844b1df4e27e0]   STRU  _export_calls  L=3 N=2 saved=3 sim=1.00
-      code2llm/cli_exports/formats.py:231-233  (_export_calls)
-      code2llm/cli_exports/formats.py:236-238  (_export_calls_toon)
+      code2llm/cli_exports/formats.py:251-253  (_export_calls)
+      code2llm/cli_exports/formats.py:256-258  (_export_calls_toon)
   [65cac80cf1403b3c]   STRU  readable_id  L=3 N=2 saved=3 sim=1.00
       code2llm/exporters/mermaid/utils.py:11-13  (readable_id)
       code2llm/exporters/mermaid/utils.py:16-18  (safe_module)

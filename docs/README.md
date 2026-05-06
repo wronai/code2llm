@@ -1,7 +1,7 @@
 <!-- code2docs:start --># code2llm
 
-![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.8-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-2687-green)
-> **2687** functions | **155** classes | **336** files | CC̄ = 3.9
+![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.8-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-2859-green)
+> **2859** functions | **155** classes | **333** files | CC̄ = 3.9
 
 > Auto-generated project documentation from source code analysis.
 
@@ -76,7 +76,6 @@ code2llm/
 ├── redsl
 ├── orchestrator
 ├── goal
-├── SUMR
 ├── planfile
 ├── Makefile
     ├── toon
@@ -84,7 +83,6 @@ code2llm/
 ├── validate_toon
 ├── pyqual
 ├── requirements
-├── sumd
 ├── pyproject
 ├── calls
 ├── pipeline
@@ -98,7 +96,6 @@ code2llm/
     ├── prompt
         ├── sample
         ├── sample_bad
-        ├── state
     ├── prompt
     ├── functional_refactoring_example
         ├── toon
@@ -170,7 +167,6 @@ code2llm/
     ├── cli_parser
         ├── code2llm_incremental
     ├── cli_commands
-        ├── toon
         ├── data_analysis
         ├── pipeline_detector
         ├── type_inference
@@ -323,62 +319,63 @@ code2llm/
         ├── sample
 ├── redsl_refactor_report
 ├── context
-├── prompt_sumd_sumr_feature
 ├── REFACTORING_PLAN
-        ├── context
 ├── redsl_refactor_plan
 ├── README
-    ├── README
-├── ROADMAP
-    ├── README
-    ├── context
-        ├── context
 ├── TODO
-        ├── README
-        ├── context
-    ├── PROJECT_SUMMARY
-        ├── README
-        ├── context
+├── ROADMAP
     ├── context
-    ├── METHODOLOGY
+    ├── README
+├── prompt_sumd_sumr_feature
+        ├── context
+        ├── context
+├── CHANGELOG
+    ├── context
+├── SUMR
+    ├── PROJECT_SUMMARY
+        ├── context
+        ├── context
+    ├── README
+    ├── LLM_USAGE
+├── SUMD
         ├── README
-    ├── API
-    ├── COMPARISON_AND_OPTIMIZATION
         ├── README
         ├── DEPENDENCY_ANALYSIS
-        ├── README
         ├── ANALYSIS
+        ├── README
+        ├── README
+        ├── README
+    ├── API
+    ├── METHODOLOGY
+    ├── README
+    ├── context
         ├── SUMMARY
-├── CHANGELOG
-    ├── LLM_USAGE
-        ├── README
+        ├── context
     ├── context
+        ├── context
+        ├── context
+        ├── toon
         ├── README
-    ├── README
-    ├── README
+        ├── toon
+    ├── COMPARISON_AND_OPTIMIZATION
     ├── prompt
-        ├── context
-    ├── context
-        ├── context
-        ├── toon
-        ├── toon
-    ├── context
     ├── README
-        ├── toon
+    ├── context
         ├── context
     ├── README
         ├── toon
-        ├── context
+        ├── README
+    ├── README
+        ├── toon
+    ├── context
+        ├── extract_method
+    ├── README
         ├── context
         ├── move_method
     ├── README
-        ├── extract_method
     ├── context
-    ├── context
-    ├── README
         ├── context
         ├── context
-├── SUMD
     ├── calls
         ├── toon
 ```
@@ -529,13 +526,13 @@ code2llm/
 - **`OrderService`** — —
 - **`PatternDetector`** — —
 - **`LanguageAnalyzer`** — —
-- **`StreamingAnalyzer`** — —
 - **`ProjectAnalyzer`** — —
 - **`AnalysisResult`** — —
 - **`NLPPipeline`** — —
 - **`QueryNormalizer`** — —
 - **`IntentMatcher`** — —
 - **`EntityResolver`** — —
+- **`StreamingAnalyzer`** — —
 - **`TemplateGenerator`** — —
 - **`CommandGenerator`** — —
 - **`IntentMatcher`** — —
@@ -623,6 +620,8 @@ code2llm/
 - `should_split_toon()` — —
 - `split_toon_file()` — —
 - `manage_toon_size()` — —
+- `get_all_projects()` — —
+- `clear_all()` — —
 - `analyze_go()` — —
 - `render_header()` — —
 - `render_next()` — —
@@ -640,8 +639,6 @@ code2llm/
 - `build_context()` — —
 - `generate_llm_flow()` — —
 - `render_llm_flow_md()` — —
-- `get_all_projects()` — —
-- `clear_all()` — —
 - `run_pipeline()` — —
 - `should_use_chunking()` — —
 - `get_analysis_plan()` — —
@@ -722,17 +719,17 @@ code2llm/
 - `resolve_callee()` — —
 - `write_file()` — —
 - `get_cc()` — —
-- `evaluate_format()` — —
-- `make_cache_key()` — —
-- `is_excluded()` — —
-- `get_file_types()` — —
-- `get_default_file_info()` — —
 - `demo_quick_strategy()` — —
 - `demo_standard_strategy()` — —
 - `demo_deep_strategy()` — —
 - `demo_incremental_analysis()` — —
 - `demo_memory_limited()` — —
 - `demo_custom_progress()` — —
+- `evaluate_format()` — —
+- `make_cache_key()` — —
+- `is_excluded()` — —
+- `get_file_types()` — —
+- `get_default_file_info()` — —
 - `get_refactoring_advice()` — —
 - `get_current_version()` — —
 - `parse_version()` — —
@@ -824,6 +821,54 @@ code2llm/
 - `generate_readme()` — —
 - `progress_callback()` — —
 - `supported_extensions()` — —
+- `save_test_report()` — —
+- `run_cli()` — —
+- `test_imports()` — —
+- `test_basic_analysis()` — —
+- `test_radon_complexity()` — —
+- `test_graph_metrics()` — —
+- `test_circular_dependency()` — —
+- `project()` — —
+- `test_first_run_populates_manifest()` — —
+- `test_run_hash_changes_when_file_modified()` — —
+- `test_run_hash_changes_when_file_deleted()` — —
+- `test_run_hash_stable_when_nothing_changes()` — —
+- `test_export_calls_toon_generates_file()` — —
+- `test_export_calls_toon_hubs_section()` — —
+- `test_export_calls_toon_modules_section()` — —
+- `test_export_calls_toon_edges_section()` — —
+- `test_export_calls_toon_header_stats()` — —
+- `iac_project()` — —
+- `test_all_extensions_includes_declarative()` — —
+- `test_all_filenames_includes_dockerfile_and_makefile()` — —
+- `test_collect_files_discovers_iac()` — —
+- `test_modifying_declarative_file_invalidates_cache()` — —
+- `test_dockerfile_edit_invalidates_cache()` — —
+- `test_dockerfile_variants_matched_by_prefix()` — —
+- `test_lockfiles_excluded_by_default()` — —
+- `test_astroid_resolution_mock()` — —
+- `test_vulture_dead_code()` — —
+- `analyzer()` — —
+- `test_analyze_file_tags_result_with_path()` — —
+- `test_nonexistent_file_returns_empty()` — —
+- `test_cached_result_also_tagged()` — —
+- `typed_source()` — —
+- `untyped_source()` — —
+- `ground_truth_project()` — —
+- `analysis_result()` — —
+- `test_copy_cached_export_refreshes_mtime()` — —
+- `test_copy_cached_export_preserves_contents()` — —
+- `tmp_project()` — —
+- `cache()` — —
+- `test_export_project_toon_writes_file()` — —
+- `test_export_single_project_all_triggers_project_toon()` — —
+- `test_tiktoken_truncation()` — —
+- `test_template_rendering_with_metrics()` — —
+- `test_tree_sitter_init()` — —
+- `test_metrics_calculation()` — —
+- `test_mutation_tracking()` — —
+- `test_smell_detection()` — —
+- `sample_result()` — —
 - `NewUserService()` — —
 - `AddUser()` — —
 - `GetUser()` — —
@@ -1064,11 +1109,278 @@ code2llm/
 - `detect_observer()` — —
 - `parse_file()` — —
 - `extract_functions()` — —
+- `handle_special_commands()` — —
+- `handle_cache_command()` — —
+- `handle_report_command()` — —
+- `validate_and_setup()` — —
+- `print_start_info()` — —
+- `validate_chunked_output()` — —
+- `generate_llm_context()` — —
+- `analyze()` — —
+- `analyze_file()` — —
+- `get_version()` — —
+- `create_parser()` — —
+- `main()` — —
 - `repair_command()` — —
 - `print()` — —
-- `on_progress()` — —
 - `print()` — —
-- `get_cfg()` — —
+- `index()` — —
+- `generate_badges()` — —
+- `get_badges()` — —
+- `parse_evolution_metrics()` — —
+- `load_previous()` — —
+- `save_current()` — —
+- `run_benchmark()` — —
+- `clear_caches()` — —
+- `run_analysis()` — —
+- `benchmark_cold_vs_warm()` — —
+- `print_summary()` — —
+- `main()` — —
+- `save_report()` — —
+- `create_test_project()` — —
+- `benchmark_original_analyzer()` — —
+- `benchmark_streaming_analyzer()` — —
+- `benchmark_with_strategies()` — —
+- `print_comparison()` — —
+- `evaluate_format()` — —
+- `create_core_py()` — —
+- `create_etl_py()` — —
+- `create_validation_py()` — —
+- `create_utils_py()` — —
+- `add_validator_to_core()` — —
+- `create_ground_truth_project()` — —
+- `print_results()` — —
+- `build_report()` — —
+- `save_test_report()` — —
+- `get_ast()` — —
+- `find_function_node()` — —
+- `ast_unparse()` — —
+- `qualified_name()` — —
+- `expr_to_str()` — —
+- `analyze()` — —
+- `analyze_file()` — —
+- `handle_special_commands()` — —
+- `handle_cache_command()` — —
+- `handle_report_command()` — —
+- `validate_and_setup()` — —
+- `print_start_info()` — —
+- `validate_chunked_output()` — —
+- `generate_llm_context()` — —
+- `get_version()` — —
+- `create_parser()` — —
+- `make_cache_key()` — —
+- `load_gitignore_patterns()` — —
+- `register_language()` — —
+- `get_parser()` — —
+- `list_parsers()` — —
+- `extract_function_body()` — —
+- `calculate_complexity_regex()` — —
+- `extract_calls_regex()` — —
+- `analyze_c_family()` — —
+- `analyze_cpp()` — —
+- `analyze_csharp()` — —
+- `analyze_generic()` — —
+- `analyze_go()` — —
+- `analyze_java()` — —
+- `analyze_php()` — —
+- `analyze_ruby()` — —
+- `analyze_rust()` — —
+- `extract_declarations_ts()` — —
+- `parse_source()` — —
+- `is_available()` — —
+- `get_typescript_patterns()` — —
+- `get_typescript_lang_config()` — —
+- `analyze_typescript_js()` — —
+- `should_use_chunking()` — —
+- `get_analysis_plan()` — —
+- `get_all_projects()` — —
+- `clear_all()` — —
+- `should_skip_file()` — —
+- `collect_files_in_dir()` — —
+- `collect_root_files()` — —
+- `count_py_files()` — —
+- `contains_python_files()` — —
+- `get_level1_dirs()` — —
+- `calculate_priority()` — —
+- `get_file_size_kb()` — —
+- `should_split_toon()` — —
+- `split_toon_file()` — —
+- `manage_toon_size()` — —
+- `export_format()` — —
+- `get_exporter()` — —
+- `list_exporters()` — —
+- `compute_func_data()` — —
+- `scan_file_sizes()` — —
+- `aggregate_file_stats()` — —
+- `make_relative_path()` — —
+- `filter_god_modules()` — —
+- `compute_god_modules()` — —
+- `compute_hub_types()` — —
+- `build_context()` — —
+- `is_excluded()` — —
+- `render_header()` — —
+- `render_next()` — —
+- `render_risks()` — —
+- `render_metrics_target()` — —
+- `render_patterns()` — —
+- `render_history()` — —
+- `export_to_yaml()` — —
+- `is_excluded_path()` — —
+- `generate_index_html()` — —
+- `get_file_types()` — —
+- `get_default_file_info()` — —
+- `build_alerts()` — —
+- `build_hotspots()` — —
+- `load_evolution_trend()` — —
+- `render_details()` — —
+- `render_module_list()` — —
+- `rel_path()` — —
+- `file_line_count()` — —
+- `count_total_lines()` — —
+- `detect_languages()` — —
+- `export_calls()` — —
+- `export_classic()` — —
+- `export_compact()` — —
+- `should_skip_module()` — —
+- `is_entry_point()` — —
+- `build_callers_graph()` — —
+- `find_leaves()` — —
+- `find_critical_path()` — —
+- `export_flow_compact()` — —
+- `export_flow_detailed()` — —
+- `export_flow_full()` — —
+- `readable_id()` — —
+- `safe_module()` — —
+- `module_of()` — —
+- `build_name_index()` — —
+- `resolve_callee()` — —
+- `write_file()` — —
+- `get_cc()` — —
+- `build_evolution()` — —
+- `load_previous_evolution()` — —
+- `build_health()` — —
+- `count_duplicates()` — —
+- `hotspot_note()` — —
+- `build_refactoring()` — —
+- `build_modules()` — —
+- `group_by_file()` — —
+- `compute_module_entry()` — —
+- `compute_inbound_deps()` — —
+- `build_exports()` — —
+- `build_class_export()` — —
+- `build_function_exports()` — —
+- `generate_readme_content()` — —
+- `get_existing_files()` — —
+- `extract_insights()` — —
+- `build_core_files_section()` — —
+- `build_llm_files_section()` — —
+- `build_viz_files_section()` — —
+- `load_project_yaml()` — —
+- `validate_project_yaml()` — —
+- `dump_yaml()` — —
+- `generate_llm_flow()` — —
+- `render_llm_flow_md()` — —
+- `normalize_llm_task()` — —
+- `parse_llm_task_text()` — —
+- `load_input()` — —
+- `fix_mermaid_file()` — —
+- `generate_pngs()` — —
+- `generate_single_png()` — —
+- `generate_with_puppeteer()` — —
+- `validate_mermaid_file()` — —
+- `run_cli()` — —
+- `parse_toon_content()` — —
+- `is_toon_file()` — —
+- `load_toon()` — —
+- `process_message()` — —
+- `generate()` — —
+- `get_refactoring_advice()` — —
+- `demo_quick_strategy()` — —
+- `demo_standard_strategy()` — —
+- `demo_deep_strategy()` — —
+- `demo_incremental_analysis()` — —
+- `demo_memory_limited()` — —
+- `demo_custom_progress()` — —
+- `validate_input()` — —
+- `format_output()` — —
+- `calculate_metrics()` — —
+- `filter_data()` — —
+- `transform_data()` — —
+- `test_imports()` — —
+- `test_basic_analysis()` — —
+- `run_pipeline()` — —
+- `get_shield_url()` — —
+- `parse_format_quality_report()` — —
+- `parse_performance_report()` — —
+- `generate_format_quality_badges()` — —
+- `generate_performance_badges()` — —
+- `create_html()` — —
+- `get_current_version()` — —
+- `parse_version()` — —
+- `format_version()` — —
+- `bump_version()` — —
+- `update_pyproject_toml()` — —
+- `update_version_file()` — —
+- `read_version()` — —
+- `read_readme()` — —
+- `test_radon_complexity()` — —
+- `test_graph_metrics()` — —
+- `test_circular_dependency()` — —
+- `project()` — —
+- `test_first_run_populates_manifest()` — —
+- `test_run_hash_changes_when_file_modified()` — —
+- `test_run_hash_changes_when_file_deleted()` — —
+- `test_run_hash_stable_when_nothing_changes()` — —
+- `test_export_calls_toon_generates_file()` — —
+- `test_export_calls_toon_hubs_section()` — —
+- `test_export_calls_toon_modules_section()` — —
+- `test_export_calls_toon_edges_section()` — —
+- `test_export_calls_toon_header_stats()` — —
+- `iac_project()` — —
+- `test_all_extensions_includes_declarative()` — —
+- `test_all_filenames_includes_dockerfile_and_makefile()` — —
+- `test_collect_files_discovers_iac()` — —
+- `test_modifying_declarative_file_invalidates_cache()` — —
+- `test_dockerfile_edit_invalidates_cache()` — —
+- `test_dockerfile_variants_matched_by_prefix()` — —
+- `test_lockfiles_excluded_by_default()` — —
+- `test_astroid_resolution_mock()` — —
+- `test_vulture_dead_code()` — —
+- `analyzer()` — —
+- `test_analyze_file_tags_result_with_path()` — —
+- `test_nonexistent_file_returns_empty()` — —
+- `test_cached_result_also_tagged()` — —
+- `typed_source()` — —
+- `untyped_source()` — —
+- `ground_truth_project()` — —
+- `analysis_result()` — —
+- `test_copy_cached_export_refreshes_mtime()` — —
+- `test_copy_cached_export_preserves_contents()` — —
+- `tmp_project()` — —
+- `cache()` — —
+- `test_export_project_toon_writes_file()` — —
+- `test_export_single_project_all_triggers_project_toon()` — —
+- `test_tiktoken_truncation()` — —
+- `test_template_rendering_with_metrics()` — —
+- `test_tree_sitter_init()` — —
+- `test_metrics_calculation()` — —
+- `test_mutation_tracking()` — —
+- `test_smell_detection()` — —
+- `sample_result()` — —
+- `load_yaml()` — —
+- `load_file()` — —
+- `extract_functions_from_yaml()` — —
+- `extract_functions_from_toon()` — —
+- `extract_classes_from_yaml()` — —
+- `extract_classes_from_toon()` — —
+- `analyze_class_differences()` — —
+- `extract_modules_from_yaml()` — —
+- `extract_modules_from_toon()` — —
+- `compare_basic_stats()` — —
+- `compare_functions()` — —
+- `compare_classes()` — —
+- `compare_modules()` — —
+- `validate_toon_completeness()` — —
 - `print()` — —
 - `analyze_project()` — —
 - `get_function_count()` — —
@@ -1087,6 +1399,9 @@ code2llm/
 - `step_2d_context_score()` — —
 - `resolve()` — —
 - `load_from_analysis()` — —
+- `on_progress()` — —
+- `print()` — —
+- `get_cfg()` — —
 - `print()` — —
 - `get_file_hash()` — —
 - `parse_file_cached()` — —
@@ -1106,227 +1421,7 @@ code2llm/
 - `validate()` — —
 - `print()` — —
 - `progress_callback()` — —
-- `handle_special_commands()` — —
-- `handle_cache_command()` — —
-- `handle_report_command()` — —
-- `validate_and_setup()` — —
-- `print_start_info()` — —
-- `validate_chunked_output()` — —
-- `generate_llm_context()` — —
-- `analyze()` — —
-- `analyze_file()` — —
-- `get_version()` — —
-- `create_parser()` — —
-- `main()` — —
 - `generate_readme()` — —
-- `print()` — —
-- `normalize_llm_task()` — —
-- `parse_llm_task_text()` — —
-- `load_input()` — —
-- `create_parser()` — —
-- `main()` — —
-- `analyze_ruby()` — —
-- `extract_function_body()` — —
-- `calculate_complexity_regex()` — —
-- `extract_calls_regex()` — —
-- `analyze_c_family()` — —
-- `parse_evolution_metrics()` — —
-- `load_previous()` — —
-- `save_current()` — —
-- `run_benchmark()` — —
-- `get_shield_url()` — —
-- `parse_format_quality_report()` — —
-- `parse_performance_report()` — —
-- `generate_badges()` — —
-- `generate_format_quality_badges()` — —
-- `generate_performance_badges()` — —
-- `create_html()` — —
-- `load_project_yaml()` — —
-- `extract_insights()` — —
-- `build_health()` — —
-- `build_alerts()` — —
-- `count_duplicates()` — —
-- `build_hotspots()` — —
-- `hotspot_note()` — —
-- `build_refactoring()` — —
-- `render_details()` — —
-- `export_compact()` — —
-- `export_calls()` — —
-- `handle_special_commands()` — —
-- `handle_cache_command()` — —
-- `handle_report_command()` — —
-- `validate_and_setup()` — —
-- `print_start_info()` — —
-- `validate_chunked_output()` — —
-- `generate_llm_context()` — —
-- `analyze_generic()` — —
-- `validate_mermaid_file()` — —
-- `validate_project_yaml()` — —
-- `build_modules()` — —
-- `group_by_file()` — —
-- `compute_module_entry()` — —
-- `compute_inbound_deps()` — —
-- `build_exports()` — —
-- `build_class_export()` — —
-- `build_function_exports()` — —
-- `export_to_yaml()` — —
-- `should_skip_module()` — —
-- `is_entry_point()` — —
-- `build_callers_graph()` — —
-- `find_leaves()` — —
-- `find_critical_path()` — —
-- `export_flow_compact()` — —
-- `get_file_size_kb()` — —
-- `should_split_toon()` — —
-- `split_toon_file()` — —
-- `manage_toon_size()` — —
-- `get_all_projects()` — —
-- `clear_all()` — —
-- `analyze_go()` — —
-- `render_header()` — —
-- `render_next()` — —
-- `render_risks()` — —
-- `render_metrics_target()` — —
-- `render_patterns()` — —
-- `render_history()` — —
-- `compute_func_data()` — —
-- `scan_file_sizes()` — —
-- `aggregate_file_stats()` — —
-- `make_relative_path()` — —
-- `filter_god_modules()` — —
-- `compute_god_modules()` — —
-- `compute_hub_types()` — —
-- `build_context()` — —
-- `generate_llm_flow()` — —
-- `render_llm_flow_md()` — —
-- `analyze_rust()` — —
-- `should_use_chunking()` — —
-- `get_analysis_plan()` — —
-- `get_ast()` — —
-- `find_function_node()` — —
-- `ast_unparse()` — —
-- `qualified_name()` — —
-- `expr_to_str()` — —
-- `should_skip_file()` — —
-- `collect_files_in_dir()` — —
-- `collect_root_files()` — —
-- `count_py_files()` — —
-- `contains_python_files()` — —
-- `get_level1_dirs()` — —
-- `calculate_priority()` — —
-- `analyze_php()` — —
-- `load_evolution_trend()` — —
-- `rel_path()` — —
-- `file_line_count()` — —
-- `count_total_lines()` — —
-- `detect_languages()` — —
-- `export_classic()` — —
-- `generate_pngs()` — —
-- `generate_single_png()` — —
-- `generate_with_puppeteer()` — —
-- `fix_mermaid_file()` — —
-- `parse_toon_content()` — —
-- `is_toon_file()` — —
-- `load_toon()` — —
-- `load_yaml()` — —
-- `load_file()` — —
-- `extract_functions_from_yaml()` — —
-- `extract_functions_from_toon()` — —
-- `extract_classes_from_yaml()` — —
-- `extract_classes_from_toon()` — —
-- `analyze_class_differences()` — —
-- `extract_modules_from_yaml()` — —
-- `extract_modules_from_toon()` — —
-- `compare_basic_stats()` — —
-- `compare_functions()` — —
-- `compare_classes()` — —
-- `compare_modules()` — —
-- `validate_toon_completeness()` — —
-- `validate_input()` — —
-- `format_output()` — —
-- `calculate_metrics()` — —
-- `filter_data()` — —
-- `transform_data()` — —
-- `clear_caches()` — —
-- `run_analysis()` — —
-- `benchmark_cold_vs_warm()` — —
-- `print_summary()` — —
-- `load_gitignore_patterns()` — —
-- `extract_declarations_ts()` — —
-- `get_parser()` — —
-- `parse_source()` — —
-- `is_available()` — —
-- `build_core_files_section()` — —
-- `build_llm_files_section()` — —
-- `build_viz_files_section()` — —
-- `print_results()` — —
-- `build_report()` — —
-- `save_report()` — —
-- `generate()` — —
-- `is_excluded_path()` — —
-- `create_test_project()` — —
-- `benchmark_original_analyzer()` — —
-- `benchmark_streaming_analyzer()` — —
-- `benchmark_with_strategies()` — —
-- `print_comparison()` — —
-- `build_evolution()` — —
-- `load_previous_evolution()` — —
-- `readable_id()` — —
-- `safe_module()` — —
-- `module_of()` — —
-- `build_name_index()` — —
-- `resolve_callee()` — —
-- `write_file()` — —
-- `get_cc()` — —
-- `demo_quick_strategy()` — —
-- `demo_standard_strategy()` — —
-- `demo_deep_strategy()` — —
-- `demo_incremental_analysis()` — —
-- `demo_memory_limited()` — —
-- `demo_custom_progress()` — —
-- `make_cache_key()` — —
-- `evaluate_format()` — —
-- `is_excluded()` — —
-- `get_file_types()` — —
-- `get_default_file_info()` — —
-- `get_refactoring_advice()` — —
-- `get_current_version()` — —
-- `parse_version()` — —
-- `format_version()` — —
-- `bump_version()` — —
-- `update_pyproject_toml()` — —
-- `update_version_file()` — —
-- `index()` — —
-- `get_badges()` — —
-- `render_module_list()` — —
-- `analyze()` — —
-- `analyze_file()` — —
-- `get_version()` — —
-- `read_version()` — —
-- `read_readme()` — —
-- `export_format()` — —
-- `get_exporter()` — —
-- `list_exporters()` — —
-- `get_existing_files()` — —
-- `create_core_py()` — —
-- `create_etl_py()` — —
-- `create_validation_py()` — —
-- `create_utils_py()` — —
-- `add_validator_to_core()` — —
-- `create_ground_truth_project()` — —
-- `analyze_cpp()` — —
-- `register_language()` — —
-- `list_parsers()` — —
-- `analyze_csharp()` — —
-- `analyze_java()` — —
-- `get_typescript_patterns()` — —
-- `get_typescript_lang_config()` — —
-- `analyze_typescript_js()` — —
-- `generate_index_html()` — —
-- `generate_readme_content()` — —
-- `export_flow_detailed()` — —
-- `dump_yaml()` — —
-- `export_flow_full()` — —
 - `analyze_ruby()` — —
 - `extract_function_body()` — —
 - `calculate_complexity_regex()` — —
@@ -1588,17 +1683,64 @@ code2llm/
 - `generate_readme()` — —
 - `progress_callback()` — —
 - `supported_extensions()` — —
+- `save_test_report()` — —
+- `run_cli()` — —
+- `test_imports()` — —
+- `test_basic_analysis()` — —
+- `test_radon_complexity()` — —
+- `test_graph_metrics()` — —
+- `test_circular_dependency()` — —
+- `project()` — —
+- `test_first_run_populates_manifest()` — —
+- `test_run_hash_changes_when_file_modified()` — —
+- `test_run_hash_changes_when_file_deleted()` — —
+- `test_run_hash_stable_when_nothing_changes()` — —
+- `test_export_calls_toon_generates_file()` — —
+- `test_export_calls_toon_hubs_section()` — —
+- `test_export_calls_toon_modules_section()` — —
+- `test_export_calls_toon_edges_section()` — —
+- `test_export_calls_toon_header_stats()` — —
+- `iac_project()` — —
+- `test_all_extensions_includes_declarative()` — —
+- `test_all_filenames_includes_dockerfile_and_makefile()` — —
+- `test_collect_files_discovers_iac()` — —
+- `test_modifying_declarative_file_invalidates_cache()` — —
+- `test_dockerfile_edit_invalidates_cache()` — —
+- `test_dockerfile_variants_matched_by_prefix()` — —
+- `test_lockfiles_excluded_by_default()` — —
+- `test_astroid_resolution_mock()` — —
+- `test_vulture_dead_code()` — —
+- `analyzer()` — —
+- `test_analyze_file_tags_result_with_path()` — —
+- `test_nonexistent_file_returns_empty()` — —
+- `test_cached_result_also_tagged()` — —
+- `typed_source()` — —
+- `untyped_source()` — —
+- `ground_truth_project()` — —
+- `analysis_result()` — —
+- `test_copy_cached_export_refreshes_mtime()` — —
+- `test_copy_cached_export_preserves_contents()` — —
+- `tmp_project()` — —
+- `cache()` — —
+- `test_export_project_toon_writes_file()` — —
+- `test_export_single_project_all_triggers_project_toon()` — —
+- `test_tiktoken_truncation()` — —
+- `test_template_rendering_with_metrics()` — —
+- `test_tree_sitter_init()` — —
+- `test_metrics_calculation()` — —
+- `test_mutation_tracking()` — —
+- `test_smell_detection()` — —
+- `sample_result()` — —
 
 
 ## Project Structure
 
-📄 `.taskill.state`
 📄 `CHANGELOG`
 📄 `Makefile`
 📄 `README`
 📄 `REFACTORING_PLAN`
 📄 `ROADMAP` (5 functions, 2 classes)
-📄 `SUMD` (492 functions)
+📄 `SUMD` (554 functions)
 📄 `SUMR` (29 functions)
 📄 `TODO`
 📄 `Taskfile` (2 functions)
@@ -1632,7 +1774,6 @@ code2llm/
 📄 `code2llm.analysis.pipeline_resolver` (5 functions, 1 classes)
 📄 `code2llm.analysis.side_effects` (15 functions, 2 classes)
 📄 `code2llm.analysis.smells` (9 functions, 1 classes)
-📄 `code2llm.analysis.toon`
 📄 `code2llm.analysis.type_inference` (17 functions, 1 classes)
 📦 `code2llm.analysis.utils`
 📄 `code2llm.analysis.utils.ast_helpers` (5 functions)
@@ -1643,7 +1784,7 @@ code2llm/
 📦 `code2llm.cli_exports`
 📄 `code2llm.cli_exports.code2logic` (8 functions)
 📄 `code2llm.cli_exports.formats` (16 functions)
-📄 `code2llm.cli_exports.orchestrator` (12 functions)
+📄 `code2llm.cli_exports.orchestrator` (13 functions)
 📄 `code2llm.cli_exports.orchestrator_chunked` (3 functions)
 📄 `code2llm.cli_exports.orchestrator_constants`
 📄 `code2llm.cli_exports.orchestrator_handlers` (8 functions)
@@ -1652,7 +1793,7 @@ code2llm/
 📦 `code2llm.core` (1 functions)
 📄 `code2llm.core.analyzer` (22 functions, 1 classes)
 📄 `code2llm.core.ast_registry` (9 functions, 1 classes)
-📄 `code2llm.core.config` (2 functions, 6 classes)
+📄 `code2llm.core.config` (3 functions, 6 classes)
 📄 `code2llm.core.export_pipeline` (5 functions, 2 classes)
 📄 `code2llm.core.file_analyzer` (18 functions, 1 classes)
 📄 `code2llm.core.file_cache` (10 functions, 1 classes)
@@ -1742,9 +1883,9 @@ code2llm/
 📄 `code2llm.exporters.readme_exporter` (1 functions, 1 classes)
 📄 `code2llm.exporters.report_generators` (1 functions)
 📦 `code2llm.exporters.toon` (11 functions, 1 classes)
-📄 `code2llm.exporters.toon.helpers` (7 functions)
+📄 `code2llm.exporters.toon.helpers` (8 functions)
 📄 `code2llm.exporters.toon.metrics` (4 functions, 1 classes)
-📄 `code2llm.exporters.toon.metrics_core` (16 functions, 1 classes)
+📄 `code2llm.exporters.toon.metrics_core` (13 functions, 1 classes)
 📄 `code2llm.exporters.toon.metrics_duplicates` (4 functions, 1 classes)
 📄 `code2llm.exporters.toon.metrics_health` (6 functions, 1 classes)
 📄 `code2llm.exporters.toon.module_detail` (9 functions, 1 classes)
@@ -1830,7 +1971,7 @@ code2llm/
 📄 `examples.streaming-analyzer.sample_project.main` (9 functions, 2 classes)
 📄 `examples.streaming-analyzer.sample_project.utils` (5 functions)
 📄 `goal`
-📄 `map.toon` (6780 functions)
+📄 `map.toon` (23564 functions)
 📄 `orchestrator`
 📄 `pipeline` (2 functions)
 📄 `planfile`
@@ -1848,7 +1989,7 @@ code2llm/
 📄 `project.duplication.toon`
 📄 `project.evolution.toon`
 📄 `project.examples.analysis.toon`
-📄 `project.map.toon` (20820 functions)
+📄 `project.map.toon` (61767 functions)
 📄 `project.project.toon`
 📄 `project.prompt`
 📄 `project.refactor-prompt` (2 functions)
@@ -1875,7 +2016,6 @@ code2llm/
 📄 `scripts.benchmark_badges` (9 functions)
 📄 `scripts.bump_version` (7 functions)
 📄 `setup` (2 functions)
-📄 `sumd`
 📄 `test_dynamic.README`
 📄 `test_dynamic.batch_1.context`
 📄 `test_dynamic.context`

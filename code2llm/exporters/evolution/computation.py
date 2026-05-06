@@ -29,21 +29,40 @@ def compute_func_data(result: AnalysisResult) -> List[Dict]:
     return sorted(func_data, key=lambda x: x["impact"], reverse=True)
 
 
-def scan_file_sizes(project_path: Optional[Path]) -> Dict[str, int]:
-    """Scan Python files and return line counts."""
+def scan_file_sizes(project_path: Optional[Path], result: Optional[AnalysisResult] = None) -> Dict[str, int]:
+    """Return per-file line counts, preferring already-analyzed module data."""
     file_lines: Dict[str, int] = {}
+
+    # Fast path: derive from AnalysisResult modules (no I/O)
+    if result and result.modules:
+        for mi in result.modules.values():
+            if mi.file and not is_excluded(mi.file):
+                lc = mi.line_count if hasattr(mi, 'line_count') and mi.line_count else 0
+                if lc == 0:
+                    lc = len(mi.functions) + len(mi.classes)
+                if lc > 0:
+                    file_lines[mi.file] = lc
+        if file_lines:
+            return file_lines
+
+    # Slow fallback: single os.walk (only if result is unavailable)
     if not project_path or not project_path.is_dir():
         return file_lines
-    
-    for py in project_path.rglob("*.py"):
-        fpath = str(py)
-        if is_excluded(fpath):
-            continue
-        try:
-            lc = len(py.read_text(encoding="utf-8", errors="ignore").splitlines())
-            file_lines[fpath] = lc
-        except Exception:
-            pass
+
+    import os
+    exclude = {'.git', '__pycache__', 'node_modules', 'venv', '.venv',
+               'env', '.env', 'site-packages', 'dist', 'build', '.tox'}
+    for dirpath, dirnames, filenames in os.walk(str(project_path)):
+        dirnames[:] = [d for d in dirnames if d not in exclude]
+        for fn in filenames:
+            if not fn.endswith('.py'):
+                continue
+            fpath = os.path.join(dirpath, fn)
+            try:
+                with open(fpath, encoding='utf-8', errors='ignore') as f:
+                    file_lines[fpath] = sum(1 for _ in f)
+            except Exception:
+                pass
     return file_lines
 
 
@@ -109,7 +128,7 @@ def compute_god_modules(result: AnalysisResult) -> List[Dict]:
     """Identify god modules (≥500 lines) from project files."""
     pp = Path(result.project_path) if result.project_path else None
     
-    file_lines = scan_file_sizes(pp)
+    file_lines = scan_file_sizes(pp, result)
     file_stats = aggregate_file_stats(result, file_lines)
     return filter_god_modules(file_stats, pp)
 

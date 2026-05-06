@@ -2,6 +2,149 @@
 
 ### Performance
 
+- Cache `is_excluded_path()` and `is_excluded()` with `@lru_cache` + set intersection (29k calls: 0.53s → ~0s)
+- Cache `_rel_path()` with `@lru_cache` to avoid repeated `Path.resolve()` / `lstat` syscalls (2.8k calls: 0.51s → ~0s)
+- Replace `scan_file_sizes()` rglob+read_text with fast path from `AnalysisResult.modules` (1.07s → 0.006s)
+- TOON export: 0.45s → 0.12s (3.5x), Evolution export: 0.55s → 0.007s (79x)
+- Cold start total: 5.5s → 2.3s, warm start: 1.5s → 1.2s
+
+## [0.5.147] - 2026-05-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update SUMD.md
+- Update SUMR.md
+- Update TODO.md
+- Update context.md
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update testql-scenarios/generated-api-smoke.testql.toon.yaml
+- Update testql-scenarios/generated-cli-tests.testql.toon.yaml
+- Update testql-scenarios/generated-from-pytests.testql.toon.yaml
+
+### Other
+- Update analysis.toon.yaml
+- Update app.doql.less
+- Update batch_1/analysis.toon.yaml
+- Update code2llm/analysis.toon.yaml
+- Update code2llm/exporters/evolution/computation.py
+- Update code2llm/exporters/evolution/exclusion.py
+- Update code2llm/exporters/flow_constants.py
+- Update code2llm/exporters/toon/helpers.py
+- Update code2llm_part2/analysis.toon.yaml
+- Update evolution.toon.yaml
+- ... and 23 more files
+
+## [0.1.10] - 2026-05-06
+
+### Fixed
+- Fix smart-return-type issues (ticket-73e5bbd1)
+- Fix string-concat issues (ticket-a30af65b)
+- Fix magic-numbers issues (ticket-ef8ee957)
+- Fix ai-boilerplate issues (ticket-b1c1fe3e)
+- Fix magic-numbers issues (ticket-52367c3a)
+- Fix ai-boilerplate issues (ticket-2121a32a)
+- Fix smart-return-type issues (ticket-4fd3d190)
+- Fix string-concat issues (ticket-d93c9bdd)
+- Fix unused-imports issues (ticket-38e59906)
+- Fix magic-numbers issues (ticket-af6405f4)
+- Fix ai-boilerplate issues (ticket-ddd13296)
+- Fix smart-return-type issues (ticket-b80757e7)
+- Fix unused-imports issues (ticket-202d235c)
+- Fix magic-numbers issues (ticket-8717b97d)
+- Fix ai-boilerplate issues (ticket-1c98d3e9)
+- Fix smart-return-type issues (ticket-7d1b05fa)
+- Fix string-concat issues (ticket-750e0a23)
+- Fix magic-numbers issues (ticket-1de3d821)
+- Fix ai-boilerplate issues (ticket-0ee7874f)
+- Fix relative-imports issues (ticket-4542c0eb)
+- Fix string-concat issues (ticket-46bada34)
+- Fix unused-imports issues (ticket-8f728eb9)
+- Fix relative-imports issues (ticket-fb785f8f)
+- Fix string-concat issues (ticket-b4b21ad2)
+- Fix unused-imports issues (ticket-3dc29315)
+- Fix magic-numbers issues (ticket-ce7e4364)
+- Fix relative-imports issues (ticket-2e1e68bb)
+- Fix relative-imports issues (ticket-5e5cb929)
+- Fix ai-boilerplate issues (ticket-9fef9348)
+- Fix smart-return-type issues (ticket-078417e9)
+- Fix unused-imports issues (ticket-2d449422)
+- Fix ai-boilerplate issues (ticket-3cf43ff0)
+- Fix smart-return-type issues (ticket-b109becf)
+- Fix string-concat issues (ticket-ebade34d)
+- Fix unused-imports issues (ticket-2c248882)
+- Fix magic-numbers issues (ticket-57f0006d)
+- Fix smart-return-type issues (ticket-0baa98af)
+- Fix unused-imports issues (ticket-ac7d302d)
+- Fix string-concat issues (ticket-3d395be4)
+- Fix unused-imports issues (ticket-29284904)
+- Fix magic-numbers issues (ticket-10343717)
+- Fix smart-return-type issues (ticket-e784b0d2)
+- Fix unused-imports issues (ticket-54fbed7c)
+- Fix string-concat issues (ticket-db8ae93d)
+- Fix relative-imports issues (ticket-50e335ed)
+- Fix string-concat issues (ticket-2442e793)
+- Fix magic-numbers issues (ticket-880b1b30)
+- Fix llm-generated-code issues (ticket-54804a5f)
+- Fix relative-imports issues (ticket-70734be8)
+- Fix unused-imports issues (ticket-00df05a4)
+- Fix string-concat issues (ticket-8a5bf302)
+- Fix unused-imports issues (ticket-3c00583d)
+- Fix magic-numbers issues (ticket-dbdd1f64)
+- Fix llm-generated-code issues (ticket-6e63000b)
+- Fix relative-imports issues (ticket-5538ba0c)
+- Fix llm-generated-code issues (ticket-fcc8677b)
+- Fix relative-imports issues (ticket-f29f8dd5)
+- Fix smart-return-type issues (ticket-3e0fb280)
+- Fix unused-imports issues (ticket-e5e7b7ed)
+- Fix ai-boilerplate issues (ticket-af4159b2)
+- Fix llm-generated-code issues (ticket-9182adcc)
+- Fix relative-imports issues (ticket-22d320b7)
+- Fix smart-return-type issues (ticket-16b1d14e)
+- Fix string-concat issues (ticket-f9bc9ca6)
+- Fix unused-imports issues (ticket-d3dfd876)
+- Fix relative-imports issues (ticket-51df42b3)
+- Fix relative-imports issues (ticket-f36da736)
+- Fix smart-return-type issues (ticket-80857266)
+- Fix magic-numbers issues (ticket-81a26ffa)
+- Fix relative-imports issues (ticket-f45674cb)
+- Fix relative-imports issues (ticket-0cf43c37)
+- Fix unused-imports issues (ticket-d65644cf)
+- Fix magic-numbers issues (ticket-932d179a)
+- Fix relative-imports issues (ticket-c5ee3839)
+- Fix string-concat issues (ticket-a683e15c)
+- Fix relative-imports issues (ticket-983158c5)
+- Fix unused-imports issues (ticket-3aec83fa)
+- Fix relative-imports issues (ticket-8ecae85a)
+- Fix magic-numbers issues (ticket-71438ebb)
+- Fix relative-imports issues (ticket-0323daf6)
+- Fix string-concat issues (ticket-a2dd7cf4)
+- Fix unused-imports issues (ticket-b1252687)
+- Fix relative-imports issues (ticket-d0802da3)
+- Fix unused-imports issues (ticket-add932e6)
+- Fix relative-imports issues (ticket-012a9053)
+- Fix string-concat issues (ticket-05a0c948)
+- Fix unused-imports issues (ticket-660b3f81)
+- Fix string-concat issues (ticket-572a8474)
+- Fix unused-imports issues (ticket-2ba99c51)
+- Fix string-concat issues (ticket-1feac4b5)
+- Fix magic-numbers issues (ticket-e7d0dbd3)
+- Fix llm-generated-code issues (ticket-f73bcd11)
+- Fix relative-imports issues (ticket-3ad1319d)
+- Fix relative-imports issues (ticket-14671464)
+- Fix string-concat issues (ticket-612747fd)
+- Fix magic-numbers issues (ticket-9b444394)
+- Fix relative-imports issues (ticket-1fb1a093)
+- Fix duplicate-imports issues (ticket-30bcfb99)
+- Fix string-concat issues (ticket-c55b872a)
+- Fix unused-imports issues (ticket-d029aee4)
+
+### Performance
+
 - perf(core): add `--fast` CLI flag — skips vulture, centrality, DFG, communities for 3-10x speedup
 - perf(core): guard `_perform_deep_analysis` with `skip_data_flow` — avoid DFG/CG extraction when not needed
 - perf(core): fix duplicate call extraction (ast.walk + CallGraphExtractor were doubling entries)

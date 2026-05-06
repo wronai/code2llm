@@ -1,20 +1,25 @@
 # System Architecture Analysis
+<!-- generated in 0.01s -->
 
 ## Overview
 
 - **Project**: /home/tom/github/semcod/code2llm
 - **Primary Language**: python
-- **Languages**: python: 343, md: 66, yaml: 46, txt: 8, shell: 7
+- **Languages**: python: 350, md: 67, yaml: 44, txt: 8, shell: 7
 - **Analysis Mode**: static
-- **Total Functions**: 3625
-- **Total Classes**: 250
-- **Modules**: 492
+- **Total Functions**: 3800
+- **Total Classes**: 259
+- **Modules**: 497
 - **Entry Points**: 0
 
 ## Architecture by Module
 
+### project.map.toon
+- **Functions**: 12034
+- **File**: `map.toon.yaml`
+
 ### map.toon
-- **Functions**: 6780
+- **Functions**: 9407
 - **File**: `map.toon.yaml`
 
 ### root.SUMD
@@ -24,10 +29,6 @@
 ### batch_1.SUMD
 - **Functions**: 554
 - **File**: `SUMD.md`
-
-### project.map.toon
-- **Functions**: 523
-- **File**: `map.toon.yaml`
 
 ### root.SUMR
 - **Functions**: 29
@@ -67,12 +68,17 @@
 - **Classes**: 1
 - **File**: `yaml_exporter.py`
 
+### code2llm.core.analyzer
+- **Functions**: 22
+- **Classes**: 1
+- **File**: `analyzer.py`
+
 ### code2llm.core.persistent_cache
 - **Functions**: 22
 - **Classes**: 1
 - **File**: `persistent_cache.py`
 
-### code2llm.core.analyzer
+### core.analyzer
 - **Functions**: 22
 - **Classes**: 1
 - **File**: `analyzer.py`
@@ -99,11 +105,6 @@
 - **Functions**: 20
 - **Classes**: 2
 - **File**: `large_repo.py`
-
-### code2llm.nlp.pipeline
-- **Functions**: 20
-- **Classes**: 3
-- **File**: `pipeline.py`
 
 ## Key Entry Points
 
@@ -142,6 +143,11 @@ Key execution flows identified:
 - **Methods**: 22
 - **Key Methods**: code2llm.core.analyzer.ProjectAnalyzer.__init__, code2llm.core.analyzer.ProjectAnalyzer.analyze_project, code2llm.core.analyzer.ProjectAnalyzer._resolve_project_path, code2llm.core.analyzer.ProjectAnalyzer._load_from_persistent_cache, code2llm.core.analyzer.ProjectAnalyzer._run_analysis, code2llm.core.analyzer.ProjectAnalyzer._store_to_persistent_cache, code2llm.core.analyzer.ProjectAnalyzer._build_stats, code2llm.core.analyzer.ProjectAnalyzer._print_summary, code2llm.core.analyzer.ProjectAnalyzer._post_process, code2llm.core.analyzer.ProjectAnalyzer._should_collect_file
 
+### core.analyzer.ProjectAnalyzer
+> Main analyzer with parallel processing.
+- **Methods**: 22
+- **Key Methods**: core.analyzer.ProjectAnalyzer.__init__, core.analyzer.ProjectAnalyzer.analyze_project, core.analyzer.ProjectAnalyzer._resolve_project_path, core.analyzer.ProjectAnalyzer._load_from_persistent_cache, core.analyzer.ProjectAnalyzer._run_analysis, core.analyzer.ProjectAnalyzer._store_to_persistent_cache, core.analyzer.ProjectAnalyzer._build_stats, core.analyzer.ProjectAnalyzer._print_summary, core.analyzer.ProjectAnalyzer._post_process, core.analyzer.ProjectAnalyzer._should_collect_file
+
 ### code2llm.core.large_repo.HierarchicalRepoSplitter
 > Splits large repositories using hierarchical approach.
 
@@ -158,6 +164,13 @@ Thread-safety: manifest writes are prote
 - **Methods**: 18
 - **Key Methods**: code2llm.core.persistent_cache.PersistentCache.__init__, code2llm.core.persistent_cache.PersistentCache.content_hash, code2llm.core.persistent_cache.PersistentCache.get_file_result, code2llm.core.persistent_cache.PersistentCache.put_file_result, code2llm.core.persistent_cache.PersistentCache.get_changed_files, code2llm.core.persistent_cache.PersistentCache.prune_missing, code2llm.core.persistent_cache.PersistentCache.get_export_cache_dir, code2llm.core.persistent_cache.PersistentCache.create_export_cache_dir, code2llm.core.persistent_cache.PersistentCache.mark_export_complete, code2llm.core.persistent_cache.PersistentCache.save
 
+### core.persistent_cache.PersistentCache
+> Content-addressed persistent cache stored in ~/.code2llm/.
+
+Thread-safety: manifest writes are prote
+- **Methods**: 18
+- **Key Methods**: core.persistent_cache.PersistentCache.__init__, core.persistent_cache.PersistentCache.content_hash, core.persistent_cache.PersistentCache.get_file_result, core.persistent_cache.PersistentCache.put_file_result, core.persistent_cache.PersistentCache.get_changed_files, core.persistent_cache.PersistentCache.prune_missing, core.persistent_cache.PersistentCache.get_export_cache_dir, core.persistent_cache.PersistentCache.create_export_cache_dir, core.persistent_cache.PersistentCache.mark_export_complete, core.persistent_cache.PersistentCache.save
+
 ### core.large_repo.HierarchicalRepoSplitter
 > Splits large repositories using hierarchical approach.
 
@@ -166,13 +179,6 @@ Strategy:
 2. 
 - **Methods**: 18
 - **Key Methods**: core.large_repo.HierarchicalRepoSplitter.__init__, core.large_repo.HierarchicalRepoSplitter.get_analysis_plan, core.large_repo.HierarchicalRepoSplitter._split_hierarchically, core.large_repo.HierarchicalRepoSplitter._merge_small_l1_dirs, core.large_repo.HierarchicalRepoSplitter._split_level2_consolidated, core.large_repo.HierarchicalRepoSplitter._categorize_subdirs, core.large_repo.HierarchicalRepoSplitter._process_large_dirs, core.large_repo.HierarchicalRepoSplitter._process_level1_files, core.large_repo.HierarchicalRepoSplitter._merge_small_dirs, core.large_repo.HierarchicalRepoSplitter._chunk_by_files
-
-### core.persistent_cache.PersistentCache
-> Content-addressed persistent cache stored in ~/.code2llm/.
-
-Thread-safety: manifest writes are prote
-- **Methods**: 18
-- **Key Methods**: core.persistent_cache.PersistentCache.__init__, core.persistent_cache.PersistentCache.content_hash, core.persistent_cache.PersistentCache.get_file_result, core.persistent_cache.PersistentCache.put_file_result, core.persistent_cache.PersistentCache.get_changed_files, core.persistent_cache.PersistentCache.prune_missing, core.persistent_cache.PersistentCache.get_export_cache_dir, core.persistent_cache.PersistentCache.create_export_cache_dir, core.persistent_cache.PersistentCache.mark_export_complete, core.persistent_cache.PersistentCache.save
 
 ### code2llm.analysis.type_inference.TypeInferenceEngine
 > Extract and infer type information from Python source files.
@@ -193,6 +199,11 @@ Operates on source files referenced by
 - **Methods**: 17
 - **Key Methods**: analysis.type_inference.TypeInferenceEngine.__init__, analysis.type_inference.TypeInferenceEngine.enrich_function, analysis.type_inference.TypeInferenceEngine.get_arg_types, analysis.type_inference.TypeInferenceEngine.get_return_type, analysis.type_inference.TypeInferenceEngine.get_typed_signature, analysis.type_inference.TypeInferenceEngine.extract_all_types, analysis.type_inference.TypeInferenceEngine._extract_from_node, analysis.type_inference.TypeInferenceEngine._extract_args, analysis.type_inference.TypeInferenceEngine._annotation_to_str, analysis.type_inference.TypeInferenceEngine._ann_constant
 
+### core.file_analyzer.FileAnalyzer
+> Analyzes a single file.
+- **Methods**: 17
+- **Key Methods**: core.file_analyzer.FileAnalyzer.__init__, core.file_analyzer.FileAnalyzer._route_to_language_analyzer, core.file_analyzer.FileAnalyzer.analyze_file, core.file_analyzer.FileAnalyzer._analyze_python, core.file_analyzer.FileAnalyzer._analyze_ast, core.file_analyzer.FileAnalyzer._calculate_complexity, core.file_analyzer.FileAnalyzer._perform_deep_analysis, core.file_analyzer.FileAnalyzer._process_class, core.file_analyzer.FileAnalyzer._process_function, core.file_analyzer.FileAnalyzer._build_cfg
+
 ### code2llm.analysis.data_analysis.DataAnalyzer
 > Analyze data flows, structures, and optimization opportunities.
 - **Methods**: 16
@@ -208,11 +219,6 @@ Operates on source files referenced by
 > Main NLP processing pipeline (4a-4e).
 - **Methods**: 16
 - **Key Methods**: code2llm.nlp.pipeline.NLPPipeline.__init__, code2llm.nlp.pipeline.NLPPipeline.process, code2llm.nlp.pipeline.NLPPipeline._step_normalize, code2llm.nlp.pipeline.NLPPipeline._step_match_intent, code2llm.nlp.pipeline.NLPPipeline._step_resolve_entities, code2llm.nlp.pipeline.NLPPipeline._infer_entity_types, code2llm.nlp.pipeline.NLPPipeline._calculate_overall_confidence, code2llm.nlp.pipeline.NLPPipeline._calculate_entity_confidence, code2llm.nlp.pipeline.NLPPipeline._apply_fallback, code2llm.nlp.pipeline.NLPPipeline._format_action
-
-### code2llm.exporters.toon.metrics_core.CoreMetricsComputer
-> Computes core structural and complexity metrics.
-- **Methods**: 16
-- **Key Methods**: code2llm.exporters.toon.metrics_core.CoreMetricsComputer.__init__, code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics, code2llm.exporters.toon.metrics_core.CoreMetricsComputer._new_file_record, code2llm.exporters.toon.metrics_core.CoreMetricsComputer._compute_fan_in, code2llm.exporters.toon.metrics_core.CoreMetricsComputer._process_function_calls, code2llm.exporters.toon.metrics_core.CoreMetricsComputer._process_called_by, code2llm.exporters.toon.metrics_core.CoreMetricsComputer._process_callee_calls, code2llm.exporters.toon.metrics_core.CoreMetricsComputer._handle_suffix_match, code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_package_metrics, code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_function_metrics
 
 ### analysis.data_analysis.DataAnalyzer
 > Analyze data flows, structures, and optimization opportunities.
@@ -230,24 +236,9 @@ Operates on source files referenced by
 - **Methods**: 16
 - **Key Methods**: nlp.pipeline.NLPPipeline.__init__, nlp.pipeline.NLPPipeline.process, nlp.pipeline.NLPPipeline._step_normalize, nlp.pipeline.NLPPipeline._step_match_intent, nlp.pipeline.NLPPipeline._step_resolve_entities, nlp.pipeline.NLPPipeline._infer_entity_types, nlp.pipeline.NLPPipeline._calculate_overall_confidence, nlp.pipeline.NLPPipeline._calculate_entity_confidence, nlp.pipeline.NLPPipeline._apply_fallback, nlp.pipeline.NLPPipeline._format_action
 
-### exporters.toon.metrics_core.CoreMetricsComputer
-> Computes core structural and complexity metrics.
-- **Methods**: 16
-- **Key Methods**: exporters.toon.metrics_core.CoreMetricsComputer.__init__, exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics, exporters.toon.metrics_core.CoreMetricsComputer._new_file_record, exporters.toon.metrics_core.CoreMetricsComputer._compute_fan_in, exporters.toon.metrics_core.CoreMetricsComputer._process_function_calls, exporters.toon.metrics_core.CoreMetricsComputer._process_called_by, exporters.toon.metrics_core.CoreMetricsComputer._process_callee_calls, exporters.toon.metrics_core.CoreMetricsComputer._handle_suffix_match, exporters.toon.metrics_core.CoreMetricsComputer.compute_package_metrics, exporters.toon.metrics_core.CoreMetricsComputer.compute_function_metrics
-
 ## Data Transformation Functions
 
 Key functions that process and transform data:
-
-### SUMR.validate_and_setup
-
-### SUMR.validate_chunked_output
-
-### SUMR._validate_chunks
-
-### SUMR._validate_single_chunk
-
-### SUMR.create_parser
 
 ### validate_toon.validate_toon_completeness
 > Validate toon format structure.
@@ -263,14 +254,6 @@ Key functions that process and transform data:
 
 ### map.toon._process_functions
 
-### map.toon._format_size
-
-### map.toon._expand_all_formats
-
-### map.toon._export_registry_formats
-
-### map.toon._get_format_kwargs
-
 ### map.toon._parse_bullets
 
 ### map.toon._parse_sections
@@ -280,6 +263,14 @@ Key functions that process and transform data:
 ### map.toon.parse_llm_task_text
 
 ### map.toon.create_parser
+
+### map.toon._format_size
+
+### map.toon._expand_all_formats
+
+### map.toon._export_registry_formats
+
+### map.toon._get_format_kwargs
 
 ### map.toon.parse_evolution_metrics
 
@@ -291,12 +282,23 @@ Key functions that process and transform data:
 
 ### map.toon._export_simple_formats
 
+### map.toon._export_calls_format
+
+### map.toon.validate_and_setup
+
+### map.toon.validate_chunked_output
+
+### map.toon._validate_chunks
+
+### map.toon._validate_single_chunk
+
 ## Public API Surface
 
 Functions exposed as public API (no underscore prefix):
 
 - `pipeline.run_pipeline` - 68 calls
 - `code2llm.cli_parser.create_parser` - 46 calls
+- `cli_parser.create_parser` - 46 calls
 - `code2llm.generators.llm_task.normalize_llm_task` - 43 calls
 - `generators.llm_task.normalize_llm_task` - 43 calls
 - `code2llm.generators.llm_flow.generator.render_llm_flow_md` - 42 calls
@@ -332,9 +334,8 @@ Functions exposed as public API (no underscore prefix):
 - `scripts.benchmark_badges.main` - 23 calls
 - `benchmarks.format_evaluator.evaluate_format` - 22 calls
 - `benchmarks.benchmark_format_quality.run_benchmark` - 22 calls
-- `code2llm.exporters.evolution_exporter.EvolutionExporter.export` - 22 calls
-- `code2llm.exporters.flow_exporter.FlowExporter.export` - 22 calls
 - `code2llm.core.analyzer.ProjectAnalyzer.analyze_project` - 22 calls
+- `code2llm.exporters.evolution_exporter.EvolutionExporter.export` - 22 calls
 
 ## System Interactions
 

@@ -24,9 +24,9 @@ High-performance Python code flow analysis with optimized TOON format - CFG, DFG
 ## Metadata
 
 - **name**: `code2llm`
-- **version**: `0.5.144`
+- **version**: `0.5.146`
 - **python_requires**: `>=3.8`
-- **license**: Apache-2.0
+- **license**: {'text': 'Apache-2.0'}
 - **ai_model**: `openrouter/qwen/qwen3-coder-next`
 - **ecosystem**: SUMD + DOQL + testql + taskfile
 - **generated_from**: pyproject.toml, requirements.txt, Taskfile.yml, Makefile, testql(3), app.doql.less, pyqual.yaml, goal.yaml, .env.example, src(5 mod), project/(2 analysis files)
@@ -45,7 +45,7 @@ SUMD (description) → DOQL/source (code) → taskfile (automation) → testql (
 
 app {
   name: code2llm;
-  version: 0.5.144;
+  version: 0.5.146;
 }
 
 interface[type="cli"] {
@@ -670,7 +670,7 @@ pipeline:
 ```yaml
 project:
   name: code2llm
-  version: 0.5.144
+  version: 0.5.146
   env: local
 ```
 
@@ -801,10 +801,10 @@ pip install -e .[dev]
 ### `project/map.toon.yaml`
 
 ```toon markpact:analysis path=project/map.toon.yaml
-# code2llm | 245f 35517L | python:224,go:5,rust:5,typescript:4,shell:4,less:2,javascript:1 | 2026-05-06
-# stats: 523 func | 186 cls | 245 mod | CC̄=4.4 | critical:39 | cycles:0
+# code2llm | 245f 35704L | python:224,go:5,rust:5,typescript:4,shell:4,less:2,javascript:1 | 2026-05-06
+# stats: 525 func | 186 cls | 245 mod | CC̄=4.4 | critical:42 | cycles:0
 # alerts[5]: CC _analyze_subproject=14; CC _run_exports=14; CC _analyze_generated_files=14; CC _match_method_name=14; CC analyze_ruby=14
-# hotspots[5]: run_benchmark fan=18; _run_exports fan=18; handle_cache_command fan=17; _analyze_subproject fan=16; _export_mermaid fan=16
+# hotspots[5]: run_benchmark fan=18; _run_exports fan=18; handle_cache_command fan=17; _export_simple_formats fan=17; _export_mermaid fan=17
 # evolution: baseline
 # Keys: M=modules, D=details, i=imports, e=exports, c=classes, f=functions, m=methods
 M[245]:
@@ -837,23 +837,23 @@ M[245]:
   code2llm/analysis/utils/ast_helpers.py,87
   code2llm/api.py,74
   code2llm/cli.py,70
-  code2llm/cli_analysis.py,332
+  code2llm/cli_analysis.py,346
   code2llm/cli_commands.py,318
   code2llm/cli_exports/__init__.py,55
   code2llm/cli_exports/code2logic.py,128
-  code2llm/cli_exports/formats.py,316
-  code2llm/cli_exports/orchestrator.py,312
+  code2llm/cli_exports/formats.py,336
+  code2llm/cli_exports/orchestrator.py,363
   code2llm/cli_exports/orchestrator_chunked.py,88
   code2llm/cli_exports/orchestrator_constants.py,53
-  code2llm/cli_exports/orchestrator_handlers.py,150
-  code2llm/cli_exports/prompt.py,476
-  code2llm/cli_parser.py,328
+  code2llm/cli_exports/orchestrator_handlers.py,175
+  code2llm/cli_exports/prompt.py,481
+  code2llm/cli_parser.py,334
   code2llm/core/__init__.py,53
-  code2llm/core/analyzer.py,490
+  code2llm/core/analyzer.py,496
   code2llm/core/ast_registry.py,103
-  code2llm/core/config.py,339
+  code2llm/core/config.py,353
   code2llm/core/export_pipeline.py,154
-  code2llm/core/file_analyzer.py,403
+  code2llm/core/file_analyzer.py,410
   code2llm/core/file_cache.py,108
   code2llm/core/file_filter.py,128
   code2llm/core/gitignore.py,139
@@ -874,7 +874,7 @@ M[245]:
   code2llm/core/large_repo.py,489
   code2llm/core/models.py,194
   code2llm/core/persistent_cache.py,454
-  code2llm/core/refactoring.py,196
+  code2llm/core/refactoring.py,210
   code2llm/core/repo_files.py,175
   code2llm/core/streaming/__init__.py,8
   code2llm/core/streaming/cache.py,51
@@ -942,9 +942,9 @@ M[245]:
   code2llm/exporters/readme_exporter.py,67
   code2llm/exporters/report_generators.py,77
   code2llm/exporters/toon/__init__.py,200
-  code2llm/exporters/toon/helpers.py,112
+  code2llm/exporters/toon/helpers.py,143
   code2llm/exporters/toon/metrics.py,99
-  code2llm/exporters/toon/metrics_core.py,306
+  code2llm/exporters/toon/metrics_core.py,298
   code2llm/exporters/toon/metrics_duplicates.py,79
   code2llm/exporters/toon/metrics_health.py,99
   code2llm/exporters/toon/module_detail.py,163
@@ -1015,7 +1015,7 @@ M[245]:
   orchestrator.sh,83
   pipeline.py,204
   project.sh,53
-  project2.sh,49
+  project2.sh,50
   scripts/benchmark_badges.py,392
   scripts/bump_version.py,97
   setup.py,73
@@ -1036,7 +1036,7 @@ M[245]:
   tests/test_cache_invalidation_e2e.py,114
   tests/test_calls_toon_export.py,242
   tests/test_declarative_collection.py,205
-  tests/test_deep_analysis.py,79
+  tests/test_deep_analysis.py,80
   tests/test_edge_cases.py,406
   tests/test_file_analyzer_tagging.py,70
   tests/test_flow_exporter.py,453
@@ -1241,7 +1241,7 @@ D:
     _export_refactor_prompts(args;result;output_dir)
     _export_index_html(args;output_dir)
   code2llm/cli_exports/orchestrator.py:
-    e: _build_export_config,_collect_dry_run_files,_show_dry_run_plan,_run_exports,_copy_cached_export,_touch_recursive,_copy_to_cache,_expand_all_formats,_export_single,_export_registry_formats,_get_format_kwargs,_export_chunked
+    e: _build_export_config,_collect_dry_run_files,_show_dry_run_plan,_run_exports,_copy_cached_export,_touch_recursive,_copy_to_cache,_expand_all_formats,_export_single,_export_registry_formats,_get_format_kwargs,_export_chunked,_inject_generation_time
     _build_export_config(args;formats)
     _collect_dry_run_files(formats;output_dir)
     _show_dry_run_plan(formats;output_dir;is_chunked;result)
@@ -1254,6 +1254,7 @@ D:
     _export_registry_formats(args;result;output_dir;formats)
     _get_format_kwargs(fmt;args)
     _export_chunked(args;result;output_dir;source_path;formats;requested_formats)
+    _inject_generation_time(filepath;elapsed)
   code2llm/cli_exports/orchestrator_chunked.py:
     e: _export_chunked,_get_filtered_subprojects,_process_subproject
     _export_chunked(args;result;output_dir;source_path;formats;requested_formats)
@@ -1306,7 +1307,7 @@ D:
   code2llm/core/config.py:
     e: _get_optimal_workers,AnalysisMode,PerformanceConfig,FilterConfig,DepthConfig,OutputConfig,Config
     AnalysisMode:  # Available analysis modes.
-    PerformanceConfig: get_workers(0)  # Performance optimization settings.
+    PerformanceConfig: get_workers(0),apply_fast_mode(0)  # Performance optimization settings.
     FilterConfig:  # Filtering options to reduce analysis scope.
     DepthConfig:  # Depth limiting for control flow analysis.
     OutputConfig:  # Output formatting options.
@@ -1709,20 +1710,21 @@ D:
     e: ToonExporter
     ToonExporter: __init__(0),export(2),export_to_yaml(2),_build_header_dict(1),_build_health_dict(1),_build_refactor_dict(1),_build_pipelines_dict(1),_build_layers_dict(1),_build_coupling_dict(1),_build_external_dict(1),_is_excluded(1)  # Export to toon v2 plain-text format — scannable, sorted by s
   code2llm/exporters/toon/helpers.py:
-    e: _rel_path,_package_of,_package_of_module,_traits_from_cfg,_dup_file_set,_hotspot_description,_scan_line_counts
+    e: _rel_path,_package_of,_package_of_module,_traits_from_cfg,_dup_file_set,_hotspot_description,_scan_line_counts,_walk_compat
     _rel_path(fpath;project_path)
     _package_of(rel_path)
     _package_of_module(module_name)
     _traits_from_cfg(fi;result)
     _dup_file_set(ctx)
     _hotspot_description(fi;fan_out)
-    _scan_line_counts(project_path)
+    _scan_line_counts(project_path;result)
+    _walk_compat(path)
   code2llm/exporters/toon/metrics.py:
     e: MetricsComputer
     MetricsComputer: __init__(0),compute_all_metrics(1),_compute_hotspots(1),_get_cycles(1)  # Computes all metrics for TOON export.
   code2llm/exporters/toon/metrics_core.py:
     e: CoreMetricsComputer
-    CoreMetricsComputer: __init__(2),compute_file_metrics(1),_new_file_record(2),_compute_fan_in(2),_process_function_calls(3),_process_called_by(4),_process_callee_calls(4),_handle_suffix_match(4),compute_package_metrics(2),compute_function_metrics(1),compute_class_metrics(1),compute_coupling_matrix(1),_build_function_to_module_map(1),_build_coupling_matrix(2),_resolve_callee_module(3),_compute_package_fan(1)  # Computes core structural and complexity metrics.
+    CoreMetricsComputer: __init__(2),compute_file_metrics(1),_new_file_record(2),_build_suffix_index(1),_compute_fan_in(2),compute_package_metrics(2),compute_function_metrics(1),compute_class_metrics(1),compute_coupling_matrix(1),_build_function_to_module_map(1),_build_coupling_matrix(2),_resolve_callee_module(4),_compute_package_fan(1)  # Computes core structural and complexity metrics.
   code2llm/exporters/toon/metrics_duplicates.py:
     e: DuplicatesMetricsComputer
     DuplicatesMetricsComputer: __init__(1),detect_duplicates(1),_check_class_for_duplicates(5),_calculate_duplicate_info(7)  # Detects duplicate classes in the codebase.
@@ -2208,7 +2210,7 @@ def generate_llm_context(args_list)  # CC=3, fan=12
 ```python
 def _run_analysis(args, source_path, output_dir)  # CC=5, fan=4
 def _run_standard_analysis(args, source_path, output_dir)  # CC=5, fan=8
-def _build_config(args, output_dir)  # CC=9, fan=9
+def _build_config(args, output_dir)  # CC=11, fan=10 ⚠
 def _print_analysis_summary(result)  # CC=1, fan=2
 def _run_chunked_analysis(args, source_path, output_dir)  # CC=3, fan=8
 def _print_chunked_plan(subprojects)  # CC=4, fan=5
@@ -2241,7 +2243,7 @@ def main()  # CC=7, fan=9
 
 ## Call Graph
 
-*460 nodes · 500 edges · 90 modules · CC̄=2.1*
+*461 nodes · 500 edges · 91 modules · CC̄=2.1*
 
 ### Hubs (by degree)
 
@@ -2252,13 +2254,13 @@ def main()  # CC=7, fan=9
 | `normalize_llm_task` *(in code2llm.generators.llm_task)* | 14 ⚠ | 1 | 43 | **44** |
 | `main` *(in benchmarks.benchmark_performance)* | 1 | 0 | 41 | **41** |
 | `analyze_class_differences` *(in validate_toon)* | 6 | 1 | 39 | **40** |
-| `run_benchmark` *(in benchmarks.benchmark_evolution)* | 9 | 0 | 34 | **34** |
 | `handle_cache_command` *(in code2llm.cli_commands)* | 12 ⚠ | 1 | 33 | **34** |
+| `run_benchmark` *(in benchmarks.benchmark_evolution)* | 9 | 0 | 34 | **34** |
 | `analyze_rust` *(in code2llm.core.lang.rust)* | 9 | 0 | 31 | **31** |
 
 ```toon markpact:analysis path=project/calls.toon.yaml
 # code2llm call graph | /home/tom/github/semcod/code2llm
-# nodes: 460 | edges: 500 | modules: 90
+# nodes: 461 | edges: 500 | modules: 91
 # CC̄=2.1
 
 HUBS[20]:
@@ -2272,10 +2274,10 @@ HUBS[20]:
     CC=1  in:0  out:41  total:41
   validate_toon.analyze_class_differences
     CC=6  in:1  out:39  total:40
-  benchmarks.benchmark_evolution.run_benchmark
-    CC=9  in:0  out:34  total:34
   code2llm.cli_commands.handle_cache_command
     CC=12  in:1  out:33  total:34
+  benchmarks.benchmark_evolution.run_benchmark
+    CC=9  in:0  out:34  total:34
   code2llm.core.lang.rust.analyze_rust
     CC=9  in:0  out:31  total:31
   benchmarks.benchmark_optimizations.benchmark_cold_vs_warm
@@ -2286,22 +2288,22 @@ HUBS[20]:
     CC=9  in:1  out:28  total:29
   code2llm.core.toon_size_manager._split_by_modules
     CC=10  in:1  out:27  total:28
-  code2llm.exporters.mermaid.compact.export_compact
-    CC=13  in:0  out:27  total:27
   code2llm.core.lang.go_lang._analyze_go_regex
     CC=10  in:1  out:26  total:27
+  code2llm.exporters.mermaid.compact.export_compact
+    CC=13  in:0  out:27  total:27
   validate_toon.compare_modules
     CC=5  in:1  out:26  total:27
   code2llm.exporters.mermaid.calls.export_calls
     CC=13  in:0  out:26  total:26
-  code2llm.exporters.evolution_exporter.EvolutionExporter._is_excluded
-    CC=1  in:24  out:1  total:25
   validate_toon.compare_functions
     CC=6  in:1  out:24  total:25
-  code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics
-    CC=12  in:0  out:25  total:25
   code2llm.exporters.project_yaml.core.ProjectYAMLExporter._build_project_yaml
     CC=12  in:0  out:25  total:25
+  code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics
+    CC=12  in:0  out:25  total:25
+  code2llm.exporters.evolution_exporter.EvolutionExporter._is_excluded
+    CC=1  in:24  out:1  total:25
 
 MODULES:
   Taskfile  [1 funcs]
@@ -2372,7 +2374,7 @@ MODULES:
   code2llm.cli_analysis  [11 funcs]
     _analyze_all_subprojects  CC=4  out:8
     _analyze_subproject  CC=14  out:19
-    _build_config  CC=9  out:13
+    _build_config  CC=11  out:16
     _filter_subprojects  CC=10  out:5
     _merge_chunked_results  CC=9  out:7
     _print_analysis_summary  CC=1  out:9
@@ -2404,7 +2406,7 @@ MODULES:
     get_workers  CC=2  out:1
   code2llm.core.file_analyzer  [3 funcs]
     _calculate_complexity  CC=8  out:5
-    _perform_deep_analysis  CC=5  out:8
+    _perform_deep_analysis  CC=7  out:9
     _route_to_language_analyzer  CC=10  out:10
   code2llm.core.file_cache  [1 funcs]
     _get_cache_key  CC=1  out:1
@@ -2484,7 +2486,7 @@ MODULES:
     _detect_cycles  CC=6  out:7
     _detect_dead_code  CC=8  out:15
     _map_dead_code_to_items  CC=9  out:13
-    perform_refactoring_analysis  CC=3  out:12
+    perform_refactoring_analysis  CC=8  out:12
   code2llm.core.repo_files  [7 funcs]
     _get_gitignore_parser  CC=2  out:2
     collect_files_in_dir  CC=6  out:10
@@ -2604,13 +2606,16 @@ MODULES:
     group_by_file  CC=5  out:8
   code2llm.exporters.readme_exporter  [1 funcs]
     export  CC=5  out:17
+  code2llm.exporters.toon.helpers  [2 funcs]
+    _scan_line_counts  CC=14  out:24
+    _walk_compat  CC=2  out:2
   code2llm.exporters.toon.metrics  [2 funcs]
     _compute_hotspots  CC=5  out:7
     compute_all_metrics  CC=1  out:15
   code2llm.exporters.toon.metrics_core  [7 funcs]
-    _build_coupling_matrix  CC=8  out:6
+    _build_coupling_matrix  CC=9  out:10
     _build_function_to_module_map  CC=3  out:2
-    _resolve_callee_module  CC=9  out:5
+    _resolve_callee_module  CC=6  out:4
     compute_class_metrics  CC=7  out:14
     compute_file_metrics  CC=12  out:25
     compute_function_metrics  CC=8  out:14
@@ -2678,7 +2683,7 @@ MODULES:
     process_request  CC=6  out:11
     start  CC=4  out:4
     main  CC=3  out:5
-  map.toon  [108 funcs]
+  map.toon  [107 funcs]
     _categorize_functions  CC=0  out:0
     _collect_entrypoints  CC=0  out:0
     _collect_functions  CC=0  out:0

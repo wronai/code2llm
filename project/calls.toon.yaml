@@ -1,5 +1,5 @@
 # code2llm call graph | /home/tom/github/semcod/code2llm
-# nodes: 460 | edges: 500 | modules: 90
+# nodes: 461 | edges: 500 | modules: 91
 # CC̄=2.1
 
 HUBS[20]:
@@ -13,10 +13,10 @@ HUBS[20]:
     CC=1  in:0  out:41  total:41
   validate_toon.analyze_class_differences
     CC=6  in:1  out:39  total:40
-  benchmarks.benchmark_evolution.run_benchmark
-    CC=9  in:0  out:34  total:34
   code2llm.cli_commands.handle_cache_command
     CC=12  in:1  out:33  total:34
+  benchmarks.benchmark_evolution.run_benchmark
+    CC=9  in:0  out:34  total:34
   code2llm.core.lang.rust.analyze_rust
     CC=9  in:0  out:31  total:31
   benchmarks.benchmark_optimizations.benchmark_cold_vs_warm
@@ -27,22 +27,22 @@ HUBS[20]:
     CC=9  in:1  out:28  total:29
   code2llm.core.toon_size_manager._split_by_modules
     CC=10  in:1  out:27  total:28
-  code2llm.exporters.mermaid.compact.export_compact
-    CC=13  in:0  out:27  total:27
   code2llm.core.lang.go_lang._analyze_go_regex
     CC=10  in:1  out:26  total:27
+  code2llm.exporters.mermaid.compact.export_compact
+    CC=13  in:0  out:27  total:27
   validate_toon.compare_modules
     CC=5  in:1  out:26  total:27
   code2llm.exporters.mermaid.calls.export_calls
     CC=13  in:0  out:26  total:26
-  code2llm.exporters.evolution_exporter.EvolutionExporter._is_excluded
-    CC=1  in:24  out:1  total:25
   validate_toon.compare_functions
     CC=6  in:1  out:24  total:25
-  code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics
-    CC=12  in:0  out:25  total:25
   code2llm.exporters.project_yaml.core.ProjectYAMLExporter._build_project_yaml
     CC=12  in:0  out:25  total:25
+  code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics
+    CC=12  in:0  out:25  total:25
+  code2llm.exporters.evolution_exporter.EvolutionExporter._is_excluded
+    CC=1  in:24  out:1  total:25
 
 MODULES:
   Taskfile  [1 funcs]
@@ -113,7 +113,7 @@ MODULES:
   code2llm.cli_analysis  [11 funcs]
     _analyze_all_subprojects  CC=4  out:8
     _analyze_subproject  CC=14  out:19
-    _build_config  CC=9  out:13
+    _build_config  CC=11  out:16
     _filter_subprojects  CC=10  out:5
     _merge_chunked_results  CC=9  out:7
     _print_analysis_summary  CC=1  out:9
@@ -145,7 +145,7 @@ MODULES:
     get_workers  CC=2  out:1
   code2llm.core.file_analyzer  [3 funcs]
     _calculate_complexity  CC=8  out:5
-    _perform_deep_analysis  CC=5  out:8
+    _perform_deep_analysis  CC=7  out:9
     _route_to_language_analyzer  CC=10  out:10
   code2llm.core.file_cache  [1 funcs]
     _get_cache_key  CC=1  out:1
@@ -225,7 +225,7 @@ MODULES:
     _detect_cycles  CC=6  out:7
     _detect_dead_code  CC=8  out:15
     _map_dead_code_to_items  CC=9  out:13
-    perform_refactoring_analysis  CC=3  out:12
+    perform_refactoring_analysis  CC=8  out:12
   code2llm.core.repo_files  [7 funcs]
     _get_gitignore_parser  CC=2  out:2
     collect_files_in_dir  CC=6  out:10
@@ -345,13 +345,16 @@ MODULES:
     group_by_file  CC=5  out:8
   code2llm.exporters.readme_exporter  [1 funcs]
     export  CC=5  out:17
+  code2llm.exporters.toon.helpers  [2 funcs]
+    _scan_line_counts  CC=14  out:24
+    _walk_compat  CC=2  out:2
   code2llm.exporters.toon.metrics  [2 funcs]
     _compute_hotspots  CC=5  out:7
     compute_all_metrics  CC=1  out:15
   code2llm.exporters.toon.metrics_core  [7 funcs]
-    _build_coupling_matrix  CC=8  out:6
+    _build_coupling_matrix  CC=9  out:10
     _build_function_to_module_map  CC=3  out:2
-    _resolve_callee_module  CC=9  out:5
+    _resolve_callee_module  CC=6  out:4
     compute_class_metrics  CC=7  out:14
     compute_file_metrics  CC=12  out:25
     compute_function_metrics  CC=8  out:14
@@ -419,7 +422,7 @@ MODULES:
     process_request  CC=6  out:11
     start  CC=4  out:4
     main  CC=3  out:5
-  map.toon  [108 funcs]
+  map.toon  [107 funcs]
     _categorize_functions  CC=0  out:0
     _collect_entrypoints  CC=0  out:0
     _collect_functions  CC=0  out:0

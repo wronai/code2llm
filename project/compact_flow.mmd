@@ -9,9 +9,9 @@ flowchart TD
     code2llm__cli["code2llm.cli<br/>1 funcs"]
     code2llm__cli_analysis["code2llm.cli_analysis<br/>11 funcs"]
     code2llm__cli_commands["code2llm.cli_commands<br/>13 funcs"]
-    code2llm__cli_exports["code2llm.cli_exports<br/>65 funcs"]
-    code2llm__core["code2llm.core<br/>245 funcs"]
-    code2llm__exporters["code2llm.exporters<br/>314 funcs"]
+    code2llm__cli_exports["code2llm.cli_exports<br/>66 funcs"]
+    code2llm__core["code2llm.core<br/>246 funcs"]
+    code2llm__exporters["code2llm.exporters<br/>312 funcs"]
     code2llm__generators["code2llm.generators<br/>62 funcs"]
     code2llm__parsers["code2llm.parsers<br/>10 funcs"]
     code2llm__refactor["code2llm.refactor<br/>7 funcs"]
@@ -19,7 +19,7 @@ flowchart TD
     examples__docker_doql_example["examples.docker-doql-example<br/>20 funcs"]
     examples__litellm["examples.litellm<br/>3 funcs"]
     examples__streaming_analyzer["examples.streaming-analyzer<br/>51 funcs"]
-    map__toon["map.toon<br/>486 funcs"]
+    map__toon["map.toon<br/>542 funcs"]
     pipeline["pipeline<br/>2 funcs"]
     scripts__benchmark_badges["scripts.benchmark_badges<br/>9 funcs"]
     scripts__bump_version["scripts.bump_version<br/>7 funcs"]
@@ -34,9 +34,9 @@ flowchart TD
     benchmarks__benchmark_performance ==>|52| Taskfile
     code2llm__core ==>|42| Taskfile
     code2llm__cli_commands ==>|40| Taskfile
+    code2llm__cli_exports ==>|34| map__toon
     benchmarks__reporting ==>|33| Taskfile
     code2llm__generators ==>|28| map__toon
-    code2llm__cli_exports ==>|28| map__toon
     pipeline ==>|25| Taskfile
     code2llm__cli_analysis ==>|23| Taskfile
     benchmarks__benchmark_optimizations ==>|21| Taskfile
