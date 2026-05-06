@@ -1,5 +1,5 @@
 flowchart TD
-# generated in 0.02s
+%% generated in 0.03s
     Taskfile["Taskfile<br/>1 funcs"]
     benchmarks__benchmark_evolution["benchmarks.benchmark_evolution<br/>4 funcs"]
     benchmarks__benchmark_format_quality["benchmarks.benchmark_format_quality<br/>5 funcs"]
@@ -52,8 +52,8 @@ flowchart TD
     benchmarks__benchmark_format_quality ==>|4| map__toon
     code2llm__cli_commands ==>|4| map__toon
     scripts__benchmark_badges -->|3| Taskfile
-    code2llm__exporters -->|3| Taskfile
     code2llm__cli_analysis -->|3| map__toon
+    code2llm__exporters -->|3| Taskfile
     validate_toon -->|2| map__toon
     examples__streaming_analyzer -->|2| map__toon
     test_python_only__valid -->|2| Taskfile
@@ -61,6 +61,6 @@ flowchart TD
     demo_langs__valid -->|2| Taskfile
     pipeline -->|1| map__toon
     test_python_only__valid -->|1| test_langs__valid
+    code2llm__refactor -->|1| Taskfile
     code2llm__parsers -->|1| Taskfile
     demo_langs__valid -->|1| test_langs__valid
-    code2llm__refactor -->|1| Taskfile

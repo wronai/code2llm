@@ -320,65 +320,65 @@ code2llm/
         ├── toon_parser
         ├── detector
         ├── sample
-├── context
+├── redsl_refactor_report
 ├── prompt_sumd_sumr_feature
 ├── REFACTORING_PLAN
-├── redsl_refactor_plan
 ├── TODO
-    ├── context
-├── redsl_refactor_report
 ├── README
-    ├── README
-        ├── context
-├── CHANGELOG
-    ├── README
-        ├── context
-    ├── context
-    ├── PROJECT_SUMMARY
-    ├── API
-        ├── context
+├── context
 ├── ROADMAP
+    ├── context
+    ├── README
+    ├── context
+        ├── context
+    ├── README
+    ├── LLM_USAGE
+    ├── PROJECT_SUMMARY
+        ├── README
+        ├── context
+        ├── context
+        ├── README
+├── redsl_refactor_plan
         ├── README
         ├── README
+├── CHANGELOG
         ├── README
-        ├── README
-        ├── README
+    ├── API
+        ├── ANALYSIS
+├── SUMR
+    ├── COMPARISON_AND_OPTIMIZATION
+        ├── SUMMARY
+    ├── METHODOLOGY
+    ├── README
         ├── DEPENDENCY_ANALYSIS
         ├── README
     ├── README
-        ├── ANALYSIS
+    ├── prompt
+        ├── context
+        ├── context
     ├── context
         ├── README
-    ├── METHODOLOGY
-├── SUMR
-    ├── COMPARISON_AND_OPTIMIZATION
-    ├── prompt
+    ├── context
+        ├── context
+        ├── toon
+    ├── context
+        ├── context
+        ├── context
+        ├── toon
     ├── README
-        ├── context
-        ├── context
-    ├── context
-        ├── context
-    ├── LLM_USAGE
-    ├── context
-        ├── toon
-        ├── context
-        ├── context
-        ├── context
         ├── toon
         ├── toon
-        ├── context
-        ├── context
         ├── extract_method
-    ├── README
-    ├── README
+    ├── context
+        ├── context
+        ├── context
+        ├── context
+    ├── context
         ├── move_method
-    ├── context
     ├── README
-        ├── toon
-    ├── context
-        ├── SUMMARY
+    ├── README
+    ├── README
 ├── SUMD
-    ├── README
     ├── calls
         ├── toon
 ```
@@ -527,20 +527,20 @@ code2llm/
 - **`UserService`** — —
 - **`Order`** — —
 - **`OrderService`** — —
+- **`PatternDetector`** — —
+- **`LanguageAnalyzer`** — —
 - **`ProjectAnalyzer`** — —
 - **`AnalysisResult`** — —
 - **`NLPPipeline`** — —
 - **`QueryNormalizer`** — —
 - **`IntentMatcher`** — —
 - **`EntityResolver`** — —
-- **`PatternDetector`** — —
-- **`LanguageAnalyzer`** — —
-- **`StreamingAnalyzer`** — —
 - **`TemplateGenerator`** — —
 - **`CommandGenerator`** — —
 - **`IntentMatcher`** — —
 - **`CommandCache`** — —
 - **`SchemaValidator`** — —
+- **`StreamingAnalyzer`** — —
 
 ### Functions
 
@@ -1107,6 +1107,11 @@ code2llm/
 - `is_toon_file(filepath)` — Check if file is TOON format based on extension or content.
 - `load_toon(filepath)` — Parse TOON plain-text format into structured data.
 - `main()` — —
+- `detect_factory()` — —
+- `detect_singleton()` — —
+- `detect_observer()` — —
+- `parse_file()` — —
+- `extract_functions()` — —
 - `repair_command()` — —
 - `print()` — —
 - `print()` — —
@@ -1127,16 +1132,6 @@ code2llm/
 - `step_2d_context_score()` — —
 - `resolve()` — —
 - `load_from_analysis()` — —
-- `detect_factory()` — —
-- `detect_singleton()` — —
-- `detect_observer()` — —
-- `parse_file()` — —
-- `extract_functions()` — —
-- `print()` — —
-- `progress_callback()` — —
-- `on_progress()` — —
-- `print()` — —
-- `get_cfg()` — —
 - `print()` — —
 - `handle_special_commands()` — —
 - `handle_cache_command()` — —
@@ -1167,6 +1162,12 @@ code2llm/
 - `get()` — —
 - `put()` — —
 - `validate()` — —
+- `on_progress()` — —
+- `print()` — —
+- `get_cfg()` — —
+- `print()` — —
+- `progress_callback()` — —
+- `generate_readme()` — —
 - `print()` — —
 - `index()` — —
 - `generate_badges()` — —
@@ -1425,7 +1426,6 @@ code2llm/
 - `compare_classes()` — —
 - `compare_modules()` — —
 - `validate_toon_completeness()` — —
-- `generate_readme()` — —
 - `compute_func_data()` — —
 - `scan_file_sizes()` — —
 - `aggregate_file_stats()` — —
@@ -1434,6 +1434,7 @@ code2llm/
 - `compute_god_modules()` — —
 - `compute_hub_types()` — —
 - `build_context()` — —
+- `analyze_ruby()` — —
 - `extract_function_body()` — —
 - `calculate_complexity_regex()` — —
 - `extract_calls_regex()` — —
@@ -1443,7 +1444,6 @@ code2llm/
 - `load_input()` — —
 - `create_parser()` — —
 - `main()` — —
-- `analyze_ruby()` — —
 - `parse_evolution_metrics()` — —
 - `load_previous()` — —
 - `save_current()` — —
@@ -1457,15 +1457,15 @@ code2llm/
 - `create_html()` — —
 - `load_project_yaml()` — —
 - `extract_insights()` — —
-- `build_hotspots()` — —
-- `hotspot_note()` — —
-- `build_refactoring()` — —
 - `build_health()` — —
 - `build_alerts()` — —
 - `count_duplicates()` — —
+- `build_hotspots()` — —
+- `hotspot_note()` — —
+- `build_refactoring()` — —
 - `render_details()` — —
-- `export_calls()` — —
 - `export_compact()` — —
+- `export_calls()` — —
 - `handle_special_commands()` — —
 - `handle_cache_command()` — —
 - `handle_report_command()` — —
@@ -1476,7 +1476,6 @@ code2llm/
 - `analyze_generic()` — —
 - `validate_mermaid_file()` — —
 - `validate_project_yaml()` — —
-- `export_to_yaml()` — —
 - `build_modules()` — —
 - `group_by_file()` — —
 - `compute_module_entry()` — —
@@ -1484,6 +1483,7 @@ code2llm/
 - `build_exports()` — —
 - `build_class_export()` — —
 - `build_function_exports()` — —
+- `export_to_yaml()` — —
 - `get_file_size_kb()` — —
 - `should_split_toon()` — —
 - `split_toon_file()` — —
@@ -1500,6 +1500,8 @@ code2llm/
 - `generate_llm_flow()` — —
 - `render_llm_flow_md()` — —
 - `run_pipeline()` — —
+- `should_use_chunking()` — —
+- `get_analysis_plan()` — —
 - `analyze_rust()` — —
 - `should_skip_module()` — —
 - `is_entry_point()` — —
@@ -1507,8 +1509,6 @@ code2llm/
 - `find_leaves()` — —
 - `find_critical_path()` — —
 - `export_flow_compact()` — —
-- `should_use_chunking()` — —
-- `get_analysis_plan()` — —
 - `get_ast()` — —
 - `find_function_node()` — —
 - `ast_unparse()` — —
@@ -1521,20 +1521,20 @@ code2llm/
 - `contains_python_files()` — —
 - `get_level1_dirs()` — —
 - `calculate_priority()` — —
+- `analyze_php()` — —
 - `load_evolution_trend()` — —
 - `rel_path()` — —
 - `file_line_count()` — —
 - `count_total_lines()` — —
 - `detect_languages()` — —
 - `export_classic()` — —
+- `generate_pngs()` — —
+- `generate_single_png()` — —
+- `generate_with_puppeteer()` — —
 - `fix_mermaid_file()` — —
 - `parse_toon_content()` — —
 - `is_toon_file()` — —
 - `load_toon()` — —
-- `analyze_php()` — —
-- `generate_pngs()` — —
-- `generate_single_png()` — —
-- `generate_with_puppeteer()` — —
 - `load_yaml()` — —
 - `load_file()` — —
 - `extract_functions_from_yaml()` — —
@@ -1559,13 +1559,13 @@ code2llm/
 - `benchmark_cold_vs_warm()` — —
 - `print_summary()` — —
 - `load_gitignore_patterns()` — —
+- `extract_declarations_ts()` — —
 - `get_parser()` — —
 - `parse_source()` — —
 - `is_available()` — —
 - `build_core_files_section()` — —
 - `build_llm_files_section()` — —
 - `build_viz_files_section()` — —
-- `extract_declarations_ts()` — —
 - `generate()` — —
 - `print_results()` — —
 - `build_report()` — —
@@ -1641,9 +1641,9 @@ code2llm/
 - `analyze_typescript_js()` — —
 - `generate_index_html()` — —
 - `generate_readme_content()` — —
-- `dump_yaml()` — —
 - `export_flow_detailed()` — —
 - `export_flow_full()` — —
+- `dump_yaml()` — —
 - `print()` — —
 - `detect_factory()` — —
 - `detect_singleton()` — —
@@ -1993,7 +1993,7 @@ code2llm/
 📄 `project.duplication.toon`
 📄 `project.evolution.toon`
 📄 `project.examples.analysis.toon`
-📄 `project.map.toon` (96713 functions)
+📄 `project.map.toon` (120760 functions)
 📄 `project.project.toon`
 📄 `project.prompt`
 📄 `project.refactor-prompt` (2 functions)

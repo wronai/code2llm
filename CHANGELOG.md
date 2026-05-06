@@ -18,6 +18,26 @@
 - Fix Mermaid comment syntax: `.mmd` files use `%%` for comments, not `#`
 - Fix Chromium sandbox crash: pass `--no-sandbox` to puppeteer/mmdc for PNG generation
 
+## [0.5.151] - 2026-05-06
+
+### Docs
+- Update README.md
+- Update docs/README.md
+- Update project/context.md
+
+### Other
+- Update code2llm/core/config.py
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.png
+- Update project/calls.toon.yaml
+- Update project/calls.yaml
+- Update project/compact_flow.mmd
+- Update project/compact_flow.png
+- Update project/duplication.toon.yaml
+- Update project/evolution.toon.yaml
+- ... and 7 more files
+
 ## [0.5.150] - 2026-05-06
 
 ### Docs

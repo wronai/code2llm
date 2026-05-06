@@ -6,7 +6,7 @@ SUMMARY:
   dup_groups:    9
   dup_fragments: 23
   saved_lines:   318
-  scan_ms:       5335
+  scan_ms:       2417
 
 HOTSPOTS[7] (files with most duplication):
   benchmarks/project_generator.py  dup=187L  groups=1  frags=4  (0.7%)

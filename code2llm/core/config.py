@@ -108,8 +108,8 @@ class FilterConfig:
     """Filtering options to reduce analysis scope."""
     exclude_tests: bool = True
     exclude_patterns: List[str] = field(default_factory=lambda: [
-        "*__pycache__*", "*.pyc", "*venv*", "*.venv*",
-        "*node_modules*", "*.git*", "*build*", "*dist*",
+        "*__pycache__*", "*.pyc", "*/venv/*", "*/.venv/*",
+        "*node_modules*", "*/.git/*", "*/build/*", "*/dist/*",
         "*_test.py", "test_*.py", "conftest.py",
         "*/tests/*", "*/test/*",
         "*demo_langs/invalid*",

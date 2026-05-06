@@ -1,5 +1,5 @@
-# code2llm | 266f 154096L | python:190,yaml:37,txt:7,shell:4,yml:3,php:2,java:2,toml:2,typescript:1,conf:1,go:1,rust:1,javascript:1,ruby:1,json:1 | 2026-05-06
-# generated in 0.11s
+# code2llm | 267f 178059L | python:189,yaml:38,txt:7,shell:4,yml:3,php:2,java:2,toml:2,typescript:1,conf:1,go:1,rust:1,javascript:1,ruby:1,json:1 | 2026-05-06
+# generated in 0.12s
 # CC̄=2.1 | critical:1/2295 | dups:0 | cycles:0
 
 HEALTH[1]:
@@ -70,19 +70,18 @@ LAYERS:
   │ ts_extractors              180L  0C    5m  CC=7      ←0
   │ repo_files                 174L  0C    8m  CC=8      ←0
   │ base                       174L  2C    8m  CC=2      ←0
-  │ config                     174L  5C    2m  CC=1      ←0
   │ analysis                   173L  1C    5m  CC=14     ←0
   │ orchestrator_handlers      173L  0C    8m  CC=6      ←0
   │ __init__                   171L  1C    5m  CC=1      ←0
   │ flow_compact               170L  0C    9m  CC=9      ←0
   │ detector                   167L  1C    8m  CC=9      ←0
-  │ dashboard_data             163L  1C    9m  CC=7      ←0
   │ ruby                       163L  1C    4m  CC=14     ←0
+  │ dashboard_data             163L  1C    9m  CC=7      ←0
   │ module_detail              162L  1C    9m  CC=7      ←0
   │ ts_parser                  158L  1C    9m  CC=7      ←0
   │ article_view               158L  1C    8m  CC=7      ←0
-  │ toon_view                  153L  1C    8m  CC=6      ←0
   │ export_pipeline            153L  2C    5m  CC=4      ←0
+  │ toon_view                  153L  1C    8m  CC=6      ←0
   │ incremental                150L  1C   10m  CC=4      ←0
   │ modules                    150L  0C    7m  CC=11     ←0
   │ prompt_engine              150L  1C    7m  CC=12     ←0
@@ -95,8 +94,8 @@ LAYERS:
   │ file_filter                128L  1C    9m  CC=9      ←0
   │ code2logic                 127L  0C    8m  CC=6      ←0
   │ normalization              122L  2C   13m  CC=6      ←0
-  │ validation                 119L  0C    6m  CC=12     ←0
   │ core                       119L  1C    3m  CC=12     ←0
+  │ validation                 119L  0C    6m  CC=12     ←0
   │ validate_project           118L  0C    3m  CC=11     ←0
   │ generator                  117L  0C    2m  CC=10     ←0
   │ scanner                    116L  1C    7m  CC=5      ←0
@@ -119,6 +118,7 @@ LAYERS:
   │ pipeline_resolver           91L  1C    5m  CC=10     ←0
   │ orchestrator_chunked        87L  0C    3m  CC=9      ←0
   │ ast_helpers                 86L  0C    5m  CC=8      ←0
+  │ config.yaml                 86L  0C    0m  CC=0.0    ←0
   │ alerts                      84L  0C    4m  CC=8      ←0
   │ utils                       84L  0C    5m  CC=12     ←0
   │ __init__                    82L  0C    0m  CC=0.0    ←0
@@ -179,6 +179,7 @@ LAYERS:
   │ __init__                     7L  0C    0m  CC=0.0    ←0
   │ __main__                     6L  0C    0m  CC=0.0    ←0
   │ __init__                     5L  0C    0m  CC=0.0    ←0
+  │ config                       0L  5C    2m  CC=1      ←0
   │ mermaid                      0L  0C    1m  CC=1      ←0
   │ __init__                     0L  0C    0m  CC=0.0    ←0
   │
@@ -276,13 +277,13 @@ LAYERS:
   │ requirements.txt             9L  0C    0m  CC=0.0    ←0
   │
   project/                        CC̄=0.0    ←in:0  →out:0
-  │ !! map.toon.yaml            73523L  0C  543m  CC=0.0    ←0
-  │ !! calls.yaml                7168L  0C    0m  CC=0.0    ←0
+  │ !! map.toon.yaml            97576L  0C  543m  CC=0.0    ←0
+  │ !! calls.yaml                7159L  0C    0m  CC=0.0    ←0
   │ !! validation.toon.yaml       821L  0C    0m  CC=0.0    ←0
-  │ !! calls.toon.yaml            531L  0C    0m  CC=0.0    ←0
+  │ !! calls.toon.yaml            540L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         434L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         433L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         381L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         379L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         248L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         213L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         207L  0C    0m  CC=0.0    ←0
@@ -329,6 +330,7 @@ LAYERS:
   │
   ── zero ──
      code2llm/generators/mermaid.py            0L
+     code2llm/nlp/config.py                    0L
      code2llm/refactor/__init__.py             0L
      demo_langs/valid/sample.py                0L
      test_langs/invalid/sample_bad.go          0L
@@ -361,18 +363,18 @@ COUPLING:
   CYCLES: none
   HUB: map/ (fan-in=301)
   HUB: Taskfile/ (fan-in=527)
-  SMELL: pipeline/ fan-out=26 → split needed
-  SMELL: code2llm.cli_exports/ fan-out=100 → split needed
-  SMELL: code2llm.core/ fan-out=108 → split needed
-  SMELL: benchmarks/ fan-out=140 → split needed
-  SMELL: code2llm.analysis/ fan-out=11 → split needed
-  SMELL: code2llm/ fan-out=80 → split needed
-  SMELL: code2llm.generators/ fan-out=39 → split needed
-  SMELL: scripts/ fan-out=11 → split needed
-  SMELL: examples.litellm/ fan-out=12 → split needed
-  SMELL: examples.streaming-analyzer/ fan-out=67 → split needed
   SMELL: code2llm.exporters/ fan-out=141 → split needed
+  SMELL: scripts/ fan-out=11 → split needed
+  SMELL: examples.streaming-analyzer/ fan-out=67 → split needed
+  SMELL: code2llm.generators/ fan-out=39 → split needed
   SMELL: validate_toon/ fan-out=82 → split needed
+  SMELL: code2llm.analysis/ fan-out=11 → split needed
+  SMELL: code2llm.core/ fan-out=108 → split needed
+  SMELL: code2llm/ fan-out=80 → split needed
+  SMELL: benchmarks/ fan-out=140 → split needed
+  SMELL: pipeline/ fan-out=26 → split needed
+  SMELL: examples.litellm/ fan-out=12 → split needed
+  SMELL: code2llm.cli_exports/ fan-out=100 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon
