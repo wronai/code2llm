@@ -6,7 +6,7 @@ from typing import Any, Dict, List
 
 import yaml
 
-from code2llm.core.models import AnalysisResult, ModuleInfo
+from code2llm.core.models import AnalysisResult
 
 from .utils import file_line_count, detect_languages, count_total_lines, rel_path
 

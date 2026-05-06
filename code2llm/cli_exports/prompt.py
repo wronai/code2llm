@@ -1,6 +1,5 @@
 """Prompt generation — prompt.txt for LLM consumption (regular and chunked)."""
 
-import sys
 import time
 from pathlib import Path
 from typing import List, Optional, Tuple

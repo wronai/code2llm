@@ -1,7 +1,7 @@
 """Call graph extractor using AST."""
 
 import ast
-from typing import Optional, Set, List, Dict
+from typing import Optional
 
 from code2llm.core.config import Config
 from code2llm.core.models import AnalysisResult, FlowEdge

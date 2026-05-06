@@ -2,7 +2,6 @@
 
 from collections import defaultdict
 from typing import Dict, Set, Tuple
-from pathlib import Path
 
 from code2llm.core.models import AnalysisResult
 

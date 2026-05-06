@@ -3,7 +3,7 @@
 from collections import defaultdict
 from typing import Any, Dict, List
 
-from code2llm.core.models import AnalysisResult, ClassInfo, FunctionInfo
+from code2llm.core.models import AnalysisResult
 from code2llm.exporters.toon.helpers import _is_excluded
 from .constants import CC_CRITICAL, CC_WARNING, CC_ERROR, CC_SEVERE, FAN_OUT_THRESHOLD, FAN_OUT_ERROR, FAN_OUT_SEVERE
 

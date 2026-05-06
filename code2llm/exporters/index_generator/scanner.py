@@ -1,7 +1,7 @@
 """File Scanner — scans output directory and collects file metadata."""
 
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 
 # File type detection and icons

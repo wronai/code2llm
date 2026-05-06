@@ -2,11 +2,10 @@
 
 from collections import defaultdict
 from typing import Dict, List, Set
-from pathlib import Path
 
 from code2llm.core.models import AnalysisResult
 
-from .utils import readable_id, safe_module, resolve_callee, write_file, get_cc, build_name_index
+from .utils import readable_id, resolve_callee, write_file, get_cc, build_name_index
 
 
 # Default skip patterns for noise reduction

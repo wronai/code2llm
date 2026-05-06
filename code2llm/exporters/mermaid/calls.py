@@ -1,7 +1,6 @@
 """Mermaid calls export — calls.mmd simplified call graph."""
 
 from typing import Dict, List, Set, Tuple
-from pathlib import Path
 
 from code2llm.core.models import AnalysisResult
 

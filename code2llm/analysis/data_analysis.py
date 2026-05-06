@@ -6,7 +6,7 @@ This module provides three analyzers:
   - DataAnalyzer: facade combining both analyzers (backward compatibility)
 """
 
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, Tuple
 from code2llm.core.models import AnalysisResult
 
 

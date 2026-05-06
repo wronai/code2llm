@@ -4,7 +4,7 @@ import jinja2
 import tiktoken
 from tree_sitter import Language, Parser
 import tree_sitter_python
-from typing import List, Dict, Any, Optional
+from typing import Dict, Any, Optional
 from code2llm.core.models import AnalysisResult, CodeSmell
 
 class PromptEngine:

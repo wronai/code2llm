@@ -144,6 +144,7 @@ code2llm/
     ├── bump_version
     ├── server
         ├── toon
+    ├── prompt
         ├── toon
     ├── refactor-prompt
             ├── toon
@@ -320,65 +321,64 @@ code2llm/
         ├── toon_parser
         ├── detector
         ├── sample
+├── prompt_sumd_sumr_feature
+├── TODO
 ├── redsl_refactor_report
 ├── context
-├── prompt_sumd_sumr_feature
-├── redsl_refactor_plan
 ├── ROADMAP
-    ├── context
-├── REFACTORING_PLAN
-├── TODO
-        ├── context
+├── redsl_refactor_plan
+    ├── README
 ├── README
+├── REFACTORING_PLAN
+    ├── API
     ├── context
         ├── context
-    ├── README
-    ├── METHODOLOGY
-    ├── README
+    ├── context
+        ├── context
+        ├── context
+        ├── context
         ├── README
-        ├── README
+        ├── DEPENDENCY_ANALYSIS
+    ├── README
     ├── LLM_USAGE
         ├── README
         ├── README
-        ├── DEPENDENCY_ANALYSIS
         ├── SUMMARY
-        ├── README
-        ├── context
-    ├── API
-├── CHANGELOG
-├── SUMR
-    ├── PROJECT_SUMMARY
-        ├── context
         ├── ANALYSIS
+    ├── README
+        ├── README
+├── CHANGELOG
+    ├── METHODOLOGY
+        ├── README
+    ├── PROJECT_SUMMARY
+        ├── README
+    ├── README
     ├── COMPARISON_AND_OPTIMIZATION
+        ├── context
+        ├── context
+    ├── README
+    ├── context
+        ├── toon
+        ├── toon
+        ├── context
+        ├── context
+    ├── README
+        ├── toon
+    ├── context
+    ├── README
+        ├── toon
+        ├── context
+    ├── context
+        ├── context
         ├── README
+    ├── README
     ├── context
-        ├── README
     ├── context
-        ├── context
-    ├── README
-    ├── README
-        ├── context
-    ├── README
-        ├── context
-        ├── context
-    ├── context
-    ├── prompt
-    ├── README
-        ├── toon
-        ├── toon
-    ├── context
-    ├── README
-        ├── context
-        ├── toon
-        ├── context
         ├── move_method
-    ├── README
-    ├── context
-        ├── context
-├── SUMD
         ├── extract_method
-        ├── toon
+        ├── context
+├── SUMR
+├── SUMD
     ├── calls
         ├── toon
 ```
@@ -529,13 +529,13 @@ code2llm/
 - **`OrderService`** — —
 - **`PatternDetector`** — —
 - **`LanguageAnalyzer`** — —
-- **`StreamingAnalyzer`** — —
 - **`ProjectAnalyzer`** — —
 - **`AnalysisResult`** — —
 - **`NLPPipeline`** — —
 - **`QueryNormalizer`** — —
 - **`IntentMatcher`** — —
 - **`EntityResolver`** — —
+- **`StreamingAnalyzer`** — —
 - **`TemplateGenerator`** — —
 - **`CommandGenerator`** — —
 - **`IntentMatcher`** — —
@@ -1112,9 +1112,6 @@ code2llm/
 - `detect_observer()` — —
 - `parse_file()` — —
 - `extract_functions()` — —
-- `on_progress()` — —
-- `print()` — —
-- `get_cfg()` — —
 - `print()` — —
 - `analyze_project()` — —
 - `get_function_count()` — —
@@ -1133,19 +1130,10 @@ code2llm/
 - `step_2d_context_score()` — —
 - `resolve()` — —
 - `load_from_analysis()` — —
+- `generate_readme()` — —
+- `on_progress()` — —
 - `print()` — —
-- `handle_special_commands()` — —
-- `handle_cache_command()` — —
-- `handle_report_command()` — —
-- `validate_and_setup()` — —
-- `print_start_info()` — —
-- `validate_chunked_output()` — —
-- `generate_llm_context()` — —
-- `analyze()` — —
-- `analyze_file()` — —
-- `get_version()` — —
-- `create_parser()` — —
-- `main()` — —
+- `get_cfg()` — —
 - `repair_command()` — —
 - `print()` — —
 - `print()` — —
@@ -1167,7 +1155,19 @@ code2llm/
 - `validate()` — —
 - `print()` — —
 - `progress_callback()` — —
-- `generate_readme()` — —
+- `print()` — —
+- `handle_special_commands()` — —
+- `handle_cache_command()` — —
+- `handle_report_command()` — —
+- `validate_and_setup()` — —
+- `print_start_info()` — —
+- `validate_chunked_output()` — —
+- `generate_llm_context()` — —
+- `analyze()` — —
+- `analyze_file()` — —
+- `get_version()` — —
+- `create_parser()` — —
+- `main()` — —
 - `print()` — —
 - `index()` — —
 - `generate_badges()` — —
@@ -1993,7 +1993,7 @@ code2llm/
 📄 `project.duplication.toon`
 📄 `project.evolution.toon`
 📄 `project.examples.analysis.toon`
-📄 `project.map.toon` (24572 functions)
+📄 `project.map.toon` (72666 functions)
 📄 `project.project.toon`
 📄 `project.prompt`
 📄 `project.refactor-prompt` (2 functions)

@@ -6,7 +6,7 @@ that were extracted from orchestrator.py to reduce its size.
 
 import time
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import List
 
 from code2llm.exporters import (
     get_exporter,
@@ -16,7 +16,6 @@ from code2llm.exporters import (
     IndexHTMLGenerator,
 )
 from code2llm.exporters.project_yaml.evolution import load_previous_evolution
-from .orchestrator_constants import FORMAT_LABELS
 
 
 def _export_mermaid(args, result, output_dir: Path):

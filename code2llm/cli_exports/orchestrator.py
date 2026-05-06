@@ -18,15 +18,7 @@ try:
 except ImportError:
     _HAS_TQDM = False
 
-from code2llm.exporters import (
-    get_exporter,
-    EXPORT_REGISTRY,
-    YAMLExporter,
-    MermaidExporter,
-    ToonViewGenerator,
-    IndexHTMLGenerator,
-)
-from code2llm.exporters.project_yaml.evolution import load_previous_evolution
+from code2llm.exporters import get_exporter
 from code2llm.core.persistent_cache import PersistentCache
 from code2llm.core.config import DEFAULT_PROGRESS_BAR_THRESHOLD
 from .orchestrator_constants import (
@@ -42,10 +34,6 @@ from .orchestrator_handlers import (
     _export_project_toon,
     _export_readme,
     _export_index_html,
-)
-from .orchestrator_chunked import (
-    _get_filtered_subprojects,
-    _process_subproject,
 )
 
 
@@ -329,8 +317,15 @@ def _inject_generation_time(filepath: Path, elapsed: float) -> None:
 
         tag = f"generated in {elapsed:.2f}s"
 
-        if suffix in ('.yaml', '.yml', '.mmd', '.export', '.txt') or name.endswith('.toon.yaml'):
-            # YAML/Mermaid/text: insert '# generated in X.XXs' after first line
+        if suffix in ('.mmd', '.export'):
+            # Mermaid uses %% for comments
+            lines = content.split('\n', 1)
+            if len(lines) == 2:
+                content = f"{lines[0]}\n%% {tag}\n{lines[1]}"
+            else:
+                content = f"{lines[0]}\n%% {tag}\n"
+        elif suffix in ('.yaml', '.yml', '.txt') or name.endswith('.toon.yaml'):
+            # YAML/text: insert '# generated in X.XXs' after first line
             lines = content.split('\n', 1)
             if len(lines) == 2:
                 content = f"{lines[0]}\n# {tag}\n{lines[1]}"

@@ -3,7 +3,6 @@
 import re
 from typing import Dict
 
-from code2llm.core.models import ClassInfo, FunctionInfo, ModuleInfo
 from code2llm.core.lang.base import extract_calls_regex, _extract_declarations
 
 

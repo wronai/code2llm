@@ -8,7 +8,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Tuple, Optional
 from .base import BaseExporter, export_format
-from code2llm.core.models import AnalysisResult, FunctionInfo
+from code2llm.core.models import AnalysisResult
 from code2llm.core.config import LANGUAGE_EXTENSIONS
 
 

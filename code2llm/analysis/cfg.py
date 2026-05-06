@@ -1,7 +1,6 @@
 """Control Flow Graph (CFG) extractor using AST."""
 
 import ast
-from collections import defaultdict
 from typing import Optional
 
 from code2llm.core.config import Config

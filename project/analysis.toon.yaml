@@ -1,6 +1,6 @@
-# code2llm | 267f 81841L | python:189,yaml:38,txt:7,shell:4,yml:3,toml:2,php:2,java:2,typescript:1,conf:1,go:1,rust:1,javascript:1,ruby:1,json:1 | 2026-05-06
-# generated in 0.13s
-# CC̄=2.1 | critical:1/2238 | dups:0 | cycles:0
+# code2llm | 267f 129999L | python:189,yaml:38,txt:7,shell:4,yml:3,toml:2,php:2,java:2,typescript:1,conf:1,go:1,rust:1,javascript:1,ruby:1,json:1 | 2026-05-06
+# generated in 0.12s
+# CC̄=2.1 | critical:1/2295 | dups:0 | cycles:0
 
 HEALTH[1]:
   🟡 CC    scan_file_sizes CC=20 (limit:15)
@@ -34,8 +34,8 @@ LAYERS:
   │ pipeline                   388L  3C   20m  CC=10     ←0
   │ flow_exporter              385L  1C   14m  CC=10     ←0
   │ data_analysis              375L  3C   28m  CC=14     ←0
+  │ orchestrator               369L  0C   13m  CC=14     ←0
   │ pipeline_detector          362L  3C    9m  CC=13     ←0
-  │ orchestrator               362L  0C   13m  CC=14     ←0
   │ yaml_exporter              354L  1C   25m  CC=8      ←0
   │ config                     352L  6C    3m  CC=3      ←0
   │ content                    348L  0C    1m  CC=1      ←0
@@ -51,8 +51,8 @@ LAYERS:
   │ side_effects               294L  2C   15m  CC=14     ←0
   │ type_inference             290L  1C   17m  CC=9      ←0
   │ cfg                        280L  1C   16m  CC=5      ←0
+  │ png                        267L  0C    8m  CC=8      ←0
   │ toon_size_manager          265L  0C    8m  CC=10     ←0
-  │ png                        264L  0C    8m  CC=8      ←0
   │ mermaid_flow_helpers       263L  0C   12m  CC=11     ←0
   │ context_exporter           250L  1C   15m  CC=10     ←0
   │ analysis.toon.yaml         248L  0C    0m  CC=0.0    ←0
@@ -277,23 +277,23 @@ LAYERS:
   │ requirements.txt             9L  0C    0m  CC=0.0    ←0
   │
   project/                        CC̄=0.0    ←in:0  →out:0
-  │ !! calls.yaml                7159L  0C    0m  CC=0.0    ←0
-  │ !! map.toon.yaml             1380L  0C  486m  CC=0.0    ←0
+  │ !! map.toon.yaml            49476L  0C  543m  CC=0.0    ←0
+  │ !! calls.yaml                7168L  0C    0m  CC=0.0    ←0
   │ !! validation.toon.yaml       821L  0C    0m  CC=0.0    ←0
-  │ !! calls.toon.yaml            528L  0C    0m  CC=0.0    ←0
+  │ !! calls.toon.yaml            531L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         434L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         433L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         362L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         381L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         248L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         213L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         207L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         183L  0C    0m  CC=0.0    ←0
   │ refactor-prompt.txt        169L  0C    2m  CC=0.0    ←0
-  │ duplication.toon.yaml       99L  0C    0m  CC=0.0    ←0
+  │ duplication.toon.yaml      108L  0C    0m  CC=0.0    ←0
   │ evolution.toon.yaml         54L  0C    0m  CC=0.0    ←0
-  │ project.toon.yaml           51L  0C    0m  CC=0.0    ←0
-  │ prompt.txt                  47L  0C    0m  CC=0.0    ←0
-  │ evolution.toon.yaml         44L  0C    0m  CC=0.0    ←0
+  │ evolution.toon.yaml         54L  0C    0m  CC=0.0    ←0
+  │ project.toon.yaml           52L  0C    0m  CC=0.0    ←0
+  │ prompt.txt                  48L  0C    0m  CC=0.0    ←0
   │
   test_prompt/                    CC̄=0.0    ←in:0  →out:0
   │ prompt.txt                  51L  0C    0m  CC=0.0    ←0
@@ -363,18 +363,18 @@ COUPLING:
   CYCLES: none
   HUB: Taskfile/ (fan-in=527)
   HUB: map/ (fan-in=301)
-  SMELL: code2llm.core/ fan-out=108 → split needed
-  SMELL: pipeline/ fan-out=26 → split needed
-  SMELL: examples.streaming-analyzer/ fan-out=67 → split needed
-  SMELL: code2llm.analysis/ fan-out=11 → split needed
-  SMELL: scripts/ fan-out=11 → split needed
-  SMELL: code2llm.exporters/ fan-out=141 → split needed
-  SMELL: examples.litellm/ fan-out=12 → split needed
-  SMELL: code2llm.generators/ fan-out=39 → split needed
-  SMELL: code2llm.cli_exports/ fan-out=100 → split needed
   SMELL: code2llm/ fan-out=80 → split needed
-  SMELL: benchmarks/ fan-out=140 → split needed
+  SMELL: pipeline/ fan-out=26 → split needed
+  SMELL: code2llm.cli_exports/ fan-out=100 → split needed
+  SMELL: code2llm.exporters/ fan-out=141 → split needed
+  SMELL: code2llm.core/ fan-out=108 → split needed
   SMELL: validate_toon/ fan-out=82 → split needed
+  SMELL: examples.litellm/ fan-out=12 → split needed
+  SMELL: benchmarks/ fan-out=140 → split needed
+  SMELL: examples.streaming-analyzer/ fan-out=67 → split needed
+  SMELL: scripts/ fan-out=11 → split needed
+  SMELL: code2llm.analysis/ fan-out=11 → split needed
+  SMELL: code2llm.generators/ fan-out=39 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon

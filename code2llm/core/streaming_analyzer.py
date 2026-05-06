@@ -10,7 +10,7 @@ Key optimizations:
 
 import time
 from pathlib import Path
-from typing import Dict, Iterator, List, Optional, Tuple
+from typing import Dict, Iterator, Optional
 
 from .config import Config, FAST_CONFIG
 from .streaming import (

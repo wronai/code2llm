@@ -11,7 +11,7 @@ Used by FlowExporter to enrich CONTRACTS and SIDE_EFFECTS sections.
 
 import ast
 import logging
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 from code2llm.core.models import FunctionInfo
 from code2llm.core.ast_registry import ASTRegistry

@@ -11,8 +11,7 @@ from code2llm.core.models import AnalysisResult
 from code2llm.core.config import LANGUAGE_EXTENSIONS
 from code2llm.exporters.base import BaseExporter, export_format
 
-from code2llm.exporters.toon.helpers import _is_excluded, _scan_line_counts, _rel_path
-from .constants import GOD_MODULE_LINES
+from code2llm.exporters.toon.helpers import _is_excluded, _scan_line_counts
 from .health import build_health
 from .modules import build_modules
 from .hotspots import build_hotspots, build_refactoring

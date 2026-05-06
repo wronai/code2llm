@@ -1,7 +1,7 @@
 """LLM Flow node collection — collect and analyze CFG nodes."""
 
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set
 
 from .parsing import _parse_func_label
 

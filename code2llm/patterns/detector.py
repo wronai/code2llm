@@ -1,7 +1,6 @@
 """Pattern detection for behavioral analysis."""
 
 from typing import List, Dict, Set
-from collections import defaultdict
 
 from code2llm.core.config import Config
 from code2llm.core.models import AnalysisResult

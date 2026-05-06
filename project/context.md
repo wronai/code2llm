@@ -7,19 +7,19 @@
 - **Primary Language**: python
 - **Languages**: python: 189, yaml: 38, txt: 7, shell: 4, yml: 3
 - **Analysis Mode**: static
-- **Total Functions**: 2238
+- **Total Functions**: 2295
 - **Total Classes**: 141
 - **Modules**: 255
-- **Entry Points**: 1814
+- **Entry Points**: 1871
 
 ## Architecture by Module
 
-### map.toon
-- **Functions**: 23564
+### project.map.toon
+- **Functions**: 48619
 - **File**: `map.toon.yaml`
 
-### project.map.toon
-- **Functions**: 525
+### map.toon
+- **Functions**: 23564
 - **File**: `map.toon.yaml`
 
 ### code2llm.analysis.data_analysis

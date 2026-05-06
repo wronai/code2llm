@@ -1,10 +1,8 @@
 """Format export functions — toon, map, context, yaml, json, mermaid, evolution, and legacy project-yaml/flow exports."""
 
-import os
 import sys
 import time
 from pathlib import Path
-from typing import Optional
 
 from code2llm.exporters import (
     YAMLExporter, JSONExporter, MermaidExporter,

@@ -18,11 +18,10 @@ logger = logging.getLogger(__name__)
 
 from .config import (
     Config, FAST_CONFIG, ALL_EXTENSIONS, ALL_FILENAMES,
-    LANGUAGE_EXTENSIONS, LANGUAGE_FILENAME_PREFIXES,
+    LANGUAGE_FILENAME_PREFIXES,
     DEFAULT_PROGRESS_BAR_THRESHOLD,
 )
-from .models import AnalysisResult, FlowEdge, FlowNode, Pattern
-from code2llm.analysis.call_graph import CallGraphExtractor
+from .models import AnalysisResult, Pattern
 
 from .file_cache import FileCache
 from .file_filter import FastFileFilter

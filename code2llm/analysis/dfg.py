@@ -5,7 +5,7 @@ from collections import defaultdict
 from typing import Set, Dict, List
 
 from code2llm.core.config import Config
-from code2llm.core.models import AnalysisResult, FlowEdge, DataFlow, Mutation
+from code2llm.core.models import AnalysisResult, DataFlow, Mutation
 from code2llm.analysis.utils import ast_unparse
 
 

@@ -5,7 +5,6 @@ Extracted from cli.py to isolate analysis orchestration from CLI parsing.
 
 import sys
 from pathlib import Path
-from typing import List, Optional, Tuple
 
 
 def _run_analysis(args, source_path: Path, output_dir: Path):

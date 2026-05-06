@@ -9,7 +9,6 @@
 
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Any
-from pathlib import Path
 
 from .config import NLPConfig, FAST_NLP_CONFIG
 from .normalization import QueryNormalizer, NormalizationResult

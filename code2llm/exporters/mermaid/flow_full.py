@@ -1,7 +1,5 @@
 """Mermaid flow full export — flow_full.mmd debug view with all nodes."""
 
-from pathlib import Path
-
 from code2llm.core.models import AnalysisResult
 
 from .utils import readable_id, safe_module, resolve_callee, write_file, get_cc, build_name_index

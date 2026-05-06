@@ -1,8 +1,8 @@
 """Map exporter details — render D: details per module with imports, exports, classes, functions."""
 
-from typing import Any, List
+from typing import List
 
-from code2llm.core.models import AnalysisResult, ModuleInfo, ClassInfo, FunctionInfo
+from code2llm.core.models import AnalysisResult, FunctionInfo
 
 from .utils import rel_path
 

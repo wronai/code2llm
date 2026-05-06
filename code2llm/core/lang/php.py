@@ -1,6 +1,6 @@
 import re
 from typing import Dict, Optional, Tuple
-from code2llm.core.models import ClassInfo, FunctionInfo, ModuleInfo
+from code2llm.core.models import ClassInfo
 from code2llm.core.lang.base import calculate_complexity_regex, extract_calls_regex, _extract_declarations
 
 def _parse_php_metadata(content: str, module_name: str, result: Dict) -> Tuple[Optional[str], bool]:

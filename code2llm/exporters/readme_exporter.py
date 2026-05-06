@@ -10,7 +10,7 @@ Implementation has been split into:
 """
 
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from .base import BaseExporter, export_format
 from .readme import (

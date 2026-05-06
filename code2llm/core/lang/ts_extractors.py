@@ -4,7 +4,7 @@ Each language has specific node types for functions, classes, methods.
 This module provides unified extraction using tree-sitter queries.
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, Optional, Any
 from pathlib import Path
 
 from code2llm.core.models import ClassInfo, FunctionInfo, ModuleInfo

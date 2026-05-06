@@ -1,7 +1,6 @@
 """Module metrics builder for project.yaml."""
 
 from collections import defaultdict
-from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 from code2llm.core.models import AnalysisResult, ClassInfo, FunctionInfo

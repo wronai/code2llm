@@ -1,4 +1,4 @@
-# code2llm | 2238 func | 185f | 105874L | python | 2026-05-06
+# code2llm | 2295 func | 185f | 154046L | python | 2026-05-06
 # generated in 0.00s
 
 HEALTH:
@@ -17,9 +17,9 @@ ALERTS[20]:
   !!  high_fan_out     handle_cache_command = 17 (limit:10)
 
 MODULES[267] (top by size):
-  M[project/map.toon.yaml] 25429L C:0 F:486 CC↑0 D:0 (yaml)
+  M[project/map.toon.yaml] 73523L C:0 F:543 CC↑0 D:0 (yaml)
   M[map.toon.yaml] 25199L C:0 F:542 CC↑0 D:71 (yaml)
-  M[project/calls.yaml] 7111L C:0 F:0 CC↑0 D:0 (yaml)
+  M[project/calls.yaml] 7168L C:0 F:0 CC↑0 D:0 (yaml)
   M[calls.yaml] 4778L C:0 F:0 CC↑0 D:0 (yaml)
   M[calls_output/calls.yaml] 3801L C:0 F:0 CC↑0 D:0 (yaml)
   M[planfile.yaml] 2077L C:0 F:0 CC↑0 D:0 (yaml)
@@ -49,4 +49,4 @@ REFACTOR[14]:
   [5] H/H Split god module map.toon.yaml (25199L, 0 classes)
 
 EVOLUTION:
-  2026-05-06 CC̄=2.1 crit=74 105874L // Automated analysis
+  2026-05-06 CC̄=2.1 crit=74 154046L // Automated analysis

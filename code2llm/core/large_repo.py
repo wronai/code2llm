@@ -8,7 +8,7 @@ Splitting strategy:
 """
 
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import List, Tuple
 from dataclasses import dataclass, field
 
 from .repo_files import (

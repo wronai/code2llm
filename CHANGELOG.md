@@ -12,6 +12,34 @@
 - Mermaid flow.mmd: 1.12s → 0.05s (22×), TOON: 0.45s → 0.12s, Evolution: 0.55s → 0.007s
 - Cold start total: 5.5s → 2.1s, --fast mode: 1.7s
 
+### Code Quality
+
+- Remove ~85 unused imports across 40+ files (analysis, core, exporters, generators, nlp, patterns, refactor)
+- Fix Mermaid comment syntax: `.mmd` files use `%%` for comments, not `#`
+- Fix Chromium sandbox crash: pass `--no-sandbox` to puppeteer/mmdc for PNG generation
+
+## [0.5.149] - 2026-05-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update code2llm/analysis/call_graph.py
+- Update code2llm/analysis/cfg.py
+- Update code2llm/analysis/data_analysis.py
+- Update code2llm/analysis/dfg.py
+- Update code2llm/analysis/side_effects.py
+- Update code2llm/analysis/smells.py
+- Update code2llm/cli_analysis.py
+- Update code2llm/cli_exports/formats.py
+- Update code2llm/cli_exports/orchestrator.py
+- Update code2llm/cli_exports/orchestrator_handlers.py
+- ... and 52 more files
+
 ## [0.5.148] - 2026-05-06
 
 ### Docs

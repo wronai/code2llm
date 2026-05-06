@@ -1,5 +1,5 @@
 # code2llm call graph | /home/tom/github/semcod/code2llm
-# generated in 0.29s
+# generated in 0.24s
 # nodes: 462 | edges: 500 | modules: 91
 # CC̄=2.1
 
@@ -18,31 +18,31 @@ HUBS[20]:
     CC=12  in:1  out:33  total:34
   benchmarks.benchmark_evolution.run_benchmark
     CC=9  in:0  out:34  total:34
-  benchmarks.benchmark_optimizations.benchmark_cold_vs_warm
-    CC=7  in:1  out:30  total:31
   code2llm.core.lang.rust.analyze_rust
     CC=9  in:0  out:31  total:31
+  benchmarks.benchmark_optimizations.benchmark_cold_vs_warm
+    CC=7  in:1  out:30  total:31
   benchmarks.benchmark_performance.create_test_project
     CC=5  in:1  out:29  total:30
   code2llm.core.lang.base._extract_declarations
     CC=9  in:1  out:28  total:29
   code2llm.core.toon_size_manager._split_by_modules
     CC=10  in:1  out:27  total:28
-  validate_toon.compare_modules
-    CC=5  in:1  out:26  total:27
-  code2llm.core.lang.go_lang._analyze_go_regex
-    CC=10  in:1  out:26  total:27
   code2llm.exporters.mermaid.compact.export_compact
     CC=13  in:0  out:27  total:27
+  code2llm.core.lang.go_lang._analyze_go_regex
+    CC=10  in:1  out:26  total:27
+  validate_toon.compare_modules
+    CC=5  in:1  out:26  total:27
   code2llm.exporters.mermaid.calls.export_calls
     CC=13  in:0  out:26  total:26
-  code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics
-    CC=12  in:0  out:25  total:25
-  code2llm.exporters.evolution_exporter.EvolutionExporter._is_excluded
-    CC=1  in:24  out:1  total:25
   validate_toon.compare_functions
     CC=6  in:1  out:24  total:25
+  code2llm.exporters.evolution_exporter.EvolutionExporter._is_excluded
+    CC=1  in:24  out:1  total:25
   code2llm.exporters.project_yaml.core.ProjectYAMLExporter._build_project_yaml
+    CC=12  in:0  out:25  total:25
+  code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics
     CC=12  in:0  out:25  total:25
 
 MODULES:

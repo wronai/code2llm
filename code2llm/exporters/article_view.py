@@ -4,7 +4,6 @@ Generates status.md from project.yaml data.
 """
 
 from datetime import datetime
-from pathlib import Path
 from typing import Any, Dict, List
 
 from code2llm.exporters.base import ViewGeneratorMixin

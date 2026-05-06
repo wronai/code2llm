@@ -10,18 +10,15 @@ Sprint 2 (v0.3.1): AST-based type inference and side-effect detection.
 Sprint 3 (v0.3.2): networkx-based pipeline detection with domain grouping.
 """
 
-import ast
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional
 
 from .base import BaseExporter, export_format
-from .flow_constants import CC_HIGH, FAN_OUT_THRESHOLD, EXCLUDE_PATTERNS, HUB_SPLIT_RECOMMENDATIONS, HUB_TYPE_THRESHOLD, is_excluded_path
+from .flow_constants import CC_HIGH, FAN_OUT_THRESHOLD, HUB_TYPE_THRESHOLD, is_excluded_path
 from .flow_renderer import FlowRenderer
-from code2llm.core.models import (
-    AnalysisResult, FunctionInfo, ClassInfo, ModuleInfo, FlowNode
-)
+from code2llm.core.models import AnalysisResult, FunctionInfo
 from code2llm.analysis.type_inference import TypeInferenceEngine
 from code2llm.analysis.side_effects import SideEffectDetector, SideEffectInfo
 from code2llm.analysis.pipeline_detector import PipelineDetector, Pipeline

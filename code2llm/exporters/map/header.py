@@ -1,12 +1,11 @@
 """Map exporter header — render header lines with project stats and alerts."""
 
 from datetime import datetime
-from pathlib import Path
 from typing import Any, Dict, List
 
 from code2llm.core.models import AnalysisResult, FunctionInfo, ModuleInfo
 
-from .utils import rel_path, count_total_lines, detect_languages
+from .utils import count_total_lines, detect_languages
 from .alerts import build_alerts, build_hotspots, load_evolution_trend
 
 

@@ -1,4 +1,4 @@
-# code2llm/evolution | 2042 func | 155f | 2026-05-06
+# code2llm/evolution | 2099 func | 155f | 2026-05-06
 # generated in 0.01s
 
 NEXT[3] (ranked by impact):
@@ -6,21 +6,21 @@ NEXT[3] (ranked by impact):
       WHY: CC=20 exceeds 15
       EFFORT: ~1h  IMPACT: 220
 
-  [2] !! SPLIT           map.toon.yaml
-      WHY: 23564L, 0 classes, max CC=0
+  [2] !! SPLIT           project/map.toon.yaml
+      WHY: 48619L, 0 classes, max CC=0
       EFFORT: ~4h  IMPACT: 0
 
-  [3] !! SPLIT           project/map.toon.yaml
-      WHY: 525L, 0 classes, max CC=0
+  [3] !! SPLIT           map.toon.yaml
+      WHY: 23564L, 0 classes, max CC=0
       EFFORT: ~4h  IMPACT: 0
 
 
 RISKS[2]:
+  ⚠ Splitting project/map.toon.yaml may break 543 import paths
   ⚠ Splitting map.toon.yaml may break 542 import paths
-  ⚠ Splitting project/map.toon.yaml may break 486 import paths
 
 METRICS-TARGET:
-  CC̄:          2.1 → ≤1.5
+  CC̄:          2.0 → ≤1.4
   max-CC:      20 → ≤10
   god-modules: 2 → 0
   high-CC(≥15): 1 → ≤0
@@ -51,4 +51,4 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  prev CC̄=2.0 → now CC̄=2.1
+  prev CC̄=2.0 → now CC̄=2.0

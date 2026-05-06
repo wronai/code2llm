@@ -4,7 +4,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from code2llm.core.models import AnalysisResult, FunctionInfo
+from code2llm.core.models import AnalysisResult
 
 from .constants import GOD_MODULE_LINES, HUB_TYPE_THRESHOLD, CC_SPLIT_THRESHOLD
 from .exclusion import is_excluded

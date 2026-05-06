@@ -5,7 +5,7 @@ pre-computes shared data (metrics aggregations, call graph, etc.) and passes
 it to all exporters in sequence.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from code2llm.core.models import AnalysisResult
 

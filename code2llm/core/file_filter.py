@@ -61,7 +61,8 @@ class FastFileFilter:
     
     def should_skip_dir(self, dirname: str) -> bool:
         """Fast O(1) check: skip this directory entirely during tree walk?"""
-        return dirname.lower() in _SKIP_DIR_NAMES
+        lower = dirname.lower()
+        return lower.startswith('.') or lower in _SKIP_DIR_NAMES
 
     def _passes_gitignore(self, file_path: str) -> bool:
         """Check if file passes gitignore patterns (True = pass, False = excluded)."""

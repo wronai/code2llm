@@ -9,7 +9,7 @@
 
 import re
 import unicodedata
-from typing import List, Dict, Optional
+from typing import List, Optional
 from dataclasses import dataclass, field
 
 from .config import NormalizationConfig

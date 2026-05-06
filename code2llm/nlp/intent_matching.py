@@ -7,9 +7,8 @@
 2e. Multi-intent resolution strategy
 """
 
-import re
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional
 from difflib import SequenceMatcher
 
 from .config import IntentMatchingConfig

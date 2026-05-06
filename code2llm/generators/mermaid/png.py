@@ -6,7 +6,7 @@ import tempfile
 import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from code2llm.core.config import (
     DEFAULT_PNG_TIMEOUT,
@@ -70,8 +70,8 @@ def generate_pngs(
     return success_count
 
 
-def _setup_puppeteer_config() -> tuple[int, int, Optional[str]]:
-    """Setup puppeteer config file and return (max_text_size, max_edges, cfg_path)."""
+def _setup_puppeteer_config() -> tuple[int, int, Optional[str], Optional[str]]:
+    """Setup puppeteer config file and return (max_text_size, max_edges, cfg_path, puppeteer_cfg_path)."""
     try:
         max_text_size = int(os.getenv('CODE2FLOW_MERMAID_MAX_TEXT_SIZE', str(DEFAULT_MERMAID_MAX_TEXT_SIZE)))
     except Exception:
@@ -83,6 +83,7 @@ def _setup_puppeteer_config() -> tuple[int, int, Optional[str]]:
         max_edges = DEFAULT_MERMAID_MAX_EDGES
 
     cfg_path: Optional[str] = None
+    puppeteer_cfg_path: Optional[str] = None
     try:
         cfg = {
             "maxTextSize": max_text_size,
@@ -95,43 +96,43 @@ def _setup_puppeteer_config() -> tuple[int, int, Optional[str]]:
     except Exception:
         pass  # cfg_path remains None, renderers will use defaults
 
-    return max_text_size, max_edges, cfg_path
+    # Puppeteer launch config — --no-sandbox required for many Linux environments
+    try:
+        puppeteer_cfg = {
+            "args": ["--no-sandbox", "--disable-setuid-sandbox"],
+        }
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp_pcfg:
+            tmp_pcfg.write(json.dumps(puppeteer_cfg))
+            puppeteer_cfg_path = tmp_pcfg.name
+    except Exception:
+        pass
+
+    return max_text_size, max_edges, cfg_path, puppeteer_cfg_path
 
 
 def _build_renderers(
     mmd_file: Path,
     output_file: Path,
     cfg_path: Optional[str],
+    puppeteer_cfg_path: Optional[str] = None,
 ) -> List[tuple]:
     """Build renderer command list based on config availability."""
+    base_mmdc = ['mmdc', '-i', str(mmd_file), '-o', str(output_file), '-t', 'default', '-b', 'white', '-w', '2400', '-H', '1800']
+    base_npx = ['npx', '-y', '@mermaid-js/mermaid-cli', '-i', str(mmd_file), '-o', str(output_file), '-t', 'default', '-b', 'white', '-w', '2400', '-H', '1800']
+
     if cfg_path:
-        return [
-            (
-                'mmdc',
-                [
-                    'mmdc', '-i', str(mmd_file), '-o', str(output_file),
-                    '-t', 'default', '-b', 'white', '-c', cfg_path,
-                    '-w', '2400', '-H', '1800',
-                ],
-            ),
-            (
-                'npx',
-                [
-                    'npx', '-y', '@mermaid-js/mermaid-cli',
-                    '-i', str(mmd_file), '-o', str(output_file),
-                    '-t', 'default', '-b', 'white', '-c', cfg_path,
-                    '-w', '2400', '-H', '1800',
-                ],
-            ),
-            ('puppeteer', None),
-        ]
-    else:
-        # Fallback without config
-        return [
-            ('mmdc', ['mmdc', '-i', str(mmd_file), '-o', str(output_file), '-t', 'default', '-b', 'white', '-w', '2400', '-H', '1800']),
-            ('npx', ['npx', '-y', '@mermaid-js/mermaid-cli', '-i', str(mmd_file), '-o', str(output_file), '-w', '2400', '-H', '1800']),
-            ('puppeteer', None),
-        ]
+        base_mmdc.extend(['-c', cfg_path])
+        base_npx.extend(['-c', cfg_path])
+
+    if puppeteer_cfg_path:
+        base_mmdc.extend(['-p', puppeteer_cfg_path])
+        base_npx.extend(['-p', puppeteer_cfg_path])
+
+    return [
+        ('mmdc', base_mmdc),
+        ('npx', base_npx),
+        ('puppeteer', None),
+    ]
 
 
 def _run_mmdc_subprocess(
@@ -175,8 +176,8 @@ def generate_single_png(mmd_file: Path, output_file: Path, timeout: int = DEFAUL
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     # Setup config and renderers
-    max_text_size, max_edges, cfg_path = _setup_puppeteer_config()
-    renderers = _build_renderers(mmd_file, output_file, cfg_path)
+    max_text_size, max_edges, cfg_path, puppeteer_cfg_path = _setup_puppeteer_config()
+    renderers = _build_renderers(mmd_file, output_file, cfg_path, puppeteer_cfg_path)
 
     # Run renderers
     try:
@@ -184,11 +185,12 @@ def generate_single_png(mmd_file: Path, output_file: Path, timeout: int = DEFAUL
             renderers, mmd_file, output_file, timeout, max_text_size, max_edges
         )
     finally:
-        if cfg_path:
-            try:
-                os.unlink(cfg_path)
-            except Exception:
-                pass
+        for p in (cfg_path, puppeteer_cfg_path):
+            if p:
+                try:
+                    os.unlink(p)
+                except Exception:
+                    pass
 
 
 def generate_with_puppeteer(
@@ -237,7 +239,8 @@ def generate_with_puppeteer(
                 '--url', f'file://{tmp_html_path}',
                 '--output', str(output_file),
                 '--wait-for', '.mermaid',
-                '--full-page'
+                '--full-page',
+                '--no-sandbox',
             ]
             
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)

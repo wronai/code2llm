@@ -5,7 +5,6 @@ from typing import Any, Dict, List
 from .utils import _as_dict, _as_list, _shorten
 from .nodes import _collect_nodes, _collect_entrypoints, _collect_functions
 from .analysis import (
-    FuncSummary,
     _summarize_functions,
     _pick_relevant_functions,
 )

@@ -1,6 +1,6 @@
 """Detection of code smells using analysis metrics."""
 from collections import defaultdict
-from typing import List, Dict, Any
+from typing import List, Dict
 from code2llm.core.models import AnalysisResult, CodeSmell
 
 class SmellDetector:

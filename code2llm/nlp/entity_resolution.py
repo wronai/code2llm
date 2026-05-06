@@ -9,7 +9,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional, Set, Tuple
+from typing import List, Dict, Optional
 from difflib import SequenceMatcher
 
 from .config import EntityResolutionConfig
