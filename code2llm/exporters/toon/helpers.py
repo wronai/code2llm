@@ -83,15 +83,12 @@ def _hotspot_description(fi: FunctionInfo, fan_out: int) -> str:
     return f"calls {fan_out} functions"
 
 
-@lru_cache(maxsize=8)
-def _scan_line_counts(project_path) -> Dict[str, int]:
-    """Scan project directory for all source file line counts.
+def _scan_line_counts(project_path, result=None) -> Dict[str, int]:
+    """Get line counts for project files.
 
-    Cached per project_path — callers within the same process reuse the result
-    instead of repeating the rglob + read_text I/O.
+    Fast path: derive from AnalysisResult modules (already parsed, no extra I/O).
+    Slow fallback: single os.walk pass reading files from disk.
     """
-    from ...core.config import ALL_EXTENSIONS
-
     line_counts: Dict[str, int] = {}
     if not project_path:
         return line_counts
@@ -99,8 +96,35 @@ def _scan_line_counts(project_path) -> Dict[str, int]:
     if not pp.is_dir():
         return line_counts
 
-    for ext in ALL_EXTENSIONS:
-        for src_file in pp.rglob(f"*{ext}"):
+    # Fast path: use already-analyzed file data when available
+    if result is not None:
+        for mname, mi in getattr(result, 'modules', {}).items():
+            fpath = mi.file
+            if not fpath:
+                continue
+            try:
+                lc = len(Path(fpath).read_text(encoding="utf-8", errors="ignore").splitlines())
+                rel = str(Path(fpath).relative_to(pp))
+                line_counts[str(fpath)] = lc
+                line_counts[rel] = lc
+            except Exception:
+                pass
+        return line_counts
+
+    # Slow fallback: single walk instead of 73 rglob calls
+    from ...core.config import ALL_EXTENSIONS
+    ext_set = set(ALL_EXTENSIONS)
+    for root, dirs, files in Path(project_path).walk() if hasattr(Path, 'walk') else _walk_compat(pp):
+        # Prune excluded directories
+        dirs[:] = [d for d in dirs if d not in {
+            'venv', '.venv', 'node_modules', '__pycache__', '.git',
+            'dist', 'build', '.tox', '.mypy_cache', 'egg-info',
+        }]
+        for fname in files:
+            ext = Path(fname).suffix
+            if ext not in ext_set:
+                continue
+            src_file = root / fname
             try:
                 lc = len(src_file.read_text(encoding="utf-8", errors="ignore").splitlines())
                 rel = str(src_file.relative_to(pp))
@@ -109,3 +133,10 @@ def _scan_line_counts(project_path) -> Dict[str, int]:
             except Exception:
                 pass
     return line_counts
+
+
+def _walk_compat(path):
+    """os.walk compatibility wrapper for Path (Python < 3.12)."""
+    import os
+    for root, dirs, files in os.walk(path):
+        yield Path(root), dirs, files

@@ -9,6 +9,8 @@
 - perf(core): make refactoring analysis conditional (`skip_refactoring_analysis`, `skip_dead_code_detection`, `skip_centrality`, `skip_community_detection`)
 - perf(config): add `PerformanceConfig.apply_fast_mode()` to set all skip flags at once
 - perf(cli): strategy `quick` now auto-enables all performance skip flags
+- perf(toon): replace O(n²) suffix matching in fan-in/coupling with O(1) dict index (`metrics_core.py`)
+- perf(toon): replace 73× rglob `_scan_line_counts` (13s) with single-pass from AnalysisResult modules (<0.1s)
 
 ### Features
 
@@ -27,6 +29,27 @@
 - refactor(config): multi-language support with 4 supporting modules
 - refactor(docs): code analysis engine
 - refactor(goal): output formatting
+
+## [0.5.146] - 2026-05-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update code2llm/cli_exports/formats.py
+- Update code2llm/cli_exports/orchestrator.py
+- Update code2llm/cli_exports/orchestrator_handlers.py
+- Update code2llm/cli_exports/prompt.py
+- Update code2llm/exporters/project_yaml/core.py
+- Update code2llm/exporters/toon/helpers.py
+- Update code2llm/exporters/toon/metrics.py
+- Update code2llm/exporters/toon/metrics_core.py
+- Update project/analysis.toon.yaml
+- Update project/batch_1/analysis.toon.yaml
+- ... and 5 more files
 
 ## [0.5.145] - 2026-05-06
 

@@ -1,6 +1,7 @@
 """Prompt generation — prompt.txt for LLM consumption (regular and chunked)."""
 
 import sys
+import time
 from pathlib import Path
 from typing import List, Optional, Tuple
 
@@ -30,9 +31,13 @@ def _export_prompt_txt(args, output_dir: Path, formats: list[str], source_path: 
     lines.extend(_build_prompt_footer(chunked=False, file_analysis=file_analysis))
 
     prompt_path = output_dir / 'prompt.txt'
+    t0 = time.monotonic()
     prompt_path.write_text("\n".join(lines) + "\n", encoding='utf-8')
+    elapsed = time.monotonic() - t0
+    from .orchestrator import _inject_generation_time
+    _inject_generation_time(prompt_path, elapsed)
     if args.verbose:
-        print(f"  - PROMPT: {prompt_path}")
+        print(f"  - PROMPT: {prompt_path} ({elapsed:.2f}s)")
 
 
 def _export_chunked_prompt_txt(args, output_dir: Path, formats: list[str], source_path: Optional[Path] = None, subprojects: list = None) -> None:

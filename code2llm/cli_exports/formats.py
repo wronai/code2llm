@@ -2,6 +2,7 @@
 
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -13,6 +14,7 @@ from code2llm.exporters import (
     ArticleViewGenerator, HTMLDashboardGenerator,
     load_project_yaml, IndexHTMLGenerator,
 )
+from .orchestrator import _inject_generation_time as _inject_time
 
 
 def _export_evolution(args, result, output_dir: Path):
@@ -21,9 +23,12 @@ def _export_evolution(args, result, output_dir: Path):
         return
     exporter = EvolutionExporter()
     filepath = output_dir / 'evolution.toon.yaml'
+    t0 = time.monotonic()
     exporter.export(result, str(filepath))
+    elapsed = time.monotonic() - t0
+    _inject_time(filepath, elapsed)
     if args.verbose:
-        print(f"  - EVOLUTION (refactoring queue): {filepath}")
+        print(f"  - EVOLUTION (refactoring queue): {filepath} ({elapsed:.2f}s)")
 
 
 def _export_data_structures(args, result, output_dir: Path):
@@ -43,9 +48,12 @@ def _export_context_fallback(args, result, output_dir: Path, formats: list):
         return
     exporter = ContextExporter()
     filepath = output_dir / 'context.md'
+    t0 = time.monotonic()
     exporter.export(result, str(filepath))
+    elapsed = time.monotonic() - t0
+    _inject_time(filepath, elapsed)
     if args.verbose:
-        print(f"  - CONTEXT (LLM narrative): {filepath}")
+        print(f"  - CONTEXT (LLM narrative): {filepath} ({elapsed:.2f}s)")
 
 
 def _export_readme(args, result, output_dir: Path):
@@ -54,18 +62,24 @@ def _export_readme(args, result, output_dir: Path):
         return
     exporter = READMEExporter()
     filepath = output_dir / 'README.md'
+    t0 = time.monotonic()
     exporter.export(result, str(filepath))
+    elapsed = time.monotonic() - t0
+    _inject_time(filepath, elapsed)
     if args.verbose:
-        print(f"  - README (documentation): {filepath}")
+        print(f"  - README (documentation): {filepath} ({elapsed:.2f}s)")
 
 
 def _export_project_yaml(args, result, output_dir: Path):
     """Export unified project.yaml — single source of truth."""
     exporter = ProjectYAMLExporter()
     filepath = output_dir / 'project.yaml'
+    t0 = time.monotonic()
     exporter.export(result, str(filepath))
+    elapsed = time.monotonic() - t0
+    _inject_time(filepath, elapsed)
     if getattr(args, 'verbose', False):
-        print(f"  - PROJECT-YAML (single source of truth): {filepath}")
+        print(f"  - PROJECT-YAML (single source of truth): {filepath} ({elapsed:.2f}s)")
     return filepath
 
 
@@ -79,10 +93,13 @@ def _export_project_toon(args, result, output_dir: Path):
 
     exporter = ToonViewGenerator()
     filepath = output_dir / 'project.toon.yaml'
+    t0 = time.monotonic()
     exporter.generate(data, str(filepath))
+    elapsed = time.monotonic() - t0
+    _inject_time(filepath, elapsed)
 
     if getattr(args, 'verbose', False):
-        print(f"  - PROJECT-TOON (project overview): {filepath}")
+        print(f"  - PROJECT-TOON (project overview): {filepath} ({elapsed:.2f}s)")
 
     return filepath
 
@@ -129,9 +146,12 @@ def _export_simple_formats(args, result, output_dir: Path, formats):
             exporter = exporter_cls()
             # Export as plain text TOON format with .toon.yaml extension
             filepath = output_dir / filename
+            t0 = time.monotonic()
             exporter.export(result, str(filepath))
+            elapsed = time.monotonic() - t0
+            _inject_time(filepath, elapsed)
             if args.verbose:
-                print(f"  - {label}: {filepath}")
+                print(f"  - {label}: {filepath} ({elapsed:.2f}s)")
 
     # Unified project.yaml (single source of truth)
     if 'project-yaml' in formats:

@@ -7,6 +7,7 @@ Maintains backward compatibility with all existing --format values.
 import os
 import shutil
 import sys
+import time
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 
@@ -280,9 +281,12 @@ def _export_registry_formats(args, result, output_dir: Path, formats: List[str])
         kwargs = _get_format_kwargs(fmt, args)
 
         try:
+            t0 = time.monotonic()
             exporter.export(result, str(filepath), **kwargs)
+            elapsed = time.monotonic() - t0
+            _inject_generation_time(filepath, elapsed)
             if args.verbose:
-                print(f"  - {label}: {filepath}")
+                print(f"  - {label}: {filepath} ({elapsed:.2f}s)")
         except Exception as e:
             if args.verbose:
                 print(f"  - {label} export failed: {e}", file=sys.stderr)
@@ -304,6 +308,53 @@ def _export_chunked(
     """Export chunked analysis results."""
     from .orchestrator_chunked import _export_chunked as _chunked_impl
     _chunked_impl(args, result, output_dir, source_path, formats, requested_formats)
+
+
+def _inject_generation_time(filepath: Path, elapsed: float) -> None:
+    """Inject generation time comment into the second line of an exported file."""
+    try:
+        path = Path(filepath)
+        if not path.exists():
+            return
+        suffix = path.suffix.lower()
+        name = path.name.lower()
+
+        # Only inject into text-based files
+        if suffix not in ('.yaml', '.yml', '.md', '.txt', '.mmd', '.html', '.json', '.export'):
+            return
+
+        content = path.read_text(encoding='utf-8')
+        if not content:
+            return
+
+        tag = f"generated in {elapsed:.2f}s"
+
+        if suffix in ('.yaml', '.yml', '.mmd', '.export', '.txt') or name.endswith('.toon.yaml'):
+            # YAML/Mermaid/text: insert '# generated in X.XXs' after first line
+            lines = content.split('\n', 1)
+            if len(lines) == 2:
+                content = f"{lines[0]}\n# {tag}\n{lines[1]}"
+            else:
+                content = f"{lines[0]}\n# {tag}\n"
+        elif suffix == '.md':
+            # Markdown: insert HTML comment after first line
+            lines = content.split('\n', 1)
+            if len(lines) == 2:
+                content = f"{lines[0]}\n<!-- {tag} -->\n{lines[1]}"
+            else:
+                content = f"{lines[0]}\n<!-- {tag} -->\n"
+        elif suffix == '.html':
+            # HTML: insert comment after <!DOCTYPE or <html>
+            content = content.replace('\n', f'\n<!-- {tag} -->\n', 1)
+        elif suffix == '.json':
+            # JSON doesn't support comments — skip
+            return
+        else:
+            return
+
+        path.write_text(content, encoding='utf-8')
+    except Exception:
+        pass  # Never fail the export pipeline for a comment
 
 
 # Backward-compatible aliases

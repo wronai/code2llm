@@ -48,7 +48,7 @@ class ProjectYAMLExporter(BaseExporter):
         self, result: AnalysisResult, prev_evolution: List[Dict]
     ) -> Dict[str, Any]:
         """Build complete project.yaml structure."""
-        line_counts = _scan_line_counts(result.project_path)
+        line_counts = _scan_line_counts(result.project_path, result=result)
         # Filter out venv/site-packages/etc — only count lines of non-excluded files
         filtered_lines = {
             k: v for k, v in line_counts.items()

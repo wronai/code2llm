@@ -35,7 +35,7 @@ class MetricsComputer:
         """Compute all metrics and return context dict."""
         self.result = result
         self.project_path = result.project_path
-        self.line_counts = _scan_line_counts(self.project_path)
+        self.line_counts = _scan_line_counts(self.project_path, result=result)
 
         # Initialize specialized computers
         self._core = CoreMetricsComputer(self.line_counts, self.project_path)

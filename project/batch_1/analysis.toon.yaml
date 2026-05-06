@@ -1,5 +1,5 @@
-# code2llm | 321f 91697L | python:189,md:53,yaml:36,txt:7,shell:4,json:3,yml:3,toml:2,php:2,java:2,typescript:1,conf:1,go:1,rust:1,javascript:1,ruby:1 | 2026-04-25
-# CC̄=1.7 | critical:0/2685 | dups:0 | cycles:0
+# code2llm | 318f 90941L | python:189,md:54,yaml:35,txt:7,shell:4,yml:3,toml:2,php:2,java:2,typescript:1,conf:1,go:1,rust:1,javascript:1,ruby:1,json:1 | 2026-05-06
+# CC̄=1.7 | critical:0/2800 | dups:0 | cycles:0
 
 HEALTH[0]: ok
 
@@ -21,23 +21,23 @@ LAYERS:
   code2llm/                       CC̄=4.3    ←in:0  →out:80  !! split
   │ !! renderer                   637L  1C    1m  CC=1      ←0
   │ !! .code2llm_incremental.json   611L  0C    0m  CC=0.0    ←0
-  │ analyzer                   489L  1C   22m  CC=11     ←0
+  │ analyzer                   495L  1C   22m  CC=11     ←0
   │ large_repo                 488L  2C   20m  CC=9      ←0
   │ prompt                     475L  0C   18m  CC=14     ←0
   │ renderer                   471L  1C   26m  CC=11     ←0
   │ base                       464L  0C   14m  CC=14     ←0
   │ persistent_cache           453L  1C   22m  CC=10     ←0
-  │ file_analyzer              402L  1C   18m  CC=12     ←0
+  │ file_analyzer              409L  1C   18m  CC=12     ←0
   │ pipeline                   388L  3C   20m  CC=10     ←0
   │ flow_exporter              385L  1C   14m  CC=10     ←0
   │ data_analysis              375L  3C   28m  CC=14     ←0
   │ pipeline_detector          362L  3C    9m  CC=13     ←0
   │ yaml_exporter              354L  1C   25m  CC=8      ←0
+  │ config                     352L  6C    3m  CC=3      ←0
   │ content                    348L  0C    1m  CC=1      ←0
+  │ cli_analysis               345L  0C   11m  CC=14     ←0
   │ dashboard_renderer         342L  1C    4m  CC=6      ←0
-  │ config                     338L  6C    2m  CC=3      ←0
-  │ cli_analysis               331L  0C   11m  CC=14     ←0
-  │ cli_parser                 327L  0C    2m  CC=2      ←0
+  │ cli_parser                 333L  0C    2m  CC=2      ←0
   │ entity_resolution          326L  3C   16m  CC=13     ←0
   │ llm_task                   319L  0C   16m  CC=14     ←0
   │ cli_commands               317L  0C   13m  CC=12     ←0
@@ -54,10 +54,10 @@ LAYERS:
   │ context_exporter           250L  1C   15m  CC=10     ←0
   │ analysis.toon.yaml         246L  0C    0m  CC=0.0    ←0
   │ dfg                        219L  1C   12m  CC=7      ←0
+  │ refactoring                209L  1C   11m  CC=9      ←0
   │ scanner                    201L  1C    6m  CC=14     ←0
   │ __init__                   199L  1C   11m  CC=9      ←0
   │ call_graph                 198L  1C   12m  CC=9      ←0
-  │ refactoring                195L  1C   11m  CC=9      ←0
   │ render                     195L  0C    6m  CC=10     ←0
   │ models                     193L  11C    6m  CC=8      ←0
   │ smells                     192L  1C    9m  CC=7      ←0
@@ -264,23 +264,21 @@ LAYERS:
   │ sample_bad.rs               18L  1C    2m  CC=1      ←0
   │
   ./                              CC̄=0.1    ←in:0  →out:0
-  │ !! map.toon.yaml             8403L  0C  486m  CC=0.0    ←1
+  │ !! map.toon.yaml            11016L  0C  540m  CC=0.0    ←1
   │ !! calls.yaml                4778L  0C    0m  CC=0.0    ←0
-  │ !! CHANGELOG.md              2701L  0C    0m  CC=0.0    ←0
-  │ !! SUMD.md                   2637L  0C  425m  CC=0.0    ←90
+  │ !! SUMD.md                   2808L  0C  485m  CC=0.0    ←90
+  │ !! CHANGELOG.md              2729L  0C    0m  CC=0.0    ←0
   │ !! SUMR.md                   2138L  0C   29m  CC=0.0    ←2
   │ !! planfile.yaml              771L  0C    0m  CC=0.0    ←0
-  │ !! TODO.md                    599L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         442L  0C    0m  CC=0.0    ←0
+  │ !! TODO.md                    609L  0C    0m  CC=0.0    ←0
   │ goal.yaml                  430L  0C    0m  CC=0.0    ←0
   │ Taskfile.yml               411L  0C    1m  CC=0.0    ←0
   │ validate_toon              379L  0C   21m  CC=7      ←0
-  │ context.md                 358L  0C    0m  CC=0.0    ←0
+  │ context.md                 357L  0C    0m  CC=0.0    ←0
   │ README.md                  336L  0C    0m  CC=0.0    ←0
   │ ROADMAP.md                 332L  2C    5m  CC=0.0    ←0
   │ REFACTORING_PLAN.md        225L  0C    0m  CC=0.0    ←0
   │ pipeline                   203L  0C    2m  CC=9      ←0
-  │ sumd.json                  192L  0C    0m  CC=0.0    ←0
   │ prompt_sumd_sumr_feature.md   176L  0C    3m  CC=0.0    ←0
   │ pyproject.toml             130L  0C    0m  CC=0.0    ←0
   │ orchestrator.sh             82L  0C    0m  CC=0.0    ←0
@@ -289,47 +287,46 @@ LAYERS:
   │ setup                       72L  0C    2m  CC=2      ←0
   │ pyqual.yaml                 55L  0C    0m  CC=0.0    ←0
   │ project.sh                  53L  0C    0m  CC=0.0    ←0
-  │ project2.sh                 49L  0C    0m  CC=0.0    ←0
+  │ project2.sh                 50L  0C    0m  CC=0.0    ←0
   │ evolution.toon.yaml         44L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_report.md    39L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.md      25L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_report.toon.yaml    21L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.toon.yaml    18L  0C    0m  CC=0.0    ←0
-  │ SUMR.json                    9L  0C    0m  CC=0.0    ←0
   │ requirements.txt             9L  0C    0m  CC=0.0    ←0
   │ Makefile                     0L  0C    0m  CC=0.0    ←0
   │
   docs/                           CC̄=0.0    ←in:0  →out:0
-  │ !! README.md                  923L  0C    1m  CC=0.0    ←0
-  │ COMPARISON_AND_OPTIMIZATION.md   465L  5C   17m  CC=0.0    ←0
+  │ !! README.md                 1942L  0C    1m  CC=0.0    ←0
+  │ COMPARISON_AND_OPTIMIZATION.md   478L  5C   17m  CC=0.0    ←0
   │ API.md                     396L  6C   19m  CC=0.0    ←0
-  │ METHODOLOGY.md             352L  1C    3m  CC=0.0    ←0
+  │ METHODOLOGY.md             358L  1C    3m  CC=0.0    ←0
   │ PROJECT_SUMMARY.md         332L  0C    2m  CC=0.0    ←0
   │ LLM_USAGE.md               316L  0C    0m  CC=0.0    ←0
   │
   project/                        CC̄=0.0    ←in:0  →out:0
-  │ !! map.toon.yaml             6475L  0C  484m  CC=0.0    ←0
-  │ !! calls.yaml                6033L  0C    0m  CC=0.0    ←0
+  │ !! calls.yaml                7041L  0C    0m  CC=0.0    ←0
+  │ !! map.toon.yaml             1378L  0C  484m  CC=0.0    ←0
   │ !! validation.toon.yaml       821L  0C    0m  CC=0.0    ←0
   │ !! context.md                 646L  0C    0m  CC=0.0    ←0
   │ !! context.md                 646L  0C    0m  CC=0.0    ←0
   │ !! context.md                 646L  0C    0m  CC=0.0    ←0
-  │ !! calls.toon.yaml            629L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         452L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         427L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         426L  0C    0m  CC=0.0    ←0
-  │ context.md                 357L  0C    0m  CC=0.0    ←0
+  │ !! context.md                 611L  0C    0m  CC=0.0    ←0
+  │ !! calls.toon.yaml            525L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         423L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         423L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         368L  0C    0m  CC=0.0    ←0
   │ README.md                  339L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         250L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         246L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         213L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         207L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         183L  0C    0m  CC=0.0    ←0
   │ refactor-prompt.txt        169L  0C    2m  CC=0.0    ←0
   │ duplication.toon.yaml       99L  0C    0m  CC=0.0    ←0
-  │ evolution.toon.yaml         60L  0C    0m  CC=0.0    ←0
   │ evolution.toon.yaml         54L  0C    0m  CC=0.0    ←0
   │ project.toon.yaml           51L  0C    0m  CC=0.0    ←0
   │ prompt.txt                  47L  0C    0m  CC=0.0    ←0
+  │ evolution.toon.yaml         44L  0C    0m  CC=0.0    ←0
   │
   test_prompt/                    CC̄=0.0    ←in:0  →out:0
   │ context.md                 460L  0C    0m  CC=0.0    ←0
@@ -365,10 +362,10 @@ LAYERS:
   │ README.md                  162L  0C    0m  CC=0.0    ←0
   │
   batch_1/                        CC̄=0.0    ←in:0  →out:0
-  │ analysis.toon.yaml         419L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         424L  0C    0m  CC=0.0    ←0
   │
   root/                           CC̄=0.0    ←in:0  →out:0
-  │ analysis.toon.yaml         419L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         430L  0C    0m  CC=0.0    ←0
   │
   project_calls_test/             CC̄=0.0    ←in:0  →out:0
   │ README.md                  329L  0C    0m  CC=0.0    ←0
@@ -405,18 +402,18 @@ COUPLING:
   CYCLES: none
   HUB: SUMR/ (fan-in=8)
   HUB: SUMD/ (fan-in=812)
-  SMELL: code2llm.analysis/ fan-out=14 → split needed
-  SMELL: validate_toon/ fan-out=82 → split needed
-  SMELL: code2llm/ fan-out=80 → split needed
-  SMELL: pipeline/ fan-out=26 → split needed
   SMELL: scripts/ fan-out=11 → split needed
-  SMELL: examples.streaming-analyzer/ fan-out=67 → split needed
-  SMELL: code2llm.generators/ fan-out=39 → split needed
-  SMELL: code2llm.core/ fan-out=108 → split needed
-  SMELL: benchmarks/ fan-out=141 → split needed
   SMELL: code2llm.exporters/ fan-out=141 → split needed
-  SMELL: examples.litellm/ fan-out=12 → split needed
+  SMELL: code2llm/ fan-out=80 → split needed
   SMELL: code2llm.cli_exports/ fan-out=94 → split needed
+  SMELL: code2llm.analysis/ fan-out=14 → split needed
+  SMELL: examples.litellm/ fan-out=12 → split needed
+  SMELL: pipeline/ fan-out=26 → split needed
+  SMELL: benchmarks/ fan-out=141 → split needed
+  SMELL: code2llm.generators/ fan-out=39 → split needed
+  SMELL: validate_toon/ fan-out=82 → split needed
+  SMELL: examples.streaming-analyzer/ fan-out=67 → split needed
+  SMELL: code2llm.core/ fan-out=108 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon

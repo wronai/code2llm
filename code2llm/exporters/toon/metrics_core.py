@@ -81,53 +81,44 @@ class CoreMetricsComputer:
         }
 
     @staticmethod
+    def _build_suffix_index(result: AnalysisResult) -> Dict[str, List[Tuple[str, FunctionInfo]]]:
+        """Build reverse lookup: simple_name -> [(qualified_name, FunctionInfo)].
+
+        Replaces O(F) scans per call with O(1) dict lookups.
+        """
+        idx: Dict[str, List[Tuple[str, FunctionInfo]]] = defaultdict(list)
+        for qn, fi in result.functions.items():
+            simple = qn.rsplit(".", 1)[-1]
+            idx[simple].append((qn, fi))
+        return idx
+
+    @staticmethod
     def _compute_fan_in(files: Dict, result: AnalysisResult) -> None:
         """Compute fan-in per file (how many other files call into this file)."""
         importers: Dict[str, set] = defaultdict(set)
+        suffix_idx = CoreMetricsComputer._build_suffix_index(result)
 
         for fname, fi in result.functions.items():
-            CoreMetricsComputer._process_function_calls(fi, result, importers)
+            src_file = fi.file
+            # Forward: who calls me? (called_by)
+            for callee in fi.called_by:
+                callee_info = result.functions.get(callee)
+                if callee_info and callee_info.file != src_file:
+                    importers[src_file].add(callee_info.file)
+            # Reverse: who do I call? → target file gets fan-in
+            for callee in fi.calls:
+                callee_info = result.functions.get(callee)
+                if callee_info and callee_info.file != src_file:
+                    importers[callee_info.file].add(src_file)
+                elif not callee_info:
+                    # O(1) suffix lookup instead of O(F) scan
+                    for qn, ci in suffix_idx.get(callee, []):
+                        if ci.file != src_file:
+                            importers[ci.file].add(src_file)
+                            break
 
         for fpath in files:
             files[fpath]["fan_in"] = len(importers.get(fpath, set()))
-
-    @staticmethod
-    def _process_function_calls(fi: FunctionInfo, result: AnalysisResult, importers: Dict[str, set]) -> None:
-        """Process calls for a single function to compute fan-in."""
-        src_file = fi.file
-
-        # Forward: who calls me? (called_by)
-        CoreMetricsComputer._process_called_by(fi, result, src_file, importers)
-
-        # Reverse: who do I call? → target file gets fan-in
-        CoreMetricsComputer._process_callee_calls(fi, result, src_file, importers)
-
-    @staticmethod
-    def _process_called_by(fi: FunctionInfo, result: AnalysisResult, src_file: str, importers: Dict[str, set]) -> None:
-        """Process called_by relationships."""
-        for callee in fi.called_by:
-            callee_info = result.functions.get(callee)
-            if callee_info and callee_info.file != src_file:
-                importers[src_file].add(callee_info.file)
-
-    @staticmethod
-    def _process_callee_calls(fi: FunctionInfo, result: AnalysisResult, src_file: str, importers: Dict[str, set]) -> None:
-        """Process callee relationships."""
-        for callee in fi.calls:
-            callee_info = result.functions.get(callee)
-            if callee_info and callee_info.file != src_file:
-                importers[callee_info.file].add(src_file)
-            else:
-                # Suffix match for unqualified names
-                CoreMetricsComputer._handle_suffix_match(callee, result, src_file, importers)
-
-    @staticmethod
-    def _handle_suffix_match(callee: str, result: AnalysisResult, src_file: str, importers: Dict[str, set]) -> None:
-        """Handle suffix matching for unqualified names."""
-        for qn, ci in result.functions.items():
-            if qn.endswith(f".{callee}") and ci.file != src_file:
-                importers[ci.file].add(src_file)
-                break
 
     def compute_package_metrics(
         self, files: Dict[str, Dict], result: AnalysisResult
@@ -248,6 +239,12 @@ class CoreMetricsComputer:
         """Build coupling matrix from cross-module calls."""
         matrix: Dict[Tuple[str, str], int] = defaultdict(int)
 
+        # Build reverse index: simple_name -> [(qualified, module)] for O(1) lookup
+        suffix_idx: Dict[str, List[Tuple[str, str]]] = defaultdict(list)
+        for qn, mod in func_to_module.items():
+            simple = qn.rsplit(".", 1)[-1]
+            suffix_idx[simple].append((qn, mod))
+
         for qname, fi in result.functions.items():
             if _is_excluded(fi.file):
                 continue
@@ -255,7 +252,9 @@ class CoreMetricsComputer:
             src_pkg = _package_of_module(src_mod)
 
             for callee in fi.calls:
-                callee_mod = self._resolve_callee_module(callee, func_to_module, src_pkg)
+                callee_mod = self._resolve_callee_module(
+                    callee, func_to_module, src_pkg, suffix_idx
+                )
                 if callee_mod and callee_mod != src_mod:
                     dst_pkg = _package_of_module(callee_mod)
                     if dst_pkg and dst_pkg != src_pkg:
@@ -263,31 +262,24 @@ class CoreMetricsComputer:
 
         return matrix
 
-    def _resolve_callee_module(self, callee: str, func_to_module: Dict[str, str], src_pkg: str) -> Optional[str]:
-        """Resolve callee to a known function module."""
+    def _resolve_callee_module(
+        self, callee: str, func_to_module: Dict[str, str],
+        src_pkg: str, suffix_idx: Dict[str, List[Tuple[str, str]]],
+    ) -> Optional[str]:
+        """Resolve callee to a known function module (O(1) via suffix index)."""
         callee_mod = func_to_module.get(callee)
         if callee_mod:
             return callee_mod
 
-        # Try suffix match — collect all candidates
-        candidates = [
-            (qn, mod) for qn, mod in func_to_module.items()
-            if qn.endswith(f".{callee}")
-        ]
-
+        candidates = suffix_idx.get(callee, [])
         if len(candidates) == 1:
             return candidates[0][1]
         elif candidates:
             # Prefer callee in same package as caller
-            same_pkg = [
-                (qn, mod) for qn, mod in candidates
-                if _package_of_module(mod) == src_pkg
-            ]
-            if same_pkg:
-                return same_pkg[0][1]
-            else:
-                # Pick first cross-package candidate
-                return candidates[0][1]
+            for qn, mod in candidates:
+                if _package_of_module(mod) == src_pkg:
+                    return mod
+            return candidates[0][1]
 
         return None
 
