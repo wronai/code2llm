@@ -100,6 +100,8 @@ class ModuleInfo(BaseModel):
     name: str
     file: str
     is_package: bool = False
+    source_kind: str = "source"
+    line_count: int = 0
     imports: List[str] = field(default_factory=list)
     functions: List[str] = field(default_factory=list)
     classes: List[str] = field(default_factory=list)

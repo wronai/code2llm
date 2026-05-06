@@ -11,6 +11,7 @@ from .models import ClassInfo, FlowEdge, FlowNode, FunctionInfo, ModuleInfo
 from code2llm.analysis.dfg import DFGExtractor
 from code2llm.analysis.call_graph import CallGraphExtractor
 from .file_filter import FastFileFilter
+from .source_classifier import classify_source_path
 from .lang import (
     analyze_typescript_js, analyze_go, analyze_rust, analyze_java,
     analyze_cpp, analyze_csharp, analyze_php, analyze_ruby, analyze_generic,
@@ -76,6 +77,9 @@ class FileAnalyzer:
             return {}
 
         result = self._route_to_language_analyzer(content, file_path, module_name, ext)
+        if result and result.get('module'):
+            result['module'].line_count = len(content.splitlines())
+            result['module'].source_kind = classify_source_path(file_path)
 
         # Tag result with its source file so downstream callers
         # (e.g. PersistentCache in ProjectAnalyzer._store_to_persistent_cache)

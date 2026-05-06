@@ -4,6 +4,7 @@ import re
 from typing import Dict
 
 from code2llm.core.models import ClassInfo, FunctionInfo, ModuleInfo
+from code2llm.core.source_classifier import is_structural_only_file
 
 
 def analyze_generic(content: str, file_path: str, module_name: str,
@@ -19,7 +20,9 @@ def analyze_generic(content: str, file_path: str, module_name: str,
 
     # Count lines as basic metric
     lines = content.split('\n')
-    non_empty = len([l for l in lines if l.strip()])
+    if is_structural_only_file(file_path):
+        stats['files_processed'] += 1
+        return result
 
     # Try to detect function-like patterns
     func_patterns = [

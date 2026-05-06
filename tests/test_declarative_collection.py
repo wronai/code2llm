@@ -20,6 +20,7 @@ from code2llm.core.config import (
     ALL_EXTENSIONS, ALL_FILENAMES, DECLARATIVE_EXTENSIONS, Config,
     LANGUAGE_FILENAMES,
 )
+from code2llm.core.file_analyzer import FileAnalyzer
 from code2llm.core.persistent_cache import PersistentCache
 
 
@@ -202,3 +203,70 @@ def test_lockfiles_excluded_by_default(iac_project, tmp_path):
     assert "Cargo.lock" not in names
     # But the non-lock package.json stays.
     assert "package.json" in names
+
+
+def test_generated_analysis_artifacts_are_excluded_by_default(tmp_path):
+    """code2llm outputs must not be fed back into the next analysis run."""
+    p = tmp_path / "proj"
+    p.mkdir()
+    (p / "app.py").write_text("def run():\n    return 1\n")
+    out = p / "project"
+    out.mkdir()
+    (out / "analysis.toon.yaml").write_text("# code2llm\nHEALTH[0]: ok\n")
+    (out / "map.toon.yaml").write_text("# generated map\n")
+    (out / "index.html").write_text("<title>code2llm Analysis Results</title>\n")
+    batch = out / "batch_1"
+    batch.mkdir()
+    (batch / "context.md").write_text("# System Architecture Analysis\n<!-- generated in 0.01s -->\n")
+    (p / ".code2llm_incremental.json").write_text("{}\n")
+    (p / "SUMD.md").write_text("# generated summary\n")
+    (p / "defscan-classes-py.md").write_text("class Noise:\n    pass\n")
+
+    cfg = Config()
+    cfg.performance.parallel_enabled = False
+    files = ProjectAnalyzer(cfg, p)._collect_files(p)
+    names = {str(Path(fp).relative_to(p)) for fp, _ in files}
+
+    assert "app.py" in names
+    assert "project/analysis.toon.yaml" not in names
+    assert "project/map.toon.yaml" not in names
+    assert "project/index.html" not in names
+    assert "project/batch_1/context.md" not in names
+    assert ".code2llm_incremental.json" not in names
+    assert "SUMD.md" not in names
+    assert "defscan-classes-py.md" not in names
+
+
+def test_code2llmignore_is_applied(tmp_path):
+    """Project-local .code2llmignore should refine analysis scope."""
+    p = tmp_path / "proj"
+    p.mkdir()
+    (p / ".code2llmignore").write_text("docs/\n")
+    (p / "app.py").write_text("def run():\n    return 1\n")
+    docs = p / "docs"
+    docs.mkdir()
+    (docs / "README.md").write_text("# Docs\n")
+
+    cfg = Config()
+    cfg.performance.parallel_enabled = False
+    files = ProjectAnalyzer(cfg, p)._collect_files(p)
+    names = {Path(fp).name for fp, _ in files}
+
+    assert "app.py" in names
+    assert "README.md" not in names
+
+
+def test_markdown_and_config_do_not_emit_fake_symbols(iac_project):
+    """Tracked docs/config invalidate cache but should not create classes/functions."""
+    cfg = Config()
+    analyzer = FileAnalyzer(cfg)
+
+    markdown = analyzer.analyze_file(str(iac_project / "README.md"), "README")
+    yaml_result = analyzer.analyze_file(str(iac_project / "k8s.yaml"), "k8s")
+
+    assert markdown["functions"] == {}
+    assert markdown["classes"] == {}
+    assert yaml_result["functions"] == {}
+    assert yaml_result["classes"] == {}
+    assert markdown["module"].source_kind == "docs"
+    assert yaml_result["module"].source_kind == "config"

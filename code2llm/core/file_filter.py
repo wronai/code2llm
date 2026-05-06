@@ -5,6 +5,11 @@ import re
 from pathlib import Path
 from .config import FilterConfig
 from .gitignore import load_gitignore_patterns
+from .source_classifier import (
+    ARCHIVE_DIR_NAMES,
+    GENERATED_OUTPUT_DIR_NAMES,
+    is_generated_artifact,
+)
 
 
 _SKIP_DIR_NAMES = frozenset({
@@ -19,13 +24,14 @@ _SKIP_DIR_NAMES = frozenset({
     'lib', 'lib64', 'site-packages', 'include', 'bin', 'share',
     '.code2llm_cache',
     'tests', 'test',
+    'coverage', '.nyc_output',
     # Backup and auto-generated directories that often contain venvs
     '.algitex', '.backup', 'backups', '.bak', 'bak',
     # Additional venv patterns
     'virtualenv', '.virtualenv', 'envs', '.envs', 'venv-', '.venv-',
     # CI/CD and deployment artifacts
     '.terraform', '.serverless', '.netlify', '.vercel',
-})
+}) | ARCHIVE_DIR_NAMES | GENERATED_OUTPUT_DIR_NAMES
 
 
 class FastFileFilter:
@@ -98,6 +104,9 @@ class FastFileFilter:
         """Check if file should be processed."""
         path_lower = file_path.lower()
         basename_lower = Path(file_path).name.lower()
+
+        if is_generated_artifact(file_path, self.project_path):
+            return False
 
         return (
             self._passes_gitignore(file_path) and

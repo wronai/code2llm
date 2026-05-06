@@ -1,7 +1,7 @@
 """Gitignore support for code2llm file filtering."""
 
 from pathlib import Path
-from typing import List
+from typing import Iterable, List
 import re
 
 
@@ -118,21 +118,25 @@ class GitIgnoreParser:
         return ignored
 
 
-def load_gitignore_patterns(project_path: Path) -> GitIgnoreParser:
-    """Load gitignore patterns from project directory.
-    
-    Searches up the directory tree from project_path until it finds a .gitignore file
-    or reaches the filesystem root. This ensures that gitignore rules are properly applied
-    even when analyzing subdirectories of a larger project.
-    """
+def _nearest_ignore_files(project_path: Path, names: Iterable[str]) -> List[Path]:
+    """Find nearest ignore files while walking upward from project_path."""
     current_path = project_path.resolve()
-    
-    while current_path != current_path.parent:  # Stop at filesystem root
-        gitignore_path = current_path / '.gitignore'
-        if gitignore_path.exists():
-            return GitIgnoreParser(gitignore_path)
+    while current_path != current_path.parent:
+        found = [current_path / name for name in names if (current_path / name).exists()]
+        if found:
+            return found
         current_path = current_path.parent
-    
-    # Check filesystem root as last resort
-    gitignore_path = current_path / '.gitignore'
-    return GitIgnoreParser(gitignore_path)
+    return [current_path / name for name in names if (current_path / name).exists()]
+
+
+def load_gitignore_patterns(project_path: Path) -> GitIgnoreParser:
+    """Load .gitignore and .code2llmignore patterns from the nearest parent.
+
+    .code2llmignore is loaded after .gitignore so project-specific analysis
+    rules can add exclusions or negations without changing version-control
+    ignores.
+    """
+    parser = GitIgnoreParser()
+    for ignore_path in _nearest_ignore_files(project_path, ('.gitignore', '.code2llmignore')):
+        parser._load_gitignore(ignore_path)
+    return parser

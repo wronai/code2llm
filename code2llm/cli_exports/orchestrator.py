@@ -85,6 +85,15 @@ def _show_dry_run_plan(formats: List[str], output_dir: Path, is_chunked: bool, r
     print(f"\n✅ Dry-run complete. Use without --dry-run to export.\n")
 
 
+def _should_skip_export_cache(args, is_chunked: bool) -> bool:
+    """Return True when this run must not read or write export cache."""
+    return (
+        is_chunked
+        or getattr(args, 'no_cache', False)
+        or getattr(args, 'force', False)
+    )
+
+
 def _run_exports(args, result, output_dir: Path, source_path: Optional[Path] = None):
     """Export analysis results in requested formats.
 
@@ -102,8 +111,9 @@ def _run_exports(args, result, output_dir: Path, source_path: Optional[Path] = N
         _show_dry_run_plan(formats, output_dir, is_chunked, result)
         return
 
-    # Skip cache for chunked or when explicitly disabled
-    skip_cache = is_chunked or getattr(args, 'no_cache', False)
+    # Skip cache for chunked runs or explicit cache bypass flags. --force is
+    # documented as a --no-cache alias, so it must bypass export cache too.
+    skip_cache = _should_skip_export_cache(args, is_chunked)
 
     if not skip_cache and source_path:
         cache = PersistentCache(str(source_path))

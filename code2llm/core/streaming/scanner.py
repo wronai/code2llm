@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from code2llm.core.models import ClassInfo, FlowNode, FunctionInfo, ModuleInfo
+from code2llm.core.source_classifier import classify_source_path, is_generated_artifact
 
 from .cache import StreamingFileCache
 from .prioritizer import FilePriority
@@ -45,7 +46,9 @@ class StreamingScanner:
         result = {
             'module': ModuleInfo(
                 name=priority.module_name,
-                file=priority.file_path
+                file=priority.file_path,
+                source_kind=classify_source_path(priority.file_path),
+                line_count=len(content.splitlines()),
             ),
             'functions': {},
             'classes': {},
@@ -186,6 +189,8 @@ class StreamingScanner:
                     continue
             
             if any(x in file_str.lower() for x in ['__pycache__', '.venv', 'venv']):
+                continue
+            if is_generated_artifact(py_file, project_path):
                 continue
             
             # Calculate module name

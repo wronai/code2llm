@@ -119,6 +119,15 @@ class FilterConfig:
         "*poetry.lock", "*Pipfile.lock", "*Cargo.lock", "*composer.lock",
         "*.terraform.lock.hcl", "*.tfstate", "*.tfstate.backup",
         "*.min.js", "*.min.css", "*.map",
+        # code2llm / analysis artefacts. These are useful outputs, but feeding
+        # them back into the next run makes reports rank generated files above
+        # real source files.
+        "*analysis.toon*", "*map.toon.yaml", "*evolution.toon*",
+        "*validation.toon.yaml", "*duplication.toon.yaml",
+        "*project.toon*", "*calls.yaml", "*calls.toon.yaml", "*calls.mmd",
+        "*compact_flow.mmd", "*flow.mmd", "*flow_detailed.mmd",
+        "*flow_full.mmd", "*mermaid.export", "*defscan-*.md",
+        "*SUMD.md", "*SUMR.md",
     ])
     include_patterns: List[str] = field(default_factory=list)
     min_function_lines: int = 1

@@ -5,6 +5,11 @@ from typing import List, Tuple, Optional
 
 from functools import lru_cache
 from .gitignore import load_gitignore_patterns, GitIgnoreParser
+from .source_classifier import (
+    ARCHIVE_DIR_NAMES,
+    GENERATED_OUTPUT_DIR_NAMES,
+    is_generated_artifact,
+)
 
 # Directories to skip during analysis
 SKIP_DIRS = {
@@ -14,7 +19,7 @@ SKIP_DIRS = {
     'build', 'dist', 'egg-info', '.eggs',
     'htmlcov', '.coverage', '.cache',
     'lib', 'lib64', 'site-packages', 'include', 'bin', 'share',  # venv internals
-}
+} | ARCHIVE_DIR_NAMES | GENERATED_OUTPUT_DIR_NAMES
 
 # Patterns that indicate a file should be skipped
 SKIP_PATTERNS = [
@@ -41,6 +46,8 @@ def should_skip_file(file_str: str, project_path: Optional[Path] = None,
     """Check if file should be skipped."""
     lower_path = file_str.lower()
     if any(pattern in lower_path for pattern in SKIP_PATTERNS):
+        return True
+    if is_generated_artifact(file_str, project_path):
         return True
     
     # Check gitignore if parser provided
