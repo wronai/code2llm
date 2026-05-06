@@ -65,6 +65,7 @@ used_func()
     config.verbose = True
     config.filters.exclude_tests = False
     config.filters.exclude_patterns = []
+    config.performance.skip_dead_code_detection = False
     analyzer = ProjectAnalyzer(config)
     result = analyzer.analyze_project(str(tmp_path))
     print(f"DEBUG: Dead code test functions: {list(result.functions.keys())}")

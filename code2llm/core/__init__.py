@@ -9,7 +9,7 @@ from .models import (
 __all__ = [
     'ProjectAnalyzer',
     'StreamingAnalyzer',
-    'IncrementalAnalyzer',
+    'StreamingIncrementalAnalyzer',
     'ScanStrategy',
     'SmartPrioritizer',
     'STRATEGY_QUICK',
@@ -43,7 +43,7 @@ def __getattr__(name):
         return locals()[name]
     
     _streaming_names = {
-        'StreamingAnalyzer', 'IncrementalAnalyzer', 'ScanStrategy',
+        'StreamingAnalyzer', 'StreamingIncrementalAnalyzer', 'ScanStrategy',
         'SmartPrioritizer', 'STRATEGY_QUICK', 'STRATEGY_STANDARD', 'STRATEGY_DEEP',
     }
     if name in _streaming_names:

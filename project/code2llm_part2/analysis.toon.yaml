@@ -1,13 +1,11 @@
-# code2llm | 157f 23354L | python:156 | 2026-04-21
-# CC̄=4.3 | critical:1/939 | dups:0 | cycles:0
+# code2llm | 162f 24553L | python:155,yaml:2,md:2,json:1 | 2026-04-25
+# CC̄=4.3 | critical:0/946 | dups:0 | cycles:0
 
-HEALTH[1]:
-  🟡 CC    load_input CC=15 (limit:15)
+HEALTH[0]: ok
 
-REFACTOR[1]:
-  1. split 1 high-CC methods  (CC>15)
+REFACTOR[0]: none needed
 
-PIPELINES[580]:
+PIPELINES[585]:
   [1] Src [main]: main → handle_special_commands → generate_llm_context
       PURITY: 100% pure
   [2] Src [__getattr__]: __getattr__
@@ -34,8 +32,8 @@ LAYERS:
   │ prompt_engine              150L  1C    7m  CC=12     ←0
   │ __init__                     0L  0C    0m  CC=0.0    ←0
   │
-  generators/                     CC̄=4.9    ←in:1  →out:1
-  │ !! llm_task                   309L  0C   14m  CC=15     ←0
+  generators/                     CC̄=4.8    ←in:1  →out:1
+  │ llm_task                   319L  0C   16m  CC=14     ←0
   │ png                        264L  0C    8m  CC=8      ←3
   │ analysis                   173L  1C    5m  CC=14     ←1
   │ fix                        147L  0C    7m  CC=8      ←1
@@ -52,9 +50,11 @@ LAYERS:
   │ __init__                    15L  0C    0m  CC=0.0    ←0
   │
   ./                              CC̄=4.7    ←in:0  →out:0
+  │ !! .code2llm_incremental.json   611L  0C    0m  CC=0.0    ←0
   │ cli_analysis               331L  0C   11m  CC=14     ←1
   │ cli_parser                 327L  0C    2m  CC=2      ←1
   │ cli_commands               317L  0C   13m  CC=12     ←1
+  │ analysis.toon.yaml         246L  0C    0m  CC=0.0    ←0
   │ api                         73L  0C    2m  CC=2      ←0
   │ cli                         69L  0C    1m  CC=7      ←0
   │ __init__                    52L  0C    1m  CC=3      ←0
@@ -149,12 +149,12 @@ LAYERS:
   │ __init__                     5L  0C    0m  CC=0.0    ←0
   │
   core/                           CC̄=4.0    ←in:9  →out:9  !! split
+  │ analyzer                   489L  1C   22m  CC=11     ←0
   │ large_repo                 488L  2C   20m  CC=9      ←1
   │ base                       464L  0C   14m  CC=14     ←8
-  │ analyzer                   460L  1C   20m  CC=11     ←0
+  │ persistent_cache           453L  1C   22m  CC=10     ←1
   │ file_analyzer              402L  1C   18m  CC=12     ←0
-  │ persistent_cache           346L  1C   19m  CC=10     ←1
-  │ config                     269L  6C    2m  CC=3      ←0
+  │ config                     338L  6C    2m  CC=3      ←0
   │ toon_size_manager          265L  0C    8m  CC=10     ←1
   │ scanner                    201L  1C    6m  CC=14     ←0
   │ refactoring                195L  1C   11m  CC=9      ←0
@@ -195,7 +195,12 @@ LAYERS:
   │ intent_matching            297L  3C   15m  CC=7      ←0
   │ config                     174L  5C    2m  CC=1      ←0
   │ normalization              122L  2C   13m  CC=6      ←0
+  │ config.yaml                 86L  0C    0m  CC=0.0    ←0
   │ __init__                    23L  0C    0m  CC=0.0    ←0
+  │
+  templates/                      CC̄=0.0    ←in:0  →out:0
+  │ extract_method.md           22L  0C    0m  CC=0.0    ←0
+  │ move_method.md              19L  0C    0m  CC=0.0    ←0
   │
   ── zero ──
      refactor/__init__.py                      0L
@@ -218,23 +223,23 @@ COUPLING:
         exporters.readme                      ←6                                                                                                                                                                                                                                                                                                                      ──                          hub
             cli_analysis                                                                                               1                       2                                                                                                                                                                      ←1                                                                      ──
   CYCLES: none
-  HUB: cli_commands/ (fan-in=5)
   HUB: exporters.readme/ (fan-in=6)
-  HUB: exporters.evolution/ (fan-in=7)
-  HUB: core/ (fan-in=9)
-  HUB: exporters.mermaid/ (fan-in=15)
-  HUB: exporters/ (fan-in=54)
   HUB: core.lang/ (fan-in=9)
+  HUB: core/ (fan-in=9)
+  HUB: exporters/ (fan-in=54)
+  HUB: exporters.evolution/ (fan-in=7)
+  HUB: cli_commands/ (fan-in=5)
+  HUB: exporters.mermaid/ (fan-in=15)
   HUB: analysis.utils/ (fan-in=7)
-  SMELL: exporters.map/ fan-out=11 → split needed
-  SMELL: analysis/ fan-out=9 → split needed
-  SMELL: core/ fan-out=9 → split needed
-  SMELL: exporters.mermaid/ fan-out=15 → split needed
-  SMELL: exporters/ fan-out=32 → split needed
-  SMELL: exporters.project_yaml/ fan-out=17 → split needed
-  SMELL: cli/ fan-out=8 → split needed
   SMELL: exporters.toon/ fan-out=10 → split needed
+  SMELL: core/ fan-out=9 → split needed
+  SMELL: exporters.map/ fan-out=11 → split needed
+  SMELL: exporters.project_yaml/ fan-out=17 → split needed
+  SMELL: analysis/ fan-out=9 → split needed
+  SMELL: cli/ fan-out=8 → split needed
+  SMELL: exporters/ fan-out=32 → split needed
   SMELL: cli_exports/ fan-out=11 → split needed
+  SMELL: exporters.mermaid/ fan-out=15 → split needed
 
 EXTERNAL:
   validation: run `vallm batch .` → validation.toon

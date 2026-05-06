@@ -4,4 +4,4 @@ from .strategies import ScanStrategy, STRATEGY_QUICK, STRATEGY_STANDARD, STRATEG
 from .cache import StreamingFileCache
 from .prioritizer import SmartPrioritizer, FilePriority
 from .scanner import StreamingScanner
-from .incremental import IncrementalAnalyzer
+from .incremental import StreamingIncrementalAnalyzer

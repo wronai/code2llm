@@ -15,11 +15,21 @@ class RefactoringAnalyzer:
         self.file_filter = file_filter
     
     def perform_refactoring_analysis(self, result: AnalysisResult) -> None:
-        """Perform deep analysis and detect code smells."""
+        """Perform deep analysis and detect code smells.
+
+        Expensive operations (centrality, cycles, communities, vulture)
+        are skipped when the corresponding config flags are set.  The
+        ``fast_mode`` shortcut disables all of them at once via
+        ``PerformanceConfig.apply_fast_mode()``.
+        """
+        perf = self.config.performance
+        if perf.skip_refactoring_analysis:
+            return
+
         if self.config.verbose:
             print("Performing refactoring analysis...")
             
-        # 1. Calculate metrics (fan-in/fan-out)
+        # 1. Calculate metrics (fan-in/fan-out) — always needed for TOON
         from ..analysis.call_graph import CallGraphExtractor
         cg_ext = CallGraphExtractor(self.config)
         cg_ext.result = result
@@ -29,13 +39,16 @@ class RefactoringAnalyzer:
         G = self._build_call_graph(result)
         
         # 3. Calculate Betweenness Centrality (Bottlenecks)
-        self._calculate_centrality(G, result)
+        if not perf.skip_centrality:
+            self._calculate_centrality(G, result)
         
         # 4. Detect Circular Dependencies
-        self._detect_cycles(G, result)
+        if not perf.skip_centrality:
+            self._detect_cycles(G, result)
         
         # 5. Community Detection (Module groups)
-        self._detect_communities(G, result)
+        if not perf.skip_community_detection:
+            self._detect_communities(G, result)
         
         # 6. Analyze coupling
         self._analyze_coupling(result)
@@ -43,8 +56,9 @@ class RefactoringAnalyzer:
         # 7. Detect code smells
         self._detect_smells(result)
         
-        # 8. Dead code detection with vulture
-        self._detect_dead_code(result)
+        # 8. Dead code detection with vulture (slowest step — rescans all files)
+        if not perf.skip_dead_code_detection:
+            self._detect_dead_code(result)
         
         if self.config.verbose:
             print(f"  Detected {len(result.smells)} code smells")

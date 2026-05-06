@@ -18,8 +18,8 @@ from .entity_resolution import EntityResolver, EntityResolutionResult, Entity
 
 
 @dataclass
-class PipelineStage:
-    """Single pipeline stage result."""
+class NlpPipelineStage:
+    """Single NLP pipeline stage result."""
     stage_name: str
     success: bool
     result: Any
@@ -49,7 +49,7 @@ class NLPPipelineResult:
     action_recommendation: Optional[str] = None
     
     # Execution metadata
-    stages: List[PipelineStage] = field(default_factory=list)
+    stages: List[NlpPipelineStage] = field(default_factory=list)
     total_execution_time_ms: float = 0.0
     
     def is_successful(self) -> bool:
@@ -117,7 +117,7 @@ class NLPPipeline:
         normalized = self._step_normalize(query, language)
         norm_time = (time.time() - norm_start) * 1000
         
-        stages.append(PipelineStage(
+        stages.append(NlpPipelineStage(
             stage_name="normalization",
             success=True,
             result=normalized,
@@ -130,7 +130,7 @@ class NLPPipeline:
         intent_time = (time.time() - intent_start) * 1000
         
         intent_success = intent_result.primary_intent is not None
-        stages.append(PipelineStage(
+        stages.append(NlpPipelineStage(
             stage_name="intent_matching",
             success=intent_success,
             result=intent_result,
@@ -151,7 +151,7 @@ class NLPPipeline:
         entity_time = (time.time() - entity_start) * 1000
         
         entity_success = len(entity_result.entities) > 0
-        stages.append(PipelineStage(
+        stages.append(NlpPipelineStage(
             stage_name="entity_resolution",
             success=entity_success,
             result=entity_result,
@@ -366,11 +366,11 @@ class NLPPipeline:
         return "\n".join(lines)
     
     # Individual step methods for 4a-4e
-    def step_4a_orchestrate(self, query: str) -> List[PipelineStage]:
+    def step_4a_orchestrate(self, query: str) -> List[NlpPipelineStage]:
         """Step 4a: Pipeline orchestration."""
         return self.process(query).stages
     
-    def step_4b_aggregate(self, stages: List[PipelineStage]) -> NLPPipelineResult:
+    def step_4b_aggregate(self, stages: List[NlpPipelineStage]) -> NLPPipelineResult:
         """Step 4b: Result aggregation."""
         # This is done in process() method
         pass

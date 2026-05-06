@@ -282,6 +282,52 @@ class PersistentCache:
         except OSError:
             return 0.0
 
+    def _cleanup_stale_exports(self, cutoff: float) -> int:
+        """Remove export directories older than *cutoff*.
+
+        Returns the number of removed export directories.
+        """
+        removed = 0
+        if not self._exports_dir.exists():
+            return removed
+        for export_dir in list(self._exports_dir.iterdir()):
+            if not export_dir.is_dir():
+                continue
+            complete = export_dir / "_complete"
+            try:
+                if complete.exists():
+                    ts = float(complete.read_text())
+                else:
+                    ts = export_dir.stat().st_mtime
+                if ts < cutoff:
+                    shutil.rmtree(export_dir, ignore_errors=True)
+                    removed += 1
+            except (ValueError, OSError):
+                pass
+        return removed
+
+    def _cleanup_orphaned_files(self, cutoff: float, known: set) -> int:
+        """Remove orphaned file-level cache entries older than *cutoff*.
+
+        *known* is a set of hash stems still referenced by the manifest.
+        Returns the number of removed files.
+        """
+        removed = 0
+        if not self._files_dir.exists():
+            return removed
+        for f in list(self._files_dir.iterdir()):
+            if not f.is_file():
+                continue
+            if f.stem in known:
+                continue  # still referenced
+            try:
+                if f.stat().st_mtime < cutoff:
+                    f.unlink()
+                    removed += 1
+            except OSError:
+                pass
+        return removed
+
     def auto_cleanup(self, ttl_days: float = _DEFAULT_TTL_DAYS) -> Dict[str, int]:
         """Remove stale cache artefacts older than *ttl_days*.
 
@@ -302,39 +348,11 @@ class PersistentCache:
         Returns a dict summary `{"exports": n, "files": n}` for logging.
         """
         cutoff = time.time() - (ttl_days * 86400)
-        removed = {"exports": 0, "files": 0}
-
-        # 1) Stale exports (complete or abandoned)
-        if self._exports_dir.exists():
-            for export_dir in list(self._exports_dir.iterdir()):
-                if not export_dir.is_dir():
-                    continue
-                complete = export_dir / "_complete"
-                try:
-                    if complete.exists():
-                        ts = float(complete.read_text())
-                    else:
-                        ts = export_dir.stat().st_mtime
-                    if ts < cutoff:
-                        shutil.rmtree(export_dir, ignore_errors=True)
-                        removed["exports"] += 1
-                except (ValueError, OSError):
-                    pass
-
-        # 2) Orphaned file-level entries older than TTL
         known = {v.get("hash") for v in self._manifest.get("files", {}).values()}
-        if self._files_dir.exists():
-            for f in list(self._files_dir.iterdir()):
-                if not f.is_file():
-                    continue
-                if f.stem in known:
-                    continue  # still referenced
-                try:
-                    if f.stat().st_mtime < cutoff:
-                        f.unlink()
-                        removed["files"] += 1
-                except OSError:
-                    pass
+        removed = {
+            "exports": self._cleanup_stale_exports(cutoff),
+            "files": self._cleanup_orphaned_files(cutoff, known),
+        }
 
         if removed["exports"] or removed["files"]:
             logger.debug(

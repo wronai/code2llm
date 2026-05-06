@@ -1,5 +1,6 @@
 .pkl
 .redsl
+.taskill
 .code2flow_cache
 final_prompts
 final_check

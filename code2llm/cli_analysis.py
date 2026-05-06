@@ -88,6 +88,20 @@ def _build_config(args, output_dir: Path):
     config.watch = getattr(args, 'watch', False)
     # Dry-run mode (handled in orchestrator, but stored for reference)
     config.dry_run = getattr(args, 'dry_run', False)
+
+    # --fast: skip expensive analyses (vulture, centrality, DFG, communities)
+    if getattr(args, 'fast', False):
+        config.performance.fast_mode = True
+        config.performance.apply_fast_mode()
+
+    # Strategy-based performance tuning
+    strategy = getattr(args, 'strategy', 'standard')
+    if strategy == 'quick':
+        config.performance.skip_data_flow = True
+        config.performance.skip_dead_code_detection = True
+        config.performance.skip_centrality = True
+        config.performance.skip_community_detection = True
+
     return config
 
 

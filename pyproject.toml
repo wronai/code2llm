@@ -4,11 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "code2llm"
-version = "0.5.144"
+version = "0.5.145"
 description = "High-performance Python code flow analysis with optimized TOON format - CFG, DFG, call graphs, and intelligent code queries"
 readme = "README.md"
 requires-python = ">=3.8"
-license = "Apache-2.0"
 authors = [
     {name = "Tom Sapletta", email = "tom@sapletta.com"},
 ]
@@ -63,6 +62,9 @@ dependencies = [
     "tree-sitter-ruby>=0.21",
 ]
 
+[project.license]
+text = "Apache-2.0"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=6.2",
@@ -71,7 +73,7 @@ dev = [
     "black>=21.0",
     "flake8>=3.9",
     "mypy>=0.910",
-    "goal>=2.1.0",
+    "goal>=2.1.218",
     "costs>=0.1.20",
     "pfix>=0.1.60",
 ]

@@ -160,6 +160,12 @@ Strategy Options (--strategy):
     )
 
     parser.add_argument(
+        '--fast',
+        action='store_true',
+        help='Skip expensive analyses (vulture, centrality, DFG, communities) for faster runs'
+    )
+
+    parser.add_argument(
         '--strategy',
         choices=['quick', 'standard', 'deep'],
         default='standard',

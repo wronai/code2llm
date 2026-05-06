@@ -81,12 +81,26 @@ class PerformanceConfig:
     fast_mode: bool = False
     skip_data_flow: bool = False
     skip_pattern_detection: bool = False
+    skip_refactoring_analysis: bool = False
+    skip_dead_code_detection: bool = True
+    skip_centrality: bool = False
+    skip_community_detection: bool = False
 
     def get_workers(self) -> int:
         """Get effective worker count (auto-detect if set to 0)."""
         if self.parallel_workers <= 0:
             return _get_optimal_workers(default=4)
         return self.parallel_workers
+
+    def apply_fast_mode(self) -> None:
+        """Apply fast_mode overrides — skip expensive analyses."""
+        if not self.fast_mode:
+            return
+        self.skip_data_flow = True
+        self.skip_pattern_detection = True
+        self.skip_dead_code_detection = True
+        self.skip_centrality = True
+        self.skip_community_detection = True
 
 
 @dataclass

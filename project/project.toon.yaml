@@ -1,7 +1,7 @@
-# code2llm | 1199 func | 181f | 34641L | python | 2026-04-21
+# code2llm | 2181 func | 185f | 153472L | python | 2026-05-06
 
 HEALTH:
-  CC̄=3.9  critical=71 (limit:10)  dup=5  cycles=0
+  CC̄=2.1  critical=70 (limit:10)  dup=3  cycles=0
 
 ALERTS[20]:
   !!! high_fan_out     analyze_rust = 24 (limit:10)
@@ -15,23 +15,23 @@ ALERTS[20]:
   !!  high_fan_out     NLPPipeline.process = 17 (limit:10)
   !!  high_fan_out     run_pipeline = 16 (limit:10)
 
-MODULES[214] (top by size):
+MODULES[268] (top by size):
+  M[project/map.toon.yaml] 15192L C:0 F:486 CC↑0 D:0 (yaml)
+  M[map.toon.yaml] 8403L C:0 F:486 CC↑0 D:70 (yaml)
+  M[project/calls.yaml] 6033L C:0 F:0 CC↑0 D:0 (yaml)
+  M[calls.yaml] 4778L C:0 F:0 CC↑0 D:0 (yaml)
+  M[calls_output/calls.yaml] 3801L C:0 F:0 CC↑0 D:0 (yaml)
+  M[project/validation.toon.yaml] 821L C:0 F:0 CC↑0 D:0 (yaml)
+  M[planfile.yaml] 771L C:0 F:0 CC↑0 D:0 (yaml)
   M[code2llm/exporters/index_generator/renderer.py] 637L C:1 F:1 CC↑1 D:0 (python)
-  M[code2llm/core/large_repo.py] 488L C:2 F:20 CC↑9 D:1 (python)
-  M[code2llm/cli_exports/prompt.py] 475L C:0 F:18 CC↑14 D:2 (python)
+  M[project/calls.toon.yaml] 629L C:0 F:0 CC↑0 D:0 (yaml)
+  M[code2llm/.code2llm_incremental.json] 611L C:0 F:0 CC↑0 D:0 (json)
+  M[code2llm/core/analyzer.py] 489L C:1 F:22 CC↑11 D:0 (python)
+  M[code2llm/core/large_repo.py] 488L C:2 F:20 CC↑9 D:0 (python)
+  M[code2llm/cli_exports/prompt.py] 475L C:0 F:18 CC↑14 D:0 (python)
   M[code2llm/exporters/toon/renderer.py] 471L C:1 F:26 CC↑11 D:0 (python)
-  M[code2llm/core/lang/base.py] 464L C:0 F:14 CC↑14 D:8 (python)
-  M[code2llm/core/analyzer.py] 460L C:1 F:20 CC↑11 D:0 (python)
-  M[examples/docker-doql-example/run-doql.sh] 427L C:0 F:0 CC↑0 D:0 (shell)
-  M[code2llm/core/file_analyzer.py] 402L C:1 F:18 CC↑12 D:0 (python)
-  M[scripts/benchmark_badges.py] 392L C:0 F:9 CC↑13 D:0 (python)
-  M[code2llm/nlp/pipeline.py] 388L C:3 F:20 CC↑10 D:0 (python)
-  M[code2llm/exporters/flow_exporter.py] 385L C:1 F:14 CC↑10 D:0 (python)
-  M[validate_toon.py] 379L C:0 F:21 CC↑7 D:0 (python)
-  M[code2llm/analysis/data_analysis.py] 375L C:3 F:28 CC↑14 D:0 (python)
-  M[code2llm/core/persistent_cache.py] 373L C:1 F:19 CC↑10 D:1 (python)
-  M[code2llm/analysis/pipeline_detector.py] 362L C:3 F:9 CC↑13 D:0 (python)
-  LANGS: python:193/java:4/shell:4/go:3/php:3/rust:3/typescript:2/javascript:1/ruby:1
+  M[code2llm/core/lang/base.py] 464L C:0 F:14 CC↑14 D:0 (python)
+  LANGS: python:193/yaml:36/txt:7/java:4/json:4/shell:4/go:3/php:3/rust:3/yml:3/typescript:2/toml:2/javascript:1/other:1/conf:1/ruby:1
 
 HOTSPOTS[10]:
   ★ analyze_rust fan=24  // Analysis pipeline, 24 stages
@@ -40,12 +40,12 @@ HOTSPOTS[10]:
   ★ run_benchmark fan=18  // Run the full format quality benchmark.
   ★ ProjectYAMLExporter._build_project_yaml fan=18  // Build complete project.yaml structure.
 
-REFACTOR[5]:
+REFACTOR[13]:
   [1] H/H Split god module code2llm/exporters/index_generator/renderer.py (637L, 1 classes)
-  [2] M/L Split load_input (CC=15)
-  [3] M/M Reduce analyze_rust fan-out (currently 24)
-  [4] M/M Reduce _summarize_functions fan-out (currently 21)
-  [5] M/M Reduce _analyze_go_regex fan-out (currently 20)
+  [2] H/H Split god module calls.yaml (4778L, 0 classes)
+  [3] H/H Split god module calls_output/calls.yaml (3801L, 0 classes)
+  [4] H/H Split god module code2llm/.code2llm_incremental.json (611L, 0 classes)
+  [5] H/H Split god module map.toon.yaml (8403L, 0 classes)
 
 EVOLUTION:
-  2026-04-21 CC̄=3.9 crit=71 34641L // Automated analysis
+  2026-05-06 CC̄=2.1 crit=70 153472L // Automated analysis

@@ -124,8 +124,9 @@ class FileAnalyzer:
         # Calculate complexity with radon
         self._calculate_complexity(content, file_path, result)
         
-        # Deep Analysis for refactoring
-        self._perform_deep_analysis(tree, module_name, file_path, result)
+        # Deep Analysis for refactoring (skip when data flow not needed)
+        if not self.config.performance.skip_data_flow:
+            self._perform_deep_analysis(tree, module_name, file_path, result)
 
         self.stats['files_processed'] += 1
         return result
@@ -164,12 +165,18 @@ class FileAnalyzer:
             result['mutations'] = dfg_res.mutations
             result['data_flows'] = dfg_res.data_flows
             
-            # Update function calls from CG extractor which is more robust
+            # Update function calls from CG extractor which is more robust.
+            # Use set-based merge to avoid duplicate call entries (ast.walk
+            # in _process_function already extracts calls).
             cg_ext = CallGraphExtractor(self.config)
             cg_res = cg_ext.extract(tree, module_name, file_path)
             for func_name, cg_func in cg_res.functions.items():
                 if func_name in result['functions']:
-                    result['functions'][func_name].calls.extend(list(cg_func.calls))
+                    existing = set(result['functions'][func_name].calls)
+                    for c in cg_func.calls:
+                        if c not in existing:
+                            result['functions'][func_name].calls.append(c)
+                            existing.add(c)
         except Exception as e:
             if self.config.verbose:
                 print(f"Error in deep analysis for {file_path}: {e}")

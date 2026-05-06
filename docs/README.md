@@ -1,7 +1,7 @@
 <!-- code2docs:start --># code2llm
 
-![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.8-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-1200-green)
-> **1200** functions | **141** classes | **225** files | CC̄ = 3.9
+![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.8-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-2687-green)
+> **2687** functions | **155** classes | **336** files | CC̄ = 3.9
 
 > Auto-generated project documentation from source code analysis.
 
@@ -72,20 +72,47 @@ docs = generate_docs("./my-project", config=config)
 
 ```
 code2llm/
+    ├── toon
+├── redsl
 ├── orchestrator
+├── goal
+├── SUMR
+├── planfile
+├── Makefile
+    ├── toon
 ├── setup
 ├── validate_toon
+├── pyqual
+├── requirements
+├── sumd
+├── pyproject
+├── calls
 ├── pipeline
+├── project2
+├── prefact
+├── Taskfile
+    ├── toon
 ├── project
+    ├── toon
+    ├── toon
+    ├── prompt
         ├── sample
         ├── sample_bad
+        ├── state
+    ├── prompt
     ├── functional_refactoring_example
+        ├── toon
         ├── run
         ├── run-doql
+        ├── fluent-bit
+        ├── docker-compose
+        ├── prometheus
             ├── Main
             ├── main
             ├── main
+            ├── requirements
             ├── worker
+            ├── Cargo
                 ├── main
             ├── index
         ├── node/
@@ -112,18 +139,38 @@ code2llm/
     ├── project_generator
     ├── benchmark_optimizations
     ├── benchmark_constants
+        ├── toon
+    ├── prompt
+        ├── toon
+        ├── toon
     ├── benchmark_badges
     ├── bump_version
     ├── server
+        ├── toon
+        ├── toon
+    ├── refactor-prompt
+            ├── toon
+            ├── toon
+            ├── toon
+            ├── toon
+            ├── toon
+            ├── toon
+            ├── toon
+        ├── toon
+    ├── calls
     ├── valid/
         ├── sample
+    ├── calls
+        ├── toon
     ├── cli
     ├── cli_analysis
 ├── code2llm/
     ├── __main__
     ├── api
     ├── cli_parser
+        ├── code2llm_incremental
     ├── cli_commands
+        ├── toon
         ├── data_analysis
         ├── pipeline_detector
         ├── type_inference
@@ -152,6 +199,7 @@ code2llm/
         ├── models
         ├── refactoring
         ├── file_analyzer
+        ├── persistent_cache
         ├── file_filter
         ├── export_pipeline
             ├── incremental
@@ -273,8 +321,66 @@ code2llm/
         ├── toon_parser
         ├── detector
         ├── sample
-├── project2
-        ├── persistent_cache
+├── redsl_refactor_report
+├── context
+├── prompt_sumd_sumr_feature
+├── REFACTORING_PLAN
+        ├── context
+├── redsl_refactor_plan
+├── README
+    ├── README
+├── ROADMAP
+    ├── README
+    ├── context
+        ├── context
+├── TODO
+        ├── README
+        ├── context
+    ├── PROJECT_SUMMARY
+        ├── README
+        ├── context
+    ├── context
+    ├── METHODOLOGY
+        ├── README
+    ├── API
+    ├── COMPARISON_AND_OPTIMIZATION
+        ├── README
+        ├── DEPENDENCY_ANALYSIS
+        ├── README
+        ├── ANALYSIS
+        ├── SUMMARY
+├── CHANGELOG
+    ├── LLM_USAGE
+        ├── README
+    ├── context
+        ├── README
+    ├── README
+    ├── README
+    ├── prompt
+        ├── context
+    ├── context
+        ├── context
+        ├── toon
+        ├── toon
+    ├── context
+    ├── README
+        ├── toon
+        ├── context
+    ├── README
+        ├── toon
+        ├── context
+        ├── context
+        ├── move_method
+    ├── README
+        ├── extract_method
+    ├── context
+    ├── context
+    ├── README
+        ├── context
+        ├── context
+├── SUMD
+    ├── calls
+        ├── toon
 ```
 
 ## API Overview
@@ -357,10 +463,11 @@ code2llm/
 - **`AnalysisResult`** — Complete analysis result for a project.
 - **`RefactoringAnalyzer`** — Performs refactoring analysis on code.
 - **`FileAnalyzer`** — Analyzes a single file.
+- **`PersistentCache`** — Content-addressed persistent cache stored in ~/.code2llm/.
 - **`FastFileFilter`** — Fast file filtering with pattern matching.
 - **`SharedExportContext`** — Pre-computed context shared across all exporters.
 - **`ExportPipeline`** — Run multiple exporters with a single shared context.
-- **`IncrementalAnalyzer`** — Incremental analysis with change detection.
+- **`StreamingIncrementalAnalyzer`** — Incremental analysis with change detection for streaming analyzer.
 - **`ScanStrategy`** — Scanning methodology configuration.
 - **`FilePriority`** — Priority scoring for file analysis order.
 - **`SmartPrioritizer`** — Smart file prioritization for optimal analysis order.
@@ -380,7 +487,7 @@ code2llm/
 - **`Entity`** — Resolved entity.
 - **`EntityResolutionResult`** — Result of entity resolution.
 - **`EntityResolver`** — Resolve entities (functions, classes, etc.) from queries.
-- **`PipelineStage`** — Single pipeline stage result.
+- **`NlpPipelineStage`** — Single NLP pipeline stage result.
 - **`NLPPipelineResult`** — Complete NLP pipeline result (4b-4e aggregation).
 - **`NLPPipeline`** — Main NLP processing pipeline (4a-4e).
 - **`NormalizationResult`** — Result of query normalization.
@@ -420,7 +527,20 @@ code2llm/
 - **`UserService`** — —
 - **`Order`** — —
 - **`OrderService`** — —
-- **`PersistentCache`** — Content-addressed persistent cache stored in ~/.code2llm/.
+- **`PatternDetector`** — —
+- **`LanguageAnalyzer`** — —
+- **`StreamingAnalyzer`** — —
+- **`ProjectAnalyzer`** — —
+- **`AnalysisResult`** — —
+- **`NLPPipeline`** — —
+- **`QueryNormalizer`** — —
+- **`IntentMatcher`** — —
+- **`EntityResolver`** — —
+- **`TemplateGenerator`** — —
+- **`CommandGenerator`** — —
+- **`IntentMatcher`** — —
+- **`CommandCache`** — —
+- **`SchemaValidator`** — —
 
 ### Functions
 
@@ -442,6 +562,268 @@ code2llm/
 - `validate_toon_completeness(toon_data)` — Validate toon format structure.
 - `main()` — Main validation function.
 - `run_pipeline(project_dir, output_dir)` — Run unified pipeline in single process.
+- `print()` — —
+- `analyze_ruby()` — —
+- `extract_function_body()` — —
+- `calculate_complexity_regex()` — —
+- `extract_calls_regex()` — —
+- `analyze_c_family()` — —
+- `normalize_llm_task()` — —
+- `parse_llm_task_text()` — —
+- `load_input()` — —
+- `create_parser()` — —
+- `main()` — —
+- `parse_evolution_metrics()` — —
+- `load_previous()` — —
+- `save_current()` — —
+- `run_benchmark()` — —
+- `get_shield_url()` — —
+- `parse_format_quality_report()` — —
+- `parse_performance_report()` — —
+- `generate_badges()` — —
+- `generate_format_quality_badges()` — —
+- `generate_performance_badges()` — —
+- `create_html()` — —
+- `load_project_yaml()` — —
+- `extract_insights()` — —
+- `build_health()` — —
+- `build_alerts()` — —
+- `count_duplicates()` — —
+- `build_hotspots()` — —
+- `hotspot_note()` — —
+- `build_refactoring()` — —
+- `render_details()` — —
+- `export_compact()` — —
+- `export_calls()` — —
+- `handle_special_commands()` — —
+- `handle_cache_command()` — —
+- `handle_report_command()` — —
+- `validate_and_setup()` — —
+- `print_start_info()` — —
+- `validate_chunked_output()` — —
+- `generate_llm_context()` — —
+- `analyze_generic()` — —
+- `validate_mermaid_file()` — —
+- `validate_project_yaml()` — —
+- `build_modules()` — —
+- `group_by_file()` — —
+- `compute_module_entry()` — —
+- `compute_inbound_deps()` — —
+- `build_exports()` — —
+- `build_class_export()` — —
+- `build_function_exports()` — —
+- `export_to_yaml()` — —
+- `should_skip_module()` — —
+- `is_entry_point()` — —
+- `build_callers_graph()` — —
+- `find_leaves()` — —
+- `find_critical_path()` — —
+- `export_flow_compact()` — —
+- `get_file_size_kb()` — —
+- `should_split_toon()` — —
+- `split_toon_file()` — —
+- `manage_toon_size()` — —
+- `analyze_go()` — —
+- `render_header()` — —
+- `render_next()` — —
+- `render_risks()` — —
+- `render_metrics_target()` — —
+- `render_patterns()` — —
+- `render_history()` — —
+- `compute_func_data()` — —
+- `scan_file_sizes()` — —
+- `aggregate_file_stats()` — —
+- `make_relative_path()` — —
+- `filter_god_modules()` — —
+- `compute_god_modules()` — —
+- `compute_hub_types()` — —
+- `build_context()` — —
+- `generate_llm_flow()` — —
+- `render_llm_flow_md()` — —
+- `get_all_projects()` — —
+- `clear_all()` — —
+- `run_pipeline()` — —
+- `should_use_chunking()` — —
+- `get_analysis_plan()` — —
+- `analyze_rust()` — —
+- `get_ast()` — —
+- `find_function_node()` — —
+- `ast_unparse()` — —
+- `qualified_name()` — —
+- `expr_to_str()` — —
+- `should_skip_file()` — —
+- `collect_files_in_dir()` — —
+- `collect_root_files()` — —
+- `count_py_files()` — —
+- `contains_python_files()` — —
+- `get_level1_dirs()` — —
+- `calculate_priority()` — —
+- `analyze_php()` — —
+- `load_evolution_trend()` — —
+- `rel_path()` — —
+- `file_line_count()` — —
+- `count_total_lines()` — —
+- `detect_languages()` — —
+- `export_classic()` — —
+- `generate_pngs()` — —
+- `generate_single_png()` — —
+- `generate_with_puppeteer()` — —
+- `fix_mermaid_file()` — —
+- `parse_toon_content()` — —
+- `is_toon_file()` — —
+- `load_toon()` — —
+- `load_yaml()` — —
+- `load_file()` — —
+- `extract_functions_from_yaml()` — —
+- `extract_functions_from_toon()` — —
+- `extract_classes_from_yaml()` — —
+- `extract_classes_from_toon()` — —
+- `analyze_class_differences()` — —
+- `extract_modules_from_yaml()` — —
+- `extract_modules_from_toon()` — —
+- `compare_basic_stats()` — —
+- `compare_functions()` — —
+- `compare_classes()` — —
+- `compare_modules()` — —
+- `validate_toon_completeness()` — —
+- `validate_input()` — —
+- `format_output()` — —
+- `calculate_metrics()` — —
+- `filter_data()` — —
+- `transform_data()` — —
+- `clear_caches()` — —
+- `run_analysis()` — —
+- `benchmark_cold_vs_warm()` — —
+- `print_summary()` — —
+- `load_gitignore_patterns()` — —
+- `extract_declarations_ts()` — —
+- `get_parser()` — —
+- `parse_source()` — —
+- `is_available()` — —
+- `build_core_files_section()` — —
+- `build_llm_files_section()` — —
+- `build_viz_files_section()` — —
+- `generate()` — —
+- `print_results()` — —
+- `build_report()` — —
+- `save_report()` — —
+- `create_test_project()` — —
+- `benchmark_original_analyzer()` — —
+- `benchmark_streaming_analyzer()` — —
+- `benchmark_with_strategies()` — —
+- `print_comparison()` — —
+- `is_excluded_path()` — —
+- `build_evolution()` — —
+- `load_previous_evolution()` — —
+- `readable_id()` — —
+- `safe_module()` — —
+- `module_of()` — —
+- `build_name_index()` — —
+- `resolve_callee()` — —
+- `write_file()` — —
+- `get_cc()` — —
+- `evaluate_format()` — —
+- `make_cache_key()` — —
+- `is_excluded()` — —
+- `get_file_types()` — —
+- `get_default_file_info()` — —
+- `demo_quick_strategy()` — —
+- `demo_standard_strategy()` — —
+- `demo_deep_strategy()` — —
+- `demo_incremental_analysis()` — —
+- `demo_memory_limited()` — —
+- `demo_custom_progress()` — —
+- `get_refactoring_advice()` — —
+- `get_current_version()` — —
+- `parse_version()` — —
+- `format_version()` — —
+- `bump_version()` — —
+- `update_pyproject_toml()` — —
+- `update_version_file()` — —
+- `index()` — —
+- `get_badges()` — —
+- `render_module_list()` — —
+- `http()` — —
+- `os()` — —
+- `PORT()` — —
+- `SERVICE_NAME()` — —
+- `DB_HOST()` — —
+- `server()` — —
+- `read_version()` — —
+- `read_readme()` — —
+- `healthHandler()` — —
+- `apiHandler()` — —
+- `analyze()` — —
+- `analyze_file()` — —
+- `get_version()` — —
+- `export_format()` — —
+- `get_exporter()` — —
+- `list_exporters()` — —
+- `get_existing_files()` — —
+- `process_message()` — —
+- `sendResponse()` — —
+- `create_core_py()` — —
+- `create_etl_py()` — —
+- `create_validation_py()` — —
+- `create_utils_py()` — —
+- `add_validator_to_core()` — —
+- `create_ground_truth_project()` — —
+- `analyze_cpp()` — —
+- `register_language()` — —
+- `list_parsers()` — —
+- `analyze_csharp()` — —
+- `analyze_java()` — —
+- `get_typescript_patterns()` — —
+- `get_typescript_lang_config()` — —
+- `analyze_typescript_js()` — —
+- `generate_index_html()` — —
+- `generate_readme_content()` — —
+- `export_flow_detailed()` — —
+- `export_flow_full()` — —
+- `dump_yaml()` — —
+- `print()` — —
+- `detect_factory()` — —
+- `detect_singleton()` — —
+- `detect_observer()` — —
+- `parse_file()` — —
+- `extract_functions()` — —
+- `analyze_project()` — —
+- `get_function_count()` — —
+- `get_class_count()` — —
+- `to_dict()` — —
+- `process()` — —
+- `normalize()` — —
+- `step_1a_lowercase()` — —
+- `step_1b_remove_punctuation()` — —
+- `step_1c_normalize_whitespace()` — —
+- `step_1d_unicode_normalize()` — —
+- `step_1e_remove_stopwords()` — —
+- `match()` — —
+- `step_2a_fuzzy_match()` — —
+- `step_2c_keyword_match()` — —
+- `step_2d_context_score()` — —
+- `resolve()` — —
+- `load_from_analysis()` — —
+- `repair_command()` — —
+- `get_file_hash()` — —
+- `parse_file_cached()` — —
+- `generate_command()` — —
+- `render_template()` — —
+- `optimize_output()` — —
+- `cache_result()` — —
+- `load_patterns()` — —
+- `fuzzy_match()` — —
+- `validate_schema()` — —
+- `render()` — —
+- `fuzzy_find()` — —
+- `get()` — —
+- `put()` — —
+- `validate()` — —
+- `on_progress()` — —
+- `get_cfg()` — —
+- `generate_readme()` — —
+- `progress_callback()` — —
+- `supported_extensions()` — —
 - `NewUserService()` — —
 - `AddUser()` — —
 - `GetUser()` — —
@@ -523,6 +905,8 @@ code2llm/
 - `index()` — Serve the main badges page.
 - `generate_badges()` — Generate badges by running the benchmark script.
 - `get_badges()` — Get the generated badges HTML.
+- `analyze()` — —
+- `supported_extensions()` — —
 - `main()` — —
 - `main()` — Main CLI entry point.
 - `analyze(project_path, config)` — Analyze a Python project and return structured results.
@@ -556,6 +940,8 @@ code2llm/
 - `should_split_toon(filepath, max_kb)` — Check if TOON file exceeds size limit.
 - `split_toon_file(source_file, output_dir, max_kb, prefix)` — Split large TOON file into chunks under size limit.
 - `manage_toon_size(source_file, output_dir, max_kb, prefix)` — Main entry point: check and split TOON file if needed.
+- `get_all_projects(cache_root)` — Return summary dicts for every cached project.
+- `clear_all(cache_root)` — Delete entire ~/.code2llm/ cache.
 - `analyze_rust(content, file_path, module_name, ext)` — Analyze Rust files using regex-based parsing.
 - `analyze_ruby(content, file_path, module_name, ext)` — Analyze Ruby files using shared extraction.
 - `extract_function_body(content, start_line)` — Extract the body of a function between braces from a start line (1-indexed).
@@ -673,13 +1059,552 @@ code2llm/
 - `is_toon_file(filepath)` — Check if file is TOON format based on extension or content.
 - `load_toon(filepath)` — Parse TOON plain-text format into structured data.
 - `main()` — —
-- `get_all_projects(cache_root)` — Return summary dicts for every cached project.
-- `clear_all(cache_root)` — Delete entire ~/.code2llm/ cache.
+- `detect_factory()` — —
+- `detect_singleton()` — —
+- `detect_observer()` — —
+- `parse_file()` — —
+- `extract_functions()` — —
+- `repair_command()` — —
+- `print()` — —
+- `on_progress()` — —
+- `print()` — —
+- `get_cfg()` — —
+- `print()` — —
+- `analyze_project()` — —
+- `get_function_count()` — —
+- `get_class_count()` — —
+- `to_dict()` — —
+- `process()` — —
+- `normalize()` — —
+- `step_1a_lowercase()` — —
+- `step_1b_remove_punctuation()` — —
+- `step_1c_normalize_whitespace()` — —
+- `step_1d_unicode_normalize()` — —
+- `step_1e_remove_stopwords()` — —
+- `match()` — —
+- `step_2a_fuzzy_match()` — —
+- `step_2c_keyword_match()` — —
+- `step_2d_context_score()` — —
+- `resolve()` — —
+- `load_from_analysis()` — —
+- `print()` — —
+- `get_file_hash()` — —
+- `parse_file_cached()` — —
+- `generate_command()` — —
+- `render_template()` — —
+- `optimize_output()` — —
+- `cache_result()` — —
+- `load_patterns()` — —
+- `fuzzy_match()` — —
+- `validate_schema()` — —
+- `generate()` — —
+- `render()` — —
+- `match()` — —
+- `fuzzy_find()` — —
+- `get()` — —
+- `put()` — —
+- `validate()` — —
+- `print()` — —
+- `progress_callback()` — —
+- `handle_special_commands()` — —
+- `handle_cache_command()` — —
+- `handle_report_command()` — —
+- `validate_and_setup()` — —
+- `print_start_info()` — —
+- `validate_chunked_output()` — —
+- `generate_llm_context()` — —
+- `analyze()` — —
+- `analyze_file()` — —
+- `get_version()` — —
+- `create_parser()` — —
+- `main()` — —
+- `generate_readme()` — —
+- `print()` — —
+- `normalize_llm_task()` — —
+- `parse_llm_task_text()` — —
+- `load_input()` — —
+- `create_parser()` — —
+- `main()` — —
+- `analyze_ruby()` — —
+- `extract_function_body()` — —
+- `calculate_complexity_regex()` — —
+- `extract_calls_regex()` — —
+- `analyze_c_family()` — —
+- `parse_evolution_metrics()` — —
+- `load_previous()` — —
+- `save_current()` — —
+- `run_benchmark()` — —
+- `get_shield_url()` — —
+- `parse_format_quality_report()` — —
+- `parse_performance_report()` — —
+- `generate_badges()` — —
+- `generate_format_quality_badges()` — —
+- `generate_performance_badges()` — —
+- `create_html()` — —
+- `load_project_yaml()` — —
+- `extract_insights()` — —
+- `build_health()` — —
+- `build_alerts()` — —
+- `count_duplicates()` — —
+- `build_hotspots()` — —
+- `hotspot_note()` — —
+- `build_refactoring()` — —
+- `render_details()` — —
+- `export_compact()` — —
+- `export_calls()` — —
+- `handle_special_commands()` — —
+- `handle_cache_command()` — —
+- `handle_report_command()` — —
+- `validate_and_setup()` — —
+- `print_start_info()` — —
+- `validate_chunked_output()` — —
+- `generate_llm_context()` — —
+- `analyze_generic()` — —
+- `validate_mermaid_file()` — —
+- `validate_project_yaml()` — —
+- `build_modules()` — —
+- `group_by_file()` — —
+- `compute_module_entry()` — —
+- `compute_inbound_deps()` — —
+- `build_exports()` — —
+- `build_class_export()` — —
+- `build_function_exports()` — —
+- `export_to_yaml()` — —
+- `should_skip_module()` — —
+- `is_entry_point()` — —
+- `build_callers_graph()` — —
+- `find_leaves()` — —
+- `find_critical_path()` — —
+- `export_flow_compact()` — —
+- `get_file_size_kb()` — —
+- `should_split_toon()` — —
+- `split_toon_file()` — —
+- `manage_toon_size()` — —
+- `get_all_projects()` — —
+- `clear_all()` — —
+- `analyze_go()` — —
+- `render_header()` — —
+- `render_next()` — —
+- `render_risks()` — —
+- `render_metrics_target()` — —
+- `render_patterns()` — —
+- `render_history()` — —
+- `compute_func_data()` — —
+- `scan_file_sizes()` — —
+- `aggregate_file_stats()` — —
+- `make_relative_path()` — —
+- `filter_god_modules()` — —
+- `compute_god_modules()` — —
+- `compute_hub_types()` — —
+- `build_context()` — —
+- `generate_llm_flow()` — —
+- `render_llm_flow_md()` — —
+- `analyze_rust()` — —
+- `should_use_chunking()` — —
+- `get_analysis_plan()` — —
+- `get_ast()` — —
+- `find_function_node()` — —
+- `ast_unparse()` — —
+- `qualified_name()` — —
+- `expr_to_str()` — —
+- `should_skip_file()` — —
+- `collect_files_in_dir()` — —
+- `collect_root_files()` — —
+- `count_py_files()` — —
+- `contains_python_files()` — —
+- `get_level1_dirs()` — —
+- `calculate_priority()` — —
+- `analyze_php()` — —
+- `load_evolution_trend()` — —
+- `rel_path()` — —
+- `file_line_count()` — —
+- `count_total_lines()` — —
+- `detect_languages()` — —
+- `export_classic()` — —
+- `generate_pngs()` — —
+- `generate_single_png()` — —
+- `generate_with_puppeteer()` — —
+- `fix_mermaid_file()` — —
+- `parse_toon_content()` — —
+- `is_toon_file()` — —
+- `load_toon()` — —
+- `load_yaml()` — —
+- `load_file()` — —
+- `extract_functions_from_yaml()` — —
+- `extract_functions_from_toon()` — —
+- `extract_classes_from_yaml()` — —
+- `extract_classes_from_toon()` — —
+- `analyze_class_differences()` — —
+- `extract_modules_from_yaml()` — —
+- `extract_modules_from_toon()` — —
+- `compare_basic_stats()` — —
+- `compare_functions()` — —
+- `compare_classes()` — —
+- `compare_modules()` — —
+- `validate_toon_completeness()` — —
+- `validate_input()` — —
+- `format_output()` — —
+- `calculate_metrics()` — —
+- `filter_data()` — —
+- `transform_data()` — —
+- `clear_caches()` — —
+- `run_analysis()` — —
+- `benchmark_cold_vs_warm()` — —
+- `print_summary()` — —
+- `load_gitignore_patterns()` — —
+- `extract_declarations_ts()` — —
+- `get_parser()` — —
+- `parse_source()` — —
+- `is_available()` — —
+- `build_core_files_section()` — —
+- `build_llm_files_section()` — —
+- `build_viz_files_section()` — —
+- `print_results()` — —
+- `build_report()` — —
+- `save_report()` — —
+- `generate()` — —
+- `is_excluded_path()` — —
+- `create_test_project()` — —
+- `benchmark_original_analyzer()` — —
+- `benchmark_streaming_analyzer()` — —
+- `benchmark_with_strategies()` — —
+- `print_comparison()` — —
+- `build_evolution()` — —
+- `load_previous_evolution()` — —
+- `readable_id()` — —
+- `safe_module()` — —
+- `module_of()` — —
+- `build_name_index()` — —
+- `resolve_callee()` — —
+- `write_file()` — —
+- `get_cc()` — —
+- `demo_quick_strategy()` — —
+- `demo_standard_strategy()` — —
+- `demo_deep_strategy()` — —
+- `demo_incremental_analysis()` — —
+- `demo_memory_limited()` — —
+- `demo_custom_progress()` — —
+- `make_cache_key()` — —
+- `evaluate_format()` — —
+- `is_excluded()` — —
+- `get_file_types()` — —
+- `get_default_file_info()` — —
+- `get_refactoring_advice()` — —
+- `get_current_version()` — —
+- `parse_version()` — —
+- `format_version()` — —
+- `bump_version()` — —
+- `update_pyproject_toml()` — —
+- `update_version_file()` — —
+- `index()` — —
+- `get_badges()` — —
+- `render_module_list()` — —
+- `analyze()` — —
+- `analyze_file()` — —
+- `get_version()` — —
+- `read_version()` — —
+- `read_readme()` — —
+- `export_format()` — —
+- `get_exporter()` — —
+- `list_exporters()` — —
+- `get_existing_files()` — —
+- `create_core_py()` — —
+- `create_etl_py()` — —
+- `create_validation_py()` — —
+- `create_utils_py()` — —
+- `add_validator_to_core()` — —
+- `create_ground_truth_project()` — —
+- `analyze_cpp()` — —
+- `register_language()` — —
+- `list_parsers()` — —
+- `analyze_csharp()` — —
+- `analyze_java()` — —
+- `get_typescript_patterns()` — —
+- `get_typescript_lang_config()` — —
+- `analyze_typescript_js()` — —
+- `generate_index_html()` — —
+- `generate_readme_content()` — —
+- `export_flow_detailed()` — —
+- `dump_yaml()` — —
+- `export_flow_full()` — —
+- `analyze_ruby()` — —
+- `extract_function_body()` — —
+- `calculate_complexity_regex()` — —
+- `extract_calls_regex()` — —
+- `analyze_c_family()` — —
+- `normalize_llm_task()` — —
+- `parse_llm_task_text()` — —
+- `load_input()` — —
+- `create_parser()` — —
+- `main()` — —
+- `parse_evolution_metrics()` — —
+- `load_previous()` — —
+- `save_current()` — —
+- `run_benchmark()` — —
+- `get_shield_url()` — —
+- `parse_format_quality_report()` — —
+- `parse_performance_report()` — —
+- `generate_badges()` — —
+- `generate_format_quality_badges()` — —
+- `generate_performance_badges()` — —
+- `create_html()` — —
+- `load_project_yaml()` — —
+- `extract_insights()` — —
+- `build_health()` — —
+- `build_alerts()` — —
+- `count_duplicates()` — —
+- `build_hotspots()` — —
+- `hotspot_note()` — —
+- `build_refactoring()` — —
+- `render_details()` — —
+- `export_compact()` — —
+- `export_calls()` — —
+- `handle_special_commands()` — —
+- `handle_cache_command()` — —
+- `handle_report_command()` — —
+- `validate_and_setup()` — —
+- `print_start_info()` — —
+- `validate_chunked_output()` — —
+- `generate_llm_context()` — —
+- `analyze_generic()` — —
+- `validate_mermaid_file()` — —
+- `validate_project_yaml()` — —
+- `build_modules()` — —
+- `group_by_file()` — —
+- `compute_module_entry()` — —
+- `compute_inbound_deps()` — —
+- `build_exports()` — —
+- `build_class_export()` — —
+- `build_function_exports()` — —
+- `export_to_yaml()` — —
+- `should_skip_module()` — —
+- `is_entry_point()` — —
+- `build_callers_graph()` — —
+- `find_leaves()` — —
+- `find_critical_path()` — —
+- `export_flow_compact()` — —
+- `get_file_size_kb()` — —
+- `should_split_toon()` — —
+- `split_toon_file()` — —
+- `manage_toon_size()` — —
+- `get_all_projects()` — —
+- `clear_all()` — —
+- `analyze_go()` — —
+- `render_header()` — —
+- `render_next()` — —
+- `render_risks()` — —
+- `render_metrics_target()` — —
+- `render_patterns()` — —
+- `render_history()` — —
+- `compute_func_data()` — —
+- `scan_file_sizes()` — —
+- `aggregate_file_stats()` — —
+- `make_relative_path()` — —
+- `filter_god_modules()` — —
+- `compute_god_modules()` — —
+- `compute_hub_types()` — —
+- `build_context()` — —
+- `generate_llm_flow()` — —
+- `render_llm_flow_md()` — —
+- `run_pipeline()` — —
+- `should_use_chunking()` — —
+- `get_analysis_plan()` — —
+- `analyze_rust()` — —
+- `get_ast()` — —
+- `find_function_node()` — —
+- `ast_unparse()` — —
+- `qualified_name()` — —
+- `expr_to_str()` — —
+- `should_skip_file()` — —
+- `collect_files_in_dir()` — —
+- `collect_root_files()` — —
+- `count_py_files()` — —
+- `contains_python_files()` — —
+- `get_level1_dirs()` — —
+- `calculate_priority()` — —
+- `analyze_php()` — —
+- `load_evolution_trend()` — —
+- `rel_path()` — —
+- `file_line_count()` — —
+- `count_total_lines()` — —
+- `detect_languages()` — —
+- `export_classic()` — —
+- `generate_pngs()` — —
+- `generate_single_png()` — —
+- `generate_with_puppeteer()` — —
+- `fix_mermaid_file()` — —
+- `parse_toon_content()` — —
+- `is_toon_file()` — —
+- `load_toon()` — —
+- `load_yaml()` — —
+- `load_file()` — —
+- `extract_functions_from_yaml()` — —
+- `extract_functions_from_toon()` — —
+- `extract_classes_from_yaml()` — —
+- `extract_classes_from_toon()` — —
+- `analyze_class_differences()` — —
+- `extract_modules_from_yaml()` — —
+- `extract_modules_from_toon()` — —
+- `compare_basic_stats()` — —
+- `compare_functions()` — —
+- `compare_classes()` — —
+- `compare_modules()` — —
+- `validate_toon_completeness()` — —
+- `validate_input()` — —
+- `format_output()` — —
+- `calculate_metrics()` — —
+- `filter_data()` — —
+- `transform_data()` — —
+- `clear_caches()` — —
+- `run_analysis()` — —
+- `benchmark_cold_vs_warm()` — —
+- `print_summary()` — —
+- `load_gitignore_patterns()` — —
+- `extract_declarations_ts()` — —
+- `get_parser()` — —
+- `parse_source()` — —
+- `is_available()` — —
+- `build_core_files_section()` — —
+- `build_llm_files_section()` — —
+- `build_viz_files_section()` — —
+- `generate()` — —
+- `print_results()` — —
+- `build_report()` — —
+- `save_report()` — —
+- `create_test_project()` — —
+- `benchmark_original_analyzer()` — —
+- `benchmark_streaming_analyzer()` — —
+- `benchmark_with_strategies()` — —
+- `print_comparison()` — —
+- `is_excluded_path()` — —
+- `build_evolution()` — —
+- `load_previous_evolution()` — —
+- `readable_id()` — —
+- `safe_module()` — —
+- `module_of()` — —
+- `build_name_index()` — —
+- `resolve_callee()` — —
+- `write_file()` — —
+- `get_cc()` — —
+- `demo_quick_strategy()` — —
+- `demo_standard_strategy()` — —
+- `demo_deep_strategy()` — —
+- `demo_incremental_analysis()` — —
+- `demo_memory_limited()` — —
+- `demo_custom_progress()` — —
+- `evaluate_format()` — —
+- `make_cache_key()` — —
+- `is_excluded()` — —
+- `get_file_types()` — —
+- `get_default_file_info()` — —
+- `get_refactoring_advice()` — —
+- `get_current_version()` — —
+- `parse_version()` — —
+- `format_version()` — —
+- `bump_version()` — —
+- `update_pyproject_toml()` — —
+- `update_version_file()` — —
+- `index()` — —
+- `get_badges()` — —
+- `render_module_list()` — —
+- `http()` — —
+- `os()` — —
+- `PORT()` — —
+- `SERVICE_NAME()` — —
+- `DB_HOST()` — —
+- `server()` — —
+- `read_version()` — —
+- `read_readme()` — —
+- `healthHandler()` — —
+- `apiHandler()` — —
+- `analyze()` — —
+- `analyze_file()` — —
+- `get_version()` — —
+- `export_format()` — —
+- `get_exporter()` — —
+- `list_exporters()` — —
+- `get_existing_files()` — —
+- `process_message()` — —
+- `sendResponse()` — —
+- `create_core_py()` — —
+- `create_etl_py()` — —
+- `create_validation_py()` — —
+- `create_utils_py()` — —
+- `add_validator_to_core()` — —
+- `create_ground_truth_project()` — —
+- `analyze_cpp()` — —
+- `register_language()` — —
+- `list_parsers()` — —
+- `analyze_csharp()` — —
+- `analyze_java()` — —
+- `get_typescript_patterns()` — —
+- `get_typescript_lang_config()` — —
+- `analyze_typescript_js()` — —
+- `generate_index_html()` — —
+- `generate_readme_content()` — —
+- `export_flow_detailed()` — —
+- `export_flow_full()` — —
+- `dump_yaml()` — —
+- `print()` — —
+- `detect_factory()` — —
+- `detect_singleton()` — —
+- `detect_observer()` — —
+- `parse_file()` — —
+- `extract_functions()` — —
+- `analyze_project()` — —
+- `get_function_count()` — —
+- `get_class_count()` — —
+- `to_dict()` — —
+- `process()` — —
+- `normalize()` — —
+- `step_1a_lowercase()` — —
+- `step_1b_remove_punctuation()` — —
+- `step_1c_normalize_whitespace()` — —
+- `step_1d_unicode_normalize()` — —
+- `step_1e_remove_stopwords()` — —
+- `match()` — —
+- `step_2a_fuzzy_match()` — —
+- `step_2c_keyword_match()` — —
+- `step_2d_context_score()` — —
+- `resolve()` — —
+- `load_from_analysis()` — —
+- `repair_command()` — —
+- `get_file_hash()` — —
+- `parse_file_cached()` — —
+- `generate_command()` — —
+- `render_template()` — —
+- `optimize_output()` — —
+- `cache_result()` — —
+- `load_patterns()` — —
+- `fuzzy_match()` — —
+- `validate_schema()` — —
+- `render()` — —
+- `fuzzy_find()` — —
+- `get()` — —
+- `put()` — —
+- `validate()` — —
+- `on_progress()` — —
+- `get_cfg()` — —
+- `generate_readme()` — —
+- `progress_callback()` — —
+- `supported_extensions()` — —
 
 
 ## Project Structure
 
+📄 `.taskill.state`
+📄 `CHANGELOG`
+📄 `Makefile`
+📄 `README`
+📄 `REFACTORING_PLAN`
+📄 `ROADMAP` (5 functions, 2 classes)
+📄 `SUMD` (492 functions)
+📄 `SUMR` (29 functions)
+📄 `TODO`
+📄 `Taskfile` (2 functions)
+📄 `analysis.toon`
 📄 `badges.server` (3 functions)
+📄 `batch_1.analysis.toon`
 📄 `benchmarks.benchmark_constants`
 📄 `benchmarks.benchmark_evolution` (4 functions)
 📄 `benchmarks.benchmark_format_quality` (5 functions)
@@ -688,7 +1613,13 @@ code2llm/
 📄 `benchmarks.format_evaluator` (5 functions, 1 classes)
 📄 `benchmarks.project_generator` (6 functions)
 📄 `benchmarks.reporting` (9 functions)
+📄 `calls`
+📄 `calls_output.README`
+📄 `calls_output.analysis.toon`
+📄 `calls_output.calls`
+📄 `calls_output.context`
 📦 `code2llm` (1 functions)
+📄 `code2llm..code2llm_incremental`
 📄 `code2llm.__main__`
 📦 `code2llm.analysis` (1 functions)
 📄 `code2llm.analysis.call_graph` (12 functions, 1 classes)
@@ -701,6 +1632,7 @@ code2llm/
 📄 `code2llm.analysis.pipeline_resolver` (5 functions, 1 classes)
 📄 `code2llm.analysis.side_effects` (15 functions, 2 classes)
 📄 `code2llm.analysis.smells` (9 functions, 1 classes)
+📄 `code2llm.analysis.toon`
 📄 `code2llm.analysis.type_inference` (17 functions, 1 classes)
 📦 `code2llm.analysis.utils`
 📄 `code2llm.analysis.utils.ast_helpers` (5 functions)
@@ -718,7 +1650,7 @@ code2llm/
 📄 `code2llm.cli_exports.prompt` (18 functions)
 📄 `code2llm.cli_parser` (2 functions)
 📦 `code2llm.core` (1 functions)
-📄 `code2llm.core.analyzer` (20 functions, 1 classes)
+📄 `code2llm.core.analyzer` (22 functions, 1 classes)
 📄 `code2llm.core.ast_registry` (9 functions, 1 classes)
 📄 `code2llm.core.config` (2 functions, 6 classes)
 📄 `code2llm.core.export_pipeline` (5 functions, 2 classes)
@@ -742,7 +1674,7 @@ code2llm/
 📄 `code2llm.core.lang.typescript` (3 functions)
 📄 `code2llm.core.large_repo` (20 functions, 2 classes)
 📄 `code2llm.core.models` (6 functions, 11 classes)
-📄 `code2llm.core.persistent_cache` (20 functions, 1 classes)
+📄 `code2llm.core.persistent_cache` (22 functions, 1 classes)
 📄 `code2llm.core.refactoring` (11 functions, 1 classes)
 📄 `code2llm.core.repo_files` (8 functions)
 📦 `code2llm.core.streaming`
@@ -829,13 +1761,13 @@ code2llm/
 📄 `code2llm.generators.llm_flow.nodes` (7 functions)
 📄 `code2llm.generators.llm_flow.parsing` (2 functions)
 📄 `code2llm.generators.llm_flow.utils` (5 functions)
-📄 `code2llm.generators.llm_task` (14 functions)
+📄 `code2llm.generators.llm_task` (16 functions)
 📦 `code2llm.generators.mermaid`
 📄 `code2llm.generators.mermaid.fix` (7 functions)
 📄 `code2llm.generators.mermaid.png` (8 functions)
 📄 `code2llm.generators.mermaid.validation` (6 functions)
 📦 `code2llm.nlp`
-📄 `code2llm.nlp.config` (2 functions, 5 classes)
+📄 `code2llm.nlp.config`
 📄 `code2llm.nlp.entity_resolution` (16 functions, 3 classes)
 📄 `code2llm.nlp.intent_matching` (15 functions, 3 classes)
 📄 `code2llm.nlp.normalization` (13 functions, 2 classes)
@@ -844,15 +1776,39 @@ code2llm/
 📄 `code2llm.patterns.detector` (8 functions, 1 classes)
 📦 `code2llm.refactor`
 📄 `code2llm.refactor.prompt_engine` (7 functions, 1 classes)
+📄 `code2llm.templates.extract_method`
+📄 `code2llm.templates.move_method`
+📄 `code2llm_part2.analysis.toon`
+📄 `context`
 📄 `demo_langs.valid.sample` (7 functions, 2 classes)
+📄 `docs.API` (21 functions, 6 classes)
+📄 `docs.COMPARISON_AND_OPTIMIZATION` (20 functions, 5 classes)
+📄 `docs.LLM_USAGE`
+📄 `docs.METHODOLOGY` (6 functions, 1 classes)
+📄 `docs.PROJECT_SUMMARY` (4 functions)
+📄 `docs.README` (1 functions)
+📄 `evolution.toon`
+📄 `examples.analysis.toon`
+📄 `examples.basic-usage.README`
+📄 `examples.ci-cd.README`
+📄 `examples.claude-code.README`
+📄 `examples.devops-workflow.README`
+📄 `examples.docker-doql-example.ANALYSIS`
+📄 `examples.docker-doql-example.DEPENDENCY_ANALYSIS`
+📄 `examples.docker-doql-example.SUMMARY`
 📄 `examples.docker-doql-example.app.main` (2 functions, 1 classes)
+📄 `examples.docker-doql-example.docker-compose`
+📄 `examples.docker-doql-example.fluent-bit`
 📄 `examples.docker-doql-example.go.main` (3 functions, 1 classes)
 📄 `examples.docker-doql-example.java.Main` (9 functions, 1 classes)
 📦 `examples.docker-doql-example.node` (6 functions)
 📄 `examples.docker-doql-example.php.index` (1 functions)
+📄 `examples.docker-doql-example.prometheus`
 📄 `examples.docker-doql-example.ruby.app`
 📄 `examples.docker-doql-example.run-doql`
+📄 `examples.docker-doql-example.rust.Cargo`
 📄 `examples.docker-doql-example.rust.src.main` (1 classes)
+📄 `examples.docker-doql-example.worker.requirements`
 📄 `examples.docker-doql-example.worker.worker` (2 functions)
 📦 `examples.functional_refactoring`
 📄 `examples.functional_refactoring.cache` (10 functions, 2 classes)
@@ -862,7 +1818,10 @@ code2llm/
 📄 `examples.functional_refactoring.models` (2 classes)
 📄 `examples.functional_refactoring.template_engine` (10 functions, 3 classes)
 📄 `examples.functional_refactoring_example` (9 functions, 1 classes)
+📄 `examples.litellm.README`
 📄 `examples.litellm.run` (3 functions)
+📄 `examples.shell-llm.README`
+📄 `examples.streaming-analyzer.README` (7 functions)
 📄 `examples.streaming-analyzer.demo` (7 functions)
 📦 `examples.streaming-analyzer.sample_project`
 📄 `examples.streaming-analyzer.sample_project.api` (7 functions, 1 classes)
@@ -870,17 +1829,77 @@ code2llm/
 📄 `examples.streaming-analyzer.sample_project.database` (13 functions, 1 classes)
 📄 `examples.streaming-analyzer.sample_project.main` (9 functions, 2 classes)
 📄 `examples.streaming-analyzer.sample_project.utils` (5 functions)
+📄 `goal`
+📄 `map.toon` (6780 functions)
 📄 `orchestrator`
 📄 `pipeline` (2 functions)
+📄 `planfile`
+📄 `prefact`
 📄 `project`
+📄 `project.README`
+📄 `project.analysis.toon`
+📄 `project.batch_1.analysis.toon`
+📄 `project.batch_1.context`
+📄 `project.batch_1.evolution.toon`
+📄 `project.calls`
+📄 `project.calls.toon`
+📄 `project.code2llm_part2.analysis.toon`
+📄 `project.context`
+📄 `project.duplication.toon`
+📄 `project.evolution.toon`
+📄 `project.examples.analysis.toon`
+📄 `project.map.toon` (20820 functions)
+📄 `project.project.toon`
+📄 `project.prompt`
+📄 `project.refactor-prompt` (2 functions)
+📄 `project.root.analysis.toon`
+📄 `project.root.context`
+📄 `project.test_python_only_examples.analysis.toon`
+📄 `project.test_python_only_examples.context`
+📄 `project.test_python_only_examples_tests.analysis.toon`
+📄 `project.validation.toon`
 📄 `project2`
+📄 `project_calls_test.README`
+📄 `project_calls_test.calls`
+📄 `project_calls_test.context`
+📄 `prompt_sumd_sumr_feature` (7 functions)
+📄 `pyproject`
+📄 `pyqual`
+📄 `redsl`
+📄 `redsl_refactor_plan`
+📄 `redsl_refactor_plan.toon`
+📄 `redsl_refactor_report`
+📄 `redsl_refactor_report.toon`
+📄 `requirements`
+📄 `root.analysis.toon`
 📄 `scripts.benchmark_badges` (9 functions)
 📄 `scripts.bump_version` (7 functions)
 📄 `setup` (2 functions)
+📄 `sumd`
+📄 `test_dynamic.README`
+📄 `test_dynamic.batch_1.context`
+📄 `test_dynamic.context`
+📄 `test_dynamic.root.context`
+📄 `test_dynamic2.README`
+📄 `test_dynamic2.batch_1.context`
+📄 `test_dynamic2.context`
+📄 `test_dynamic2.prompt`
+📄 `test_dynamic2.root.context`
 📄 `test_langs.invalid.sample_bad` (3 functions, 2 classes)
 📄 `test_langs.valid.sample` (4 functions, 2 classes)
+📄 `test_metrics.README`
+📄 `test_metrics.batch_1.context`
+📄 `test_metrics.context`
+📄 `test_metrics.prompt`
+📄 `test_metrics.root.context`
+📄 `test_prompt.README`
+📄 `test_prompt.batch_1.context`
+📄 `test_prompt.context`
+📄 `test_prompt.prompt`
+📄 `test_prompt.root.context`
 📦 `test_python_only.valid`
 📄 `test_python_only.valid.sample` (5 functions, 2 classes)
+📄 `test_python_only_examples_tests.analysis.toon`
 📄 `validate_toon` (21 functions)
 
 ## Requirements

@@ -121,10 +121,16 @@ class ProjectAnalyzer:
             return None, [], files
 
     def _run_analysis(self, files_to_analyze: List[Tuple[str, str]]) -> List[Dict]:
-        """Analyze files in parallel or sequentially depending on config."""
+        """Analyze files in parallel or sequentially depending on config.
+
+        Parallel mode has significant startup/pickle overhead.  It is only
+        beneficial for larger file sets (threshold: 30 files).
+        """
         if not files_to_analyze:
             return []
-        if self.config.performance.parallel_enabled and len(files_to_analyze) > 1:
+        _PARALLEL_THRESHOLD = 30
+        if (self.config.performance.parallel_enabled
+                and len(files_to_analyze) > _PARALLEL_THRESHOLD):
             return self._analyze_parallel(files_to_analyze)
         return self._analyze_sequential(files_to_analyze)
 
@@ -197,39 +203,61 @@ class ProjectAnalyzer:
         if self.config.verbose:
             self._print_summary(merged)
     
+    @staticmethod
+    def _should_collect_file(
+        filename: str,
+        ext_set: set,
+        filename_set_lower: frozenset,
+        filename_prefixes_lower: tuple,
+    ) -> bool:
+        """Return True if *filename* matches a known language extension,
+        well-known filename (Dockerfile, Makefile, ...), or filename prefix
+        (Dockerfile.dev, Makefile.am).
+        """
+        filename_lower = filename.lower()
+        suffix = os.path.splitext(filename)[1].lower()
+        return (
+            suffix in ext_set
+            or filename_lower in filename_set_lower
+            or filename_lower.startswith(filename_prefixes_lower)
+        )
+
+    @staticmethod
+    def _compute_module_name(
+        rel: str, filename: str, project_name: str
+    ) -> str:
+        """Derive a Pythonic module name from a relative file path."""
+        parts = rel.replace('\\', '/').split('/')
+        dir_parts = parts[:-1]
+        init_names = frozenset({'__init__.py', 'index.js', 'index.ts', 'mod.rs', 'lib.rs'})
+        if filename in init_names:
+            return '.'.join(dir_parts) if dir_parts else project_name
+        stem = os.path.splitext(filename)[0]
+        return '.'.join(dir_parts + [stem]) if dir_parts else stem
+
     def _collect_files(self, project_path: Path) -> List[Tuple[str, str]]:
         """Collect all source files with their module names for all supported languages.
-        
+
         Uses a single os.walk traversal with early directory pruning instead of
         separate rglob calls per extension (~40x speedup on large repos).
         """
         files = []
-        ext_set = set(ALL_EXTENSIONS)  # O(1) lookup
-        # Filename lookup uses a case-insensitive set. We lowercase once
-        # here so the hot loop only does a single lower() per file.
+        ext_set = set(ALL_EXTENSIONS)
         filename_set_lower = frozenset(n.lower() for n in ALL_FILENAMES)
         filename_prefixes_lower = tuple(p.lower() for p in LANGUAGE_FILENAME_PREFIXES)
-        init_names = frozenset({'__init__.py', 'index.js', 'index.ts', 'mod.rs', 'lib.rs'})
-        seen = set()  # guard against duplicate paths (e.g. .h in both c and cpp lists)
+        seen = set()
         project_str = str(project_path)
+        project_name = project_path.name
 
         for dirpath, dirnames, filenames in os.walk(project_str, topdown=True):
-            # Prune skipped directories in-place so os.walk won't descend into them
             dirnames[:] = [
                 d for d in dirnames
                 if not self.file_filter.should_skip_dir(d)
             ]
 
             for filename in filenames:
-                filename_lower = filename.lower()
-                suffix = os.path.splitext(filename)[1].lower()
-                # Accept by extension, well-known filename
-                # (Dockerfile, Makefile, Jenkinsfile, ...), or known
-                # prefix (Dockerfile.dev, Dockerfile.prod, Makefile.am).
-                if (
-                    suffix not in ext_set
-                    and filename_lower not in filename_set_lower
-                    and not filename_lower.startswith(filename_prefixes_lower)
+                if not self._should_collect_file(
+                    filename, ext_set, filename_set_lower, filename_prefixes_lower
                 ):
                     continue
 
@@ -241,17 +269,8 @@ class ProjectAnalyzer:
                 if not self.file_filter.should_process(file_str):
                     continue
 
-                # Calculate module name from relative path
                 rel = os.path.relpath(file_str, project_str)
-                parts = rel.replace('\\', '/').split('/')
-                dir_parts = parts[:-1]  # everything before filename
-
-                if filename in init_names:
-                    module_name = '.'.join(dir_parts) if dir_parts else project_path.name
-                else:
-                    stem = os.path.splitext(filename)[0]
-                    module_name = '.'.join(dir_parts + [stem]) if dir_parts else stem
-
+                module_name = self._compute_module_name(rel, filename, project_name)
                 files.append((file_str, module_name))
 
         return files

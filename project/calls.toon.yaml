@@ -1,50 +1,52 @@
 # code2llm call graph | /home/tom/github/semcod/code2llm
-# nodes: 452 | edges: 500 | modules: 113
-# CC̄=3.9
+# nodes: 460 | edges: 500 | modules: 90
+# CC̄=2.1
 
 HUBS[20]:
-  code2llm.cli_parser.create_parser
-    CC=1  in:1  out:45  total:46
+  Taskfile.print
+    CC=0  in:527  out:0  total:527
+  pipeline.run_pipeline
+    CC=9  in:0  out:68  total:68
   code2llm.generators.llm_task.normalize_llm_task
     CC=14  in:1  out:43  total:44
-  code2llm.generators.llm_flow.generator.render_llm_flow_md
-    CC=10  in:1  out:42  total:43
   benchmarks.benchmark_performance.main
     CC=1  in:0  out:41  total:41
   validate_toon.analyze_class_differences
     CC=6  in:1  out:39  total:40
-  code2llm.generators.llm_flow.analysis._summarize_functions
-    CC=14  in:1  out:35  total:36
   benchmarks.benchmark_evolution.run_benchmark
     CC=9  in:0  out:34  total:34
   code2llm.cli_commands.handle_cache_command
     CC=12  in:1  out:33  total:34
   code2llm.core.lang.rust.analyze_rust
-    CC=9  in:1  out:31  total:32
-  code2llm.core.lang.base._extract_declarations
-    CC=9  in:4  out:28  total:32
+    CC=9  in:0  out:31  total:31
   benchmarks.benchmark_optimizations.benchmark_cold_vs_warm
     CC=7  in:1  out:30  total:31
   benchmarks.benchmark_performance.create_test_project
     CC=5  in:1  out:29  total:30
-  code2llm.cli_exports.formats._export_mermaid
-    CC=6  in:1  out:27  total:28
+  code2llm.core.lang.base._extract_declarations
+    CC=9  in:1  out:28  total:29
   code2llm.core.toon_size_manager._split_by_modules
     CC=10  in:1  out:27  total:28
-  code2llm.cli_exports.orchestrator._run_exports
-    CC=14  in:1  out:26  total:27
-  code2llm.core.lang.go_lang._analyze_go_regex
-    CC=10  in:1  out:26  total:27
   code2llm.exporters.mermaid.compact.export_compact
     CC=13  in:0  out:27  total:27
+  code2llm.core.lang.go_lang._analyze_go_regex
+    CC=10  in:1  out:26  total:27
   validate_toon.compare_modules
     CC=5  in:1  out:26  total:27
   code2llm.exporters.mermaid.calls.export_calls
     CC=13  in:0  out:26  total:26
-  code2llm.cli_exports.formats._export_simple_formats
-    CC=13  in:1  out:24  total:25
+  code2llm.exporters.evolution_exporter.EvolutionExporter._is_excluded
+    CC=1  in:24  out:1  total:25
+  validate_toon.compare_functions
+    CC=6  in:1  out:24  total:25
+  code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics
+    CC=12  in:0  out:25  total:25
+  code2llm.exporters.project_yaml.core.ProjectYAMLExporter._build_project_yaml
+    CC=12  in:0  out:25  total:25
 
 MODULES:
+  Taskfile  [1 funcs]
+    print  CC=0  out:0
   benchmarks.benchmark_evolution  [3 funcs]
     load_previous  CC=3  out:3
     run_benchmark  CC=9  out:34
@@ -59,9 +61,14 @@ MODULES:
     main  CC=3  out:13
     print_summary  CC=1  out:18
     run_analysis  CC=1  out:7
-  benchmarks.benchmark_performance  [2 funcs]
+  benchmarks.benchmark_performance  [7 funcs]
+    benchmark_original_analyzer  CC=3  out:14
+    benchmark_streaming_analyzer  CC=5  out:12
+    benchmark_with_strategies  CC=6  out:10
     create_test_project  CC=5  out:29
     main  CC=1  out:41
+    print_comparison  CC=2  out:10
+    save_report  CC=2  out:10
   benchmarks.format_evaluator  [5 funcs]
     _check_structural_features  CC=1  out:16
     _detect_hub_types  CC=2  out:2
@@ -82,30 +89,22 @@ MODULES:
     _print_problems_detail  CC=5  out:13
     _print_scores_table  CC=3  out:7
     _print_structural_features  CC=5  out:11
-    build_report  CC=3  out:8
     print_results  CC=1  out:6
+    save_report  CC=2  out:8
   code2llm.analysis.call_graph  [2 funcs]
     _expr_to_str  CC=1  out:1
     visit_FunctionDef  CC=2  out:4
   code2llm.analysis.cfg  [2 funcs]
     _expr_to_str  CC=1  out:1
     visit_FunctionDef  CC=5  out:8
-  code2llm.analysis.data_analysis  [3 funcs]
+  code2llm.analysis.data_analysis  [1 funcs]
     _find_data_pipelines  CC=7  out:7
-    _categorize_functions  CC=8  out:8
-    _make_stage  CC=2  out:0
   code2llm.analysis.dfg  [1 funcs]
     _expr_to_str  CC=1  out:1
-  code2llm.analysis.pipeline_resolver  [1 funcs]
-    resolve  CC=4  out:5
   code2llm.analysis.side_effects  [1 funcs]
     analyze_function  CC=3  out:6
   code2llm.analysis.type_inference  [1 funcs]
     enrich_function  CC=3  out:4
-  code2llm.analysis.utils.ast_helpers  [3 funcs]
-    ast_unparse  CC=4  out:4
-    find_function_node  CC=8  out:4
-    qualified_name  CC=2  out:3
   code2llm.api  [2 funcs]
     analyze  CC=2  out:2
     analyze_file  CC=1  out:4
@@ -133,75 +132,28 @@ MODULES:
     handle_cache_command  CC=12  out:33
     handle_report_command  CC=4  out:17
     handle_special_commands  CC=9  out:8
-  code2llm.cli_exports.code2logic  [8 funcs]
-    _build_code2logic_cmd  CC=2  out:3
-    _check_code2logic_installed  CC=2  out:4
-    _export_code2logic  CC=6  out:13
-    _find_code2logic_output  CC=6  out:6
-    _handle_code2logic_error  CC=6  out:7
-    _normalize_code2logic_output  CC=2  out:4
-    _run_code2logic  CC=3  out:4
-    _should_run_code2logic  CC=2  out:0
-  code2llm.cli_exports.formats  [13 funcs]
-    _export_calls  CC=1  out:1
-    _export_calls_format  CC=4  out:7
-    _export_calls_toon  CC=1  out:1
-    _export_context_fallback  CC=4  out:4
-    _export_index_html  CC=5  out:4
-    _export_mermaid  CC=6  out:27
-    _export_mermaid_pngs  CC=11  out:11
-    _export_project_toon  CC=2  out:8
-    _export_project_yaml  CC=2  out:5
-    _export_readme  CC=4  out:5
-  code2llm.cli_exports.orchestrator  [10 funcs]
-    _build_export_config  CC=1  out:7
-    _collect_dry_run_files  CC=3  out:4
-    _copy_cached_export  CC=8  out:8
-    _expand_all_formats  CC=2  out:0
-    _export_registry_formats  CC=9  out:12
-    _export_single  CC=10  out:13
-    _get_format_kwargs  CC=2  out:0
-    _run_exports  CC=14  out:26
-    _show_dry_run_plan  CC=4  out:16
-    _touch_recursive  CC=5  out:4
-  code2llm.cli_exports.orchestrator_chunked  [3 funcs]
-    _export_chunked  CC=6  out:9
-    _get_filtered_subprojects  CC=9  out:7
-    _process_subproject  CC=5  out:5
-  code2llm.cli_exports.orchestrator_handlers  [4 funcs]
-    _export_context_fallback  CC=3  out:5
-    _export_mermaid_pngs  CC=6  out:4
-    _export_project_toon  CC=2  out:7
-    _export_readme  CC=4  out:6
-  code2llm.cli_exports.prompt  [18 funcs]
-    _analyze_generated_files  CC=14  out:11
-    _build_dynamic_focus_areas  CC=9  out:17
-    _build_dynamic_tasks  CC=8  out:16
-    _build_main_files_section  CC=1  out:1
-    _build_missing_files_section  CC=6  out:5
-    _build_optional_files_section  CC=2  out:1
-    _build_priority_order  CC=9  out:21
-    _build_prompt_file_lines  CC=4  out:5
-    _build_prompt_footer  CC=5  out:7
-    _build_prompt_header  CC=1  out:0
-  code2llm.cli_parser  [1 funcs]
-    create_parser  CC=1  out:45
-  code2llm.core.config  [2 funcs]
+  code2llm.core.analyzer  [8 funcs]
+    _analyze_parallel  CC=11  out:15
+    _analyze_sequential  CC=11  out:9
+    _build_call_graph  CC=3  out:7
+    _load_from_persistent_cache  CC=11  out:19
+    _post_process  CC=5  out:7
+    _print_summary  CC=1  out:10
+    analyze_files  CC=2  out:6
+    analyze_project  CC=6  out:22
+  code2llm.core.config  [1 funcs]
     get_workers  CC=2  out:1
-    _get_optimal_workers  CC=3  out:5
-  code2llm.core.file_analyzer  [1 funcs]
+  code2llm.core.file_analyzer  [3 funcs]
+    _calculate_complexity  CC=8  out:5
+    _perform_deep_analysis  CC=5  out:8
     _route_to_language_analyzer  CC=10  out:10
-  code2llm.core.file_cache  [2 funcs]
+  code2llm.core.file_cache  [1 funcs]
     _get_cache_key  CC=1  out:1
-    make_cache_key  CC=1  out:4
   code2llm.core.file_filter  [1 funcs]
     __init__  CC=9  out:13
-  code2llm.core.gitignore  [1 funcs]
-    load_gitignore_patterns  CC=3  out:4
-  code2llm.core.incremental  [3 funcs]
+  code2llm.core.incremental  [2 funcs]
     needs_analysis  CC=2  out:5
     update  CC=1  out:2
-    _file_signature  CC=2  out:1
   code2llm.core.lang.base  [10 funcs]
     _extract_declarations  CC=9  out:28
     _match_method_name  CC=14  out:9
@@ -217,8 +169,6 @@ MODULES:
     analyze_cpp  CC=1  out:1
   code2llm.core.lang.csharp  [1 funcs]
     analyze_csharp  CC=1  out:1
-  code2llm.core.lang.generic  [1 funcs]
-    analyze_generic  CC=12  out:20
   code2llm.core.lang.go_lang  [2 funcs]
     _analyze_go_regex  CC=10  out:26
     analyze_go  CC=4  out:6
@@ -266,11 +216,18 @@ MODULES:
     _get_level1_dirs  CC=1  out:1
     _merge_small_l1_dirs  CC=7  out:19
     _process_level1_files  CC=5  out:13
-  code2llm.core.persistent_cache  [1 funcs]
-    get_all_projects  CC=6  out:8
-  code2llm.core.repo_files  [8 funcs]
+  code2llm.core.persistent_cache  [2 funcs]
+    get_file_result  CC=4  out:5
+    put_file_result  CC=3  out:7
+  code2llm.core.refactoring  [6 funcs]
+    _calculate_centrality  CC=8  out:9
+    _detect_communities  CC=7  out:10
+    _detect_cycles  CC=6  out:7
+    _detect_dead_code  CC=8  out:15
+    _map_dead_code_to_items  CC=9  out:13
+    perform_refactoring_analysis  CC=3  out:12
+  code2llm.core.repo_files  [7 funcs]
     _get_gitignore_parser  CC=2  out:2
-    calculate_priority  CC=7  out:1
     collect_files_in_dir  CC=6  out:10
     collect_root_files  CC=3  out:5
     contains_python_files  CC=3  out:4
@@ -288,8 +245,6 @@ MODULES:
     manage_toon_size  CC=8  out:11
     should_split_toon  CC=1  out:1
     split_toon_file  CC=3  out:6
-  code2llm.exporters.base  [1 funcs]
-    get_exporter  CC=1  out:1
   code2llm.exporters.evolution.computation  [8 funcs]
     aggregate_file_stats  CC=7  out:11
     build_context  CC=10  out:12
@@ -299,19 +254,13 @@ MODULES:
     filter_god_modules  CC=3  out:5
     make_relative_path  CC=3  out:3
     scan_file_sizes  CC=6  out:7
-  code2llm.exporters.evolution.exclusion  [1 funcs]
-    is_excluded  CC=5  out:4
   code2llm.exporters.evolution.yaml_export  [1 funcs]
     export_to_yaml  CC=11  out:24
   code2llm.exporters.evolution_exporter  [2 funcs]
     _is_excluded  CC=1  out:1
     export  CC=1  out:22
-  code2llm.exporters.flow_constants  [1 funcs]
-    is_excluded_path  CC=6  out:4
   code2llm.exporters.flow_exporter  [1 funcs]
     _is_excluded  CC=1  out:1
-  code2llm.exporters.flow_renderer  [1 funcs]
-    render_header  CC=4  out:4
   code2llm.exporters.map.alerts  [2 funcs]
     _read_previous_cc_avg  CC=6  out:6
     load_evolution_trend  CC=5  out:2
@@ -327,11 +276,10 @@ MODULES:
     render_header  CC=8  out:18
   code2llm.exporters.map.module_list  [1 funcs]
     render_module_list  CC=4  out:8
-  code2llm.exporters.map.utils  [4 funcs]
+  code2llm.exporters.map.utils  [3 funcs]
     count_total_lines  CC=5  out:5
     detect_languages  CC=8  out:10
     file_line_count  CC=2  out:4
-    rel_path  CC=6  out:9
   code2llm.exporters.map.yaml_export  [5 funcs]
     _build_module_classes_data  CC=6  out:5
     _build_module_entry  CC=2  out:6
@@ -349,28 +297,21 @@ MODULES:
     export_classic  CC=1  out:5
   code2llm.exporters.mermaid.compact  [1 funcs]
     export_compact  CC=13  out:27
-  code2llm.exporters.mermaid.flow_compact  [8 funcs]
+  code2llm.exporters.mermaid.flow_compact  [6 funcs]
     _longest_path_dfs  CC=7  out:5
     _select_longest_path  CC=4  out:4
     build_callers_graph  CC=4  out:4
     export_flow_compact  CC=1  out:9
     find_critical_path  CC=2  out:6
     find_leaves  CC=4  out:5
-    is_entry_point  CC=11  out:7
-    should_skip_module  CC=3  out:2
   code2llm.exporters.mermaid.flow_detailed  [1 funcs]
     export_flow_detailed  CC=1  out:14
   code2llm.exporters.mermaid.flow_full  [1 funcs]
     export_flow_full  CC=1  out:14
-  code2llm.exporters.mermaid.utils  [8 funcs]
+  code2llm.exporters.mermaid.utils  [3 funcs]
     _sanitize_identifier  CC=4  out:3
-    build_name_index  CC=2  out:3
-    get_cc  CC=3  out:2
-    module_of  CC=4  out:4
     readable_id  CC=1  out:1
-    resolve_callee  CC=6  out:3
     safe_module  CC=1  out:1
-    write_file  CC=1  out:5
   code2llm.exporters.mermaid_flow_helpers  [12 funcs]
     _append_entry_styles  CC=3  out:3
     _append_flow_node  CC=4  out:6
@@ -386,9 +327,6 @@ MODULES:
     _build_project_yaml  CC=12  out:25
     _detect_primary_language  CC=9  out:11
     export  CC=1  out:6
-  code2llm.exporters.project_yaml.evolution  [2 funcs]
-    build_evolution  CC=3  out:4
-    load_previous_evolution  CC=6  out:5
   code2llm.exporters.project_yaml.health  [3 funcs]
     build_alerts  CC=13  out:11
     build_health  CC=7  out:13
@@ -405,28 +343,8 @@ MODULES:
     compute_inbound_deps  CC=5  out:3
     compute_module_entry  CC=4  out:12
     group_by_file  CC=5  out:8
-  code2llm.exporters.readme.content  [1 funcs]
-    generate_readme_content  CC=1  out:2
-  code2llm.exporters.readme.files  [1 funcs]
-    get_existing_files  CC=2  out:1
-  code2llm.exporters.readme.insights  [1 funcs]
-    extract_insights  CC=13  out:14
-  code2llm.exporters.readme.sections  [3 funcs]
-    build_core_files_section  CC=4  out:10
-    build_llm_files_section  CC=5  out:12
-    build_viz_files_section  CC=7  out:13
   code2llm.exporters.readme_exporter  [1 funcs]
     export  CC=5  out:17
-  code2llm.exporters.report_generators  [1 funcs]
-    load_project_yaml  CC=13  out:17
-  code2llm.exporters.toon.helpers  [7 funcs]
-    _dup_file_set  CC=2  out:3
-    _hotspot_description  CC=8  out:5
-    _package_of  CC=2  out:2
-    _package_of_module  CC=4  out:4
-    _rel_path  CC=6  out:9
-    _scan_line_counts  CC=6  out:10
-    _traits_from_cfg  CC=7  out:7
   code2llm.exporters.toon.metrics  [2 funcs]
     _compute_hotspots  CC=5  out:7
     compute_all_metrics  CC=1  out:15
@@ -441,85 +359,36 @@ MODULES:
   code2llm.exporters.toon.metrics_duplicates  [2 funcs]
     _calculate_duplicate_info  CC=6  out:14
     detect_duplicates  CC=4  out:5
-  code2llm.exporters.toon.module_detail  [2 funcs]
+  code2llm.exporters.toon.module_detail  [1 funcs]
     _render_module_detail  CC=3  out:10
-    render_details  CC=3  out:2
   code2llm.exporters.toon.renderer  [2 funcs]
     _detect_language_label  CC=10  out:12
     render_layers  CC=2  out:8
   code2llm.exporters.validate_project  [2 funcs]
     _check_required_keys  CC=9  out:6
     validate_project_yaml  CC=11  out:17
-  code2llm.generators._utils  [1 funcs]
-    dump_yaml  CC=1  out:1
-  code2llm.generators.llm_flow.analysis  [3 funcs]
+  code2llm.generators.llm_flow.analysis  [2 funcs]
     _node_counts_by_function  CC=4  out:4
     _pick_relevant_functions  CC=8  out:11
-    _summarize_functions  CC=14  out:35
   code2llm.generators.llm_flow.cli  [1 funcs]
     main  CC=3  out:18
-  code2llm.generators.llm_flow.generator  [2 funcs]
+  code2llm.generators.llm_flow.generator  [1 funcs]
     generate_llm_flow  CC=5  out:12
-    render_llm_flow_md  CC=10  out:42
-  code2llm.generators.llm_flow.nodes  [7 funcs]
-    _collect_entrypoints  CC=5  out:6
-    _collect_functions  CC=7  out:10
-    _collect_nodes  CC=5  out:5
-    _deduplicate_entrypoints  CC=5  out:4
-    _extract_entrypoint_info  CC=4  out:6
-    _group_nodes_by_file  CC=3  out:5
-    _is_entrypoint_file  CC=2  out:2
-  code2llm.generators.llm_flow.parsing  [1 funcs]
-    _parse_func_label  CC=4  out:4
-  code2llm.generators.llm_flow.utils  [4 funcs]
-    _as_dict  CC=2  out:1
-    _as_list  CC=2  out:1
-    _safe_read_yaml  CC=12  out:14
-    _strip_bom  CC=2  out:1
-  code2llm.generators.llm_task  [12 funcs]
+  code2llm.generators.llm_task  [14 funcs]
     _apply_bullet_sections  CC=6  out:10
     _apply_simple_sections  CC=5  out:4
     _create_empty_task_data  CC=1  out:0
     _ensure_list  CC=3  out:1
+    _load_json  CC=2  out:3
+    _load_yaml  CC=9  out:8
     _parse_acceptance_tests  CC=3  out:4
     _parse_bullets  CC=4  out:5
     _parse_sections  CC=7  out:8
     _strip_bom  CC=2  out:1
-    load_input  CC=15  out:20
-    main  CC=4  out:13
   code2llm.generators.mermaid  [1 funcs]
     run_cli  CC=1  out:8
-  code2llm.generators.mermaid.fix  [7 funcs]
-    _fix_class_line  CC=6  out:11
-    _fix_edge_label_pipes  CC=8  out:10
-    _fix_edge_line  CC=5  out:9
-    _fix_subgraph_line  CC=3  out:8
-    _sanitize_label_text  CC=1  out:9
-    _sanitize_node_id  CC=3  out:3
-    fix_mermaid_file  CC=5  out:10
-  code2llm.generators.mermaid.png  [8 funcs]
-    _build_renderers  CC=2  out:8
-    _is_png_fresh  CC=2  out:3
-    _prepare_and_render  CC=4  out:8
-    _run_mmdc_subprocess  CC=8  out:7
-    _setup_puppeteer_config  CC=4  out:9
-    generate_pngs  CC=7  out:9
-    generate_single_png  CC=3  out:5
-    generate_with_puppeteer  CC=2  out:7
-  code2llm.generators.mermaid.validation  [6 funcs]
-    _check_bracket_balance  CC=7  out:8
-    _check_node_ids  CC=12  out:12
-    _is_balanced_node_line  CC=6  out:0
-    _scan_brackets  CC=10  out:6
-    _strip_label_segments  CC=1  out:6
-    validate_mermaid_file  CC=6  out:10
-  code2llm.parsers.toon_parser  [6 funcs]
-    _detect_section  CC=3  out:2
-    _parse_header_line  CC=2  out:2
-    _parse_stats_line  CC=5  out:5
-    is_toon_file  CC=4  out:5
-    load_toon  CC=2  out:4
-    parse_toon_content  CC=8  out:9
+  examples.docker-doql-example.app.main  [1 funcs]
+    log_message  CC=1  out:2
   examples.docker-doql-example.java.Main  [6 funcs]
     ApiHandler  CC=1  out:0
     HealthHandler  CC=1  out:0
@@ -527,16 +396,42 @@ MODULES:
     main  CC=1  out:12
     mapToJson  CC=4  out:6
     sendResponse  CC=1  out:8
+  examples.docker-doql-example.worker.worker  [2 funcs]
+    main  CC=1  out:9
+    process_message  CC=1  out:4
   examples.litellm.run  [3 funcs]
     get_refactoring_advice  CC=2  out:5
     main  CC=1  out:17
     run_analysis  CC=4  out:8
-  examples.streaming-analyzer.sample_project.main  [2 funcs]
+  examples.streaming-analyzer.demo  [7 funcs]
+    demo_custom_progress  CC=3  out:16
+    demo_deep_strategy  CC=5  out:10
+    demo_incremental_analysis  CC=5  out:19
+    demo_memory_limited  CC=4  out:8
+    demo_quick_strategy  CC=2  out:14
+    demo_standard_strategy  CC=5  out:9
+    main  CC=3  out:17
+  examples.streaming-analyzer.sample_project.main  [7 funcs]
+    handle_default_request  CC=2  out:4
+    handle_delete_request  CC=4  out:5
     handle_get_request  CC=4  out:6
+    handle_set_request  CC=4  out:5
     process_request  CC=6  out:11
-  examples.streaming-analyzer.sample_project.utils  [2 funcs]
-    format_output  CC=3  out:5
-    validate_input  CC=4  out:2
+    start  CC=4  out:4
+    main  CC=3  out:5
+  map.toon  [108 funcs]
+    _categorize_functions  CC=0  out:0
+    _collect_entrypoints  CC=0  out:0
+    _collect_functions  CC=0  out:0
+    _collect_nodes  CC=0  out:0
+    _dup_file_set  CC=0  out:0
+    _entry_points  CC=0  out:0
+    _export_simple_formats  CC=0  out:0
+    _extract_declarations  CC=0  out:0
+    _file_signature  CC=0  out:0
+    _filtered_functions  CC=0  out:0
+  pipeline  [1 funcs]
+    run_pipeline  CC=9  out:68
   scripts.benchmark_badges  [3 funcs]
     create_html  CC=4  out:3
     get_shield_url  CC=1  out:3
@@ -562,7 +457,8 @@ MODULES:
     add_user  CC=1  out:1
     get_user  CC=1  out:2
     main  CC=2  out:3
-  test_python_only.valid.sample  [1 funcs]
+  test_python_only.valid.sample  [2 funcs]
+    process_users  CC=2  out:1
     main  CC=2  out:5
   validate_toon  [21 funcs]
     _compare_all_aspects  CC=1  out:5
@@ -577,22 +473,31 @@ MODULES:
     compare_functions  CC=6  out:24
 
 EDGES:
-  validate_toon.load_file → code2llm.parsers.toon_parser.is_toon_file
+  validate_toon.load_yaml → Taskfile.print
+  validate_toon.load_file → map.toon.is_toon_file
   validate_toon.load_file → validate_toon.load_yaml
-  validate_toon.load_file → code2llm.parsers.toon_parser.load_toon
+  validate_toon.load_file → map.toon.load_toon
   validate_toon.extract_functions_from_toon → validate_toon._extract_names_from_toon
   validate_toon.extract_classes_from_yaml → validate_toon._extract_keys_from_yaml
   validate_toon.extract_classes_from_toon → validate_toon._extract_names_from_toon
+  validate_toon.analyze_class_differences → Taskfile.print
   validate_toon.extract_modules_from_yaml → validate_toon._extract_keys_from_yaml
+  validate_toon.compare_basic_stats → Taskfile.print
+  validate_toon.compare_functions → Taskfile.print
   validate_toon.compare_functions → validate_toon.extract_functions_from_yaml
   validate_toon.compare_functions → validate_toon.extract_functions_from_toon
+  validate_toon.compare_classes → Taskfile.print
   validate_toon.compare_classes → validate_toon.extract_classes_from_yaml
   validate_toon.compare_classes → validate_toon.extract_classes_from_toon
   validate_toon.compare_classes → validate_toon.analyze_class_differences
+  validate_toon.compare_modules → Taskfile.print
   validate_toon.compare_modules → validate_toon.extract_modules_from_yaml
   validate_toon.compare_modules → validate_toon.extract_modules_from_toon
+  validate_toon.validate_toon_completeness → Taskfile.print
+  validate_toon._run_single_file_mode → Taskfile.print
   validate_toon._run_single_file_mode → validate_toon.load_file
   validate_toon._run_single_file_mode → validate_toon.validate_toon_completeness
+  validate_toon._run_comparison_mode → Taskfile.print
   validate_toon._run_comparison_mode → validate_toon.load_yaml
   validate_toon._run_comparison_mode → validate_toon.load_file
   validate_toon._run_comparison_mode → validate_toon._compare_all_aspects
@@ -602,8 +507,11 @@ EDGES:
   validate_toon._compare_all_aspects → validate_toon.compare_classes
   validate_toon._compare_all_aspects → validate_toon.compare_modules
   validate_toon._compare_all_aspects → validate_toon.validate_toon_completeness
+  validate_toon._print_comparison_summary → Taskfile.print
   validate_toon.main → validate_toon._run_single_file_mode
   validate_toon.main → validate_toon._run_comparison_mode
+  validate_toon.main → Taskfile.print
+  pipeline.run_pipeline → Taskfile.print
   test_langs.valid.sample.main → test_langs.valid.sample.add_user
   test_langs.valid.sample.main → test_langs.valid.sample.get_user
   test_langs.valid.sample.UserService.service → test_langs.valid.sample.UserService.addUser
@@ -612,18 +520,6 @@ EDGES:
   test_langs.valid.sample.UserService.main → test_langs.valid.sample.UserService.getUser
   test_langs.valid.sample.UserService.main → test_langs.valid.sample.User.getName
   test_langs.invalid.sample_bad.UserService.service → test_langs.invalid.sample_bad.UserService.addUser
+  examples.litellm.run.run_analysis → Taskfile.print
+  examples.litellm.run.get_refactoring_advice → Taskfile.print
   examples.litellm.run.main → examples.litellm.run.run_analysis
-  examples.litellm.run.main → examples.litellm.run.get_refactoring_advice
-  examples.docker-doql-example.java.Main.Main.main → examples.docker-doql-example.java.Main.Main.HealthHandler
-  examples.docker-doql-example.java.Main.Main.main → examples.docker-doql-example.java.Main.Main.ApiHandler
-  examples.docker-doql-example.java.Main.Main.handle → examples.docker-doql-example.java.Main.Main.sendResponse
-  examples.docker-doql-example.java.Main.Main.sendResponse → examples.docker-doql-example.java.Main.Main.mapToJson
-  examples.streaming-analyzer.sample_project.main.Application.process_request → examples.streaming-analyzer.sample_project.utils.validate_input
-  examples.streaming-analyzer.sample_project.main.Application.handle_get_request → examples.streaming-analyzer.sample_project.utils.format_output
-  benchmarks.benchmark_evolution.run_benchmark → benchmarks.benchmark_evolution.load_previous
-  benchmarks.benchmark_evolution.run_benchmark → benchmarks.benchmark_evolution.save_current
-  benchmarks.reporting.print_results → benchmarks.reporting._print_header
-  benchmarks.reporting.print_results → benchmarks.reporting._print_scores_table
-  benchmarks.reporting.print_results → benchmarks.reporting._print_problems_detail
-  benchmarks.reporting.print_results → benchmarks.reporting._print_pipelines_detail
-  benchmarks.reporting.print_results → benchmarks.reporting._print_structural_features

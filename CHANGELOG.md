@@ -1,5 +1,63 @@
 ## [Unreleased]
 
+### Performance
+
+- perf(core): add `--fast` CLI flag — skips vulture, centrality, DFG, communities for 3-10x speedup
+- perf(core): guard `_perform_deep_analysis` with `skip_data_flow` — avoid DFG/CG extraction when not needed
+- perf(core): fix duplicate call extraction (ast.walk + CallGraphExtractor were doubling entries)
+- perf(core): raise parallel threshold to 30 files — sequential is faster for small/medium projects
+- perf(core): make refactoring analysis conditional (`skip_refactoring_analysis`, `skip_dead_code_detection`, `skip_centrality`, `skip_community_detection`)
+- perf(config): add `PerformanceConfig.apply_fast_mode()` to set all skip flags at once
+- perf(cli): strategy `quick` now auto-enables all performance skip flags
+
+### Features
+
+- feat(code2llm): configuration management system
+- feat(code2llm): deep code analysis engine
+- feat(config): changelog generation
+- feat(goal): CLI interface improvements
+
+### Fixes
+
+- fix(docs): add markdown output and commit messages
+- fix(todo): move 105 completed prefact items from TODO.md to Done section
+
+### Refactoring
+
+- refactor(config): multi-language support with 4 supporting modules
+- refactor(docs): code analysis engine
+- refactor(goal): output formatting
+
+## [0.5.145] - 2026-05-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update SUMD.md
+- Update TODO.md
+- Update context.md
+- Update docs/COMPARISON_AND_OPTIMIZATION.md
+- Update docs/METHODOLOGY.md
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Test
+- Update tests/test_deep_analysis.py
+
+### Other
+- Update .gitignore
+- Update SUMR.json
+- Update analysis.toon.yaml
+- Update app.doql.less
+- Update batch_1/analysis.toon.yaml
+- Update code2llm/analysis.toon.yaml
+- Update code2llm/cli_analysis.py
+- Update code2llm/cli_parser.py
+- Update code2llm/core/__init__.py
+- Update code2llm/core/analyzer.py
+- ... and 34 more files
+
 ## [0.5.144] - 2026-04-25
 
 ### Docs

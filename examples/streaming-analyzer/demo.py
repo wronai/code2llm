@@ -19,7 +19,7 @@ from code2llm.core.streaming_analyzer import (
     STRATEGY_QUICK, 
     STRATEGY_STANDARD, 
     STRATEGY_DEEP,
-    IncrementalAnalyzer
+    StreamingIncrementalAnalyzer
 )
 
 
@@ -108,7 +108,7 @@ def demo_incremental_analysis():
     print("\n🔄 Incremental Analysis Demo")
     print("=" * 50)
     
-    incremental = IncrementalAnalyzer()
+    incremental = StreamingIncrementalAnalyzer()
     
     # First run - all files are "changed"
     print("🔍 First analysis run...")

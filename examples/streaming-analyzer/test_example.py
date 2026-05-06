@@ -18,7 +18,7 @@ def test_imports():
             STRATEGY_QUICK, 
             STRATEGY_STANDARD, 
             STRATEGY_DEEP,
-            IncrementalAnalyzer
+            StreamingIncrementalAnalyzer
         )
         print("✅ All imports successful")
         return True

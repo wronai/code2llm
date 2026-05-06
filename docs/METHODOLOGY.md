@@ -299,11 +299,17 @@ else:
 
 ### For Large Projects (>1000 functions)
 
-1. **Always use `STRATEGY_QUICK` first** - Get overview in seconds
-2. **Exclude test files** - Add to filter config
-3. **Use incremental analysis** - Only scan changed files
-4. **Limit parallel workers** - Reduce memory pressure (2-4 workers)
-5. **Enable streaming output** - See results immediately
+1. **Use `--fast` flag** - Skips vulture, centrality, DFG, communities (3-10x speedup)
+2. **Always use `STRATEGY_QUICK` first** - Get overview in seconds
+3. **Exclude test files** - Add to filter config
+4. **Use incremental analysis** - Only scan changed files
+5. **Limit parallel workers** - Reduce memory pressure (2-4 workers)
+6. **Enable streaming output** - See results immediately
+
+```bash
+# Fastest possible full export (seconds, not minutes)
+code2llm ./ -f all --fast --no-chunk --no-png
+```
 
 ### For CI/CD Integration
 

@@ -4,14 +4,22 @@
 
 - **Project**: /home/tom/github/semcod/code2llm
 - **Primary Language**: python
-- **Languages**: python: 190, shell: 4, php: 2, java: 2, typescript: 1
+- **Languages**: python: 189, yaml: 36, txt: 7, shell: 4, json: 4
 - **Analysis Mode**: static
-- **Total Functions**: 1199
+- **Total Functions**: 2181
 - **Total Classes**: 141
-- **Modules**: 203
-- **Entry Points**: 794
+- **Modules**: 256
+- **Entry Points**: 1761
 
 ## Architecture by Module
+
+### project.map.toon
+- **Functions**: 13560
+- **File**: `map.toon.yaml`
+
+### map.toon
+- **Functions**: 6780
+- **File**: `map.toon.yaml`
 
 ### code2llm.analysis.data_analysis
 - **Functions**: 28
@@ -28,14 +36,19 @@
 - **Classes**: 1
 - **File**: `yaml_exporter.py`
 
+### code2llm.core.analyzer
+- **Functions**: 22
+- **Classes**: 1
+- **File**: `analyzer.py`
+
+### code2llm.core.persistent_cache
+- **Functions**: 22
+- **Classes**: 1
+- **File**: `persistent_cache.py`
+
 ### validate_toon
 - **Functions**: 21
 - **File**: `validate_toon.py`
-
-### code2llm.core.analyzer
-- **Functions**: 20
-- **Classes**: 1
-- **File**: `analyzer.py`
 
 ### code2llm.core.large_repo
 - **Functions**: 20
@@ -46,11 +59,6 @@
 - **Functions**: 20
 - **Classes**: 3
 - **File**: `pipeline.py`
-
-### code2llm.core.persistent_cache
-- **Functions**: 19
-- **Classes**: 1
-- **File**: `persistent_cache.py`
 
 ### examples.functional_refactoring.entity_preparers
 - **Functions**: 18
@@ -86,6 +94,10 @@
 - **Classes**: 1
 - **File**: `metrics_core.py`
 
+### code2llm.generators.llm_task
+- **Functions**: 16
+- **File**: `llm_task.py`
+
 ### code2llm.cli_exports.formats
 - **Functions**: 16
 - **File**: `formats.py`
@@ -95,20 +107,6 @@
 - **Classes**: 2
 - **File**: `side_effects.py`
 
-### code2llm.nlp.intent_matching
-- **Functions**: 15
-- **Classes**: 3
-- **File**: `intent_matching.py`
-
-### code2llm.exporters.context_exporter
-- **Functions**: 15
-- **Classes**: 1
-- **File**: `context_exporter.py`
-
-### code2llm.core.lang.base
-- **Functions**: 14
-- **File**: `base.py`
-
 ## Key Entry Points
 
 Main execution flows into the system:
@@ -117,15 +115,30 @@ Main execution flows into the system:
 > Run unified pipeline in single process.
 
 Returns dict with timings and status for each stage.
-- **Calls**: None.resolve, None.resolve, out_path.mkdir, time.perf_counter, print, print, print, print
+- **Calls**: None.resolve, None.resolve, out_path.mkdir, time.perf_counter, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print
+
+### code2llm.cli_parser.create_parser
+> Create CLI argument parser.
+- **Calls**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
+
+### code2llm.generators.llm_flow.generator.render_llm_flow_md
+- **Calls**: map.toon._as_dict, map.toon._as_list, map.toon._as_list, lines.append, lines.append, map.toon._as_list, lines.append, flow.get
 
 ### benchmarks.benchmark_performance.main
 > Run benchmark suite.
-- **Calls**: print, print, print, print, benchmarks.benchmark_performance.create_test_project, print, print, print
+- **Calls**: Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, benchmarks.benchmark_performance.create_test_project, Taskfile.print, Taskfile.print, Taskfile.print
+
+### code2llm.generators.llm_flow.analysis._summarize_functions
+> Summarize functions with their decisions, calls, and location info.
+- **Calls**: defaultdict, defaultdict, nodes.values, set, n.get, n.get, str, loc_by_func.get
 
 ### benchmarks.benchmark_evolution.run_benchmark
 > Run evolution analysis and print before/after table.
-- **Calls**: benchmarks.benchmark_evolution.load_previous, print, print, print, print, print, metrics_labels.items, print
+- **Calls**: benchmarks.benchmark_evolution.load_previous, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, Taskfile.print, metrics_labels.items, Taskfile.print
+
+### code2llm.core.lang.rust.analyze_rust
+> Analyze Rust files using regex-based parsing.
+- **Calls**: content.split, re.compile, re.compile, re.compile, re.compile, re.compile, enumerate, map.toon.calculate_complexity_regex
 
 ### code2llm.nlp.pipeline.NLPPipeline.process
 > Process query through full pipeline (4a-4e).
@@ -140,7 +153,15 @@ Returns dict with timings and status for each stage.
 
 ### code2llm.exporters.mermaid.compact.export_compact
 > Export module-level graph: one node per module, weighted edges.
-- **Calls**: code2llm.exporters.mermaid.utils.build_name_index, defaultdict, defaultdict, result.functions.items, defaultdict, result.functions.items, set, sorted
+- **Calls**: map.toon.build_name_index, defaultdict, defaultdict, result.functions.items, defaultdict, result.functions.items, set, sorted
+
+### code2llm.cli_exports.formats._export_mermaid
+> Export Mermaid diagrams + optional PNG generation.
+
+Plan R1: 3-level flow diagrams
+- flow.mmd (compact, ~50 nodes) - architectural view [default]
+- fl
+- **Calls**: MermaidExporter, getattr, exporter.export_flow_compact, getattr, getattr, exporter.export_call_graph, exporter.export_compact, YAMLExporter
 
 ### code2llm.core.streaming_analyzer.StreamingAnalyzer.analyze_streaming
 > Analyze project with streaming output (yields partial results).
@@ -148,11 +169,18 @@ Returns dict with timings and status for each stage.
 
 ### code2llm.exporters.mermaid.calls.export_calls
 > Export simplified call graph — only connected nodes.
-- **Calls**: code2llm.exporters.mermaid.utils.build_name_index, set, result.functions.items, sorted, set, code2llm.exporters.mermaid.utils.write_file, code2llm.exporters.mermaid.utils.module_of, result.functions.get
+- **Calls**: map.toon.build_name_index, set, result.functions.items, sorted, set, map.toon.write_file, map.toon.module_of, result.functions.get
 
 ### code2llm.cli_exports.orchestrator_handlers._export_mermaid
 > Export mermaid diagrams.
 - **Calls**: MermaidExporter, getattr, exporter.export_flow_compact, exporter.export_call_graph, exporter.export_compact, getattr, getattr, YAMLExporter
+
+### code2llm.cli_exports.orchestrator._run_exports
+> Export analysis results in requested formats.
+
+Uses EXPORT_REGISTRY for core format dispatch.
+For chunked analysis, exports to subproject subdirectori
+- **Calls**: code2llm.cli_exports.orchestrator._expand_all_formats, getattr, getattr, f.strip, getattr, code2llm.cli_exports.orchestrator._show_dry_run_plan, getattr, PersistentCache
 
 ### code2llm.exporters.toon.ToonExporter.export
 > Export analysis result to toon v2 format.
@@ -164,7 +192,7 @@ Returns dict with timings and status for each stage.
 
 ### code2llm.exporters.project_yaml.core.ProjectYAMLExporter._build_project_yaml
 > Build complete project.yaml structure.
-- **Calls**: code2llm.exporters.toon.helpers._scan_line_counts, code2llm.exporters.project_yaml.modules.build_modules, code2llm.exporters.project_yaml.health.build_health, code2llm.exporters.project_yaml.hotspots.build_hotspots, code2llm.exporters.project_yaml.hotspots.build_refactoring, code2llm.exporters.project_yaml.evolution.build_evolution, sum, line_counts.items
+- **Calls**: map.toon._scan_line_counts, map.toon.build_modules, map.toon.build_health, map.toon.build_hotspots, map.toon.build_refactoring, map.toon.build_evolution, sum, line_counts.items
 
 ### code2llm.exporters.context_exporter.ContextExporter.export
 > Generate comprehensive LLM prompt with architecture description.
@@ -175,15 +203,23 @@ Returns dict with timings and status for each stage.
 
 ### code2llm.exporters.evolution.yaml_export.export_to_yaml
 > Generate evolution.toon.yaml (structured YAML).
-- **Calls**: code2llm.exporters.evolution.computation.build_context, actions.sort, None.parent.mkdir, actions.append, risks.append, None.strftime, open, yaml.dump
+- **Calls**: map.toon.build_context, actions.sort, None.parent.mkdir, actions.append, risks.append, None.strftime, open, yaml.dump
+
+### code2llm.cli_exports.formats._export_simple_formats
+> Export toon, map, flow, context, yaml, json, project-yaml formats.
+- **Calls**: format_map.items, code2llm.cli_exports.formats._export_project_yaml, map.toon.load_project_yaml, view_map.items, map.toon.validate_project_yaml, code2llm.cli_exports.formats._export_yaml, JSONExporter, exporter.export
 
 ### scripts.benchmark_badges.main
 > Main function to generate badges.
-- **Calls**: Path, output_dir.mkdir, os.walk, None.glob, None.glob, scripts.benchmark_badges.create_html, output_path.write_text, print
+- **Calls**: Path, output_dir.mkdir, os.walk, None.glob, None.glob, scripts.benchmark_badges.create_html, output_path.write_text, Taskfile.print
+
+### benchmarks.format_evaluator.evaluate_format
+> Oceń pojedynczy format względem ground truth.
+- **Calls**: FormatScore, benchmarks.format_evaluator._detect_problems, sum, benchmarks.format_evaluator._detect_pipelines, sum, benchmarks.format_evaluator._detect_hub_types, sum, benchmarks.format_evaluator._check_structural_features
 
 ### benchmarks.benchmark_format_quality.run_benchmark
 > Run the full format quality benchmark.
-- **Calls**: benchmarks.benchmark_format_quality._print_benchmark_header, Path, benchmarks.project_generator.create_ground_truth_project, benchmarks.benchmark_format_quality._print_ground_truth_info, output_dir.mkdir, benchmarks.reporting.print_results, benchmarks.reporting.build_report, tempfile.mkdtemp
+- **Calls**: benchmarks.benchmark_format_quality._print_benchmark_header, Path, map.toon.create_ground_truth_project, benchmarks.benchmark_format_quality._print_ground_truth_info, output_dir.mkdir, map.toon.print_results, map.toon.build_report, tempfile.mkdtemp
 
 ### code2llm.core.analyzer.ProjectAnalyzer.analyze_project
 > Analyze entire project.
@@ -195,48 +231,11 @@ Returns dict with timings and status for each stage.
 
 ### code2llm.exporters.evolution_exporter.EvolutionExporter.export
 > Generate evolution.toon.
-- **Calls**: code2llm.exporters.evolution.computation.build_context, sections.extend, sections.append, sections.extend, sections.append, sections.extend, sections.append, sections.extend
+- **Calls**: map.toon.build_context, sections.extend, sections.append, sections.extend, sections.append, sections.extend, sections.append, sections.extend
 
 ### code2llm.exporters.flow_exporter.FlowExporter.export
 > Export analysis result to flow.toon format.
 - **Calls**: self._build_context, sections.extend, sections.append, sections.extend, sections.append, sections.extend, sections.append, sections.extend
-
-### code2llm.analysis.pipeline_detector.PipelineDetector._find_pipeline_paths
-> Find longest paths in the call graph as pipeline candidates.
-
-Strategy:
-1. Find all source nodes (in-degree 0) as potential entry points
-2. Find all s
-- **Calls**: set, nx.weakly_connected_components, self._longest_path_from, len, graph.subgraph, self._longest_path_in_dag, graph.nodes, sorted
-
-### code2llm.exporters.dashboard_renderer.DashboardRenderer._assemble_html
-> Assemble the complete HTML document with all charts and tables.
-- **Calls**: proj.get, proj.get, proj.get, stats.get, stats.get, stats.get, stats.get, len
-
-### code2llm.exporters.toon_view.ToonViewGenerator._render
-- **Calls**: data.get, data.get, data.get, data.get, data.get, data.get, lines.extend, lines.extend
-
-### examples.streaming-analyzer.demo.demo_incremental_analysis
-> Demonstrate incremental analysis.
-- **Calls**: print, print, IncrementalAnalyzer, print, incremental.get_changed_files, print, print, print
-
-### code2llm.core.analyzer.ProjectAnalyzer._load_from_persistent_cache
-> Split files into cached/changed; return (pcache, cached_results, files_to_analyze).
-- **Calls**: getattr, PersistentCache, pcache.get_changed_files, pcache.prune_missing, dict, str, pcache.get_file_result, print
-
-### code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_l1_dirs
-> Merge small L1 directories into consolidated chunks up to size limit.
-- **Calls**: sorted, current_chunk_files.extend, current_chunk_names.append, chunks.append, chunks.append, None.join, SubProject, code2llm.core.repo_files.calculate_priority
-
-### code2llm.core.large_repo.HierarchicalRepoSplitter._split_level2_consolidated
-> Split level 1 directory with aggressive consolidation.
-
-Strategy: Create chunks of ~target_chunk_kb size (up to 384KB with margin).
-- **Calls**: code2llm.core.repo_files.collect_files_in_dir, all_files.sort, len, current_files.append, chunks.append, SubProject, chunks.append, SubProject
-
-### code2llm.core.streaming.prioritizer.SmartPrioritizer.prioritize_files
-> Score and sort files by importance.
-- **Calls**: self._build_import_graph, scored.sort, self._check_has_main, len, FilePriority, scored.append, reasons.append, reasons.append
 
 ## Process Flows
 
@@ -245,55 +244,60 @@ Key execution flows identified:
 ### Flow 1: run_pipeline
 ```
 run_pipeline [pipeline]
+  └─ →> print
 ```
 
-### Flow 2: main
+### Flow 2: create_parser
+```
+create_parser [code2llm.cli_parser]
+```
+
+### Flow 3: render_llm_flow_md
+```
+render_llm_flow_md [code2llm.generators.llm_flow.generator]
+  └─ →> _as_dict
+  └─ →> _as_list
+```
+
+### Flow 4: main
 ```
 main [benchmarks.benchmark_performance]
   └─> create_test_project
+  └─ →> print
+  └─ →> print
 ```
 
-### Flow 3: run_benchmark
+### Flow 5: _summarize_functions
+```
+_summarize_functions [code2llm.generators.llm_flow.analysis]
+```
+
+### Flow 6: run_benchmark
 ```
 run_benchmark [benchmarks.benchmark_evolution]
   └─> load_previous
+  └─ →> print
+  └─ →> print
 ```
 
-### Flow 4: process
+### Flow 7: analyze_rust
+```
+analyze_rust [code2llm.core.lang.rust]
+```
+
+### Flow 8: process
 ```
 process [code2llm.nlp.pipeline.NLPPipeline]
 ```
 
-### Flow 5: _build_context_for_smell
+### Flow 9: _build_context_for_smell
 ```
 _build_context_for_smell [code2llm.refactor.prompt_engine.PromptEngine]
 ```
 
-### Flow 6: _render_architecture
+### Flow 10: _render_architecture
 ```
 _render_architecture [code2llm.exporters.context_view.ContextViewGenerator]
-```
-
-### Flow 7: export_compact
-```
-export_compact [code2llm.exporters.mermaid.compact]
-  └─ →> build_name_index
-```
-
-### Flow 8: analyze_streaming
-```
-analyze_streaming [code2llm.core.streaming_analyzer.StreamingAnalyzer]
-```
-
-### Flow 9: export_calls
-```
-export_calls [code2llm.exporters.mermaid.calls]
-  └─ →> build_name_index
-```
-
-### Flow 10: _export_mermaid
-```
-_export_mermaid [code2llm.cli_exports.orchestrator_handlers]
 ```
 
 ## Key Classes
@@ -311,8 +315,8 @@ _export_mermaid [code2llm.cli_exports.orchestrator_handlers]
 
 ### code2llm.core.analyzer.ProjectAnalyzer
 > Main analyzer with parallel processing.
-- **Methods**: 20
-- **Key Methods**: code2llm.core.analyzer.ProjectAnalyzer.__init__, code2llm.core.analyzer.ProjectAnalyzer.analyze_project, code2llm.core.analyzer.ProjectAnalyzer._resolve_project_path, code2llm.core.analyzer.ProjectAnalyzer._load_from_persistent_cache, code2llm.core.analyzer.ProjectAnalyzer._run_analysis, code2llm.core.analyzer.ProjectAnalyzer._store_to_persistent_cache, code2llm.core.analyzer.ProjectAnalyzer._build_stats, code2llm.core.analyzer.ProjectAnalyzer._print_summary, code2llm.core.analyzer.ProjectAnalyzer._post_process, code2llm.core.analyzer.ProjectAnalyzer._collect_files
+- **Methods**: 22
+- **Key Methods**: code2llm.core.analyzer.ProjectAnalyzer.__init__, code2llm.core.analyzer.ProjectAnalyzer.analyze_project, code2llm.core.analyzer.ProjectAnalyzer._resolve_project_path, code2llm.core.analyzer.ProjectAnalyzer._load_from_persistent_cache, code2llm.core.analyzer.ProjectAnalyzer._run_analysis, code2llm.core.analyzer.ProjectAnalyzer._store_to_persistent_cache, code2llm.core.analyzer.ProjectAnalyzer._build_stats, code2llm.core.analyzer.ProjectAnalyzer._print_summary, code2llm.core.analyzer.ProjectAnalyzer._post_process, code2llm.core.analyzer.ProjectAnalyzer._should_collect_file
 
 ### code2llm.core.large_repo.HierarchicalRepoSplitter
 > Splits large repositories using hierarchical approach.
@@ -322,6 +326,13 @@ Strategy:
 2. 
 - **Methods**: 18
 - **Key Methods**: code2llm.core.large_repo.HierarchicalRepoSplitter.__init__, code2llm.core.large_repo.HierarchicalRepoSplitter.get_analysis_plan, code2llm.core.large_repo.HierarchicalRepoSplitter._split_hierarchically, code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_l1_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._split_level2_consolidated, code2llm.core.large_repo.HierarchicalRepoSplitter._categorize_subdirs, code2llm.core.large_repo.HierarchicalRepoSplitter._process_large_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._process_level1_files, code2llm.core.large_repo.HierarchicalRepoSplitter._merge_small_dirs, code2llm.core.large_repo.HierarchicalRepoSplitter._chunk_by_files
+
+### code2llm.core.persistent_cache.PersistentCache
+> Content-addressed persistent cache stored in ~/.code2llm/.
+
+Thread-safety: manifest writes are prote
+- **Methods**: 18
+- **Key Methods**: code2llm.core.persistent_cache.PersistentCache.__init__, code2llm.core.persistent_cache.PersistentCache.content_hash, code2llm.core.persistent_cache.PersistentCache.get_file_result, code2llm.core.persistent_cache.PersistentCache.put_file_result, code2llm.core.persistent_cache.PersistentCache.get_changed_files, code2llm.core.persistent_cache.PersistentCache.prune_missing, code2llm.core.persistent_cache.PersistentCache.get_export_cache_dir, code2llm.core.persistent_cache.PersistentCache.create_export_cache_dir, code2llm.core.persistent_cache.PersistentCache.mark_export_complete, code2llm.core.persistent_cache.PersistentCache.save
 
 ### code2llm.analysis.type_inference.TypeInferenceEngine
 > Extract and infer type information from Python source files.
@@ -363,13 +374,6 @@ Output: context.md — architecture na
 - **Methods**: 15
 - **Key Methods**: code2llm.exporters.context_exporter.ContextExporter.export, code2llm.exporters.context_exporter.ContextExporter._get_overview, code2llm.exporters.context_exporter.ContextExporter._detect_languages, code2llm.exporters.context_exporter.ContextExporter._get_architecture_by_module, code2llm.exporters.context_exporter.ContextExporter._get_important_entries, code2llm.exporters.context_exporter.ContextExporter._get_key_entry_points, code2llm.exporters.context_exporter.ContextExporter._get_process_flows, code2llm.exporters.context_exporter.ContextExporter._get_key_classes, code2llm.exporters.context_exporter.ContextExporter._get_data_transformations, code2llm.exporters.context_exporter.ContextExporter._get_behavioral_patterns
 - **Inherits**: BaseExporter
-
-### code2llm.core.persistent_cache.PersistentCache
-> Content-addressed persistent cache stored in ~/.code2llm/.
-
-Thread-safety: manifest writes are prote
-- **Methods**: 15
-- **Key Methods**: code2llm.core.persistent_cache.PersistentCache.__init__, code2llm.core.persistent_cache.PersistentCache.content_hash, code2llm.core.persistent_cache.PersistentCache.get_file_result, code2llm.core.persistent_cache.PersistentCache.put_file_result, code2llm.core.persistent_cache.PersistentCache.get_changed_files, code2llm.core.persistent_cache.PersistentCache.prune_missing, code2llm.core.persistent_cache.PersistentCache.get_export_cache_dir, code2llm.core.persistent_cache.PersistentCache.create_export_cache_dir, code2llm.core.persistent_cache.PersistentCache.mark_export_complete, code2llm.core.persistent_cache.PersistentCache.save
 
 ### code2llm.nlp.entity_resolution.EntityResolver
 > Resolve entities (functions, classes, etc.) from queries.
@@ -424,99 +428,55 @@ Key functions that process and transform data:
 
 ### validate_toon.validate_toon_completeness
 > Validate toon format structure.
-- **Output to**: print, print, bool, bool, bool
+- **Output to**: Taskfile.print, Taskfile.print, bool, bool, bool
 
-### test_langs.valid.sample.ProcessUsers
-- **Output to**: test_langs.valid.sample.func, test_langs.valid.sample.Printf
+### map.toon._process_decorators
 
-### test_langs.valid.sample.UserService.processUsers
-- **Output to**: test_langs.valid.sample.foreach
+### map.toon._process_classes
 
-### test_langs.valid.sample.process_users
+### map.toon._process_standalone_function
 
-### examples.docker-doql-example.worker.worker.process_message
-- **Output to**: print, time.sleep, print, ch.basic_ack
+### map.toon._process_class_method
 
-### examples.streaming-analyzer.sample_project.auth.AuthManager.validate_session
-> Validate session and return user ID.
-- **Output to**: self.sessions.get
+### map.toon._process_functions
 
-### examples.streaming-analyzer.sample_project.api.APIHandler.process_request
-> Process API request.
-- **Output to**: self._check_rate_limit, self._get_stats, self._get_user_info, self._health_check
+### map.toon._format_size
 
-### examples.streaming-analyzer.sample_project.api.APIHandler.format_response
-> Format API response.
-- **Output to**: json.dumps
+### map.toon._expand_all_formats
 
-### examples.streaming-analyzer.sample_project.utils.validate_input
-> Validate input data.
-- **Output to**: isinstance, isinstance
+### map.toon._export_registry_formats
 
-### examples.streaming-analyzer.sample_project.utils.format_output
-> Format output data.
-- **Output to**: isinstance, json.dumps, isinstance, json.dumps, str
+### map.toon._get_format_kwargs
 
-### examples.streaming-analyzer.sample_project.utils.transform_data
-> Transform data fields.
-- **Output to**: item.copy, transformations.items, transformed.append, None.upper, None.lower
+### map.toon._parse_bullets
 
-### examples.streaming-analyzer.sample_project.main.Application.process_request
-> Process a user request with complex logic.
-- **Output to**: request.action.startswith, examples.streaming-analyzer.sample_project.utils.validate_input, print, self.auth.authenticate, print
+### map.toon._parse_sections
 
-### benchmarks.benchmark_evolution.parse_evolution_metrics
-> Extract metrics from evolution.toon content.
-- **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, int
+### map.toon._parse_acceptance_tests
 
-### benchmarks.format_evaluator.evaluate_format
-> Oceń pojedynczy format względem ground truth.
-- **Output to**: FormatScore, benchmarks.format_evaluator._detect_problems, sum, benchmarks.format_evaluator._detect_pipelines, sum
+### map.toon.parse_llm_task_text
 
-### benchmarks.benchmark_format_quality._generate_format_outputs
-> Generate all format outputs and evaluate them.
-- **Output to**: format_configs.items, __import__, getattr, exporter_cls, time.time
+### map.toon.create_parser
 
-### scripts.benchmark_badges.parse_evolution_metrics
-> Extract metrics from evolution.toon content.
-- **Output to**: toon_content.splitlines, re.search, line.strip, line.startswith, m.group
+### map.toon.parse_evolution_metrics
 
-### scripts.benchmark_badges.parse_format_quality_report
-> Parse format quality JSON report.
-- **Output to**: report_path.exists, json.loads, data.get, report_path.read_text
+### map.toon.parse_format_quality_report
 
-### scripts.benchmark_badges.parse_performance_report
-> Parse performance JSON report.
-- **Output to**: report_path.exists, json.loads, report_path.read_text
+### map.toon.parse_performance_report
 
-### scripts.benchmark_badges.generate_format_quality_badges
-> Generate badges from format quality scores.
-- **Output to**: enumerate, badges.append, sorted, badges.append, format_scores.items
+### map.toon.generate_format_quality_badges
 
-### scripts.bump_version.parse_version
-> Parse version string into tuple of (major, minor, patch)
-- **Output to**: version_str.split, tuple, int
+### map.toon._export_simple_formats
 
-### scripts.bump_version.format_version
-> Format version tuple as string
+### map.toon._export_calls_format
 
-### test_python_only.valid.sample.UserService.process_users
-- **Output to**: print
+### map.toon.validate_and_setup
 
-### code2llm.cli_parser.create_parser
-> Create CLI argument parser.
-- **Output to**: argparse.ArgumentParser, parser.add_argument, parser.add_argument, parser.add_argument, parser.add_argument
+### map.toon.validate_chunked_output
 
-### code2llm.cli_commands.validate_and_setup
-> Validate source path and setup output directory.
-- **Output to**: None.resolve, Path, output_dir.mkdir, print, print
+### map.toon._validate_chunks
 
-### code2llm.cli_commands.validate_chunked_output
-> Validate generated chunked output.
-
-Checks:
-1. All chunks have required files (analysis.toon, contex
-- **Output to**: code2llm.cli_commands._get_chunk_dirs, code2llm.cli_commands._validate_chunks, code2llm.cli_commands._print_validation_summary, output_dir.exists, print
+### map.toon._validate_single_chunk
 
 ## Behavioral Patterns
 
@@ -550,10 +510,10 @@ Checks:
 - **Confidence**: 0.70
 - **Functions**: code2llm.core.export_pipeline.SharedExportContext.__init__, code2llm.core.export_pipeline.SharedExportContext.result, code2llm.core.export_pipeline.SharedExportContext.functions, code2llm.core.export_pipeline.SharedExportContext.classes, code2llm.core.export_pipeline.SharedExportContext.modules
 
-### state_machine_IncrementalAnalyzer
+### state_machine_StreamingIncrementalAnalyzer
 - **Type**: state_machine
 - **Confidence**: 0.70
-- **Functions**: code2llm.core.streaming.incremental.IncrementalAnalyzer.__init__, code2llm.core.streaming.incremental.IncrementalAnalyzer._load_state, code2llm.core.streaming.incremental.IncrementalAnalyzer._save_state, code2llm.core.streaming.incremental.IncrementalAnalyzer.get_changed_files, code2llm.core.streaming.incremental.IncrementalAnalyzer._get_module_name
+- **Functions**: code2llm.core.streaming.incremental.StreamingIncrementalAnalyzer.__init__, code2llm.core.streaming.incremental.StreamingIncrementalAnalyzer._load_state, code2llm.core.streaming.incremental.StreamingIncrementalAnalyzer._save_state, code2llm.core.streaming.incremental.StreamingIncrementalAnalyzer.get_changed_files, code2llm.core.streaming.incremental.StreamingIncrementalAnalyzer._get_module_name
 
 ## Public API Surface
 
@@ -590,7 +550,6 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.cli_commands.generate_llm_context` - 21 calls
 - `code2llm.core.lang.generic.analyze_generic` - 20 calls
 - `code2llm.exporters.project_yaml.hotspots.build_refactoring` - 20 calls
-- `code2llm.generators.llm_task.load_input` - 20 calls
 - `validate_toon.compare_classes` - 19 calls
 - `examples.streaming-analyzer.demo.demo_incremental_analysis` - 19 calls
 - `scripts.benchmark_badges.parse_evolution_metrics` - 19 calls
@@ -599,6 +558,7 @@ Functions exposed as public API (no underscore prefix):
 - `code2llm.core.lang.ruby.analyze_ruby` - 19 calls
 - `code2llm.exporters.yaml_exporter.YAMLExporter.export_grouped` - 19 calls
 - `code2llm.exporters.yaml_exporter.YAMLExporter.export_calls_toon` - 19 calls
+- `code2llm.exporters.map.yaml_export.export_to_yaml` - 19 calls
 
 ## System Interactions
 
@@ -610,10 +570,21 @@ graph TD
     run_pipeline --> mkdir
     run_pipeline --> perf_counter
     run_pipeline --> print
+    create_parser --> ArgumentParser
+    create_parser --> add_argument
+    render_llm_flow_md --> _as_dict
+    render_llm_flow_md --> _as_list
+    render_llm_flow_md --> append
     main --> print
     main --> create_test_project
+    _summarize_functions --> defaultdict
+    _summarize_functions --> values
+    _summarize_functions --> set
+    _summarize_functions --> get
     run_benchmark --> load_previous
     run_benchmark --> print
+    analyze_rust --> split
+    analyze_rust --> compile
     process --> time
     process --> _step_normalize
     process --> append
@@ -625,17 +596,6 @@ graph TD
     _render_architecture --> get
     _render_architecture --> append
     _render_architecture --> keys
-    _render_architecture --> sum
-    export_compact --> build_name_index
-    export_compact --> defaultdict
-    export_compact --> items
-    analyze_streaming --> time
-    analyze_streaming --> resolve
-    analyze_streaming --> collect_files
-    analyze_streaming --> prioritize_files
-    analyze_streaming --> len
-    export_calls --> build_name_index
-    export_calls --> set
 ```
 
 ## Reverse Engineering Guidelines

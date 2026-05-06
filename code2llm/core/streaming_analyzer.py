@@ -15,7 +15,7 @@ from typing import Dict, Iterator, List, Optional, Tuple
 from .config import Config, FAST_CONFIG
 from .streaming import (
     ScanStrategy, STRATEGY_STANDARD, StreamingFileCache,
-    SmartPrioritizer, FilePriority, StreamingScanner, IncrementalAnalyzer
+    SmartPrioritizer, FilePriority, StreamingScanner, StreamingIncrementalAnalyzer
 )
 
 
@@ -177,5 +177,5 @@ class StreamingAnalyzer:
 # Re-export for backward compatibility
 from .streaming import (
     ScanStrategy, STRATEGY_QUICK, STRATEGY_STANDARD, STRATEGY_DEEP,
-    StreamingFileCache, SmartPrioritizer, FilePriority, IncrementalAnalyzer
+    StreamingFileCache, SmartPrioritizer, FilePriority, StreamingIncrementalAnalyzer
 )

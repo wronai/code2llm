@@ -1,3 +1,5 @@
+# Porównanie i Optymalizacja code2llm
+
 ### Metryki dla nlp2cmd (197 modułów, ~3500 funkcji)
 
 | Aspekt | Standard code2llm | llm-context | Różnica |
@@ -8,6 +10,7 @@
 | **Czytelność** | Maszyna | Człowiek/LLM | Przyjazne LLM |
 | **Struktura** | Strukturalna | Funkcjonalna | Logiczna |
 
+```yaml
 # analysis.yaml - 13MB, strukturalny
 modules:
   adapter.kubernetes:
@@ -55,7 +58,6 @@ graph TD
     _execute_plan_step --> Console
     _execute_plan_step --> print
 ```
-```
 
 **Zalety:**
 - ✅ Nadaje się dla LLM (mieści się w context window)
@@ -72,6 +74,7 @@ Dla projektu z 10,000+ funkcji:
 - Standard: 40MB+ YAML, czas: 5-10 minut, pamięć: 2GB+
 - llm-context: 100KB, czas: 10s, pamięć: 200MB
 
+```python
 # Szybka analiza - dla pierwszego przeglądu
 FAST_CONFIG = Config(
     performance=PerformanceConfig(
@@ -98,6 +101,7 @@ DEEP_CONFIG = Config(
 )
 ```
 
+```python
 # Pliki są sortowane według ważności:
 priority_score = (
     entry_point_bonus * 100 +      # __main__, cli.py
@@ -125,6 +129,7 @@ for update in analyzer.analyze_streaming('/path/to/project'):
 - Możliwość przerwania i wznowienia
 - Natura rzeczywista (real-time)
 
+```python
 # Tylko zmienione pliki od ostatniej analizy
 analyzer = StreamingAnalyzer(
     strategy=STRATEGY_QUICK,
@@ -286,6 +291,7 @@ class SchemaValidator:
 
 ---
 
+```bash
 # Generuj kontekst (3s zamiast 60s)
 code2llm llm-context /path/to/project -o ./context.md
 
@@ -299,6 +305,7 @@ cat ./context.md | llm "What does this project do?"
 > command generation (templates, matching), automation (planning, validation),
 > and web interaction (scraping, browser control)."
 
+```bash
 # Generuj kontekst
 code2llm llm-context . -o ./context.md
 
@@ -317,11 +324,12 @@ and suggest fixes.
 > 
 > Suggested fix: Add configurable timeout parameter to BrowserExecutionMixin..."
 
+```bash
 # Porównaj obecny stan z proponowanym
 code2llm llm-context . -o ./current.md
 
 # Zapytaj o refaktoryzację
-cat ./current.md | llam "
+cat ./current.md | llm "
 Analyze the Architecture by Module section.
 The generation.template_generator has 128 functions - suggest how to split it
 using functional domain separation.
@@ -340,6 +348,7 @@ using functional domain separation.
 > 2. `domain/command_generation/matching/` - fuzzy matching
 > 3. `infrastructure/parsing/validation/` - schema validation"
 
+```bash
 # Generuj kontekst dla nowego developera
 code2llm llm-context . -o ./onboarding.md
 
@@ -358,6 +367,7 @@ I'm new to this project. Based on the Key Entry Points and Process Flows:
 > 2. Follow the process flow: run → execute_action_plan → _execute_plan_step
 > 3. Key modules: generation (templates), automation (planning), web_schema (scraping)"
 
+```bash
 # Generuj kontekst
 code2llm llm-context . -o ./api_docs.md
 
@@ -373,10 +383,13 @@ including:
 
 ---
 
+```bash
 # Standard code2llm
 time code2llm ../src/nlp2cmd -v -o ./output
 # llm-context
 time code2llm llm-context ../src/nlp2cmd -o ./context.md
+```
+
 ### Test 2: Użyteczność dla LLM
 
 **Standard output (13MB YAML):**

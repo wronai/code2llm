@@ -1,40 +1,65 @@
 flowchart TD
+    Taskfile["Taskfile<br/>1 funcs"]
+    benchmarks__benchmark_evolution["benchmarks.benchmark_evolution<br/>4 funcs"]
     benchmarks__benchmark_format_quality["benchmarks.benchmark_format_quality<br/>5 funcs"]
-    benchmarks__format_evaluator["benchmarks.format_evaluator<br/>5 funcs"]
-    benchmarks__project_generator["benchmarks.project_generator<br/>6 funcs"]
+    benchmarks__benchmark_optimizations["benchmarks.benchmark_optimizations<br/>5 funcs"]
+    benchmarks__benchmark_performance["benchmarks.benchmark_performance<br/>7 funcs"]
     benchmarks__reporting["benchmarks.reporting<br/>9 funcs"]
     code2llm__analysis["code2llm.analysis<br/>139 funcs"]
-    code2llm__api["code2llm.api<br/>2 funcs"]
     code2llm__cli["code2llm.cli<br/>1 funcs"]
     code2llm__cli_analysis["code2llm.cli_analysis<br/>11 funcs"]
     code2llm__cli_commands["code2llm.cli_commands<br/>13 funcs"]
     code2llm__cli_exports["code2llm.cli_exports<br/>65 funcs"]
-    code2llm__cli_parser["code2llm.cli_parser<br/>2 funcs"]
-    code2llm__core["code2llm.core<br/>240 funcs"]
+    code2llm__core["code2llm.core<br/>245 funcs"]
     code2llm__exporters["code2llm.exporters<br/>314 funcs"]
-    code2llm__generators["code2llm.generators<br/>60 funcs"]
+    code2llm__generators["code2llm.generators<br/>62 funcs"]
     code2llm__parsers["code2llm.parsers<br/>10 funcs"]
+    code2llm__refactor["code2llm.refactor<br/>7 funcs"]
     demo_langs__valid["demo_langs.valid<br/>15 funcs"]
+    examples__docker_doql_example["examples.docker-doql-example<br/>20 funcs"]
+    examples__litellm["examples.litellm<br/>3 funcs"]
+    examples__streaming_analyzer["examples.streaming-analyzer<br/>51 funcs"]
+    map__toon["map.toon<br/>486 funcs"]
     pipeline["pipeline<br/>2 funcs"]
+    scripts__benchmark_badges["scripts.benchmark_badges<br/>9 funcs"]
+    scripts__bump_version["scripts.bump_version<br/>7 funcs"]
     test_langs__valid["test_langs.valid<br/>22 funcs"]
     test_python_only__valid["test_python_only.valid<br/>5 funcs"]
     validate_toon["validate_toon<br/>21 funcs"]
-    code2llm__cli_exports ==>|8| code2llm__exporters
-    code2llm__cli ==>|5| code2llm__cli_commands
-    code2llm__cli_commands -->|3| code2llm__core
-    validate_toon -->|2| code2llm__parsers
-    benchmarks__benchmark_format_quality -->|2| benchmarks__reporting
-    code2llm__cli_analysis -->|2| code2llm__cli_exports
-    code2llm__exporters -->|2| code2llm__analysis
-    code2llm__cli_exports -->|2| code2llm__generators
-    pipeline -->|1| code2llm__api
-    benchmarks__benchmark_format_quality -->|1| benchmarks__format_evaluator
-    benchmarks__benchmark_format_quality -->|1| benchmarks__project_generator
+    code2llm__exporters ==>|138| map__toon
+    validate_toon ==>|80| Taskfile
+    code2llm__core ==>|66| map__toon
+    code2llm__cli_exports ==>|66| Taskfile
+    examples__streaming_analyzer ==>|65| Taskfile
+    benchmarks__benchmark_performance ==>|52| Taskfile
+    code2llm__core ==>|42| Taskfile
+    code2llm__cli_commands ==>|40| Taskfile
+    benchmarks__reporting ==>|33| Taskfile
+    code2llm__generators ==>|28| map__toon
+    code2llm__cli_exports ==>|28| map__toon
+    pipeline ==>|25| Taskfile
+    code2llm__cli_analysis ==>|23| Taskfile
+    benchmarks__benchmark_optimizations ==>|21| Taskfile
+    benchmarks__benchmark_evolution ==>|15| Taskfile
+    benchmarks__benchmark_format_quality ==>|15| Taskfile
+    examples__litellm ==>|12| Taskfile
+    code2llm__analysis ==>|11| map__toon
+    code2llm__generators ==>|11| Taskfile
+    scripts__bump_version ==>|8| Taskfile
+    code2llm__cli ==>|8| map__toon
+    examples__docker_doql_example ==>|5| Taskfile
+    benchmarks__benchmark_format_quality ==>|4| map__toon
+    code2llm__cli_commands ==>|4| map__toon
+    scripts__benchmark_badges -->|3| Taskfile
+    code2llm__cli_analysis -->|3| map__toon
+    code2llm__exporters -->|3| Taskfile
+    validate_toon -->|2| map__toon
+    examples__streaming_analyzer -->|2| map__toon
+    test_python_only__valid -->|2| Taskfile
+    code2llm__cli -->|2| Taskfile
+    demo_langs__valid -->|2| Taskfile
+    pipeline -->|1| map__toon
     test_python_only__valid -->|1| test_langs__valid
-    code2llm__cli -->|1| code2llm__cli_parser
-    code2llm__cli -->|1| code2llm__cli_analysis
-    code2llm__cli -->|1| code2llm__cli_exports
-    code2llm__cli_analysis -->|1| code2llm__core
-    code2llm__cli_commands -->|1| code2llm__cli_exports
-    code2llm__cli_exports -->|1| code2llm__core
+    code2llm__refactor -->|1| Taskfile
+    code2llm__parsers -->|1| Taskfile
     demo_langs__valid -->|1| test_langs__valid

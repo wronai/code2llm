@@ -20,9 +20,6 @@
 - [ ] badges/server.py:17 - Function 'index' missing return type (suggested: -> Any)
 - [ ] badges/server.py:22 - Function 'generate_badges' missing return type (suggested: -> Any)
 - [ ] badges/server.py:56 - Function 'get_badges' missing return type (suggested: -> Any)
-- [x] badges/server.py:6 - Unused request imported from flask
-- [x] badges/server.py:8 - Unused import json
-- [x] badges/server.py:9 - Unused import os
 - [ ] badges/server.py:110 - Magic number: 5000 - use named constant
 - [ ] badges/server.py:42 - Magic number: 500 - use named constant
 - [ ] badges/server.py:48 - Magic number: 500 - use named constant
@@ -40,7 +37,6 @@
 - [ ] benchmarks/benchmark_performance.py:305 - module execution block
 - [ ] benchmarks/format_evaluator.py:12 - Relative import (level=1): '.benchmark_constants'
 - [ ] benchmarks/format_evaluator.py:132 - String concatenation can be converted to f-string
-- [x] benchmarks/format_evaluator.py:10 - Unused List imported from typing
 - [ ] benchmarks/format_evaluator.py:10 - Unused import: 'List'
 - [ ] code2llm/__init__.py:15 - Relative import (level=1): '.core.config'
 - [ ] code2llm/__init__.py:16 - Relative import (level=1): '.core.models'
@@ -52,7 +48,6 @@
 - [ ] benchmarks/reporting.py:18 - String concatenation can be converted to f-string
 - [ ] benchmarks/reporting.py:107 - String concatenation can be converted to f-string
 - [ ] benchmarks/reporting.py:48 - String concatenation can be converted to f-string
-- [x] benchmarks/reporting.py:10 - Unused List imported from typing
 - [ ] benchmarks/reporting.py:10 - Unused import: 'List'
 - [ ] benchmarks/reporting.py:20 - Magic number: 70 - use named constant
 - [ ] benchmarks/reporting.py:27 - Magic number: 75 - use named constant
@@ -60,15 +55,11 @@
 - [ ] benchmarks/test_performance.py:44 - Function 'large_project' missing return type (suggested: -> None)
 - [ ] benchmarks/test_performance.py:100 - Function 'test_fast_mode_performance' missing return type (suggested: -> None)
 - [ ] benchmarks/test_performance.py:127 - Function 'test_caching_performance' missing return type (suggested: -> None)
-- [x] benchmarks/test_performance.py:7 - Unused Dict imported from typing
-- [x] benchmarks/test_performance.py:7 - Unused List imported from typing
-- [x] benchmarks/test_performance.py:13 - Unused Config imported from code2llm
 - [ ] benchmarks/test_performance.py:258 - module execution block
 - [ ] code2llm/analysis/cfg.py:57 - Function 'connect' missing return type (suggested: -> None)
 - [ ] code2llm/analysis/cfg.py:69 - Function 'visit_FunctionDef' missing return type (suggested: -> None)
 - [ ] code2llm/analysis/cfg.py:106 - Function 'visit_AsyncFunctionDef' missing return type (suggested: -> None)
 - [ ] code2llm/analysis/cfg.py:142 - String concatenation can be converted to f-string
-- [x] code2llm/analysis/cfg.py:4 - Unused defaultdict imported from collections
 - [ ] code2llm/analysis/cfg.py:4 - Unused import: 'defaultdict'
 - [ ] code2llm/analysis/cfg.py:248 - Magic number: 80 - use named constant
 - [ ] code2llm/analysis/cfg.py:229 - Magic number: 50 - use named constant
@@ -76,13 +67,9 @@
 - [ ] code2llm/analysis/call_graph.py:64 - Function 'visit_Import' missing return type (suggested: -> None)
 - [ ] code2llm/analysis/call_graph.py:71 - Function 'visit_ImportFrom' missing return type (suggested: -> None)
 - [ ] code2llm/analysis/call_graph.py:80 - Function 'visit_ClassDef' missing return type (suggested: -> None)
-- [x] code2llm/analysis/call_graph.py:4 - Unused Set imported from typing
-- [x] code2llm/analysis/call_graph.py:4 - Unused List imported from typing
-- [x] code2llm/analysis/call_graph.py:4 - Unused Dict imported from typing
 - [ ] code2llm/analysis/call_graph.py:191 - Duplicate import: '_astroid' (first at line 36)
 - [ ] code2llm/analysis/data_analysis.py:285 - String concatenation can be converted to f-string
 - [ ] code2llm/analysis/data_analysis.py:284 - String concatenation can be converted to f-string
-- [x] code2llm/analysis/data_analysis.py:3 - Unused List imported from typing
 - [ ] code2llm/analysis/data_analysis.py:3 - Unused import: 'List'
 - [ ] code2llm/analysis/data_analysis.py:10 - Magic number: 15 - use named constant
 - [ ] code2llm/analysis/data_analysis.py:67 - Magic number: 20 - use named constant
@@ -91,7 +78,6 @@
 - [ ] code2llm/analysis/pipeline_detector.py:22 - Relative import (level=1): '.type_inference'
 - [ ] code2llm/analysis/pipeline_detector.py:484 - String concatenation can be converted to f-string
 - [ ] code2llm/analysis/pipeline_detector.py:261 - String concatenation can be converted to f-string
-- [x] code2llm/analysis/pipeline_detector.py:20 - Unused AnalysisResult imported from code2llm.core.models
 - [ ] code2llm/analysis/pipeline_detector.py:20 - Unused import: 'AnalysisResult'
 - [ ] code2llm/analysis/pipeline_detector.py:28 - Magic number: 12 - use named constant
 - [ ] code2llm/analysis/pipeline_detector.py:29 - Magic number: 15 - use named constant
@@ -99,14 +85,10 @@
 - [ ] code2llm/analysis/dfg.py:41 - Function 'visit_FunctionDef' missing return type (suggested: -> None)
 - [ ] code2llm/analysis/dfg.py:54 - Function 'visit_Assign' missing return type (suggested: -> None)
 - [ ] code2llm/analysis/dfg.py:97 - Function 'visit_AugAssign' missing return type (suggested: -> None)
-- [x] code2llm/analysis/dfg.py:8 - Unused FlowEdge imported from code2llm.core.models
 - [ ] code2llm/analysis/dfg.py:8 - Unused import: 'FlowEdge'
-- [x] code2llm/analysis/side_effects.py:15 - Unused Set imported from typing
 - [ ] code2llm/analysis/side_effects.py:15 - Unused import: 'Set'
 - [ ] code2llm/analysis/smells.py:37 - String concatenation can be converted to f-string
 - [ ] code2llm/analysis/smells.py:59 - String concatenation can be converted to f-string
-- [x] code2llm/analysis/smells.py:2 - Unused Dict imported from typing
-- [x] code2llm/analysis/smells.py:2 - Unused Any imported from typing
 - [ ] code2llm/analysis/smells.py:2 - Unused import: 'Dict'
 - [ ] code2llm/analysis/smells.py:36 - Magic number in comparison: 12
 - [ ] code2llm/analysis/smells.py:58 - Magic number in comparison: 40
@@ -120,9 +102,6 @@
 - [ ] code2llm/cli.py:11 - Relative import (level=1): '.cli_commands'
 - [ ] code2llm/cli.py:18 - Relative import (level=1): '.cli_exports'
 - [ ] code2llm/cli.py:34 - Function 'main' missing return type (suggested: -> Any)
-- [x] code2llm/cli.py:11 - Unused generate_llm_context imported from cli_commands
-- [x] code2llm/cli.py:18 - Unused _export_evolution imported from cli_exports
-- [x] code2llm/cli.py:18 - Unused _export_data_structures imported from cli_exports
 - [ ] code2llm/cli.py:34 - standalone main function
 - [ ] code2llm/cli.py:68 - module execution block
 - [ ] code2llm/analysis/type_inference.py:67 - LLM-style docstring in enrich_function
@@ -130,7 +109,6 @@
 - [ ] code2llm/cli_commands.py:194 - Relative import (level=1): '.'
 - [ ] code2llm/cli_commands.py:195 - Relative import (level=1): '.exporters'
 - [ ] code2llm/cli_commands.py:179 - Function 'generate_llm_context' missing return type (suggested: -> int)
-- [x] code2llm/cli_commands.py:3 - Unused import argparse
 - [ ] code2llm/cli_commands.py:33 - Duplicate import: 'argparse' (first at line 3)
 - [ ] code2llm/cli_commands.py:181 - Duplicate import: 'argparse' (first at line 3)
 - [ ] code2llm/cli_commands.py:193 - Duplicate import: 'Path' (first at line 5)
@@ -143,9 +121,6 @@
 - [ ] code2llm/cli_analysis.py:138 - String concatenation can be converted to f-string
 - [ ] code2llm/cli_analysis.py:70 - String concatenation can be converted to f-string
 - [ ] code2llm/cli_analysis.py:203 - String concatenation can be converted to f-string
-- [x] code2llm/cli_analysis.py:8 - Unused List imported from typing
-- [x] code2llm/cli_analysis.py:8 - Unused Optional imported from typing
-- [x] code2llm/cli_analysis.py:8 - Unused Tuple imported from typing
 - [ ] code2llm/cli_analysis.py:60 - Duplicate import: 'Config' (first at line 36)
 - [ ] code2llm/cli_analysis.py:191 - Duplicate import: 'ProjectAnalyzer' (first at line 37)
 - [ ] code2llm/cli_analysis.py:192 - Duplicate import: 'Config' (first at line 36)
@@ -160,22 +135,16 @@
 - [ ] code2llm/cli_exports/formats.py:250 - Relative import (level=2): '..refactor.prompt_engine'
 - [ ] code2llm/cli_exports/formats.py:151 - Relative import (level=2): '..exporters.validate_project'
 - [ ] code2llm/cli_exports/formats.py:196 - Relative import (level=2): '..generators.mermaid'
-- [x] code2llm/cli_exports/formats.py:3 - Unused import os
-- [x] code2llm/cli_exports/formats.py:6 - Unused Optional imported from typing
 - [ ] code2llm/cli_exports/formats.py:3 - Unused import: 'os'
 - [ ] code2llm/cli_exports/prompt.py:155 - String concatenation can be converted to f-string
 - [ ] code2llm/cli_exports/prompt.py:33 - String concatenation can be converted to f-string
 - [ ] code2llm/cli_exports/prompt.py:58 - String concatenation can be converted to f-string
-- [x] code2llm/cli_exports/prompt.py:3 - Unused import sys
 - [ ] code2llm/cli_exports/prompt.py:3 - Unused import: 'sys'
 - [ ] code2llm/cli_parser.py:5 - Relative import (level=1): '.core.config'
 - [ ] code2llm/cli_parser.py:209 - Magic number: 50 - use named constant
 - [ ] code2llm/core/__init__.py:3 - Relative import (level=1): '.config'
 - [ ] code2llm/core/__init__.py:4 - Relative import (level=1): '.models'
 - [ ] code2llm/core/__init__.py:32 - Relative import (level=1): '.analyzer'
-- [x] code2llm/core/__init__.py:3 - Unused PerformanceConfig imported from config
-- [x] code2llm/core/__init__.py:3 - Unused FilterConfig imported from config
-- [x] code2llm/core/__init__.py:4 - Unused FlowNode imported from models
 - [ ] code2llm/core/analyzer.py:9 - Relative import (level=1): '.config'
 - [ ] code2llm/core/analyzer.py:10 - Relative import (level=1): '.models'
 - [ ] code2llm/core/analyzer.py:13 - Relative import (level=1): '.file_cache'
@@ -183,9 +152,6 @@
 - [ ] code2llm/core/analyzer.py:354 - Duplicate import: file_filter.FastFileFilter
 - [ ] code2llm/core/analyzer.py:355 - Duplicate import: file_analyzer.FileAnalyzer
 - [ ] code2llm/core/analyzer.py:137 - String concatenation can be converted to f-string
-- [x] code2llm/core/analyzer.py:9 - Unused LANGUAGE_EXTENSIONS imported from config
-- [x] code2llm/core/analyzer.py:10 - Unused FlowEdge imported from models
-- [x] code2llm/core/analyzer.py:10 - Unused FlowNode imported from models
 - [ ] code2llm/core/analyzer.py:278 - LLM-style docstring in analyze_files
 - [ ] code2llm/core/config.py:27 - Magic number: 10000 - use named constant
 - [ ] code2llm/core/config.py:28 - Magic number: 50000 - use named constant
@@ -196,9 +162,6 @@
 - [ ] code2llm/core/file_analyzer.py:208 - String concatenation can be converted to f-string
 - [ ] code2llm/core/file_analyzer.py:313 - String concatenation can be converted to f-string
 - [ ] code2llm/core/file_analyzer.py:348 - String concatenation can be converted to f-string
-- [x] code2llm/core/file_analyzer.py:4 - Unused import re
-- [x] code2llm/core/file_analyzer.py:10 - Unused LANGUAGE_EXTENSIONS imported from config
-- [x] code2llm/core/file_analyzer.py:11 - Unused AnalysisResult imported from models
 - [ ] code2llm/core/file_analyzer.py:393 - Duplicate import: 'Config' (first at line 10)
 - [ ] code2llm/core/file_analyzer.py:148 - Magic number in comparison: 20
 - [ ] code2llm/core/file_analyzer.py:148 - Magic number: 20 - use named constant
@@ -207,9 +170,6 @@
 - [ ] code2llm/core/lang/__init__.py:3 - Relative import (level=1): '.typescript'
 - [ ] code2llm/core/lang/__init__.py:4 - Relative import (level=1): '.go_lang'
 - [ ] code2llm/core/lang/__init__.py:5 - Relative import (level=1): '.rust'
-- [x] code2llm/core/lang/__init__.py:3 - Unused analyze_typescript_js imported from typescript
-- [x] code2llm/core/lang/__init__.py:4 - Unused analyze_go imported from go_lang
-- [x] code2llm/core/lang/__init__.py:5 - Unused analyze_rust imported from rust
 - [ ] code2llm/core/lang/base.py:146 - Relative import (level=2): '..models'
 - [ ] code2llm/core/lang/base.py:254 - Relative import (level=2): '..models'
 - [ ] code2llm/core/lang/base.py:305 - Relative import (level=2): '..models'
@@ -220,45 +180,23 @@
 - [ ] code2llm/core/lang/base.py:67 - Magic number in comparison: 20
 - [ ] code2llm/core/lang/base.py:67 - Magic number: 20 - use named constant
 - [ ] code2llm/core/lang/base.py:128 - LLM-style docstring in _extract_declarations
-- [x] code2llm/core/gitignore.py:4 - Unused Set imported from typing
 - [ ] code2llm/core/gitignore.py:4 - Unused import: 'Set'
-- [x] code2llm/core/lang/cpp.py:6 - Unused ClassInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/cpp.py:6 - Unused FunctionInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/cpp.py:6 - Unused ModuleInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/csharp.py:6 - Unused ClassInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/csharp.py:6 - Unused FunctionInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/csharp.py:6 - Unused ModuleInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/go_lang.py:4 - Unused Path imported from pathlib
 - [ ] code2llm/core/lang/go_lang.py:4 - Unused import: 'Path'
-- [x] code2llm/core/lang/java.py:6 - Unused ClassInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/java.py:6 - Unused FunctionInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/java.py:6 - Unused ModuleInfo imported from code2llm.core.models
 - [ ] code2llm/core/lang/ruby.py:28 - String concatenation can be converted to f-string
 - [ ] code2llm/core/lang/ruby.py:133 - String concatenation can be converted to f-string
-- [x] code2llm/core/lang/ruby.py:6 - Unused ClassInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/ruby.py:6 - Unused FunctionInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/ruby.py:6 - Unused ModuleInfo imported from code2llm.core.models
 - [ ] code2llm/core/lang/ruby.py:134 - Magic number in comparison: 20
 - [ ] code2llm/core/lang/ruby.py:134 - Magic number: 20 - use named constant
-- [x] code2llm/core/lang/php.py:6 - Unused FunctionInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/php.py:6 - Unused ModuleInfo imported from code2llm.core.models
 - [ ] code2llm/core/lang/php.py:6 - Unused import: 'FunctionInfo'
-- [x] code2llm/core/lang/typescript.py:6 - Unused ClassInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/typescript.py:6 - Unused FunctionInfo imported from code2llm.core.models
-- [x] code2llm/core/lang/typescript.py:6 - Unused ModuleInfo imported from code2llm.core.models
 - [ ] code2llm/core/large_repo.py:14 - Relative import (level=1): '.repo_files'
 - [ ] code2llm/core/large_repo.py:323 - Relative import (level=1): '.repo_files'
 - [ ] code2llm/core/large_repo.py:168 - String concatenation can be converted to f-string
 - [ ] code2llm/core/large_repo.py:242 - String concatenation can be converted to f-string
 - [ ] code2llm/core/large_repo.py:222 - String concatenation can be converted to f-string
-- [x] code2llm/core/large_repo.py:11 - Unused Dict imported from typing
-- [x] code2llm/core/large_repo.py:11 - Unused Optional imported from typing
 - [ ] code2llm/core/large_repo.py:11 - Unused import: 'Dict'
 - [ ] code2llm/core/large_repo.py:323 - Duplicate import: 'should_skip_file' (first at line 14)
 - [ ] code2llm/core/large_repo.py:54 - Magic number: 120 - use named constant
 - [ ] code2llm/core/large_repo.py:56 - Magic number: 192 - use named constant
 - [ ] code2llm/core/large_repo.py:205 - Magic number: 50 - use named constant
-- [x] code2llm/core/models.py:3 - Unused Path imported from pathlib
 - [ ] code2llm/core/models.py:3 - Unused import: 'Path'
 - [ ] code2llm/core/repo_files.py:7 - Relative import (level=1): '.gitignore'
 - [ ] code2llm/core/repo_files.py:78 - String concatenation can be converted to f-string
@@ -268,14 +206,10 @@
 - [ ] code2llm/core/streaming/__init__.py:3 - Relative import (level=1): '.strategies'
 - [ ] code2llm/core/streaming/__init__.py:4 - Relative import (level=1): '.cache'
 - [ ] code2llm/core/streaming/__init__.py:5 - Relative import (level=1): '.prioritizer'
-- [x] code2llm/core/streaming/__init__.py:3 - Unused ScanStrategy imported from strategies
-- [x] code2llm/core/streaming/__init__.py:3 - Unused STRATEGY_QUICK imported from strategies
-- [x] code2llm/core/streaming/__init__.py:3 - Unused STRATEGY_STANDARD imported from strategies
 - [ ] code2llm/core/streaming/incremental.py:75 - String concatenation can be converted to f-string
 - [ ] code2llm/core/refactoring.py:6 - Relative import (level=1): '.config'
 - [ ] code2llm/core/refactoring.py:7 - Relative import (level=1): '.models'
 - [ ] code2llm/core/refactoring.py:8 - Relative import (level=1): '.file_filter'
-- [x] code2llm/core/refactoring.py:4 - Unused Optional imported from typing
 - [ ] code2llm/core/refactoring.py:4 - Unused import: 'Optional'
 - [ ] code2llm/core/refactoring.py:94 - Duplicate import: 'nx' (first at line 55)
 - [ ] code2llm/core/refactoring.py:74 - Duplicate import: 'nx' (first at line 55)
@@ -283,7 +217,6 @@
 - [ ] code2llm/core/refactoring.py:69 - Magic number in comparison: 500
 - [ ] code2llm/core/refactoring.py:69 - Magic number: 500 - use named constant
 - [ ] code2llm/core/refactoring.py:73 - Magic number: 500 - use named constant
-- [x] code2llm/core/streaming/strategies.py:3 - Unused field imported from dataclasses
 - [ ] code2llm/core/streaming/strategies.py:3 - Unused import: 'field'
 - [ ] code2llm/core/streaming/strategies.py:20 - Magic number: 50 - use named constant
 - [ ] code2llm/core/streaming/strategies.py:21 - Magic number: 10000 - use named constant
@@ -303,9 +236,6 @@
 - [ ] code2llm/core/streaming_analyzer.py:178 - Duplicate import: streaming.ScanStrategy
 - [ ] code2llm/core/streaming_analyzer.py:178 - Duplicate import: streaming.STRATEGY_STANDARD
 - [ ] code2llm/core/streaming_analyzer.py:178 - Duplicate import: streaming.StreamingFileCache
-- [x] code2llm/core/streaming_analyzer.py:13 - Unused List imported from typing
-- [x] code2llm/core/streaming_analyzer.py:13 - Unused Tuple imported from typing
-- [x] code2llm/core/streaming_analyzer.py:16 - Unused FilePriority imported from streaming
 - [ ] code2llm/core/streaming_analyzer.py:121 - Magic number: 50 - use named constant
 - [ ] code2llm/exporters/__init__.py:17 - Relative import (level=1): '.base'
 - [ ] code2llm/exporters/__init__.py:18 - Relative import (level=1): '.json_exporter'
@@ -319,7 +249,6 @@
 - [ ] code2llm/exporters/context_exporter.py:10 - Relative import (level=1): '.base'
 - [ ] code2llm/exporters/context_exporter.py:114 - String concatenation can be converted to f-string
 - [ ] code2llm/exporters/context_exporter.py:221 - String concatenation can be converted to f-string
-- [x] code2llm/exporters/context_exporter.py:11 - Unused FunctionInfo imported from code2llm.core.models
 - [ ] code2llm/exporters/context_exporter.py:11 - Unused import: 'FunctionInfo'
 - [ ] code2llm/exporters/context_exporter.py:101 - Magic number: 20 - use named constant
 - [ ] code2llm/exporters/context_exporter.py:121 - Magic number: 30 - use named constant
@@ -328,9 +257,6 @@
 - [ ] code2llm/exporters/context_view.py:17 - String concatenation can be converted to f-string
 - [ ] code2llm/exporters/evolution_exporter.py:16 - Relative import (level=1): '.base'
 - [ ] code2llm/exporters/evolution_exporter.py:67 - String concatenation can be converted to f-string
-- [x] code2llm/exporters/evolution_exporter.py:14 - Unused Set imported from typing
-- [x] code2llm/exporters/evolution_exporter.py:14 - Unused Tuple imported from typing
-- [x] code2llm/exporters/evolution_exporter.py:17 - Unused FunctionInfo imported from code2llm.core.models
 - [ ] code2llm/exporters/evolution_exporter.py:21 - Magic number: 15 - use named constant
 - [ ] code2llm/exporters/evolution_exporter.py:23 - Magic number: 500 - use named constant
 - [ ] code2llm/exporters/evolution_exporter.py:97 - Magic number in comparison: 20
@@ -349,14 +275,10 @@
 - [ ] code2llm/exporters/flow_exporter.py:212 - String concatenation can be converted to f-string
 - [ ] code2llm/exporters/flow_exporter.py:242 - String concatenation can be converted to f-string
 - [ ] code2llm/exporters/flow_exporter.py:69 - String concatenation can be converted to f-string
-- [x] code2llm/exporters/flow_exporter.py:13 - Unused import ast
-- [x] code2llm/exporters/flow_exporter.py:17 - Unused Set imported from typing
-- [x] code2llm/exporters/flow_exporter.py:17 - Unused Tuple imported from typing
 - [ ] code2llm/exporters/flow_exporter.py:168 - Magic number in comparison: 30
 - [ ] code2llm/exporters/flow_exporter.py:170 - Magic number in comparison: 20
 - [ ] code2llm/exporters/flow_exporter.py:168 - Magic number: 30 - use named constant
 - [ ] code2llm/exporters/index_generator.py:92 - String concatenation can be converted to f-string
-- [x] code2llm/exporters/index_generator.py:9 - Unused Optional imported from typing
 - [ ] code2llm/exporters/index_generator.py:9 - Unused import: 'Optional'
 - [ ] code2llm/exporters/index_generator.py:91 - Magic number in comparison: 100000
 - [ ] code2llm/exporters/index_generator.py:91 - Magic number: 100000 - use named constant
@@ -375,14 +297,11 @@
 - [ ] code2llm/exporters/mermaid_flow_helpers.py:126 - Magic number: 15 - use named constant
 - [ ] code2llm/exporters/map_exporter.py:18 - Relative import (level=1): '.base'
 - [ ] code2llm/exporters/map_exporter.py:47 - String concatenation can be converted to f-string
-- [x] code2llm/exporters/map_exporter.py:16 - Unused Set imported from typing
-- [x] code2llm/exporters/map_exporter.py:19 - Unused ClassInfo imported from code2llm.core.models
 - [ ] code2llm/exporters/map_exporter.py:16 - Unused import: 'Set'
 - [ ] code2llm/exporters/map_exporter.py:378 - Magic number in comparison: 15
 - [ ] code2llm/exporters/map_exporter.py:378 - Magic number: 15 - use named constant
 - [ ] code2llm/exporters/map_exporter.py:170 - Magic number in comparison: 15
 - [ ] code2llm/exporters/readme_exporter.py:12 - Relative import (level=1): '.base'
-- [x] code2llm/exporters/readme_exporter.py:7 - Unused import os
 - [ ] code2llm/exporters/readme_exporter.py:7 - Unused import: 'os'
 - [ ] code2llm/exporters/report_generators.py:13 - Relative import (level=1): '.toon_view'
 - [ ] code2llm/exporters/report_generators.py:14 - Relative import (level=1): '.context_view'
@@ -390,7 +309,6 @@
 - [ ] code2llm/exporters/project_yaml_exporter.py:18 - Relative import (level=1): '.base'
 - [ ] code2llm/exporters/project_yaml_exporter.py:20 - Relative import (level=1): '.toon.helpers'
 - [ ] code2llm/exporters/project_yaml_exporter.py:192 - String concatenation can be converted to f-string
-- [x] code2llm/exporters/project_yaml_exporter.py:16 - Unused Optional imported from typing
 - [ ] code2llm/exporters/project_yaml_exporter.py:16 - Unused import: 'Optional'
 - [ ] code2llm/exporters/project_yaml_exporter.py:26 - Magic number: 15 - use named constant
 - [ ] code2llm/exporters/project_yaml_exporter.py:27 - Magic number: 20 - use named constant
@@ -399,9 +317,6 @@
 - [ ] code2llm/exporters/toon/__init__.py:10 - Relative import (level=1): '.renderer'
 - [ ] code2llm/exporters/toon/__init__.py:11 - Relative import (level=1): '.helpers'
 - [ ] code2llm/exporters/toon/__init__.py:54 - String concatenation can be converted to f-string
-- [x] code2llm/exporters/toon/__init__.py:11 - Unused _rel_path imported from helpers
-- [x] code2llm/exporters/toon/__init__.py:11 - Unused _package_of imported from helpers
-- [x] code2llm/exporters/toon/__init__.py:11 - Unused _package_of_module imported from helpers
 - [ ] code2llm/exporters/toon/__init__.py:21 - Magic number: 20 - use named constant
 - [ ] code2llm/exporters/toon/__init__.py:22 - Magic number: 15 - use named constant
 - [ ] code2llm/exporters/toon/__init__.py:23 - Magic number: 50 - use named constant
@@ -417,15 +332,12 @@
 - [ ] code2llm/exporters/toon/module_detail.py:160 - String concatenation can be converted to f-string
 - [ ] code2llm/exporters/toon/module_detail.py:11 - Magic number: 15 - use named constant
 - [ ] code2llm/exporters/toon.py:8 - Relative import (level=1): '.toon'
-- [x] code2llm/exporters/toon.py:8 - Unused ToonExporter imported from toon
 - [ ] code2llm/exporters/toon.py:8 - Unused import: 'ToonExporter'
 - [ ] code2llm/exporters/toon/renderer.py:10 - Relative import (level=1): '.helpers'
 - [ ] code2llm/exporters/toon/renderer.py:49 - Relative import (level=1): '.helpers'
 - [ ] code2llm/exporters/toon/renderer.py:138 - String concatenation can be converted to f-string
 - [ ] code2llm/exporters/toon/renderer.py:139 - String concatenation can be converted to f-string
 - [ ] code2llm/exporters/toon/renderer.py:145 - String concatenation can be converted to f-string
-- [x] code2llm/exporters/toon/renderer.py:7 - Unused FunctionInfo imported from code2llm.core.models
-- [x] code2llm/exporters/toon/renderer.py:10 - Unused _package_of imported from helpers
 - [ ] code2llm/exporters/toon/renderer.py:7 - Unused import: 'FunctionInfo'
 - [ ] code2llm/exporters/toon/renderer.py:14 - Magic number: 15 - use named constant
 - [ ] code2llm/exporters/toon/renderer.py:16 - Magic number: 15 - use named constant
@@ -442,7 +354,6 @@
 - [ ] code2llm/nlp/__init__.py:10 - Relative import (level=1): '.normalization'
 - [ ] code2llm/nlp/__init__.py:11 - Relative import (level=1): '.intent_matching'
 - [ ] code2llm/generators/mermaid.py:250 - String concatenation can be converted to f-string
-- [x] code2llm/generators/mermaid.py:7 - Unused import sys
 - [ ] code2llm/generators/mermaid.py:7 - Unused import: 'sys'
 - [ ] code2llm/generators/mermaid.py:99 - Duplicate import: 're' (first at line 40)
 - [ ] code2llm/generators/mermaid.py:141 - Duplicate import: 're' (first at line 40)
@@ -459,34 +370,26 @@
 - [ ] code2llm/generators/llm_flow.py:195 - Magic number: 80 - use named constant
 - [ ] code2llm/generators/llm_flow.py:196 - Magic number: 120 - use named constant
 - [ ] code2llm/generators/llm_flow.py:471 - module execution block
-- [x] code2llm/nlp/config.py:4 - Unused Optional imported from typing
 - [ ] code2llm/nlp/config.py:4 - Unused import: 'Optional'
 - [ ] code2llm/nlp/entity_resolution.py:15 - Relative import (level=1): '.config'
 - [ ] code2llm/nlp/entity_resolution.py:194 - String concatenation can be converted to f-string
 - [ ] code2llm/nlp/entity_resolution.py:200 - String concatenation can be converted to f-string
 - [ ] code2llm/nlp/entity_resolution.py:224 - String concatenation can be converted to f-string
-- [x] code2llm/nlp/entity_resolution.py:12 - Unused Set imported from typing
-- [x] code2llm/nlp/entity_resolution.py:12 - Unused Tuple imported from typing
 - [ ] code2llm/nlp/entity_resolution.py:12 - Unused import: 'Set'
 - [ ] code2llm/nlp/normalization.py:15 - Relative import (level=1): '.config'
-- [x] code2llm/nlp/normalization.py:12 - Unused Dict imported from typing
 - [ ] code2llm/nlp/normalization.py:12 - Unused import: 'Dict'
 - [ ] code2llm/nlp/intent_matching.py:15 - Relative import (level=1): '.config'
 - [ ] code2llm/nlp/intent_matching.py:107 - String concatenation can be converted to f-string
 - [ ] code2llm/nlp/intent_matching.py:104 - String concatenation can be converted to f-string
 - [ ] code2llm/nlp/intent_matching.py:191 - String concatenation can be converted to f-string
-- [x] code2llm/nlp/intent_matching.py:10 - Unused import re
-- [x] code2llm/nlp/intent_matching.py:12 - Unused Tuple imported from typing
 - [ ] code2llm/nlp/intent_matching.py:10 - Unused import: 're'
 - [ ] code2llm/parsers/toon_parser.py:83 - Function 'parse_toon_content' missing return type (suggested: -> Any)
 - [ ] code2llm/parsers/toon_parser.py:125 - Function 'is_toon_file' missing return type (suggested: -> Any)
 - [ ] code2llm/parsers/toon_parser.py:139 - Function 'load_toon' missing return type (suggested: -> Any)
-- [x] code2llm/patterns/detector.py:4 - Unused defaultdict imported from collections
 - [ ] code2llm/patterns/detector.py:4 - Unused import: 'defaultdict'
 - [ ] code2llm/refactor/prompt_engine.py:99 - String concatenation can be converted to f-string
 - [ ] code2llm/refactor/prompt_engine.py:130 - String concatenation can be converted to f-string
 - [ ] code2llm/refactor/prompt_engine.py:135 - String concatenation can be converted to f-string
-- [x] code2llm/refactor/prompt_engine.py:7 - Unused List imported from typing
 - [ ] code2llm/refactor/prompt_engine.py:7 - Unused import: 'List'
 - [ ] code2llm/refactor/prompt_engine.py:112 - Magic number: 50 - use named constant
 - [ ] code2llm/refactor/prompt_engine.py:99 - Magic number: 20 - use named constant
@@ -498,7 +401,6 @@
 - [ ] code2llm/nlp/pipeline.py:15 - Relative import (level=1): '.normalization'
 - [ ] code2llm/nlp/pipeline.py:16 - Relative import (level=1): '.intent_matching'
 - [ ] code2llm/nlp/pipeline.py:271 - String concatenation can be converted to f-string
-- [x] code2llm/nlp/pipeline.py:12 - Unused Path imported from pathlib
 - [ ] code2llm/nlp/pipeline.py:12 - Unused import: 'Path'
 - [ ] demo_langs/valid/sample.py:30 - Function 'main' missing return type (suggested: -> None)
 - [ ] demo_langs/valid/sample.py:30 - standalone main function
@@ -526,7 +428,6 @@
 - [ ] examples/streaming-analyzer/demo.py:250 - module execution block
 - [ ] examples/streaming-analyzer/sample_project/api.py:5 - Relative import (level=1): '.database'
 - [ ] examples/streaming-analyzer/sample_project/api.py:34 - String concatenation can be converted to f-string
-- [x] examples/streaming-analyzer/sample_project/api.py:4 - Unused Optional imported from typing
 - [ ] examples/streaming-analyzer/sample_project/api.py:4 - Unused import: 'Optional'
 - [ ] examples/functional_refactoring_example.py:354 - Relative import (level=1): '.entities.preparer'
 - [ ] examples/functional_refactoring_example.py:355 - Relative import (level=1): '.templates.loader'
@@ -538,9 +439,6 @@
 - [ ] examples/functional_refactoring_example.py:335 - Function 'replace_conditional' missing return type (suggested: -> Any)
 - [ ] examples/functional_refactoring_example.py:531 - String concatenation can be converted to f-string
 - [ ] examples/functional_refactoring_example.py:543 - String concatenation can be converted to f-string
-- [x] examples/functional_refactoring_example.py:79 - Unused ABC imported from abc
-- [x] examples/functional_refactoring_example.py:79 - Unused abstractmethod imported from abc
-- [x] examples/functional_refactoring_example.py:423 - Unused List imported from typing
 - [ ] examples/functional_refactoring_example.py:375 - LLM-style docstring in generate
 - [ ] examples/streaming-analyzer/sample_project/auth.py:84 - String concatenation can be converted to f-string
 - [ ] examples/streaming-analyzer/sample_project/database.py:122 - String concatenation can be converted to f-string
@@ -555,7 +453,6 @@
 - [ ] examples/streaming-analyzer/sample_project/main.py:8 - Relative import (level=1): '.database'
 - [ ] examples/streaming-analyzer/sample_project/main.py:9 - Relative import (level=1): '.api'
 - [ ] examples/streaming-analyzer/sample_project/main.py:146 - Function 'main' missing return type (suggested: -> None)
-- [x] examples/streaming-analyzer/sample_project/main.py:5 - Unused List imported from typing
 - [ ] examples/streaming-analyzer/sample_project/main.py:5 - Unused import: 'List'
 - [ ] examples/streaming-analyzer/sample_project/main.py:146 - standalone main function
 - [ ] examples/streaming-analyzer/sample_project/main.py:157 - module execution block
@@ -587,8 +484,6 @@
 - [ ] validate_toon.py:321 - String concatenation can be converted to f-string
 - [ ] validate_toon.py:328 - String concatenation can be converted to f-string
 - [ ] validate_toon.py:364 - String concatenation can be converted to f-string
-- [x] validate_toon.py:7 - Unused defaultdict imported from collections
-- [x] validate_toon.py:10 - Unused parse_toon_content imported from code2llm.parsers.toon_parser
 - [ ] validate_toon.py:7 - Unused import: 'defaultdict'
 - [ ] validate_toon.py:79 - Magic number: 50 - use named constant
 - [ ] validate_toon.py:144 - Magic number: 50 - use named constant
@@ -597,3 +492,118 @@
 - [ ] validate_toon.py:393 - module execution block
 
 ---
+
+## Discovered
+
+- Add tests for changelog generation (config)
+- Add tests for the configuration management system
+- Add tests/benchmarks for the new deep code analysis engine
+
+
+## Done (moved to CHANGELOG)
+
+- [x] badges/server.py:6 - Unused request imported from flask
+- [x] badges/server.py:8 - Unused import json
+- [x] badges/server.py:9 - Unused import os
+- [x] benchmarks/format_evaluator.py:10 - Unused List imported from typing
+- [x] benchmarks/reporting.py:10 - Unused List imported from typing
+- [x] benchmarks/test_performance.py:13 - Unused Config imported from code2llm
+- [x] benchmarks/test_performance.py:7 - Unused Dict imported from typing
+- [x] benchmarks/test_performance.py:7 - Unused List imported from typing
+- [x] code2llm/analysis/call_graph.py:4 - Unused Dict imported from typing
+- [x] code2llm/analysis/call_graph.py:4 - Unused List imported from typing
+- [x] code2llm/analysis/call_graph.py:4 - Unused Set imported from typing
+- [x] code2llm/analysis/cfg.py:4 - Unused defaultdict imported from collections
+- [x] code2llm/analysis/data_analysis.py:3 - Unused List imported from typing
+- [x] code2llm/analysis/dfg.py:8 - Unused FlowEdge imported from code2llm.core.models
+- [x] code2llm/analysis/pipeline_detector.py:20 - Unused AnalysisResult imported from code2llm.core.models
+- [x] code2llm/analysis/side_effects.py:15 - Unused Set imported from typing
+- [x] code2llm/analysis/smells.py:2 - Unused Any imported from typing
+- [x] code2llm/analysis/smells.py:2 - Unused Dict imported from typing
+- [x] code2llm/cli.py:11 - Unused generate_llm_context imported from cli_commands
+- [x] code2llm/cli.py:18 - Unused _export_data_structures imported from cli_exports
+- [x] code2llm/cli.py:18 - Unused _export_evolution imported from cli_exports
+- [x] code2llm/cli_analysis.py:8 - Unused List imported from typing
+- [x] code2llm/cli_analysis.py:8 - Unused Optional imported from typing
+- [x] code2llm/cli_analysis.py:8 - Unused Tuple imported from typing
+- [x] code2llm/cli_commands.py:3 - Unused import argparse
+- [x] code2llm/cli_exports/formats.py:3 - Unused import os
+- [x] code2llm/cli_exports/formats.py:6 - Unused Optional imported from typing
+- [x] code2llm/cli_exports/prompt.py:3 - Unused import sys
+- [x] code2llm/core/__init__.py:3 - Unused FilterConfig imported from config
+- [x] code2llm/core/__init__.py:3 - Unused PerformanceConfig imported from config
+- [x] code2llm/core/__init__.py:4 - Unused FlowNode imported from models
+- [x] code2llm/core/analyzer.py:10 - Unused FlowEdge imported from models
+- [x] code2llm/core/analyzer.py:10 - Unused FlowNode imported from models
+- [x] code2llm/core/analyzer.py:9 - Unused LANGUAGE_EXTENSIONS imported from config
+- [x] code2llm/core/file_analyzer.py:10 - Unused LANGUAGE_EXTENSIONS imported from config
+- [x] code2llm/core/file_analyzer.py:11 - Unused AnalysisResult imported from models
+- [x] code2llm/core/file_analyzer.py:4 - Unused import re
+- [x] code2llm/core/gitignore.py:4 - Unused Set imported from typing
+- [x] code2llm/core/lang/__init__.py:3 - Unused analyze_typescript_js imported from typescript
+- [x] code2llm/core/lang/__init__.py:4 - Unused analyze_go imported from go_lang
+- [x] code2llm/core/lang/__init__.py:5 - Unused analyze_rust imported from rust
+- [x] code2llm/core/lang/cpp.py:6 - Unused ClassInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/cpp.py:6 - Unused FunctionInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/cpp.py:6 - Unused ModuleInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/csharp.py:6 - Unused ClassInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/csharp.py:6 - Unused FunctionInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/csharp.py:6 - Unused ModuleInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/go_lang.py:4 - Unused Path imported from pathlib
+- [x] code2llm/core/lang/java.py:6 - Unused ClassInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/java.py:6 - Unused FunctionInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/java.py:6 - Unused ModuleInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/php.py:6 - Unused FunctionInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/php.py:6 - Unused ModuleInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/ruby.py:6 - Unused ClassInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/ruby.py:6 - Unused FunctionInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/ruby.py:6 - Unused ModuleInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/typescript.py:6 - Unused ClassInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/typescript.py:6 - Unused FunctionInfo imported from code2llm.core.models
+- [x] code2llm/core/lang/typescript.py:6 - Unused ModuleInfo imported from code2llm.core.models
+- [x] code2llm/core/large_repo.py:11 - Unused Dict imported from typing
+- [x] code2llm/core/large_repo.py:11 - Unused Optional imported from typing
+- [x] code2llm/core/models.py:3 - Unused Path imported from pathlib
+- [x] code2llm/core/refactoring.py:4 - Unused Optional imported from typing
+- [x] code2llm/core/streaming/__init__.py:3 - Unused STRATEGY_QUICK imported from strategies
+- [x] code2llm/core/streaming/__init__.py:3 - Unused STRATEGY_STANDARD imported from strategies
+- [x] code2llm/core/streaming/__init__.py:3 - Unused ScanStrategy imported from strategies
+- [x] code2llm/core/streaming/strategies.py:3 - Unused field imported from dataclasses
+- [x] code2llm/core/streaming_analyzer.py:13 - Unused List imported from typing
+- [x] code2llm/core/streaming_analyzer.py:13 - Unused Tuple imported from typing
+- [x] code2llm/core/streaming_analyzer.py:16 - Unused FilePriority imported from streaming
+- [x] code2llm/exporters/context_exporter.py:11 - Unused FunctionInfo imported from code2llm.core.models
+- [x] code2llm/exporters/evolution_exporter.py:14 - Unused Set imported from typing
+- [x] code2llm/exporters/evolution_exporter.py:14 - Unused Tuple imported from typing
+- [x] code2llm/exporters/evolution_exporter.py:17 - Unused FunctionInfo imported from code2llm.core.models
+- [x] code2llm/exporters/flow_exporter.py:13 - Unused import ast
+- [x] code2llm/exporters/flow_exporter.py:17 - Unused Set imported from typing
+- [x] code2llm/exporters/flow_exporter.py:17 - Unused Tuple imported from typing
+- [x] code2llm/exporters/index_generator.py:9 - Unused Optional imported from typing
+- [x] code2llm/exporters/map_exporter.py:16 - Unused Set imported from typing
+- [x] code2llm/exporters/map_exporter.py:19 - Unused ClassInfo imported from code2llm.core.models
+- [x] code2llm/exporters/project_yaml_exporter.py:16 - Unused Optional imported from typing
+- [x] code2llm/exporters/readme_exporter.py:7 - Unused import os
+- [x] code2llm/exporters/toon.py:8 - Unused ToonExporter imported from toon
+- [x] code2llm/exporters/toon/__init__.py:11 - Unused _package_of imported from helpers
+- [x] code2llm/exporters/toon/__init__.py:11 - Unused _package_of_module imported from helpers
+- [x] code2llm/exporters/toon/__init__.py:11 - Unused _rel_path imported from helpers
+- [x] code2llm/exporters/toon/renderer.py:10 - Unused _package_of imported from helpers
+- [x] code2llm/exporters/toon/renderer.py:7 - Unused FunctionInfo imported from code2llm.core.models
+- [x] code2llm/generators/mermaid.py:7 - Unused import sys
+- [x] code2llm/nlp/config.py:4 - Unused Optional imported from typing
+- [x] code2llm/nlp/entity_resolution.py:12 - Unused Set imported from typing
+- [x] code2llm/nlp/entity_resolution.py:12 - Unused Tuple imported from typing
+- [x] code2llm/nlp/intent_matching.py:10 - Unused import re
+- [x] code2llm/nlp/intent_matching.py:12 - Unused Tuple imported from typing
+- [x] code2llm/nlp/normalization.py:12 - Unused Dict imported from typing
+- [x] code2llm/nlp/pipeline.py:12 - Unused Path imported from pathlib
+- [x] code2llm/patterns/detector.py:4 - Unused defaultdict imported from collections
+- [x] code2llm/refactor/prompt_engine.py:7 - Unused List imported from typing
+- [x] examples/functional_refactoring_example.py:423 - Unused List imported from typing
+- [x] examples/functional_refactoring_example.py:79 - Unused ABC imported from abc
+- [x] examples/functional_refactoring_example.py:79 - Unused abstractmethod imported from abc
+- [x] examples/streaming-analyzer/sample_project/api.py:4 - Unused Optional imported from typing
+- [x] examples/streaming-analyzer/sample_project/main.py:5 - Unused List imported from typing
+- [x] validate_toon.py:10 - Unused parse_toon_content imported from code2llm.parsers.toon_parser
+- [x] validate_toon.py:7 - Unused defaultdict imported from collections
