@@ -1,5 +1,6 @@
 # code2llm call graph | /home/tom/github/semcod/code2llm
-# nodes: 461 | edges: 500 | modules: 91
+# generated in 0.29s
+# nodes: 462 | edges: 500 | modules: 91
 # CC̄=2.1
 
 HUBS[20]:
@@ -17,32 +18,32 @@ HUBS[20]:
     CC=12  in:1  out:33  total:34
   benchmarks.benchmark_evolution.run_benchmark
     CC=9  in:0  out:34  total:34
-  code2llm.core.lang.rust.analyze_rust
-    CC=9  in:0  out:31  total:31
   benchmarks.benchmark_optimizations.benchmark_cold_vs_warm
     CC=7  in:1  out:30  total:31
+  code2llm.core.lang.rust.analyze_rust
+    CC=9  in:0  out:31  total:31
   benchmarks.benchmark_performance.create_test_project
     CC=5  in:1  out:29  total:30
   code2llm.core.lang.base._extract_declarations
     CC=9  in:1  out:28  total:29
   code2llm.core.toon_size_manager._split_by_modules
     CC=10  in:1  out:27  total:28
+  validate_toon.compare_modules
+    CC=5  in:1  out:26  total:27
   code2llm.core.lang.go_lang._analyze_go_regex
     CC=10  in:1  out:26  total:27
   code2llm.exporters.mermaid.compact.export_compact
     CC=13  in:0  out:27  total:27
-  validate_toon.compare_modules
-    CC=5  in:1  out:26  total:27
   code2llm.exporters.mermaid.calls.export_calls
     CC=13  in:0  out:26  total:26
-  validate_toon.compare_functions
-    CC=6  in:1  out:24  total:25
-  code2llm.exporters.project_yaml.core.ProjectYAMLExporter._build_project_yaml
-    CC=12  in:0  out:25  total:25
   code2llm.exporters.toon.metrics_core.CoreMetricsComputer.compute_file_metrics
     CC=12  in:0  out:25  total:25
   code2llm.exporters.evolution_exporter.EvolutionExporter._is_excluded
     CC=1  in:24  out:1  total:25
+  validate_toon.compare_functions
+    CC=6  in:1  out:24  total:25
+  code2llm.exporters.project_yaml.core.ProjectYAMLExporter._build_project_yaml
+    CC=12  in:0  out:25  total:25
 
 MODULES:
   Taskfile  [1 funcs]
@@ -220,7 +221,7 @@ MODULES:
     get_file_result  CC=4  out:5
     put_file_result  CC=3  out:7
   code2llm.core.refactoring  [6 funcs]
-    _calculate_centrality  CC=8  out:9
+    _calculate_centrality  CC=9  out:9
     _detect_communities  CC=7  out:10
     _detect_cycles  CC=6  out:7
     _detect_dead_code  CC=8  out:15
@@ -253,7 +254,7 @@ MODULES:
     compute_hub_types  CC=7  out:8
     filter_god_modules  CC=3  out:5
     make_relative_path  CC=3  out:3
-    scan_file_sizes  CC=6  out:7
+    scan_file_sizes  CC=20  out:12
   code2llm.exporters.evolution.yaml_export  [1 funcs]
     export_to_yaml  CC=11  out:24
   code2llm.exporters.evolution_exporter  [2 funcs]
@@ -279,7 +280,7 @@ MODULES:
   code2llm.exporters.map.utils  [3 funcs]
     count_total_lines  CC=5  out:5
     detect_languages  CC=8  out:10
-    file_line_count  CC=2  out:4
+    file_line_count  CC=2  out:5
   code2llm.exporters.map.yaml_export  [5 funcs]
     _build_module_classes_data  CC=6  out:5
     _build_module_entry  CC=2  out:6
@@ -297,13 +298,15 @@ MODULES:
     export_classic  CC=1  out:5
   code2llm.exporters.mermaid.compact  [1 funcs]
     export_compact  CC=13  out:27
-  code2llm.exporters.mermaid.flow_compact  [6 funcs]
+  code2llm.exporters.mermaid.flow_compact  [8 funcs]
+    _get_called_funcs  CC=3  out:4
     _longest_path_dfs  CC=7  out:5
     _select_longest_path  CC=4  out:4
     build_callers_graph  CC=4  out:4
     export_flow_compact  CC=1  out:9
     find_critical_path  CC=2  out:6
     find_leaves  CC=4  out:5
+    is_entry_point  CC=9  out:5
   code2llm.exporters.mermaid.flow_detailed  [1 funcs]
     export_flow_detailed  CC=1  out:14
   code2llm.exporters.mermaid.flow_full  [1 funcs]
@@ -422,10 +425,9 @@ MODULES:
     process_request  CC=6  out:11
     start  CC=4  out:4
     main  CC=3  out:5
-  map.toon  [107 funcs]
+  map.toon  [106 funcs]
     _categorize_functions  CC=0  out:0
     _collect_entrypoints  CC=0  out:0
-    _collect_functions  CC=0  out:0
     _collect_nodes  CC=0  out:0
     _dup_file_set  CC=0  out:0
     _entry_points  CC=0  out:0
@@ -433,6 +435,7 @@ MODULES:
     _extract_declarations  CC=0  out:0
     _file_signature  CC=0  out:0
     _filtered_functions  CC=0  out:0
+    _get_gitignore_parser  CC=0  out:0
   pipeline  [1 funcs]
     run_pipeline  CC=9  out:68
   scripts.benchmark_badges  [3 funcs]

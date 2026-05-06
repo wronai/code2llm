@@ -1,24 +1,25 @@
 # System Architecture Analysis
+<!-- generated in 0.01s -->
 
 ## Overview
 
 - **Project**: /home/tom/github/semcod/code2llm
 - **Primary Language**: python
-- **Languages**: python: 189, yaml: 35, txt: 7, shell: 4, yml: 3
+- **Languages**: python: 189, yaml: 38, txt: 7, shell: 4, yml: 3
 - **Analysis Mode**: static
-- **Total Functions**: 2293
+- **Total Functions**: 2238
 - **Total Classes**: 141
-- **Modules**: 252
-- **Entry Points**: 1870
+- **Modules**: 255
+- **Entry Points**: 1814
 
 ## Architecture by Module
 
-### project.map.toon
-- **Functions**: 37721
-- **File**: `map.toon.yaml`
-
 ### map.toon
 - **Functions**: 23564
+- **File**: `map.toon.yaml`
+
+### project.map.toon
+- **Functions**: 525
 - **File**: `map.toon.yaml`
 
 ### code2llm.analysis.data_analysis

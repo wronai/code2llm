@@ -21,6 +21,21 @@ def should_skip_module(module: str, include_examples: bool = False) -> bool:
     return any(pat in mod_lower for pat in SKIP_PATTERNS)
 
 
+# Pre-computed set of functions that have at least one incoming call
+_called_funcs_cache: Dict[int, Set[str]] = {}
+
+
+def _get_called_funcs(result: AnalysisResult) -> Set[str]:
+    """Build (and cache) the set of all functions called by other functions."""
+    rid = id(result)
+    if rid not in _called_funcs_cache:
+        called: Set[str] = set()
+        for fi in result.functions.values():
+            called.update(fi.calls)
+        _called_funcs_cache[rid] = called
+    return _called_funcs_cache[rid]
+
+
 def is_entry_point(func_name: str, fi, result: AnalysisResult) -> bool:
     """Detect if function is an entry point (main, cli, api entry)."""
     name = fi.name
@@ -36,9 +51,8 @@ def is_entry_point(func_name: str, fi, result: AnalysisResult) -> bool:
     if func_name.startswith('code2llm.api.'):
         return True
     # Entry points have no incoming calls from within the project
-    has_incoming = any(func_name in (c.calls if hasattr(c, 'calls') else [])
-                      for c in result.functions.values())
-    if not has_incoming and name not in ('__init__', '__getattr__'):
+    called_funcs = _get_called_funcs(result)
+    if func_name not in called_funcs and name not in ('__init__', '__getattr__'):
         return True
     return False
 

@@ -1,4 +1,5 @@
-# code2llm | 2293 func | 185f | 237830L | python | 2026-05-06
+# code2llm | 2238 func | 185f | 105874L | python | 2026-05-06
+# generated in 0.00s
 
 HEALTH:
   CC̄=2.1  critical=74 (limit:10)  dup=3  cycles=0
@@ -7,31 +8,31 @@ ALERTS[20]:
   !!! high_fan_out     analyze_rust = 24 (limit:10)
   !!! high_fan_out     _summarize_functions = 21 (limit:10)
   !!! high_fan_out     _analyze_go_regex = 20 (limit:10)
+  !!  cc_exceeded      scan_file_sizes = 20 (limit:15)
   !!  high_fan_out     run_benchmark = 18 (limit:10)
   !!  high_fan_out     ProjectYAMLExporter._build_project_yaml = 18 (limit:10)
   !!  high_fan_out     export_calls = 18 (limit:10)
   !!  high_fan_out     _export_simple_formats = 18 (limit:10)
   !!  high_fan_out     _run_exports = 18 (limit:10)
   !!  high_fan_out     handle_cache_command = 17 (limit:10)
-  !!  high_fan_out     NLPPipeline.process = 17 (limit:10)
 
-MODULES[264] (top by size):
-  M[project/map.toon.yaml] 39352L C:0 F:542 CC↑0 D:0 (yaml)
+MODULES[267] (top by size):
+  M[project/map.toon.yaml] 25429L C:0 F:486 CC↑0 D:0 (yaml)
   M[map.toon.yaml] 25199L C:0 F:542 CC↑0 D:71 (yaml)
-  M[project/calls.yaml] 7041L C:0 F:0 CC↑0 D:0 (yaml)
+  M[project/calls.yaml] 7111L C:0 F:0 CC↑0 D:0 (yaml)
   M[calls.yaml] 4778L C:0 F:0 CC↑0 D:0 (yaml)
   M[calls_output/calls.yaml] 3801L C:0 F:0 CC↑0 D:0 (yaml)
+  M[planfile.yaml] 2077L C:0 F:0 CC↑0 D:0 (yaml)
   M[project/validation.toon.yaml] 821L C:0 F:0 CC↑0 D:0 (yaml)
-  M[planfile.yaml] 771L C:0 F:0 CC↑0 D:0 (yaml)
   M[code2llm/exporters/index_generator/renderer.py] 637L C:1 F:1 CC↑1 D:0 (python)
   M[code2llm/.code2llm_incremental.json] 611L C:0 F:0 CC↑0 D:0 (json)
-  M[project/calls.toon.yaml] 525L C:0 F:0 CC↑0 D:0 (yaml)
+  M[project/calls.toon.yaml] 531L C:0 F:0 CC↑0 D:0 (yaml)
   M[code2llm/core/analyzer.py] 495L C:1 F:22 CC↑11 D:0 (python)
   M[code2llm/core/large_repo.py] 488L C:2 F:20 CC↑9 D:0 (python)
   M[code2llm/cli_exports/prompt.py] 480L C:0 F:18 CC↑14 D:0 (python)
   M[code2llm/exporters/toon/renderer.py] 471L C:1 F:26 CC↑11 D:0 (python)
   M[code2llm/core/lang/base.py] 464L C:0 F:14 CC↑14 D:0 (python)
-  LANGS: python:193/yaml:35/txt:7/java:4/shell:4/go:3/php:3/rust:3/yml:3/typescript:2/toml:2/javascript:1/other:1/json:1/conf:1/ruby:1
+  LANGS: python:193/yaml:38/txt:7/java:4/shell:4/go:3/php:3/rust:3/yml:3/typescript:2/toml:2/javascript:1/other:1/json:1/conf:1/ruby:1
 
 HOTSPOTS[10]:
   ★ analyze_rust fan=24  // Analysis pipeline, 24 stages
@@ -40,7 +41,7 @@ HOTSPOTS[10]:
   ★ run_benchmark fan=18  // Run the full format quality benchmark.
   ★ ProjectYAMLExporter._build_project_yaml fan=18  // Build complete project.yaml structure.
 
-REFACTOR[13]:
+REFACTOR[14]:
   [1] H/H Split god module code2llm/exporters/index_generator/renderer.py (637L, 1 classes)
   [2] H/H Split god module calls.yaml (4778L, 0 classes)
   [3] H/H Split god module calls_output/calls.yaml (3801L, 0 classes)
@@ -48,4 +49,4 @@ REFACTOR[13]:
   [5] H/H Split god module map.toon.yaml (25199L, 0 classes)
 
 EVOLUTION:
-  2026-05-06 CC̄=2.1 crit=74 237830L // Automated analysis
+  2026-05-06 CC̄=2.1 crit=74 105874L // Automated analysis

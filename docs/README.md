@@ -1,7 +1,7 @@
 <!-- code2docs:start --># code2llm
 
-![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.8-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-2859-green)
-> **2859** functions | **155** classes | **333** files | CC̄ = 3.9
+![version](https://img.shields.io/badge/version-0.1.0-blue) ![python](https://img.shields.io/badge/python-%3E%3D3.8-blue) ![coverage](https://img.shields.io/badge/coverage-unknown-lightgrey) ![functions](https://img.shields.io/badge/functions-2864-green)
+> **2864** functions | **155** classes | **336** files | CC̄ = 3.9
 
 > Auto-generated project documentation from source code analysis.
 
@@ -146,6 +146,9 @@ code2llm/
         ├── toon
         ├── toon
     ├── refactor-prompt
+            ├── toon
+            ├── toon
+            ├── toon
             ├── toon
             ├── toon
             ├── toon
@@ -319,63 +322,63 @@ code2llm/
         ├── sample
 ├── redsl_refactor_report
 ├── context
-├── REFACTORING_PLAN
+├── prompt_sumd_sumr_feature
 ├── redsl_refactor_plan
-├── README
-├── TODO
 ├── ROADMAP
     ├── context
-    ├── README
-├── prompt_sumd_sumr_feature
+├── REFACTORING_PLAN
+├── TODO
         ├── context
-        ├── context
-├── CHANGELOG
+├── README
     ├── context
-├── SUMR
-    ├── PROJECT_SUMMARY
-        ├── context
         ├── context
     ├── README
+    ├── METHODOLOGY
+    ├── README
+        ├── README
+        ├── README
     ├── LLM_USAGE
-├── SUMD
         ├── README
         ├── README
         ├── DEPENDENCY_ANALYSIS
-        ├── ANALYSIS
-        ├── README
-        ├── README
-        ├── README
-    ├── API
-    ├── METHODOLOGY
-    ├── README
-    ├── context
         ├── SUMMARY
+        ├── README
         ├── context
+    ├── API
+├── CHANGELOG
+├── SUMR
+    ├── PROJECT_SUMMARY
+        ├── context
+        ├── ANALYSIS
+    ├── COMPARISON_AND_OPTIMIZATION
+        ├── README
+    ├── context
+        ├── README
     ├── context
         ├── context
+    ├── README
+    ├── README
         ├── context
-        ├── toon
-        ├── README
-        ├── toon
-    ├── COMPARISON_AND_OPTIMIZATION
+    ├── README
+        ├── context
+        ├── context
+    ├── context
     ├── prompt
     ├── README
+        ├── toon
+        ├── toon
     ├── context
+    ├── README
         ├── context
-    ├── README
         ├── toon
-        ├── README
-    ├── README
-        ├── toon
-    ├── context
-        ├── extract_method
-    ├── README
         ├── context
         ├── move_method
     ├── README
     ├── context
         ├── context
-        ├── context
+├── SUMD
+        ├── extract_method
+        ├── toon
     ├── calls
         ├── toon
 ```
@@ -526,13 +529,13 @@ code2llm/
 - **`OrderService`** — —
 - **`PatternDetector`** — —
 - **`LanguageAnalyzer`** — —
+- **`StreamingAnalyzer`** — —
 - **`ProjectAnalyzer`** — —
 - **`AnalysisResult`** — —
 - **`NLPPipeline`** — —
 - **`QueryNormalizer`** — —
 - **`IntentMatcher`** — —
 - **`EntityResolver`** — —
-- **`StreamingAnalyzer`** — —
 - **`TemplateGenerator`** — —
 - **`CommandGenerator`** — —
 - **`IntentMatcher`** — —
@@ -1045,7 +1048,7 @@ code2llm/
 - `export_to_yaml(result, output_path)` — Generate evolution.toon.yaml (structured YAML).
 - `is_excluded(path)` — Check if path should be excluded (venv, site-packages, etc.).
 - `compute_func_data(result)` — Compute per-function metrics, excluding venv.
-- `scan_file_sizes(project_path)` — Scan Python files and return line counts.
+- `scan_file_sizes(project_path, result)` — Return per-file line counts, preferring already-analyzed module data.
 - `aggregate_file_stats(result, file_lines)` — Aggregate function and class data per file.
 - `make_relative_path(fpath, project_path)` — Convert absolute path to relative path.
 - `filter_god_modules(file_stats, project_path)` — Filter files to god modules (≥500 lines).
@@ -1109,6 +1112,28 @@ code2llm/
 - `detect_observer()` — —
 - `parse_file()` — —
 - `extract_functions()` — —
+- `on_progress()` — —
+- `print()` — —
+- `get_cfg()` — —
+- `print()` — —
+- `analyze_project()` — —
+- `get_function_count()` — —
+- `get_class_count()` — —
+- `to_dict()` — —
+- `process()` — —
+- `normalize()` — —
+- `step_1a_lowercase()` — —
+- `step_1b_remove_punctuation()` — —
+- `step_1c_normalize_whitespace()` — —
+- `step_1d_unicode_normalize()` — —
+- `step_1e_remove_stopwords()` — —
+- `match()` — —
+- `step_2a_fuzzy_match()` — —
+- `step_2c_keyword_match()` — —
+- `step_2d_context_score()` — —
+- `resolve()` — —
+- `load_from_analysis()` — —
+- `print()` — —
 - `handle_special_commands()` — —
 - `handle_cache_command()` — —
 - `handle_report_command()` — —
@@ -1123,6 +1148,26 @@ code2llm/
 - `main()` — —
 - `repair_command()` — —
 - `print()` — —
+- `print()` — —
+- `get_file_hash()` — —
+- `parse_file_cached()` — —
+- `generate_command()` — —
+- `render_template()` — —
+- `optimize_output()` — —
+- `cache_result()` — —
+- `load_patterns()` — —
+- `fuzzy_match()` — —
+- `validate_schema()` — —
+- `generate()` — —
+- `render()` — —
+- `match()` — —
+- `fuzzy_find()` — —
+- `get()` — —
+- `put()` — —
+- `validate()` — —
+- `print()` — —
+- `progress_callback()` — —
+- `generate_readme()` — —
 - `print()` — —
 - `index()` — —
 - `generate_badges()` — —
@@ -1381,47 +1426,14 @@ code2llm/
 - `compare_classes()` — —
 - `compare_modules()` — —
 - `validate_toon_completeness()` — —
-- `print()` — —
-- `analyze_project()` — —
-- `get_function_count()` — —
-- `get_class_count()` — —
-- `to_dict()` — —
-- `process()` — —
-- `normalize()` — —
-- `step_1a_lowercase()` — —
-- `step_1b_remove_punctuation()` — —
-- `step_1c_normalize_whitespace()` — —
-- `step_1d_unicode_normalize()` — —
-- `step_1e_remove_stopwords()` — —
-- `match()` — —
-- `step_2a_fuzzy_match()` — —
-- `step_2c_keyword_match()` — —
-- `step_2d_context_score()` — —
-- `resolve()` — —
-- `load_from_analysis()` — —
-- `on_progress()` — —
-- `print()` — —
-- `get_cfg()` — —
-- `print()` — —
-- `get_file_hash()` — —
-- `parse_file_cached()` — —
-- `generate_command()` — —
-- `render_template()` — —
-- `optimize_output()` — —
-- `cache_result()` — —
-- `load_patterns()` — —
-- `fuzzy_match()` — —
-- `validate_schema()` — —
-- `generate()` — —
-- `render()` — —
-- `match()` — —
-- `fuzzy_find()` — —
-- `get()` — —
-- `put()` — —
-- `validate()` — —
-- `print()` — —
-- `progress_callback()` — —
-- `generate_readme()` — —
+- `compute_func_data()` — —
+- `scan_file_sizes()` — —
+- `aggregate_file_stats()` — —
+- `make_relative_path()` — —
+- `filter_god_modules()` — —
+- `compute_god_modules()` — —
+- `compute_hub_types()` — —
+- `build_context()` — —
 - `analyze_ruby()` — —
 - `extract_function_body()` — —
 - `calculate_complexity_regex()` — —
@@ -1472,12 +1484,6 @@ code2llm/
 - `build_class_export()` — —
 - `build_function_exports()` — —
 - `export_to_yaml()` — —
-- `should_skip_module()` — —
-- `is_entry_point()` — —
-- `build_callers_graph()` — —
-- `find_leaves()` — —
-- `find_critical_path()` — —
-- `export_flow_compact()` — —
 - `get_file_size_kb()` — —
 - `should_split_toon()` — —
 - `split_toon_file()` — —
@@ -1491,20 +1497,18 @@ code2llm/
 - `render_metrics_target()` — —
 - `render_patterns()` — —
 - `render_history()` — —
-- `compute_func_data()` — —
-- `scan_file_sizes()` — —
-- `aggregate_file_stats()` — —
-- `make_relative_path()` — —
-- `filter_god_modules()` — —
-- `compute_god_modules()` — —
-- `compute_hub_types()` — —
-- `build_context()` — —
 - `generate_llm_flow()` — —
 - `render_llm_flow_md()` — —
 - `run_pipeline()` — —
 - `should_use_chunking()` — —
 - `get_analysis_plan()` — —
 - `analyze_rust()` — —
+- `should_skip_module()` — —
+- `is_entry_point()` — —
+- `build_callers_graph()` — —
+- `find_leaves()` — —
+- `find_critical_path()` — —
+- `export_flow_compact()` — —
 - `get_ast()` — —
 - `find_function_node()` — —
 - `ast_unparse()` — —
@@ -1571,7 +1575,6 @@ code2llm/
 - `benchmark_streaming_analyzer()` — —
 - `benchmark_with_strategies()` — —
 - `print_comparison()` — —
-- `is_excluded_path()` — —
 - `build_evolution()` — —
 - `load_previous_evolution()` — —
 - `readable_id()` — —
@@ -1589,7 +1592,6 @@ code2llm/
 - `demo_custom_progress()` — —
 - `evaluate_format()` — —
 - `make_cache_key()` — —
-- `is_excluded()` — —
 - `get_file_types()` — —
 - `get_default_file_info()` — —
 - `get_refactoring_advice()` — —
@@ -1618,7 +1620,9 @@ code2llm/
 - `export_format()` — —
 - `get_exporter()` — —
 - `list_exporters()` — —
+- `is_excluded_path()` — —
 - `get_existing_files()` — —
+- `is_excluded()` — —
 - `process_message()` — —
 - `sendResponse()` — —
 - `create_core_py()` — —
@@ -1740,8 +1744,8 @@ code2llm/
 📄 `README`
 📄 `REFACTORING_PLAN`
 📄 `ROADMAP` (5 functions, 2 classes)
-📄 `SUMD` (554 functions)
-📄 `SUMR` (29 functions)
+📄 `SUMD` (556 functions)
+📄 `SUMR` (31 functions)
 📄 `TODO`
 📄 `Taskfile` (2 functions)
 📄 `analysis.toon`
@@ -1861,7 +1865,7 @@ code2llm/
 📄 `code2llm.exporters.mermaid.calls` (1 functions)
 📄 `code2llm.exporters.mermaid.classic` (4 functions)
 📄 `code2llm.exporters.mermaid.compact` (1 functions)
-📄 `code2llm.exporters.mermaid.flow_compact` (8 functions)
+📄 `code2llm.exporters.mermaid.flow_compact` (9 functions)
 📄 `code2llm.exporters.mermaid.flow_detailed` (1 functions)
 📄 `code2llm.exporters.mermaid.flow_full` (1 functions)
 📄 `code2llm.exporters.mermaid.utils` (8 functions)
@@ -1989,7 +1993,7 @@ code2llm/
 📄 `project.duplication.toon`
 📄 `project.evolution.toon`
 📄 `project.examples.analysis.toon`
-📄 `project.map.toon` (61767 functions)
+📄 `project.map.toon` (24572 functions)
 📄 `project.project.toon`
 📄 `project.prompt`
 📄 `project.refactor-prompt` (2 functions)
@@ -2040,6 +2044,9 @@ code2llm/
 📦 `test_python_only.valid`
 📄 `test_python_only.valid.sample` (5 functions, 2 classes)
 📄 `test_python_only_examples_tests.analysis.toon`
+📄 `testql-scenarios.generated-api-smoke.testql.toon`
+📄 `testql-scenarios.generated-cli-tests.testql.toon`
+📄 `testql-scenarios.generated-from-pytests.testql.toon`
 📄 `validate_toon` (21 functions)
 
 ## Requirements

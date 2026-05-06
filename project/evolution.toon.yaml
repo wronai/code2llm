@@ -1,19 +1,29 @@
-# code2llm/evolution | 2097 func | 155f | 2026-05-06
+# code2llm/evolution | 2042 func | 155f | 2026-05-06
+# generated in 0.01s
 
-NEXT[1] (ranked by impact):
-  [1] !! SPLIT           code2llm/exporters/index_generator/renderer.py
-      WHY: 637L, 1 classes, max CC=1
-      EFFORT: ~4h  IMPACT: 637
+NEXT[3] (ranked by impact):
+  [1] !  SPLIT-FUNC      scan_file_sizes  CC=20  fan=11
+      WHY: CC=20 exceeds 15
+      EFFORT: ~1h  IMPACT: 220
+
+  [2] !! SPLIT           map.toon.yaml
+      WHY: 23564L, 0 classes, max CC=0
+      EFFORT: ~4h  IMPACT: 0
+
+  [3] !! SPLIT           project/map.toon.yaml
+      WHY: 525L, 0 classes, max CC=0
+      EFFORT: ~4h  IMPACT: 0
 
 
-RISKS[1]:
-  ⚠ Splitting code2llm/exporters/index_generator/renderer.py may break 1 import paths
+RISKS[2]:
+  ⚠ Splitting map.toon.yaml may break 542 import paths
+  ⚠ Splitting project/map.toon.yaml may break 486 import paths
 
 METRICS-TARGET:
-  CC̄:          2.0 → ≤1.4
-  max-CC:      14 → ≤7
-  god-modules: 1 → 0
-  high-CC(≥15): 0 → ≤0
+  CC̄:          2.1 → ≤1.5
+  max-CC:      20 → ≤10
+  god-modules: 2 → 0
+  high-CC(≥15): 1 → ≤0
   hub-types:   0 → ≤0
 
 PATTERNS (language parser shared logic):
@@ -41,4 +51,4 @@ PATTERNS (language parser shared logic):
     - Standardized FunctionInfo/ClassInfo models
 
 HISTORY:
-  prev CC̄=2.3 → now CC̄=2.0
+  prev CC̄=2.0 → now CC̄=2.1

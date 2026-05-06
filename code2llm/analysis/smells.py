@@ -1,4 +1,5 @@
 """Detection of code smells using analysis metrics."""
+from collections import defaultdict
 from typing import List, Dict, Any
 from code2llm.core.models import AnalysisResult, CodeSmell
 
@@ -7,6 +8,10 @@ class SmellDetector:
     
     def __init__(self, result: AnalysisResult):
         self.result = result
+        # Pre-index mutations by scope — avoids O(n×m) full scans
+        self._mutations_by_scope: Dict[str, list] = defaultdict(list)
+        for m in result.mutations:
+            self._mutations_by_scope[m.scope].append(m)
         
     def detect(self) -> List[CodeSmell]:
         """Record and return detected code smells."""
@@ -28,7 +33,7 @@ class SmellDetector:
         for func_name, func_info in self.result.functions.items():
             metrics = self.result.metrics.get(func_name, {})
             fan_out = metrics.get('fan_out', 0)
-            mutation_count = len([m for m in self.result.mutations if m.scope == func_name])
+            mutation_count = len(self._mutations_by_scope.get(func_name, []))
             
             # Use cyclomatic complexity (now mapped to 'cc' in FunctionInfo.complexity)
             complexity = func_info.complexity.get('cyclomatic_complexity', 1)
@@ -78,12 +83,11 @@ class SmellDetector:
             mut_mod = func_name.split('.')[0]
             foreign_mutations = []
             
-            for mutation in self.result.mutations:
-                if mutation.scope == func_name:
-                    if '.' in mutation.variable:
-                        origin_mod = mutation.variable.split('.')[0]
-                        if origin_mod != mut_mod:
-                            foreign_mutations.append(mutation.variable)
+            for mutation in self._mutations_by_scope.get(func_name, []):
+                if '.' in mutation.variable:
+                    origin_mod = mutation.variable.split('.')[0]
+                    if origin_mod != mut_mod:
+                        foreign_mutations.append(mutation.variable)
                             
             if len(set(foreign_mutations)) >= 3:
                 smells.append(CodeSmell(

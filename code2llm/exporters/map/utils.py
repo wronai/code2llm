@@ -1,5 +1,6 @@
 """Map exporter utilities — path handling, line counting, language detection."""
 
+from functools import lru_cache
 from pathlib import Path
 from typing import Dict, Set
 from collections import defaultdict
@@ -8,6 +9,7 @@ from code2llm.core.config import LANGUAGE_EXTENSIONS
 from code2llm.core.models import AnalysisResult
 
 
+@lru_cache(maxsize=4096)
 def rel_path(fpath: str, project_path: str) -> str:
     """Get relative path from project root."""
     if not project_path or not fpath:
@@ -21,6 +23,7 @@ def rel_path(fpath: str, project_path: str) -> str:
             return fpath
 
 
+@lru_cache(maxsize=4096)
 def file_line_count(fpath: str) -> int:
     """Count lines in a file."""
     try:

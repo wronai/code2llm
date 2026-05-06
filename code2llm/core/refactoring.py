@@ -82,8 +82,9 @@ class RefactoringAnalyzer:
                 if node_count > 500:
                     if self.config.verbose:
                         print(f"  Large graph ({node_count} nodes), using sampled centrality...")
-                    # Sample 20% of nodes, max 500
-                    k = min(int(node_count * 0.2), 500)
+                    # Sample adaptively: 10% for large, 20% for medium, cap at 200
+                    ratio = 0.1 if node_count > 2000 else 0.2
+                    k = min(int(node_count * ratio), 200)
                     import networkx as nx
                     centrality = nx.betweenness_centrality(call_graph, k=k)
                 else:

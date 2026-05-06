@@ -1,11 +1,14 @@
-# code2llm | 264f 118736L | python:189,yaml:35,txt:7,shell:4,yml:3,toml:2,php:2,java:2,typescript:1,conf:1,go:1,rust:1,javascript:1,ruby:1,json:1 | 2026-05-06
-# CC̄=2.1 | critical:0/2293 | dups:0 | cycles:0
+# code2llm | 267f 81841L | python:189,yaml:38,txt:7,shell:4,yml:3,toml:2,php:2,java:2,typescript:1,conf:1,go:1,rust:1,javascript:1,ruby:1,json:1 | 2026-05-06
+# generated in 0.13s
+# CC̄=2.1 | critical:1/2238 | dups:0 | cycles:0
 
-HEALTH[0]: ok
+HEALTH[1]:
+  🟡 CC    scan_file_sizes CC=20 (limit:15)
 
-REFACTOR[0]: none needed
+REFACTOR[1]:
+  1. split 1 high-CC methods  (CC>15)
 
-PIPELINES[855]:
+PIPELINES[856]:
   [1] Src [read_version]: read_version
       PURITY: 100% pure
   [2] Src [read_readme]: read_readme
@@ -54,30 +57,29 @@ LAYERS:
   │ context_exporter           250L  1C   15m  CC=10     ←0
   │ analysis.toon.yaml         248L  0C    0m  CC=0.0    ←0
   │ dfg                        219L  1C   12m  CC=7      ←0
-  │ refactoring                209L  1C   11m  CC=9      ←0
+  │ refactoring                210L  1C   11m  CC=9      ←0
   │ scanner                    201L  1C    6m  CC=14     ←0
   │ __init__                   199L  1C   11m  CC=9      ←0
   │ call_graph                 198L  1C   12m  CC=9      ←0
+  │ smells                     196L  1C    9m  CC=7      ←0
   │ render                     195L  0C    6m  CC=10     ←0
   │ models                     193L  11C    6m  CC=8      ←0
-  │ smells                     192L  1C    9m  CC=7      ←0
   │ flow_renderer              188L  1C    6m  CC=14     ←0
+  │ !! computation                186L  0C    8m  CC=20     ←0
   │ streaming_analyzer         181L  1C    6m  CC=12     ←0
   │ ts_extractors              180L  0C    5m  CC=7      ←0
   │ repo_files                 174L  0C    8m  CC=8      ←0
-  │ config                     174L  5C    2m  CC=1      ←0
   │ base                       174L  2C    8m  CC=2      ←0
   │ orchestrator_handlers      174L  0C    8m  CC=6      ←0
   │ analysis                   173L  1C    5m  CC=14     ←0
   │ __init__                   171L  1C    5m  CC=1      ←0
+  │ flow_compact               171L  0C    9m  CC=9      ←0
   │ detector                   168L  1C    8m  CC=9      ←0
-  │ computation                167L  0C    8m  CC=10     ←0
   │ ruby                       164L  1C    4m  CC=14     ←0
   │ dashboard_data             163L  1C    9m  CC=7      ←0
   │ module_detail              162L  1C    9m  CC=7      ←0
   │ article_view               159L  1C    8m  CC=7      ←0
   │ ts_parser                  158L  1C    9m  CC=7      ←0
-  │ flow_compact               157L  0C    8m  CC=11     ←0
   │ export_pipeline            153L  2C    5m  CC=4      ←0
   │ toon_view                  153L  1C    8m  CC=6      ←0
   │ modules                    151L  0C    7m  CC=11     ←0
@@ -85,7 +87,7 @@ LAYERS:
   │ prompt_engine              150L  1C    7m  CC=12     ←0
   │ fix                        147L  0C    7m  CC=8      ←0
   │ toon_parser                147L  0C   10m  CC=8      ←0
-  │ helpers                    142L  0C    8m  CC=14     ←0
+  │ helpers                    143L  0C    8m  CC=14     ←0
   │ gitignore                  138L  2C    7m  CC=7      ←0
   │ context_view               136L  1C    7m  CC=11     ←0
   │ prioritizer                131L  2C    4m  CC=9      ←0
@@ -104,7 +106,7 @@ LAYERS:
   │ health                     103L  0C    3m  CC=13     ←0
   │ yaml_export                103L  0C    1m  CC=11     ←0
   │ nodes                      103L  0C    7m  CC=7      ←0
-  │ ast_registry               102L  1C    9m  CC=5      ←4
+  │ ast_registry               102L  1C    9m  CC=5      ←0
   │ go_lang                    102L  0C    2m  CC=10     ←0
   │ pipeline_classifier        100L  1C    5m  CC=8      ←0
   │ utils                       99L  0C    8m  CC=6      ←0
@@ -114,7 +116,6 @@ LAYERS:
   │ rust                        94L  0C    1m  CC=9      ←0
   │ classic                     93L  0C    4m  CC=8      ←0
   │ pipeline_resolver           91L  1C    5m  CC=10     ←0
-  │ mermaid                     88L  0C    1m  CC=1      ←0
   │ orchestrator_chunked        87L  0C    3m  CC=9      ←0
   │ ast_helpers                 86L  0C    5m  CC=8      ←0
   │ config.yaml                 86L  0C    0m  CC=0.0    ←0
@@ -131,13 +132,13 @@ LAYERS:
   │ mermaid_exporter            74L  1C    0m  CC=0.0    ←0
   │ api                         73L  0C    2m  CC=2      ←0
   │ __init__                    73L  1C    5m  CC=1      ←0
+  │ utils                       72L  0C    4m  CC=8      ←0
   │ generic                     71L  0C    1m  CC=12     ←0
   │ header                      71L  0C    4m  CC=8      ←0
   │ flow_detailed               70L  0C    1m  CC=1      ←0
   │ flow_full                   70L  0C    1m  CC=1      ←0
   │ __init__                    70L  0C    0m  CC=0.0    ←0
   │ cli                         69L  0C    1m  CC=7      ←0
-  │ utils                       69L  0C    4m  CC=8      ←0
   │ html_dashboard              68L  1C    3m  CC=1      ←0
   │ strategies                  68L  1C    0m  CC=0.0    ←0
   │ sections                    67L  0C    3m  CC=7      ←0
@@ -155,8 +156,8 @@ LAYERS:
   │ orchestrator_constants      52L  0C    0m  CC=0.0    ←0
   │ cache                       50L  1C    5m  CC=4      ←0
   │ map_exporter                50L  1C    2m  CC=1      ←0
-  │ flow_constants              46L  0C    1m  CC=6      ←0
   │ evolution                   46L  0C    2m  CC=6      ←0
+  │ flow_constants              44L  0C    1m  CC=2      ←0
   │ java                        43L  0C    1m  CC=1      ←0
   │ csharp                      42L  0C    1m  CC=1      ←0
   │ __init__                    40L  0C    0m  CC=0.0    ←0
@@ -168,7 +169,7 @@ LAYERS:
   │ module_list                 26L  0C    1m  CC=4      ←0
   │ constants                   25L  0C    0m  CC=0.0    ←0
   │ __init__                    23L  0C    0m  CC=0.0    ←0
-  │ exclusion                   17L  0C    1m  CC=5      ←0
+  │ exclusion                   17L  0C    1m  CC=2      ←0
   │ _utils                      15L  0C    1m  CC=1      ←0
   │ project_yaml_exporter       15L  0C    0m  CC=0.0    ←0
   │ __init__                    15L  0C    0m  CC=0.0    ←0
@@ -178,13 +179,15 @@ LAYERS:
   │ __init__                     7L  0C    0m  CC=0.0    ←0
   │ __main__                     6L  0C    0m  CC=0.0    ←0
   │ __init__                     5L  0C    0m  CC=0.0    ←0
+  │ config                       0L  5C    2m  CC=1      ←0
+  │ mermaid                      0L  0C    1m  CC=1      ←0
   │ __init__                     0L  0C    0m  CC=0.0    ←0
   │
   scripts/                        CC̄=3.9    ←in:0  →out:11  !! split
   │ benchmark_badges           392L  0C    9m  CC=13     ←0
   │ bump_version                96L  0C    7m  CC=4      ←0
   │
-  benchmarks/                     CC̄=3.0    ←in:0  →out:141  !! split
+  benchmarks/                     CC̄=3.0    ←in:0  →out:140  !! split
   │ benchmark_performance      306L  0C    7m  CC=6      ←0
   │ project_generator          233L  0C    6m  CC=1      ←0
   │ reporting                  179L  0C    9m  CC=6      ←0
@@ -235,29 +238,30 @@ LAYERS:
   │ __init__                     1L  0C    0m  CC=0.0    ←0
   │
   demo_langs/                     CC̄=1.7    ←in:0  →out:0
-  │ sample                      53L  2C    8m  CC=3      ←0
   │ sample.java                 47L  2C    7m  CC=3      ←0
+  │ sample                       0L  2C    8m  CC=3      ←0
   │
   test_langs/                     CC̄=1.3    ←in:0  →out:0
-  │ sample.rs                   47L  1C    5m  CC=2      ←0
-  │ sample.java                 47L  2C    4m  CC=2      ←2
-  │ sample.go                   46L  0C    4m  CC=3      ←0
   │ sample.php                  44L  2C    4m  CC=2      ←2
-  │ sample                      40L  2C    4m  CC=3      ←0
-  │ sample.ts                   26L  1C    1m  CC=1      ←0
-  │ sample_bad.go               24L  0C    2m  CC=1      ←0
-  │ sample_bad.php              22L  1C    1m  CC=1      ←0
   │ sample_bad.ts               20L  2C    3m  CC=1      ←0
-  │ sample_bad.java             18L  1C    1m  CC=1      ←0
-  │ sample_bad.rs               18L  1C    2m  CC=1      ←0
+  │ sample.go                    0L  0C    4m  CC=3      ←0
+  │ sample.rs                    0L  1C    5m  CC=2      ←0
+  │ sample                       0L  2C    4m  CC=3      ←0
+  │ sample.ts                    0L  1C    1m  CC=1      ←0
+  │ sample.java                  0L  2C    4m  CC=2      ←2
+  │ sample_bad.java              0L  1C    1m  CC=1      ←0
+  │ sample_bad.php               0L  1C    1m  CC=1      ←0
+  │ sample_bad.go                0L  0C    2m  CC=1      ←0
+  │ sample_bad.rs                0L  1C    2m  CC=1      ←0
   │
   ./                              CC̄=0.2    ←in:0  →out:0
   │ !! map.toon.yaml            25199L  0C  542m  CC=0.0    ←71
   │ !! calls.yaml                4778L  0C    0m  CC=0.0    ←0
-  │ !! planfile.yaml              771L  0C    0m  CC=0.0    ←0
+  │ !! planfile.yaml             2077L  0C    0m  CC=0.0    ←0
   │ goal.yaml                  430L  0C    0m  CC=0.0    ←0
   │ Taskfile.yml               411L  0C    1m  CC=0.0    ←37
   │ validate_toon              379L  0C   21m  CC=7      ←0
+  │ Makefile                   252L  0C    0m  CC=0.0    ←0
   │ pipeline                   203L  0C    2m  CC=9      ←0
   │ pyproject.toml             132L  0C    0m  CC=0.0    ←0
   │ orchestrator.sh             82L  0C    0m  CC=0.0    ←0
@@ -271,16 +275,15 @@ LAYERS:
   │ redsl_refactor_report.toon.yaml    21L  0C    0m  CC=0.0    ←0
   │ redsl_refactor_plan.toon.yaml    18L  0C    0m  CC=0.0    ←0
   │ requirements.txt             9L  0C    0m  CC=0.0    ←0
-  │ Makefile                     0L  0C    0m  CC=0.0    ←0
   │
   project/                        CC̄=0.0    ←in:0  →out:0
-  │ !! map.toon.yaml            39352L  0C  542m  CC=0.0    ←0
-  │ !! calls.yaml                7041L  0C    0m  CC=0.0    ←0
+  │ !! calls.yaml                7159L  0C    0m  CC=0.0    ←0
+  │ !! map.toon.yaml             1380L  0C  486m  CC=0.0    ←0
   │ !! validation.toon.yaml       821L  0C    0m  CC=0.0    ←0
-  │ !! calls.toon.yaml            525L  0C    0m  CC=0.0    ←0
-  │ analysis.toon.yaml         455L  0C    0m  CC=0.0    ←0
+  │ !! calls.toon.yaml            528L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         434L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         433L  0C    0m  CC=0.0    ←0
+  │ analysis.toon.yaml         362L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         248L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         213L  0C    0m  CC=0.0    ←0
   │ analysis.toon.yaml         207L  0C    0m  CC=0.0    ←0
@@ -290,7 +293,7 @@ LAYERS:
   │ evolution.toon.yaml         54L  0C    0m  CC=0.0    ←0
   │ project.toon.yaml           51L  0C    0m  CC=0.0    ←0
   │ prompt.txt                  47L  0C    0m  CC=0.0    ←0
-  │ evolution.toon.yaml         45L  0C    0m  CC=0.0    ←0
+  │ evolution.toon.yaml         44L  0C    0m  CC=0.0    ←0
   │
   test_prompt/                    CC̄=0.0    ←in:0  →out:0
   │ prompt.txt                  51L  0C    0m  CC=0.0    ←0
@@ -310,6 +313,11 @@ LAYERS:
   batch_1/                        CC̄=0.0    ←in:0  →out:0
   │ analysis.toon.yaml         434L  0C    0m  CC=0.0    ←0
   │
+  testql-scenarios/               CC̄=0.0    ←in:0  →out:0
+  │ generated-api-smoke.testql.toon.yaml    23L  0C    0m  CC=0.0    ←0
+  │ generated-cli-tests.testql.toon.yaml    20L  0C    0m  CC=0.0    ←0
+  │ generated-from-pytests.testql.toon.yaml    12L  0C    0m  CC=0.0    ←0
+  │
   root/                           CC̄=0.0    ←in:0  →out:0
   │ analysis.toon.yaml         434L  0C    0m  CC=0.0    ←0
   │
@@ -321,40 +329,51 @@ LAYERS:
   │ analysis.toon.yaml         179L  0C    0m  CC=0.0    ←0
   │
   ── zero ──
-     Makefile                                  0L
+     code2llm/generators/mermaid.py            0L
+     code2llm/nlp/config.py                    0L
      code2llm/refactor/__init__.py             0L
+     demo_langs/valid/sample.py                0L
+     test_langs/invalid/sample_bad.go          0L
+     test_langs/invalid/sample_bad.java        0L
+     test_langs/invalid/sample_bad.php         0L
+     test_langs/invalid/sample_bad.rs          0L
+     test_langs/valid/sample.go                0L
+     test_langs/valid/sample.java              0L
+     test_langs/valid/sample.py                0L
+     test_langs/valid/sample.rs                0L
+     test_langs/valid/sample.ts                0L
 
 COUPLING:
-                                                    Taskfile                           map                    benchmarks            code2llm.exporters                 code2llm.core          code2llm.cli_exports                 validate_toon                      code2llm   examples.streaming-analyzer           code2llm.generators                      pipeline             code2llm.analysis              examples.litellm                       scripts  examples.docker-doql-example
-                      Taskfile                            ──                                                        ←136                            ←3                           ←42                           ←66                           ←80                           ←65                           ←65                           ←11                           ←25                                                         ←12                           ←11                            ←5  hub
-                           map                                                          ──                            ←4                          ←138                           ←66                           ←34                            ←2                           ←15                            ←2                           ←28                            ←1                           ←11                                                                                            hub
-                    benchmarks                           136                             4                            ──                                                           1                                                                                                                                                                                                                                                                                                              !! fan-out
-            code2llm.exporters                             3                           138                                                          ──                                                                                                                                                                                                                                                                                                                                            !! fan-out
-                 code2llm.core                            42                            66                            ←1                                                          ──                                                                                                                                                                                                                ←3                                                                                            !! fan-out
+                                                    Taskfile                           map            code2llm.exporters                    benchmarks                 code2llm.core          code2llm.cli_exports                 validate_toon                      code2llm   examples.streaming-analyzer           code2llm.generators                      pipeline              examples.litellm             code2llm.analysis                       scripts  examples.docker-doql-example
+                      Taskfile                            ──                                                          ←3                          ←136                           ←42                           ←66                           ←80                           ←65                           ←65                           ←11                           ←25                           ←12                                                         ←11                            ←5  hub
+                           map                                                          ──                          ←138                            ←4                           ←66                           ←34                            ←2                           ←15                            ←2                           ←28                            ←1                                                         ←11                                                              hub
+            code2llm.exporters                             3                           138                            ──                                                                                                                                                                                                                                                                                                                                                                          !! fan-out
+                    benchmarks                           136                             4                                                          ──                                                                                                                                                                                                                                                                                                                                            !! fan-out
+                 code2llm.core                            42                            66                                                                                        ──                                                                                                                                                                                                                                                                                                              !! fan-out
           code2llm.cli_exports                            66                            34                                                                                                                      ──                                                                                                                                                                                                                                                                                !! fan-out
                  validate_toon                            80                             2                                                                                                                                                    ──                                                                                                                                                                                                                                                  !! fan-out
                       code2llm                            65                            15                                                                                                                                                                                  ──                                                                                                                                                                                                                    !! fan-out
    examples.streaming-analyzer                            65                             2                                                                                                                                                                                                                ──                                                                                                                                                                                      !! fan-out
            code2llm.generators                            11                            28                                                                                                                                                                                                                                              ──                                                                                                                                                        !! fan-out
                       pipeline                            25                             1                                                                                                                                                                                                                                                                            ──                                                                                                                          !! fan-out
-             code2llm.analysis                                                          11                                                                                         3                                                                                                                                                                                                                ──                                                                                            !! fan-out
-              examples.litellm                            12                                                                                                                                                                                                                                                                                                                                                                      ──                                                              !! fan-out
+              examples.litellm                            12                                                                                                                                                                                                                                                                                                                                        ──                                                                                            !! fan-out
+             code2llm.analysis                                                          11                                                                                                                                                                                                                                                                                                                                        ──                                                              !! fan-out
                        scripts                            11                                                                                                                                                                                                                                                                                                                                                                                                    ──                                !! fan-out
   examples.docker-doql-example                             5                                                                                                                                                                                                                                                                                                                                                                                                                                  ──
   CYCLES: none
-  HUB: map/ (fan-in=301)
   HUB: Taskfile/ (fan-in=527)
-  SMELL: examples.litellm/ fan-out=12 → split needed
+  HUB: map/ (fan-in=301)
   SMELL: code2llm.core/ fan-out=108 → split needed
-  SMELL: examples.streaming-analyzer/ fan-out=67 → split needed
   SMELL: pipeline/ fan-out=26 → split needed
-  SMELL: code2llm.analysis/ fan-out=14 → split needed
-  SMELL: code2llm.exporters/ fan-out=141 → split needed
-  SMELL: code2llm.generators/ fan-out=39 → split needed
-  SMELL: benchmarks/ fan-out=141 → split needed
+  SMELL: examples.streaming-analyzer/ fan-out=67 → split needed
+  SMELL: code2llm.analysis/ fan-out=11 → split needed
   SMELL: scripts/ fan-out=11 → split needed
+  SMELL: code2llm.exporters/ fan-out=141 → split needed
+  SMELL: examples.litellm/ fan-out=12 → split needed
+  SMELL: code2llm.generators/ fan-out=39 → split needed
   SMELL: code2llm.cli_exports/ fan-out=100 → split needed
   SMELL: code2llm/ fan-out=80 → split needed
+  SMELL: benchmarks/ fan-out=140 → split needed
   SMELL: validate_toon/ fan-out=82 → split needed
 
 EXTERNAL:

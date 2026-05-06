@@ -3,10 +3,36 @@
 ### Performance
 
 - Cache `is_excluded_path()` and `is_excluded()` with `@lru_cache` + set intersection (29k calls: 0.53s → ~0s)
-- Cache `_rel_path()` with `@lru_cache` to avoid repeated `Path.resolve()` / `lstat` syscalls (2.8k calls: 0.51s → ~0s)
+- Cache `_rel_path()` / `rel_path()` with `@lru_cache` to avoid repeated `Path.resolve()` / `lstat` syscalls
 - Replace `scan_file_sizes()` rglob+read_text with fast path from `AnalysisResult.modules` (1.07s → 0.006s)
-- TOON export: 0.45s → 0.12s (3.5x), Evolution export: 0.55s → 0.007s (79x)
-- Cold start total: 5.5s → 2.3s, warm start: 1.5s → 1.2s
+- Fix O(n²) `is_entry_point` in flow_compact.py — pre-compute called_funcs set (6.8M iterations → O(n))
+- Fix O(n×m) mutations scan in `SmellDetector._detect_god_functions` and `_detect_feature_envy` — pre-index by scope
+- Reduce betweenness centrality sampling for large graphs (k=200 cap, 10% for >2k nodes)
+- Cache `file_line_count()` in MAP exporter
+- Mermaid flow.mmd: 1.12s → 0.05s (22×), TOON: 0.45s → 0.12s, Evolution: 0.55s → 0.007s
+- Cold start total: 5.5s → 2.1s, --fast mode: 1.7s
+
+## [0.5.148] - 2026-05-06
+
+### Docs
+- Update CHANGELOG.md
+- Update README.md
+- Update docs/README.md
+- Update project/README.md
+- Update project/context.md
+
+### Other
+- Update code2llm/analysis/smells.py
+- Update code2llm/core/refactoring.py
+- Update code2llm/exporters/map/utils.py
+- Update code2llm/exporters/mermaid/flow_compact.py
+- Update project/analysis.toon.yaml
+- Update project/calls.mmd
+- Update project/calls.toon.yaml
+- Update project/calls.yaml
+- Update project/compact_flow.mmd
+- Update project/evolution.toon.yaml
+- ... and 6 more files
 
 ## [0.5.147] - 2026-05-06
 
